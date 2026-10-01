@@ -27,6 +27,11 @@ label{font-size:13px;font-weight:700;color:#536257}.statgrid{display:grid;grid-t
 .empty{text-align:center;color:var(--muted);padding:25px}
 .small{font-size:12px}
 </style>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#2f5d3a">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Vap’ et Moi">
 </head>
 <body>
 <header><h1>🌿 Vap’ et Moi</h1><div class="sub">Carte de fidélité numérique</div></header>
@@ -180,6 +185,11 @@ function renderAll(){renderClients();renderSale();renderStats();renderHome()}
 function showToast(t){const e=document.getElementById('toast');e.textContent=t;e.style.display='block';setTimeout(()=>e.style.display='none',1800)}
 function esc(s){return String(s||'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
 renderAll();
+</script>
+<script>
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => navigator.serviceWorker.register("./sw.js"));
+}
 </script>
 </body>
 </html>
