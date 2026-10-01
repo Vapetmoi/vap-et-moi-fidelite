@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#0b2f20">
+<title>Vap' et Moi – Fidélité</title>
+<style>
+:root{
+  --green:#0b2f20; --green2:#1f7a46; --light:#f3f7f4;
+  --card:#fff; --text:#173126; --muted:#6b7771; --border:#dce6df;
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,Helvetica,sans-serif;background:var(--light);color:var(--text)}
+header{background:linear-gradient(135deg,var(--green),#174d32);color:white;padding:22px 18px 18px}
+header h1{margin:0;font-size:27px} header p{margin:7px 0 0;opacity:.85}
+nav{display:grid;grid-template-columns:repeat(4,1fr);background:white;border-bottom:1px solid var(--border);position:sticky;top:0;z-index:5}
+nav button{border:0;background:white;padding:13px 4px;font-size:13px;color:#355046}
+nav button.active{color:var(--green2);font-weight:bold;border-bottom:3px solid var(--green2)}
+main{max-width:760px;margin:auto;padding:18px}
+.page{display:none}.page.active{display:block}
+.card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:20px;margin-bottom:16px;box-shadow:0 3px 12px #1731260d}
+h2{margin:0 0 10px;font-size:24px}.muted{color:var(--muted)}
+button.primary{background:var(--green2);color:white;border:0;border-radius:13px;padding:14px 18px;font-size:16px;font-weight:bold}
+button.secondary{background:white;color:var(--green2);border:1px solid var(--green2);border-radius:13px;padding:13px 18px;font-size:15px}
+input,select{width:100%;padding:14px;border:1px solid var(--border);border-radius:12px;font-size:16px;margin:6px 0 12px;background:white}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.stat{padding:16px;border-radius:15px;background:#eef6f0;text-align:center}.stat strong{display:block;font-size:25px;color:var(--green2)}
+.actions{display:flex;gap:10px;flex-wrap:wrap}
+.client{border:1px solid var(--border);border-radius:14px;padding:14px;margin:9px 0;display:flex;justify-content:space-between;align-items:center}
+.badge{background:#e4f3e8;color:#17613a;border-radius:20px;padding:6px 10px;font-size:13px;font-weight:bold}
+.row{display:flex;justify-content:space-between;gap:10px;margin:9px 0}
+.reward{font-size:18px;font-weight:bold;color:var(--green2)}
+.small{font-size:13px}
+footer{text-align:center;color:var(--muted);padding:20px}
+@media(max-width:500px){.grid{grid-template-columns:1fr}nav button{font-size:12px}}
+
+.danger{background:#fff0f0;color:#b42318;border:1px solid #f2b8b5;padding:10px 14px;border-radius:10px;font-weight:700}
+</style>
+</head>
+<body>
+<header>
+  <h1>🌿 Vap' et Moi</h1>
+  <p>Carte de fidélité numérique</p>
+</header>
+
+<nav>
+  <button class="active" onclick="showPage('accueil',this)">🏠 Accueil</button>
+  <button onclick="showPage('clients',this)">👥 Clients</button>
+  <button onclick="showPage('achat',this)">💶 Achat</button>
+  <button onclick="showPage('stats',this)">📊 Stats</button>
+</nav>
+
+<main>
+<section id="accueil" class="page active">
+  <div class="card">
+    <h2>Bienvenue</h2>
+    <p class="muted">Gère la fidélité de tes clients directement depuis la boutique.</p>
+    <div class="actions">
+      <button class="primary" onclick="showPage('achat')">💶 Nouvel achat</button>
+      <button class="secondary" onclick="showPage('clients')">🔎 Rechercher</button>
+    </div>
+  </div>
+  <div class="card">
+    <h2>Règle fidélité</h2>
+    <div class="row"><span>Chaque 50 € cumulés</span><span class="reward">🎁 5 € offerts</span></div>
+    <p class="muted small">Les récompenses sont calculées automatiquement à partir du total des achats du client.</p>
+  </div>
+  <div class="grid">
+    <div class="stat"><strong id="homeClients">0</strong>clients</div>
+    <div class="stat"><strong id="homeCA">0 €</strong>achats enregistrés</div>
+  </div>
+</section>
+
+<section id="clients" class="page">
+  <div class="card">
+    <h2>👥 Clients</h2>
+    <button class="primary" onclick="toggleNewClient()">➕ Nouveau client</button>
+
+    <div id="newClientBox" style="display:none;margin-top:16px;padding-top:16px;border-top:1px solid var(--border)">
+      <label>Nom et prénom</label>
+      <input id="newClientName" placeholder="Ex. Jean Dupont" autocomplete="off">
+
+      <label>Téléphone (facultatif)</label>
+      <input id="newClientPhone" type="tel" placeholder="06 12 34 56 78" autocomplete="tel">
+
+      <label>E-mail (facultatif)</label>
+      <input id="newClientEmail" type="email" placeholder="client@email.fr" autocomplete="email">
+
+      <label>Notes (facultatif)</label>
+      <textarea id="newClientNotes" rows="3" placeholder="Préférences, remarques..."></textarea>
+
+      <div class="actions">
+        <button class="primary" onclick="addClient()">Créer le client</button>
+        <button class="secondary" onclick="toggleNewClient(false)">Annuler</button>
+      </div>
+      <p id="clientMessage" class="muted"></p>
+    </div>
+
+    <input id="search" placeholder="Rechercher un nom..." oninput="renderClients()">
+    <div id="clientList"></div>
+  </div>
+</section>
+
+<section id="achat" class="page">
+  <div class="card">
+    <h2>💶 Nouvel achat</h2>
+    <label>Client</label>
+    <select id="clientName" onchange="updatePurchaseBox()">
+      <option value="">— Sélectionner un client —</option>
+    </select>
+
+    <label>Montant de l'achat avant réduction (€)</label>
+    <input id="amount" type="number" min="0" step="0.01" placeholder="17.00" oninput="updatePurchaseBox()">
+
+    <div id="rewardBox" class="card" style="display:none;background:#eef6f0;margin:4px 0 14px;padding:14px">
+      <div class="row"><strong>🎁 Bon disponible</strong><strong id="availableReward">0 €</strong></div>
+      <label style="display:flex;align-items:center;gap:10px;margin-top:10px">
+        <input id="useReward" type="checkbox" onchange="updatePurchaseBox()" style="width:22px;height:22px;margin:0">
+        <span>Utiliser 5 € de la cagnotte sur cet achat</span>
+      </label>
+      <div id="payableBox" class="small muted" style="margin-top:10px"></div>
+    </div>
+
+    <button class="primary" onclick="addPurchase()">Enregistrer l'achat</button>
+    <p id="message" class="muted"></p>
+  </div>
+</section>
+
+<section id="stats" class="page">
+  <div class="card">
+    <h2>📊 Statistiques</h2>
+    <div class="grid">
+      <div class="stat"><strong id="sClients">0</strong>clients</div>
+      <div class="stat"><strong id="sPurchases">0</strong>achats</div>
+      <div class="stat"><strong id="sCA">0 €</strong>CA cumulé</div>
+      <div class="stat"><strong id="sBasket">0 €</strong>panier moyen</div>
+    </div>
+  </div>
+  <div class="card">
+    <h2>🏆 Meilleur client</h2>
+    <div id="topClient" class="muted">Aucun achat enregistré.</div>
+  </div>
+</section>
+</main>
+
+<footer>Vap' et Moi · Fidélité</footer>
+
+<script>
+const KEY='vapetmoi_fidelite_v1';
+let clients=JSON.parse(localStorage.getItem(KEY)||'[]');
+
+function save(){clients=clients.map(normalizeClient);localStorage.setItem(KEY,JSON.stringify(clients));updateAll()}
+function showPage(id,btn){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  if(btn){document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));btn.classList.add('active')}
+  updateAll();
+}
+function rewards(total){return Math.floor(total/50)*5}
+function usedRewards(c){return Number(c.usedRewards||0)}
+function availableReward(c){return Math.max(0,rewards(Number(c.total||0))-usedRewards(c))}
+function normalizeClient(c){
+  c.total=Number(c.total||0);
+  c.purchases=Number(c.purchases||0);
+  c.usedRewards=Number(c.usedRewards||0);
+  c.phone=c.phone||'';
+  c.email=c.email||'';
+  c.notes=c.notes||'';
+  c.history=Array.isArray(c.history)?c.history:[];
+  return c;
+}
+clients=clients.map(normalizeClient);
+
+function updateClientOptions(){
+  const select=document.getElementById('clientName');
+  if(!select)return;
+  const current=select.value;
+  select.innerHTML='<option value="">— Sélectionner un client —</option>'+
+    [...clients].sort((a,b)=>a.name.localeCompare(b.name,'fr')).map(c=>
+      `<option value="${escapeHtml(c.name)}">${escapeHtml(c.name)}</option>`
+    ).join('');
+  if(clients.some(c=>c.name===current)) select.value=current;
+}
+
+function updatePurchaseBox(){
+  const name=document.getElementById('clientName')?.value||'';
+  const amount=parseFloat(document.getElementById('amount')?.value);
+  const box=document.getElementById('rewardBox');
+  const rewardEl=document.getElementById('availableReward');
+  const use=document.getElementById('useReward');
+  const payable=document.getElementById('payableBox');
+  if(!box||!rewardEl||!use||!payable)return;
+
+  const c=clients.find(x=>x.name.toLowerCase()===name.toLowerCase());
+  const reward=c?availableReward(c):0;
+
+  if(!c || reward<5){
+    box.style.display='none';
+    use.checked=false;
+    payable.textContent='';
+    return;
+  }
+
+  box.style.display='block';
+  rewardEl.textContent=reward.toFixed(0)+' €';
+  if(use.checked && amount>0){
+    const paid=Math.max(0,amount-5);
+    payable.innerHTML=`💳 Le client paiera <strong>${paid.toFixed(2)} €</strong> au lieu de <strong>${amount.toFixed(2)} €</strong>.`;
+  }else if(amount>0){
+    payable.innerHTML=`💳 Le client paiera <strong>${amount.toFixed(2)} €</strong>.`;
+  }else{
+    payable.textContent='Coche la case pour utiliser le bon de 5 €.';
+  }
+}
+
+function toggleNewClient(show){
+  const box=document.getElementById('newClientBox');
+  if(!box)return;
+  const visible = typeof show === 'boolean' ? show : box.style.display === 'none';
+  box.style.display = visible ? 'block' : 'none';
+  if(visible){
+    document.getElementById('newClientName').focus();
+    document.getElementById('clientMessage').textContent='';
+  }
+}
+
+function addClient(){
+  const input=document.getElementById('newClientName');
+  const msg=document.getElementById('clientMessage');
+  const name=input.value.trim();
+
+  if(!name){
+    msg.textContent='⚠️ Indique le nom et le prénom du client.';
+    return;
+  }
+
+  const exists=clients.some(c=>c.name.toLowerCase()===name.toLowerCase());
+  if(exists){
+    msg.textContent='⚠️ Ce client existe déjà.';
+    return;
+  }
+
+  const phone=document.getElementById('newClientPhone').value.trim();
+  const email=document.getElementById('newClientEmail').value.trim();
+  const notes=document.getElementById('newClientNotes').value.trim();
+
+  clients.push({name, phone, email, notes, total:0, purchases:0, usedRewards:0, history:[]});
+  save();
+
+  input.value='';
+  document.getElementById('newClientPhone').value='';
+  document.getElementById('newClientEmail').value='';
+  document.getElementById('newClientNotes').value='';
+  msg.textContent=`✅ ${name} a été créé.`;
+  toggleNewClient(false);
+  document.getElementById('search').value='';
+  updateClientOptions();
+  renderClients();
+  updatePurchaseBox();
+}
+
+function addPurchase(){
+  const name=document.getElementById('clientName').value.trim();
+  const amount=parseFloat(document.getElementById('amount').value);
+  const useReward=document.getElementById('useReward').checked;
+  const msg=document.getElementById('message');
+
+  if(!name || !amount || amount<=0){
+    msg.textContent='⚠️ Indique un client et un montant valide.';
+    return;
+  }
+
+  let c=clients.find(x=>x.name.toLowerCase()===name.toLowerCase());
+  if(!c){
+    msg.textContent='⚠️ Sélectionne un client existant dans la liste.';
+    return;
+  }
+  normalizeClient(c);
+
+  const before=availableReward(c);
+  if(useReward && before<5){
+    msg.textContent='⚠️ Ce client n’a pas de bon de 5 € disponible.';
+    return;
+  }
+
+  const discount=useReward?5:0;
+  const paid=Math.max(0,amount-discount);
+
+  // La fidélité est calculée sur ce que le client paie réellement.
+  c.total=Math.round((c.total+paid)*100)/100;
+  c.purchases++;
+
+  if(useReward) c.usedRewards+=5;
+
+  c.history.push({
+    id: (crypto.randomUUID ? crypto.randomUUID() : String(Date.now()) + Math.random()),
+    date: new Date().toISOString(),
+    amount: amount,
+    discount: discount,
+    paid: paid
+  });
+
+  save();
+
+  const remaining=availableReward(c);
+  msg.innerHTML=useReward
+    ? `✅ Achat enregistré pour ${escapeHtml(c.name)}. Bon de 5 € utilisé. Le client paie ${paid.toFixed(2)} €. Cagnotte restante : ${remaining.toFixed(0)} €.`
+    : `✅ Achat enregistré pour ${escapeHtml(c.name)}. Total cumulé : ${c.total.toFixed(2)} €. Cagnotte disponible : ${remaining.toFixed(0)} €.`;
+
+  document.getElementById('amount').value='';
+  document.getElementById('useReward').checked=false;
+  updatePurchaseBox();
+}
+function renderClients(){
+  const q=(document.getElementById('search')?.value||'').toLowerCase();
+  const list=document.getElementById('clientList');
+  if(!list)return;
+  const arr=clients.filter(c=>c.name.toLowerCase().includes(q));
+  list.innerHTML=arr.length?arr.map(c=>`
+    <div class="client" onclick="showClient('${escapeJs(c.name)}')" style="cursor:pointer">
+      <div><strong>${escapeHtml(c.name)}</strong><br>
+      <span class="small muted">${c.purchases} achat(s) · ${c.total.toFixed(2)} € cumulés</span></div>
+      <span class="badge">🎁 ${availableReward(c)} €</span>
+    </div>`).join(''):'<p class="muted">Aucun client trouvé.</p>';
+}
+function escapeJs(s){
+  return String(s||'').replace(/\\/g,'\\\\').replace(/'/g,"\\'");
+}
+
+function showClient(name){
+  const c=clients.find(x=>x.name===name);
+  if(!c)return;
+  normalizeClient(c);
+  const existing=document.getElementById('clientDetail');
+  if(existing) existing.remove();
+
+  const history=[...c.history].reverse();
+  const historyHtml=history.length ? history.map(p=>`
+    <div class="small" style="display:flex;justify-content:space-between;align-items:center;gap:8px;padding:10px 0;border-bottom:1px solid #e1ebe4">
+      <div>
+        📅 ${new Date(p.date).toLocaleDateString('fr-FR')}
+        · Achat ${Number(p.amount).toFixed(2)} €
+        ${Number(p.discount)>0 ? `· 🎁 -${Number(p.discount).toFixed(2)} €` : ''}
+        · Payé ${Number(p.paid).toFixed(2)} €
+      </div>
+      <button class="secondary" onclick="cancelPurchase('${escapeJs(c.name)}','${escapeJs(p.id)}')">↩️ Annuler</button>
+    </div>
+  `).join('') : '<p class="small muted">Aucun achat enregistré.</p>';
+
+  const box=document.createElement('div');
+  box.id='clientDetail';
+  box.className='card';
+  box.style.cssText='margin-top:16px;background:#f7fbf8;border:2px solid #d8eadf;';
+  box.innerHTML=`
+    <div class="row">
+      <h3 style="margin:0">👤 Fiche client</h3>
+      <button class="secondary" onclick="document.getElementById('clientDetail').remove()">Fermer</button>
+    </div>
+    <h2 style="margin-bottom:4px">${escapeHtml(c.name)}</h2>
+    <p class="small muted">${c.purchases} achat(s) · ${c.total.toFixed(2)} € cumulés</p>
+    <div class="small" style="line-height:1.8">
+      📞 ${escapeHtml(c.phone||'Non renseigné')}<br>
+      ✉️ ${escapeHtml(c.email||'Non renseigné')}<br>
+      📝 ${escapeHtml(c.notes||'Aucune note')}<br>
+      🎁 <strong>${availableReward(c).toFixed(0)} € disponibles</strong>
+    </div>
+
+    <button class="primary" style="margin-top:12px" onclick="selectClientForPurchase('${escapeJs(c.name)}')">🛒 Faire un achat pour ce client</button>
+
+    <h3 style="margin:18px 0 8px">🧾 Historique des achats</h3>
+    <div>${historyHtml}</div>
+
+    <button class="danger" style="margin-top:16px" onclick="deleteClient('${escapeJs(c.name)}')">🗑️ Supprimer cette fiche client</button>
+  `;
+  document.getElementById('clientList').prepend(box);
+}
+
+function cancelPurchase(name,id){
+  const c=clients.find(x=>x.name===name);
+  if(!c)return;
+  normalizeClient(c);
+  const index=c.history.findIndex(p=>p.id===id);
+  if(index===-1)return;
+  const p=c.history[index];
+
+  if(!confirm(`Annuler cet achat de ${Number(p.amount).toFixed(2)} € pour ${c.name} ?`))return;
+
+  c.total=Math.round(Math.max(0,c.total-Number(p.paid))*100)/100;
+  c.purchases=Math.max(0,c.purchases-1);
+  if(Number(p.discount)>0){
+    c.usedRewards=Math.max(0,c.usedRewards-Number(p.discount));
+  }
+  c.history.splice(index,1);
+
+  save();
+  showClient(name);
+}
+
+function deleteClient(name){
+  const c=clients.find(x=>x.name===name);
+  if(!c)return;
+
+  if(!confirm(`Supprimer définitivement la fiche de ${c.name} et tout son historique d'achats ?`))return;
+
+  clients=clients.filter(x=>x.name!==name);
+  save();
+
+  const detail=document.getElementById('clientDetail');
+  if(detail)detail.remove();
+}
+
+function selectClientForPurchase(name){
+  const select=document.getElementById('clientName');
+  select.value=name;
+  updatePurchaseBox();
+  showPage('achat');
+}
+
+function updateAll(){
+  const total=clients.reduce((s,c)=>s+c.total,0);
+  const purchases=clients.reduce((s,c)=>s+c.purchases,0);
+  const basket=purchases?total/purchases:0;
+  ['homeClients','sClients'].forEach(id=>document.getElementById(id).textContent=clients.length);
+  document.getElementById('homeCA').textContent=total.toFixed(2)+' €';
+  document.getElementById('sPurchases').textContent=purchases;
+  document.getElementById('sCA').textContent=total.toFixed(2)+' €';
+  document.getElementById('sBasket').textContent=basket.toFixed(2)+' €';
+  const top=[...clients].sort((a,b)=>b.total-a.total)[0];
+  document.getElementById('topClient').innerHTML=top?`<strong>${escapeHtml(top.name)}</strong> — ${top.total.toFixed(2)} € cumulés`:'Aucun achat enregistré.';
+  renderClients();
+}
+function escapeHtml(s){return s.replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]))}
+updateAll();
+</script>
+</body>
+</html>
