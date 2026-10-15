@@ -1,0 +1,807 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#0b2f20">
+<title>Vap’ et Moi – V17 Pilotage avancé</title>
+<style>
+:root{--green:#0b2f20;--green2:#1f7a46;--light:#f3f7f4;--card:#fff;--text:#173126;--muted:#66756e;--border:#dce6df;--gold:#b7791f;--red:#b42318}
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,Helvetica,sans-serif;background:var(--light);color:var(--text)}
+header{background:linear-gradient(135deg,var(--green),#174d32);color:white;padding:20px 18px 16px}
+header h1{margin:0;font-size:27px} header p{margin:6px 0 0;opacity:.88}
+nav{display:grid;grid-template-columns:repeat(4,1fr);background:white;border-bottom:1px solid var(--border);position:sticky;top:0;z-index:5}
+nav button{border:0;background:white;padding:12px 3px;font-size:12px;color:#355046}
+nav button.active{color:var(--green2);font-weight:bold;border-bottom:3px solid var(--green2)}
+main{max-width:850px;margin:auto;padding:16px}
+.page{display:none}.page.active{display:block}
+.card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:18px;margin-bottom:14px;box-shadow:0 3px 12px #1731260d}
+h2{margin:0 0 10px;font-size:23px}.muted{color:var(--muted)}
+button{cursor:pointer} button.primary{background:var(--green2);color:white;border:0;border-radius:12px;padding:13px 16px;font-size:15px;font-weight:bold}
+button.secondary{background:white;color:var(--green2);border:1px solid var(--green2);border-radius:12px;padding:11px 14px;font-size:14px}
+button.danger{background:#fff0f0;color:var(--red);border:1px solid #f2b8b5;border-radius:10px;padding:10px 13px;font-weight:bold}
+input,select,textarea{width:100%;padding:13px;border:1px solid var(--border);border-radius:11px;font-size:16px;margin:5px 0 11px;background:white}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.stat{padding:14px;border-radius:14px;background:#eef6f0;text-align:center}.stat strong{display:block;font-size:23px;color:var(--green2);margin-bottom:3px}
+.actions{display:flex;gap:8px;flex-wrap:wrap}.row{display:flex;justify-content:space-between;gap:10px;margin:8px 0}.small{font-size:13px}
+.badge{display:inline-block;background:#e4f3e8;color:#17613a;border-radius:20px;padding:5px 9px;font-size:12px;font-weight:bold}
+.alert{border-left:4px solid var(--gold);background:#fff8e8;padding:12px;border-radius:10px;margin:8px 0}
+.alert.red{border-left-color:var(--red);background:#fff3f2}
+.client{border:1px solid var(--border);border-radius:14px;padding:13px;margin:8px 0;display:flex;justify-content:space-between;align-items:center;gap:10px}
+.progress{height:9px;background:#e6eee9;border-radius:99px;overflow:hidden}.progress>div{height:100%;background:var(--green2)}
+.kpiTitle{font-size:12px;color:var(--muted)} .reward{font-size:18px;font-weight:bold;color:var(--green2)}
+table{width:100%;border-collapse:collapse;font-size:13px}th,td{text-align:left;padding:8px;border-bottom:1px solid var(--border)}th{color:var(--muted)}
+.chartWrap{width:100%;overflow-x:auto}.historyChart{width:100%;min-width:560px;height:auto;display:block}.historyChart text{font-family:Arial,Helvetica,sans-serif}.tableWrap{overflow-x:auto}
+footer{text-align:center;color:var(--muted);padding:20px}
+.statsTheme{margin:16px 0 20px;border:0}.statsThemeHead{display:flex;align-items:center;gap:13px;padding:14px 16px;margin-bottom:12px;border-radius:16px;background:#e7f2ea;border:1px solid #d4e6d9;color:var(--green);cursor:pointer;list-style:none}.statsThemeHead::-webkit-details-marker{display:none}.statsThemeHead:after{content:"＋";margin-left:auto;font-size:22px;font-weight:700}.statsTheme[open]>.statsThemeHead:after{content:"−"}.statsTheme:not([open])>.statsThemeHead{margin-bottom:0}.statsThemeBody{display:block}.statsThemeHead>span{font-size:25px}.statsThemeHead strong{display:block;font-size:18px}.statsThemeHead small{display:block;color:var(--muted);font-size:12px;margin-top:4px;line-height:1.4}
+/* V12 — expérience mobile type application */
+.appGreeting{background:linear-gradient(145deg,#0b2f20,#226b43);color:white;border-radius:22px;padding:22px 19px;margin-bottom:14px;box-shadow:0 8px 22px #0b2f201c}
+.appGreeting .eyebrow{font-size:12px;letter-spacing:.08em;text-transform:uppercase;opacity:.8;font-weight:700}
+.appGreeting h2{font-size:26px;margin:7px 0}.appGreeting p{margin:0;opacity:.85;font-size:14px}
+.homeQuick{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.quickTile{border:1px solid var(--border);border-radius:17px;padding:15px 12px;background:white;text-align:left;min-height:92px;box-shadow:0 3px 12px #17312608}
+.quickTile .tileIcon{font-size:23px;display:block;margin-bottom:7px}.quickTile strong{display:block;color:var(--green);font-size:14px}.quickTile span:last-child{font-size:12px;color:var(--muted)}
+.homeStats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.homeStats .stat{text-align:left;padding:15px;background:white;border:1px solid var(--border);border-radius:17px}
+.homeStats .stat strong{font-size:22px}
+.homeStats .stat .kpiTitle{font-size:12px}
+#purchaseClientStats .purchaseRank{display:flex;align-items:center;gap:10px;padding:12px 2px;border-bottom:1px solid var(--border)}
+.clientMetricGrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.clientMetricGrid .stat{padding:14px 10px;border-radius:14px;background:#f2f7f3;text-align:left}.clientMetricGrid .stat strong{display:block;font-size:22px;color:var(--green2);overflow-wrap:anywhere}.clientMetricGrid .kpiTitle{display:block;font-size:12px;color:var(--muted);margin-top:4px}
+#purchaseClientStats .purchaseRank:last-child{border-bottom:0}
+.rankNum{width:30px;height:30px;display:flex;align-items:center;justify-content:center;border-radius:10px;background:#e8f3ec;color:var(--green2);font-weight:800;flex-shrink:0}
+.rankInfo{flex:1;min-width:0}.rankInfo strong{display:block;overflow-wrap:anywhere}.rankInfo small{color:var(--muted)}.rankValues{text-align:right;white-space:nowrap}.rankValues strong{display:block}.rankValues small{color:var(--muted)}
+.statsToggle{width:100%;margin-top:12px}
+@media(max-width:650px){
+ body{padding-bottom:78px}header{padding:17px 17px 14px}header h1{font-size:24px}header p{font-size:13px}
+ nav{position:fixed;top:auto;bottom:0;left:0;right:0;z-index:20;grid-template-columns:repeat(4,1fr);padding:7px 5px calc(7px + env(safe-area-inset-bottom));border-top:1px solid var(--border);border-bottom:0;box-shadow:0 -5px 20px #17312612}
+ nav button{border-radius:12px;padding:8px 2px 7px;font-size:11px;display:flex;flex-direction:column;align-items:center;gap:3px}
+ nav button.active{border-bottom:0;background:#eaf4ed;color:var(--green2)}
+ main{padding:12px}.card{padding:15px;border-radius:18px;margin-bottom:12px}h2{font-size:21px}
+ .appGreeting{padding:20px 17px}.appGreeting h2{font-size:25px}
+ .grid4{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+ .homeStats .stat strong{font-size:20px}.homeQuick{gap:9px}
+ #stats .grid{grid-template-columns:1fr}
+}
+@media(max-width:650px){.grid4{grid-template-columns:1fr 1fr}.grid{grid-template-columns:1fr}nav button{font-size:11px}main{padding:12px}}
+
+/* V11: lisibilité mobile et hiérarchie des statistiques */
+.periodMetric{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;padding:10px 0;border-bottom:1px solid var(--border)}
+.periodMetric:last-child{border-bottom:0}
+.periodMetric span{color:var(--muted);flex:1}
+.periodMetric strong{text-align:right;max-width:58%;overflow-wrap:anywhere}
+.statNote{font-size:13px;color:var(--muted);line-height:1.45;margin-top:10px}
+#historicalTable{overflow-x:auto}
+#historicalTable table{min-width:460px}
+@media(max-width:650px){
+  .periodMetric{font-size:15px}
+  .periodMetric strong{max-width:55%}
+  #historicalChart{overflow-x:auto}
+  .historyChart{max-width:none}
+}
+
+</style>
+</head>
+<body>
+<header>
+  <h1>🌿 Vap' et Moi</h1>
+  <p>V18 · statistiques organisées · pilotage avancé</p>
+</header>
+<nav>
+  <button class="active" onclick="showPage('accueil',this)">🏠 Accueil</button>
+  <button onclick="showPage('clients',this)">👥 Clients</button>
+  <button onclick="showPage('achat',this)">💶 Achat</button>
+  <button onclick="showPage('stats',this)">📊 Stats</button>
+</nav>
+<main>
+
+<section id="accueil" class="page active">
+  <div class="appGreeting">
+    <div class="eyebrow">Votre espace boutique</div>
+    <h2>Bonjour 👋</h2>
+    <p>Bienvenue dans votre espace Vap’ et Moi.</p>
+  </div>
+  <div class="homeStats" style="margin-bottom:14px">
+    <div class="stat"><strong id="dToday">0 €</strong><span class="kpiTitle">💶 CA aujourd’hui</span></div>
+    <div class="stat"><strong id="dWeek">0 €</strong><span class="kpiTitle">📆 CA cette semaine</span></div>
+    <div class="stat"><strong id="dMonth">0 €</strong><span class="kpiTitle">📅 CA ce mois</span></div>
+    <div class="stat"><strong id="dBasket">0 €</strong><span class="kpiTitle">🛍️ Panier moyen</span></div>
+    <div class="stat"><strong id="dClients">0</strong><span class="kpiTitle">👥 Clients enregistrés</span></div>
+  </div>
+  <div class="card" id="dailyOpsCard">
+    <h3 style="margin-top:0">🧾 Résumé de la journée</h3>
+    <div class="grid4">
+      <div class="stat"><strong id="opsTodayCount">0</strong><span class="kpiTitle">Achats enregistrés</span></div>
+      <div class="stat"><strong id="opsTodayDiscount">0 €</strong><span class="kpiTitle">Réductions accordées</span></div>
+      <div class="stat"><strong id="opsTodayLoyalty">0 €</strong><span class="kpiTitle">Bons fidélité utilisés</span></div>
+      <div class="stat"><strong id="opsTodayExceptional">0 €</strong><span class="kpiTitle">Remises exceptionnelles</span></div>
+    </div>
+    <p class="small muted">Calculé sur les achats enregistrés aujourd’hui. Les anciennes remises dont le type n’a pas été sauvegardé restent non détaillées dans les statistiques générales.</p>
+  </div>
+
+  <div class="card">
+    <h3 style="margin-top:0">⚡ Accès rapide</h3>
+    <div class="homeQuick">
+      <button class="quickTile" onclick="showPage('achat')"><span class="tileIcon">💶</span><strong>Nouvel achat</strong><span>Enregistrer une vente</span></button>
+      <button class="quickTile" onclick="showPage('clients')"><span class="tileIcon">👥</span><strong>Mes clients</strong><span>Fiches et fidélité</span></button>
+      <button class="quickTile" onclick="showPage('clients');toggleNewClient(true)"><span class="tileIcon">➕</span><strong>Nouveau client</strong><span>Créer une fiche rapidement</span></button>
+      <button class="quickTile" onclick="showPage('stats')"><span class="tileIcon">📊</span><strong>Statistiques</strong><span>Suivre l’activité</span></button>
+      <button class="quickTile" onclick="exportData()"><span class="tileIcon">💾</span><strong>Sauvegarder</strong><span>Exporter mes données</span></button>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3 style="margin-top:0">🎯 Objectifs de chiffre d’affaires</h3>
+    <div class="row"><span>Objectif mensuel</span><strong id="goalText">4 000 €</strong></div>
+    <input id="monthlyGoal" type="number" min="0" step="100" value="4000" onchange="setGoal()" aria-label="Objectif mensuel en euros">
+    <div class="progress"><div id="goalBar" style="width:0%"></div></div>
+    <p id="goalMessage" class="small muted"></p>
+    <div style="height:1px;background:var(--border);margin:16px 0"></div>
+    <div class="row"><span>Objectif hebdomadaire</span><strong id="weeklyGoalText">1 000 €</strong></div>
+    <input id="weeklyGoal" type="number" min="0" step="50" value="1000" onchange="setWeeklyGoal()" aria-label="Objectif hebdomadaire en euros">
+    <div class="progress"><div id="weeklyGoalBar" style="width:0%"></div></div>
+    <p id="weeklyGoalMessage" class="small muted"></p>
+  </div>
+
+  <div id="alertsBox" class="card">
+    <h3 style="margin-top:0">🔔 À surveiller</h3>
+    <div id="alerts"></div>
+  </div>
+
+  <div class="card">
+    <h3 style="margin-top:0">↩️ Restaurer une sauvegarde</h3>
+    <p class="small muted">Récupère tes données à partir d’un fichier de sauvegarde JSON.</p>
+    <button class="secondary" onclick="document.getElementById('restoreFile').click()">Choisir un fichier</button>
+    <input id="restoreFile" type="file" accept=".json,application/json" style="display:none" onchange="restoreData(event)">
+  </div>
+
+  <div class="card">
+    <h3 style="margin-top:0">🎁 Fidélité</h3>
+    <div class="row"><span>Chaque 50 € réellement payés</span><span class="reward">5 € offerts</span></div>
+    <p class="small muted">Les bons utilisés et les annulations sont recalculés automatiquement.</p>
+  </div>
+</section>
+
+<section id="clients" class="page">
+  <div class="card">
+    <h2>👥 Clients</h2>
+    <button class="primary" onclick="toggleNewClient()">➕ Nouveau client</button>
+    <div id="newClientBox" style="display:none;margin-top:14px;padding-top:14px;border-top:1px solid var(--border)">
+      <label>Nom et prénom</label><input id="newClientName" placeholder="Ex. Jean Dupont" autocomplete="off">
+      <label>Téléphone</label><input id="newClientPhone" type="tel" placeholder="06 12 34 56 78">
+      <label>E-mail</label><input id="newClientEmail" type="email" placeholder="client@email.fr">
+      <label>Notes</label><textarea id="newClientNotes" rows="3" placeholder="Préférences, remarques..."></textarea>
+      <div class="actions"><button class="primary" onclick="addClient()">Créer le client</button><button class="secondary" onclick="toggleNewClient(false)">Annuler</button></div>
+      <p id="clientMessage" class="muted"></p>
+    </div>
+    <input id="search" placeholder="🔎 Rechercher un nom..." oninput="renderClients()"><label for="clientSort">Trier les clients par</label><select id="clientSort" onchange="renderClients()"><option value="name">Nom (A à Z)</option><option value="nameDesc">Nom (Z à A)</option><option value="totalDesc">Chiffre d’affaires cumulé</option><option value="avgDesc">Panier moyen</option><option value="purchasesDesc">Nombre d’achats</option><option value="recent">Dernier achat récent</option><option value="rewardsDesc">Bons disponibles</option></select>
+    <div id="clientList"></div>
+  </div>
+  <div class="card">
+    <h3 style="margin-top:0">🏆 Classement clients</h3>
+    <div id="clientRanking"></div>
+  </div>
+</section>
+
+<section id="achat" class="page">
+  <div class="card">
+    <h2>💶 Nouvel achat</h2>
+    <label>Client</label>
+    <select id="clientName" onchange="updatePurchaseBox()"><option value="">— Sélectionner un client —</option></select>
+    <div id="linkedClientInfo" class="small muted"></div>
+    <label>Montant avant réduction (€)</label>
+    <input id="amount" type="number" min="0" step="0.01" placeholder="17.00" oninput="updatePurchaseBox()">
+    <div id="rewardBox" class="card" style="display:none;background:#eef6f0;padding:13px">
+      <div class="row"><strong>🎁 Bon disponible</strong><strong id="availableReward">0 €</strong></div>
+      <label style="display:flex;align-items:center;gap:9px"><input id="useReward" type="checkbox" onchange="updatePurchaseBox()" style="width:21px;margin:0"><span>Utiliser 5 € de la cagnotte</span></label>
+    </div>
+    <label for="exceptionalDiscount">🎟️ Réduction exceptionnelle (€) — facultatif</label>
+    <input id="exceptionalDiscount" type="number" min="0" step="0.01" value="0" placeholder="0,00" oninput="updatePurchaseBox()">
+    <p class="small muted" style="margin-top:-7px">À utiliser pour une remise ponctuelle, en plus ou à la place du bon de fidélité.</p>
+    <div id="payableBox" class="small muted" style="margin:8px 0 12px"></div>
+    <button class="primary" onclick="addPurchase()">Enregistrer l'achat</button>
+    <p id="message" class="muted"></p>
+  </div>
+</section>
+
+<section id="stats" class="page">
+  <div class="card">
+    <h2>📊 Tableau de bord — V18</h2>
+    <p class="muted small">Statistiques regroupées par sujet : chiffre d’affaires, ventes et panier moyen, clients, encaissements, puis prévisions.</p>
+    <div class="grid4">
+      <div class="stat"><strong id="sCA">0 €</strong>CA cumulé</div>
+      <div class="stat"><strong id="sPurchases">0</strong>achats enregistrés</div>
+      <div class="stat"><strong id="sBasket">0 €</strong>panier moyen</div>
+      <div class="stat"><strong id="sClients">0</strong>clients</div>
+    </div>
+  </div>
+
+  <details class="statsTheme" open><summary class="statsThemeHead"><span>💶</span><div><strong>1. Chiffre d’affaires</strong><small>Résultats par période et historique mensuel</small></div></summary>
+    <div class="grid">
+      <div class="card"><h3 style="margin-top:0">📅 CA par période</h3><div id="periodStats"></div></div>
+      <div class="card"><h3 style="margin-top:0">↔️ Comparaison des périodes</h3><div id="comparisonStats"></div></div>
+    </div>
+    <div class="card" id="historicalCASection">
+      <h3 style="margin-top:0">🗓️ Historique mensuel du chiffre d’affaires</h3>
+      <p class="muted small">Chiffres historiques saisis manuellement. Ils restent séparés des achats enregistrés dans l’application et ne sont pas ajoutés au CA calculé à partir des ventes.</p>
+      <div class="grid4" id="historicalSummary"></div>
+      <div class="chartWrap" id="historicalChart" aria-label="Graphique d’évolution du chiffre d’affaires historique"></div>
+      <div class="tableWrap" id="historicalTable"></div>
+    </div>
+  </details>
+
+  <details class="statsTheme" open><summary class="statsThemeHead"><span>🛍️</span><div><strong>2. Ventes et panier moyen</strong><small>Nombre d’achats, panier moyen et comparaison semaine par semaine</small></div></summary>
+    <div class="card"><h3 style="margin-top:0">🛍️ Achats par jour et par semaine</h3><div id="purchasePeriodStats"></div><div id="dailyPurchaseStats"></div></div>
+    <div class="card" id="weeklyClientPurchaseCompare">
+      <h3 style="margin-top:0">📅 Comparatif hebdomadaire — 2 derniers mois</h3>
+      <p class="muted small">Chiffre d’affaires encaissé, nombre de ventes, panier moyen et nouveaux clients sur environ 9 semaines. Les semaines incomplètes sont signalées.</p>
+      <div id="weeklyAlert"></div><div id="weeklyCAChart" class="chartWrap"></div>
+      <div id="weeklyCAStats" style="margin-top:16px"></div><div id="weeklyPurchasesStats" style="margin-top:16px"></div><div id="weeklyNewClientsStats" style="margin-top:16px"></div>
+    </div>
+  </details>
+
+  <details class="statsTheme" open><summary class="statsThemeHead"><span>👥</span><div><strong>3. Clients et fidélité</strong><small>Fréquence de visite, fidélisation, meilleurs clients et relances</small></div></summary>
+    <div class="card"><h3 style="margin-top:0">🔁 Fidélisation en un coup d’œil</h3><div id="statsRetentionSummary" class="clientMetricGrid"></div><p class="statNote">Les retours sont calculés uniquement à partir des achats datés enregistrés dans l’application.</p></div>
+    <div class="card" id="visitFrequencyStats">
+      <h3 style="margin-top:0">⏱️ Fréquence moyenne des visites</h3>
+      <p class="muted small">Calculée à partir des jours distincts où chaque client a effectué un achat. Plusieurs achats le même jour comptent comme une seule visite.</p>
+      <div id="visitFrequencySummary" class="clientMetricGrid"></div><div id="visitFrequencyTable"></div><button id="visitFrequencyToggle" class="secondary statsToggle" onclick="toggleVisitFrequencyStats()" style="display:none">Afficher tous les clients</button>
+    </div>
+    <div class="card"><h3 style="margin-top:0">👤 Nombre d’achats par client</h3><p class="muted small">Top 5 affiché par défaut, classé du plus grand nombre d’achats au plus petit.</p><div id="purchaseClientStats"></div><button id="purchaseStatsToggle" class="secondary statsToggle" onclick="togglePurchaseStats()" style="display:none">Afficher tous les clients</button></div>
+    <div class="card"><h3 style="margin-top:0">👥 Vue d’ensemble des clients</h3><div id="clientStats"></div></div>
+    <div class="card"><h3 style="margin-top:0">🏆 Meilleurs clients</h3><div id="topClient"></div></div>
+    <div class="card" id="clientInsights"><h3 style="margin-top:0">💡 Analyse de la clientèle</h3><div id="clientInsightsContent"></div></div>
+    <div class="card" id="relanceCard"><h3 style="margin-top:0">🔔 Clients à revoir</h3><p class="muted small">Clients dont le dernier achat remonte à au moins 30 jours. La liste est calculée depuis l’historique enregistré.</p><div id="relanceList"></div></div>
+  </details>
+
+  <details class="statsTheme" open><summary class="statsThemeHead"><span>🎟️</span><div><strong>4. Réductions et encaissements</strong><small>Bons de fidélité, remises ponctuelles et total encaissé</small></div></summary>
+    <div class="card" id="discountStatsCard"><h3 style="margin-top:0">🎟️ Suivi des réductions</h3><div id="discountStats"></div></div>
+    <div class="card" id="profitabilityCard"><h3 style="margin-top:0">💶 Encaissements et indicateurs commerciaux</h3><p class="muted small">Vue de pilotage basée sur les achats enregistrés : ce n’est pas une marge comptable, car les coûts d’achat des produits ne sont pas saisis.</p><div id="profitabilityStats" class="clientMetricGrid"></div></div>
+  </details>
+
+  <details class="statsTheme" open><summary class="statsThemeHead"><span>🎯</span><div><strong>5. Prévisions et objectifs</strong><small>Rythme de la journée, de la semaine, du mois et de l’année</small></div></summary>
+    <div class="card"><h3 style="margin-top:0">🎯 Objectifs et rythme</h3><div id="statsGoalSummary"></div></div>
+  </details>
+</section>
+</main>
+<footer>Vap' et Moi · V18 statistiques organisées</footer>
+
+<script>
+const KEY='vapetmoi_fidelite_v1';
+const HISTORICAL_KEY=KEY+'_historical_monthly_ca';
+const INITIAL_HISTORICAL_CA={
+  '2025-11':1458.96,'2025-12':2336.45,'2026-01':2639.70,'2026-02':2657.42,
+  '2026-03':4381.29,'2026-04':3914.19,'2026-05':4518.34,'2026-06':3981.55,
+  '2026-07':3385.42,'2026-08':1820.61,'2026-09':3637.57
+};
+// Initialisation uniquement si aucun historique n’existe : ne jamais écraser un historique déjà enregistré.
+if(!localStorage.getItem(HISTORICAL_KEY)) localStorage.setItem(HISTORICAL_KEY,JSON.stringify(INITIAL_HISTORICAL_CA));
+let historicalCA={...INITIAL_HISTORICAL_CA,...JSON.parse(localStorage.getItem(HISTORICAL_KEY)||'{}')};
+const LEGACY_CLIENT_DATE='2026-10-05T10:00:00';
+let clients=JSON.parse(localStorage.getItem(KEY)||'[]');
+let settings=JSON.parse(localStorage.getItem(KEY+'_settings')||'{}');
+let showAllPurchaseStats=false;
+let showAllVisitFrequencyStats=false;
+
+function normalizeClient(c){
+  c.total=Number(c.total||0); c.purchases=Number(c.purchases||0); c.usedRewards=Number(c.usedRewards||0); c.manualRewards=Number(c.manualRewards||0); c.manualRewardHistory=Array.isArray(c.manualRewardHistory)?c.manualRewardHistory:[];
+  c.phone=c.phone||''; c.email=c.email||''; c.notes=c.notes||'';
+  c.history=Array.isArray(c.history)?c.history:[];
+  // Requested fictitious date for old client records that did not have one.
+  if(!c.createdAt) c.createdAt=LEGACY_CLIENT_DATE;
+  return c;
+}
+clients=clients.map(normalizeClient);
+function save(){clients=clients.map(normalizeClient);localStorage.setItem(KEY,JSON.stringify(clients));updateAll()}
+function setGoal(){settings.goal=Math.max(0,Number(document.getElementById('monthlyGoal').value||0));localStorage.setItem(KEY+'_settings',JSON.stringify(settings));updateAll()}
+function setWeeklyGoal(){settings.weeklyGoal=Math.max(0,Number(document.getElementById('weeklyGoal').value||0));localStorage.setItem(KEY+'_settings',JSON.stringify(settings));updateAll()}
+function showPage(id,btn){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  if(btn){document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));btn.classList.add('active')}
+  updateAll();
+}
+function rewards(total){return Math.floor(total/50)*5}
+function availableReward(c){return Math.max(0,rewards(Number(c.total||0))+Number(c.manualRewards||0)-Number(c.usedRewards||0))}
+function rewardSummary(c){const regularEarned=rewards(Number(c.total||0));const manualEarned=Math.max(0,Number(c.manualRewards||0));const earned=regularEarned+manualEarned;const used=Math.max(0,Number(c.usedRewards||0));const available=availableReward(c);return {earned,used,available,earnedCount:Math.floor(Number(c.total||0)/50)+Math.floor(manualEarned/5),usedCount:Math.floor(used/5),availableCount:Math.floor(available/5),manualEarned}}
+function esc(s){return String(s||'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]))}
+function escJs(s){return String(s||'').replace(/\\/g,'\\\\').replace(/'/g,"\\'")}
+function allPurchases(){return clients.flatMap(c=>(c.history||[]).map(p=>({...p,client:c.name})))}
+function dateOf(p){return new Date(p.date)}
+function safelyPaid(p){const n=Number(p&&p.paid);return Number.isFinite(n)?n:0}
+function sameDay(d,a){return d.toDateString()===a.toDateString()}
+function monthKey(d){return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')}
+function fmt(n){return Number(n||0).toLocaleString('fr-FR',{minimumFractionDigits:2,maximumFractionDigits:2})+' €'}
+function dateFmt(d){return new Date(d).toLocaleDateString('fr-FR')}
+function clientVisitMetrics(c){
+  const days=[...new Set((c.history||[]).map(p=>{const d=new Date(p.date);if(!Number.isFinite(d.getTime()))return null;d.setHours(0,0,0,0);return d.getTime()}).filter(v=>v!==null))].sort((a,b)=>a-b);
+  const gaps=[];for(let i=1;i<days.length;i++)gaps.push(Math.round((days[i]-days[i-1])/86400000));
+  const average=gaps.length?gaps.reduce((a,b)=>a+b,0)/gaps.length:null;
+  const last=days.length?Math.max(0,Math.floor((new Date().setHours(0,0,0,0)-days[days.length-1])/86400000)):null;
+  let regularity='Pas assez d’historique';
+  if(gaps.length>=2){const mean=average||1;const variance=gaps.reduce((sum,g)=>sum+(g-mean)**2,0)/gaps.length;const cv=Math.sqrt(variance)/mean;regularity=cv<=0.35?'Très régulière':cv<=0.7?'Assez régulière':'Variable';}
+  else if(gaps.length===1)regularity='À confirmer';
+  return {days:days.length,average,last,regularity};
+}
+function frequencyLabel(days){if(days===null)return 'Pas assez d’historique';if(days<1)return 'Plusieurs visites le même jour';return 'Environ tous les '+Math.round(days)+' jours';}
+function updateClientOptions(){
+  const s=document.getElementById('clientName'); if(!s)return; const cur=s.value;
+  s.innerHTML='<option value="">— Sélectionner un client —</option>'+[...clients].sort((a,b)=>a.name.localeCompare(b.name,'fr')).map(c=>`<option value="${esc(c.name)}">${esc(c.name)}</option>`).join('');
+  if(clients.some(c=>c.name===cur))s.value=cur;
+}
+function updatePurchaseBox(){
+  const name=document.getElementById('clientName')?.value||'', amount=Math.max(0,parseFloat(document.getElementById('amount')?.value)||0);
+  const exceptional=Math.max(0,parseFloat(document.getElementById('exceptionalDiscount')?.value)||0);
+  const c=clients.find(x=>x.name.toLowerCase()===name.toLowerCase()), box=document.getElementById('rewardBox'), use=document.getElementById('useReward');
+  document.getElementById('linkedClientInfo').textContent=c?`👤 Achat lié à ${c.name} · ${c.purchases} achat(s) · ${fmt(c.total)} cumulés.`:'';
+  if(!c||availableReward(c)<5){box.style.display='none';if(use)use.checked=false;}
+  else {box.style.display='block';document.getElementById('availableReward').textContent=availableReward(c).toFixed(0)+' €';}
+  const rewardDiscount=use&&use.checked&&c&&availableReward(c)>=5?5:0;
+  const totalDiscount=rewardDiscount+exceptional;
+  const payableBox=document.getElementById('payableBox');
+  if(exceptional>amount && amount>0){payableBox.innerHTML='<span style="color:#b42318">⚠️ La réduction exceptionnelle ne peut pas dépasser le montant de l’achat.</span>';return;}
+  if(amount>0)payableBox.innerHTML=`Réduction fidélité : <strong>${fmt(rewardDiscount)}</strong> · Réduction exceptionnelle : <strong>${fmt(exceptional)}</strong><br>Réduction totale : <strong>${fmt(totalDiscount)}</strong> · À payer : <strong>${fmt(Math.max(0,amount-totalDiscount))}</strong>`;
+  else payableBox.textContent='';
+}
+function toggleNewClient(show){
+  const b=document.getElementById('newClientBox');const v=typeof show==='boolean'?show:b.style.display==='none';b.style.display=v?'block':'none';
+  if(v)document.getElementById('newClientName').focus();
+}
+function addClient(){
+  const name=document.getElementById('newClientName').value.trim(),msg=document.getElementById('clientMessage');
+  if(!name){msg.textContent='⚠️ Indique le nom et le prénom.';return}
+  if(clients.some(c=>c.name.toLowerCase()===name.toLowerCase())){msg.textContent='⚠️ Ce client existe déjà.';return}
+  const c={name,phone:document.getElementById('newClientPhone').value.trim(),email:document.getElementById('newClientEmail').value.trim(),notes:document.getElementById('newClientNotes').value.trim(),total:0,purchases:0,usedRewards:0,history:[],createdAt:new Date().toISOString()};
+  clients.push(c);save();
+  ['newClientName','newClientPhone','newClientEmail','newClientNotes'].forEach(id=>document.getElementById(id).value='');
+  toggleNewClient(false); document.getElementById('search').value='';
+}
+function addPurchase(){
+  const name=document.getElementById('clientName').value.trim(),amount=parseFloat(document.getElementById('amount').value),use=document.getElementById('useReward').checked,exceptional=Math.round(Math.max(0,parseFloat(document.getElementById('exceptionalDiscount').value)||0)*100)/100,msg=document.getElementById('message');
+  if(!name||!Number.isFinite(amount)||amount<=0){msg.textContent='⚠️ Indique un client et un montant valide.';return}
+  const c=clients.find(x=>x.name.toLowerCase()===name.toLowerCase());if(!c)return;
+  if(use&&availableReward(c)<5){msg.textContent='⚠️ Aucun bon de 5 € disponible.';return}
+  if(exceptional>amount){msg.textContent='⚠️ La réduction exceptionnelle ne peut pas dépasser le montant de l’achat.';return}
+  const rewardDiscount=use?5:0,discount=rewardDiscount+exceptional,paid=Math.max(0,Math.round((amount-discount)*100)/100);
+  c.total=Math.round((c.total+paid)*100)/100;c.purchases++;if(use)c.usedRewards+=5;
+  c.history.push({id:crypto.randomUUID?crypto.randomUUID():String(Date.now()),date:new Date().toISOString(),amount,discount,exceptionalDiscount:exceptional,rewardDiscount,paid});
+  save();msg.innerHTML=`✅ Achat enregistré pour ${esc(c.name)} · payé ${fmt(paid)} · réduction totale ${fmt(discount)} · cagnotte ${availableReward(c).toFixed(0)} €`;
+  document.getElementById('amount').value='';document.getElementById('exceptionalDiscount').value='0';document.getElementById('useReward').checked=false;updatePurchaseBox();
+}
+function renderClients(){
+  const q=(document.getElementById('search')?.value||'').toLowerCase(),list=document.getElementById('clientList');
+  const sort=document.getElementById('clientSort')?.value||'name';
+  const arr=clients.filter(c=>c.name.toLowerCase().includes(q));
+  const lastPurchase=c=>c.history&&c.history.length?Math.max(...c.history.map(p=>new Date(p.date).getTime()).filter(Number.isFinite)):0;
+  arr.sort((a,b)=>{
+    if(sort==='nameDesc') return b.name.localeCompare(a.name,'fr');
+    if(sort==='totalDesc') return b.total-a.total || a.name.localeCompare(b.name,'fr');
+    if(sort==='avgDesc') return (b.purchases?b.total/b.purchases:0)-(a.purchases?a.total/a.purchases:0) || a.name.localeCompare(b.name,'fr');
+    if(sort==='purchasesDesc') return b.purchases-a.purchases || a.name.localeCompare(b.name,'fr');
+    if(sort==='recent') return lastPurchase(b)-lastPurchase(a) || a.name.localeCompare(b.name,'fr');
+    if(sort==='rewardsDesc') return availableReward(b)-availableReward(a) || a.name.localeCompare(b.name,'fr');
+    return a.name.localeCompare(b.name,'fr');
+  });
+  list.innerHTML=arr.length?arr.map(c=>`<div class="client" onclick="showClient('${escJs(c.name)}')" style="cursor:pointer"><div><strong>${esc(c.name)}</strong><br><span class="small muted">${c.purchases} achat(s) · ${fmt(c.total)} · panier moyen ${fmt(c.purchases?c.total/c.purchases:0)} · créé le ${dateFmt(c.createdAt)}</span></div><span class="badge">🎁 ${availableReward(c)} €</span></div>`).join(''):'<p class="muted">Aucun client trouvé.</p>';
+  const ranked=[...clients].sort((a,b)=>b.total-a.total).slice(0,5);
+  document.getElementById('clientRanking').innerHTML=ranked.length?ranked.map((c,i)=>`<div class="row"><span>${i+1}. <strong>${esc(c.name)}</strong></span><strong>${fmt(c.total)}</strong></div>`).join(''):'<span class="muted">Aucun client.</span>';
+}
+function showClient(name){
+  const c=clients.find(x=>x.name===name);if(!c)return;const old=document.getElementById('clientDetail');if(old)old.remove();
+  const avg=c.purchases?c.total/c.purchases:0, target=c.total%50, progress=Math.min(100,target/50*100), reward=rewardSummary(c);
+  const visit=clientVisitMetrics(c), hist=[...c.history].reverse();
+  const lastVisit=visit.last===null?'Aucun achat':visit.last===0?'Aujourd’hui':`Il y a ${visit.last} jour(s)`;
+  const box=document.createElement('div');box.id='clientDetail';box.className='card';box.style.border='2px solid #d8eadf';
+  box.innerHTML=`<div class="row"><h3 style="margin:0">👤 ${esc(c.name)}</h3><button class="secondary" onclick="document.getElementById('clientDetail').remove()">Fermer</button></div>
+  <p class="small muted">Création : ${dateFmt(c.createdAt)} · ${c.purchases} achat(s)</p>
+  <div class="actions" style="margin:12px 0"><button class="primary" style="flex:1;min-height:52px;font-size:1.05rem" onclick="selectClientForPurchase('${escJs(c.name)}')">🛒 Faire un achat pour ce client</button></div>
+  <h3>💶 Résumé du client</h3>
+  <div class="grid"><div><strong>CA client</strong><br>${fmt(c.total)}</div><div><strong>Panier moyen</strong><br>${fmt(avg)}</div><div><strong>Nombre d’achats</strong><br>${c.purchases}</div></div>
+  <h3>🧾 Historique des achats</h3>${hist.length?hist.map(p=>`<div class="row small" style="border-bottom:1px solid var(--border);padding:8px 0"><span>📅 ${dateFmt(p.date)} · ${fmt(p.amount)}${p.discount?' · 🎁 -'+fmt(p.discount):''}${p.exceptionalDiscount?' (dont remise exceptionnelle '+fmt(p.exceptionalDiscount)+')':''} · payé ${fmt(p.paid)}</span><button class="secondary" onclick="cancelPurchase('${escJs(c.name)}','${escJs(p.id)}')">Annuler</button></div>`).join(''):'<p class="muted">Aucun achat.</p>'}
+  <h3>🎁 Fidélité</h3>
+  <div class="grid grid4">
+    <div class="stat"><strong>${reward.earnedCount}</strong><span class="kpiTitle">Bons gagnés</span><div class="small muted">${fmt(reward.earned)}</div></div>
+    <div class="stat"><strong>${reward.usedCount}</strong><span class="kpiTitle">Bons utilisés</span><div class="small muted">${fmt(reward.used)}</div></div>
+    <div class="stat"><strong>${reward.availableCount}</strong><span class="kpiTitle">Bons disponibles</span><div class="small muted">${fmt(reward.available)}</div></div>
+  </div>
+  <div class="row"><span>Progression vers le prochain bon</span><strong>${fmt(target)} / 50,00 €</strong></div>
+  <div class="progress"><div style="width:${progress}%"></div></div><p class="small muted">Encore ${fmt(50-target)} d’achats nets pour gagner le prochain bon de 5 €. Les bons disponibles sont calculés séparément des bons déjà utilisés.</p>
+  <h3>📊 Statistiques du client</h3>
+  <div class="clientMetricGrid">
+    <div class="stat"><strong>${frequencyLabel(visit.average)}</strong><span class="kpiTitle">Fréquence moyenne entre les visites</span></div>
+    <div class="stat"><strong>${lastVisit}</strong><span class="kpiTitle">Dernier passage</span></div>
+    <div class="stat"><strong>${esc(visit.regularity)}</strong><span class="kpiTitle">Régularité estimée</span></div>
+    <div class="stat"><strong>${fmt(c.total)}</strong><span class="kpiTitle">Valeur totale · ${visit.days} jour(s) de visite</span></div>
+  </div>
+  <div style="margin-top:12px;padding:12px;background:#f3f7f4;border-radius:14px">
+    <strong>🎁 Ajouter un bon exceptionnel</strong>
+    <p class="small muted">Tu peux créditer manuellement un bon de 5 € dans la cagnotte, sans modifier les achats ni le CA du client.</p>
+    <button class="secondary" onclick="addManualReward('${escJs(c.name)}')">＋ Ajouter un bon de 5 €</button>
+    ${c.manualRewardHistory.length?`<p class="small muted">Bons ajoutés manuellement : ${c.manualRewardHistory.length} · ${fmt(c.manualRewards)} au total</p>`:''}
+  </div>
+  <p class="small muted">La fréquence est calculée sur les jours distincts où un achat a été enregistré. Elle devient plus fiable avec plusieurs visites.</p>
+  <h3>👤 Informations du client</h3>
+  <p>📞 ${esc(c.phone||'Non renseigné')}<br>✉️ ${esc(c.email||'Non renseigné')}<br>📝 ${esc(c.notes||'Aucune note')}</p>
+  <div class="actions"><button class="secondary" onclick="startEditClient('${escJs(c.name)}')">✏️ Modifier la fiche</button></div>
+  <div id="editClientBox" style="display:none;margin-top:14px;padding:14px;background:#f3f7f4;border-radius:14px">
+    <h3 style="margin-top:0">✏️ Modifier les informations</h3>
+    <label for="editClientName">Nom et prénom</label><input id="editClientName" value="${esc(c.name)}" maxlength="120">
+    <label for="editClientPhone">Téléphone</label><input id="editClientPhone" value="${esc(c.phone||'')}" maxlength="80">
+    <label for="editClientEmail">E-mail</label><input id="editClientEmail" type="email" value="${esc(c.email||'')}" maxlength="160">
+    <label for="editClientNotes">Notes</label><textarea id="editClientNotes" rows="3" maxlength="1000">${esc(c.notes||'')}</textarea>
+    <p id="editClientMessage" class="small muted"></p>
+    <div class="actions"><button class="primary" onclick="saveClientEdits('${escJs(c.name)}')">💾 Enregistrer les modifications</button><button class="secondary" onclick="document.getElementById('editClientBox').style.display='none'">Annuler</button></div>
+  </div>
+  <button class="danger" style="margin-top:12px" onclick="deleteClient('${escJs(c.name)}')">🗑️ Supprimer la fiche</button>`;
+  document.getElementById('clientList').prepend(box);
+  box.scrollIntoView({behavior:'smooth',block:'start'});
+}
+function addManualReward(name){
+  const c=clients.find(x=>x.name===name);if(!c)return;
+  if(!confirm(`Ajouter un bon exceptionnel de 5 € à la cagnotte de ${c.name} ?`))return;
+  c.manualRewards=Math.round((Number(c.manualRewards||0)+5)*100)/100;
+  if(!Array.isArray(c.manualRewardHistory))c.manualRewardHistory=[];
+  c.manualRewardHistory.push({amount:5,date:new Date().toISOString(),type:'manual'});
+  save();showClient(name);
+}
+function startEditClient(name){const box=document.getElementById('editClientBox');if(box)box.style.display='block';}
+function saveClientEdits(oldName){
+  const c=clients.find(x=>x.name===oldName);if(!c)return;
+  const name=document.getElementById('editClientName').value.trim();
+  const msg=document.getElementById('editClientMessage');
+  if(!name){msg.textContent='⚠️ Le nom et le prénom sont obligatoires.';return;}
+  if(clients.some(x=>x!==c&&x.name.toLocaleLowerCase('fr')===name.toLocaleLowerCase('fr'))){msg.textContent='⚠️ Un autre client porte déjà ce nom.';return;}
+  c.name=name;c.phone=document.getElementById('editClientPhone').value.trim();c.email=document.getElementById('editClientEmail').value.trim();c.notes=document.getElementById('editClientNotes').value.trim();
+  save();showClient(name);
+}
+function cancelPurchase(name,id){
+  const c=clients.find(x=>x.name===name);if(!c)return;const i=c.history.findIndex(p=>p.id===id);if(i<0)return;const p=c.history[i];
+  if(!confirm(`Annuler l'achat de ${fmt(p.amount)} pour ${c.name} ?`))return;
+  c.total=Math.round(Math.max(0,c.total-Number(p.paid))*100)/100;c.purchases=Math.max(0,c.purchases-1);if(p.rewardDiscount)c.usedRewards=Math.max(0,c.usedRewards-Number(p.rewardDiscount));c.history.splice(i,1);save();showClient(name);
+}
+function deleteClient(name){
+  const c=clients.find(x=>x.name===name);if(!c)return;
+  if(!confirm(`Supprimer définitivement ${c.name} et son historique ?`))return;
+  clients=clients.filter(x=>x.name!==name);save();const d=document.getElementById('clientDetail');if(d)d.remove();
+}
+function selectClientForPurchase(name){document.getElementById('clientName').value=name;updatePurchaseBox();showPage('achat')}
+function setDashboard(){
+  const now=new Date(),ps=allPurchases(),today=ps.filter(p=>sameDay(dateOf(p),now)),mk=monthKey(now),month=ps.filter(p=>monthKey(dateOf(p))===mk);
+  const weekStart=new Date(now);weekStart.setHours(0,0,0,0);weekStart.setDate(weekStart.getDate()-((weekStart.getDay()+6)%7));
+  const week=ps.filter(p=>dateOf(p)>=weekStart&&dateOf(p)<=now);
+  const todayCA=today.reduce((s,p)=>s+safelyPaid(p),0),weekCA=week.reduce((s,p)=>s+safelyPaid(p),0),monthCA=month.reduce((s,p)=>s+safelyPaid(p),0),allCA=ps.reduce((s,p)=>s+safelyPaid(p),0);
+  document.getElementById('dToday').textContent=fmt(todayCA);document.getElementById('dWeek').textContent=fmt(weekCA);document.getElementById('dMonth').textContent=fmt(monthCA);document.getElementById('dBasket').textContent=fmt(ps.length?allCA/ps.length:0);document.getElementById('dClients').textContent=clients.length;
+  const goal=Number(settings.goal??4000);document.getElementById('monthlyGoal').value=goal;document.getElementById('goalText').textContent=fmt(goal);
+  const pct=goal?Math.min(100,monthCA/goal*100):0;document.getElementById('goalBar').style.width=pct+'%';document.getElementById('goalMessage').textContent=`${pct.toFixed(0)} % atteint · ${fmt(Math.max(0,goal-monthCA))} restant pour l'objectif mensuel.`;
+  const weeklyGoal=Number(settings.weeklyGoal??1000);document.getElementById('weeklyGoal').value=weeklyGoal;document.getElementById('weeklyGoalText').textContent=fmt(weeklyGoal);
+  const weeklyPct=weeklyGoal?Math.min(100,weekCA/weeklyGoal*100):0;document.getElementById('weeklyGoalBar').style.width=weeklyPct+'%';document.getElementById('weeklyGoalMessage').textContent=`Cette semaine : ${fmt(weekCA)} · ${weeklyPct.toFixed(0)} % atteint · ${fmt(Math.max(0,weeklyGoal-weekCA))} restant.`;
+  const inactive=clients.filter(c=>c.history.length&&((Date.now()-new Date(c.history[c.history.length-1].date).getTime())/86400000)>=30).sort((a,b)=>new Date(a.history.at(-1).date)-new Date(b.history.at(-1).date));
+  const rewardsReady=clients.filter(c=>availableReward(c)>=5);
+  let a='';if(inactive.length)a+=`<div class="alert">👥 <strong>${inactive.length} client(s)</strong> n'ont pas acheté depuis au moins 30 jours.</div>`;
+  if(rewardsReady.length)a+=`<div class="alert">🎁 <strong>${rewardsReady.length} client(s)</strong> ont un bon disponible.</div>`;
+  if(!a)a='<p class="muted">✅ Rien de particulier à signaler.</p>';document.getElementById('alerts').innerHTML=a;
+}
+function monthLabel(key){const [y,m]=key.split('-').map(Number);return new Date(y,m-1,1).toLocaleDateString('fr-FR',{month:'long',year:'numeric'});}
+function historicalEntries(){return Object.entries(historicalCA).filter(([k,v])=>/^\d{4}-\d{2}$/.test(k)&&v!==null&&v!==''&&Number.isFinite(Number(v))).sort((a,b)=>a[0].localeCompare(b[0]));}
+function renderHistoricalCA(){
+  const entries=historicalEntries();
+  const vals=entries.map(([,v])=>Number(v));
+  const total=vals.reduce((a,b)=>a+b,0),avg=vals.length?total/vals.length:0;
+  const best=entries.length?entries.reduce((a,b)=>Number(a[1])>=Number(b[1])?a:b):null;
+  const latest=entries.length?entries[entries.length-1]:null;
+  document.getElementById('historicalSummary').innerHTML=`<div class="stat"><strong>${fmt(total)}</strong><span class="kpiTitle">Total sur ${entries.length} mois</span></div><div class="stat"><strong>${fmt(avg)}</strong><span class="kpiTitle">Moyenne mensuelle</span></div><div class="stat"><strong>${best?fmt(best[1]):'—'}</strong><span class="kpiTitle">Meilleur mois${best?' · '+esc(monthLabel(best[0])):''}</span></div><div class="stat"><strong>${latest?fmt(latest[1]):'—'}</strong><span class="kpiTitle">Dernier mois renseigné${latest?' · '+esc(monthLabel(latest[0])):''}</span></div>`;
+  const chart=document.getElementById('historicalChart');
+  if(!entries.length){chart.innerHTML='<p class="muted">Aucun chiffre historique renseigné.</p>';document.getElementById('historicalTable').innerHTML='';return;}
+  const W=Math.max(600,entries.length*62),H=260,L=46,R=12,T=18,B=62,plotW=W-L-R,plotH=H-T-B;
+  const max=Math.max(...vals)*1.12||1,step=plotW/Math.max(1,entries.length-1);
+  const points=entries.map(([k,v],i)=>({x:entries.length===1?L+plotW/2:L+i*step,y:T+plotH-(Number(v)/max)*plotH,k,v:Number(v)}));
+  const grid=[0,.25,.5,.75,1].map(t=>{const y=T+plotH-t*plotH;return `<line x1="${L}" y1="${y}" x2="${W-R}" y2="${y}" stroke="#dce6df" stroke-dasharray="3 4"/><text x="${L-7}" y="${y+4}" text-anchor="end" font-size="10" fill="#66756e">${Math.round(max*t).toLocaleString('fr-FR')}</text>`}).join('');
+  const poly=points.map(p=>`${p.x},${p.y}`).join(' ');
+  const circles=points.map(p=>`<circle cx="${p.x}" cy="${p.y}" r="4" fill="#1f7a46"><title>${esc(monthLabel(p.k))} : ${fmt(p.v)}</title></circle><text x="${p.x}" y="${p.y-9}" text-anchor="middle" font-size="10" font-weight="bold" fill="#173126">${(p.v/1000).toLocaleString('fr-FR',{maximumFractionDigits:1})}k</text><text transform="translate(${p.x},${H-B+12}) rotate(-35)" text-anchor="end" font-size="10" fill="#66756e">${esc(monthLabel(p.k))}</text>`).join('');
+  chart.innerHTML=`<svg class="historyChart" viewBox="0 0 ${W} ${H}" role="img" aria-label="Évolution du chiffre d’affaires mensuel historique">${grid}<polyline points="${poly}" fill="none" stroke="#1f7a46" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>${circles}</svg>`;
+  document.getElementById('historicalTable').innerHTML=`<table><thead><tr><th>Mois</th><th>CA historique</th><th>Évolution vs mois précédent</th></tr></thead><tbody>${entries.map(([k,v],i)=>{const prev=i?Number(entries[i-1][1]):null;const change=prev!==null&&prev!==0?(Number(v)-prev)/prev*100:null;return `<tr><td>${esc(monthLabel(k))}</td><td><strong>${fmt(v)}</strong></td><td>${change===null?'—':`<span style="color:${change>=0?'#17613a':'#b42318'}">${change>=0?'+':''}${change.toFixed(1).replace('.',',')} %</span>`}</td></tr>`}).join('')}</tbody></table>`;
+}
+
+function setStats(){
+  const ps=allPurchases(),total=ps.reduce((s,p)=>s+p.paid,0),avg=ps.length?total/ps.length:0;
+  document.getElementById('sClients').textContent=clients.length;document.getElementById('sPurchases').textContent=ps.length;document.getElementById('sCA').textContent=fmt(total);document.getElementById('sBasket').textContent=fmt(avg);
+  const now=new Date(),thisMonth=ps.filter(p=>monthKey(dateOf(p))===monthKey(now)),prev=new Date(now.getFullYear(),now.getMonth()-1,1),prevPs=ps.filter(p=>monthKey(dateOf(p))===monthKey(prev));
+  const ca=a=>a.reduce((s,p)=>s+p.paid,0);
+  const cur=ca(thisMonth);
+  // Pour le mois précédent, privilégier le CA historique si ce mois est renseigné.
+  const prevKey=monthKey(prev),prevCA=Object.prototype.hasOwnProperty.call(historicalCA,prevKey)?Number(historicalCA[prevKey]):ca(prevPs);
+  const delta=prevCA?((cur-prevCA)/prevCA*100):0;
+  // Cumul annuel hybride sans double comptage : pour chaque mois, prendre le CA historique
+  // quand il existe, sinon les ventes enregistrées dans l'application pour ce mois.
+  let annualCA=0;
+  for(let m=0;m<12;m++){
+    const d=new Date(now.getFullYear(),m,1),key=monthKey(d);
+    if(Object.prototype.hasOwnProperty.call(historicalCA,key)&&historicalCA[key]!==null&&historicalCA[key]!==''&&Number.isFinite(Number(historicalCA[key]))) annualCA+=Number(historicalCA[key]);
+    else annualCA+=ca(ps.filter(p=>monthKey(dateOf(p))===key));
+  }
+  const todayCA=ps.filter(p=>sameDay(dateOf(p),now)).reduce((s,p)=>s+p.paid,0);
+  document.getElementById('periodStats').innerHTML=
+    `<div class="periodMetric"><span>Aujourd'hui</span><strong>${fmt(todayCA)}</strong></div>`+
+    `<div class="periodMetric"><span>Ce mois · ventes enregistrées</span><strong>${fmt(cur)}</strong></div>`+
+    `<div class="periodMetric"><span>Mois précédent · historique si disponible</span><strong>${fmt(prevCA)}</strong></div>`+
+    `<div class="periodMetric"><span>Cumul annuel · historique + mois sans historique</span><strong>${fmt(annualCA)}</strong></div>`;
+  const isCurrentMonthComplete = now.getDate() === new Date(now.getFullYear(),now.getMonth()+1,0).getDate();
+  const comparisonLabel = isCurrentMonthComplete
+    ? `Évolution vs mois précédent : <strong>${prevCA?((delta>=0?'+':'')+delta.toFixed(1).replace('.',',')+' %'):'non disponible'}</strong>`
+    : `Comparaison complète disponible en fin de mois`;
+  document.getElementById('comparisonStats').innerHTML=
+    `<p>CA du mois en cours : <strong>${fmt(cur)}</strong></p>`+
+    `<p>CA du mois précédent : <strong>${fmt(prevCA)}</strong></p>`+
+    `<p>${comparisonLabel}</p>`+
+    `<p>Achats ce mois : <strong>${thisMonth.length}</strong></p>`+
+    `<p>Achats mois précédent : <strong>${prevPs.length}</strong></p>`+
+    `<p class="statNote">Le mois en cours n'est pas terminé : son CA ne doit pas être interprété comme une baisse ou une hausse définitive par rapport au mois précédent.</p>`;
+  const statsWeekStart=new Date(now);statsWeekStart.setHours(0,0,0,0);statsWeekStart.setDate(statsWeekStart.getDate()-((statsWeekStart.getDay()+6)%7));
+  const statsPrevWeekStart=new Date(statsWeekStart);statsPrevWeekStart.setDate(statsPrevWeekStart.getDate()-7);
+  const statsPrevWeekEnd=new Date(statsWeekStart);
+  const statsThisWeek=ps.filter(p=>dateOf(p)>=statsWeekStart&&dateOf(p)<=now);
+  const statsPreviousWeek=ps.filter(p=>dateOf(p)>=statsPrevWeekStart&&dateOf(p)<statsPrevWeekEnd);
+  const statsThisWeekCA=ca(statsThisWeek),statsPreviousWeekCA=ca(statsPreviousWeek);
+  const weeklyGoal=Number(settings.weeklyGoal??1000),monthlyGoal=Number(settings.goal??4000);
+  const statsWeekPct=weeklyGoal>0?Math.min(100,statsThisWeekCA/weeklyGoal*100):0,statsMonthPct=monthlyGoal>0?Math.min(100,cur/monthlyGoal*100):0;
+  const statsWeekChange=statsPreviousWeekCA>0?(statsThisWeekCA-statsPreviousWeekCA)/statsPreviousWeekCA*100:null;
+  document.getElementById('statsGoalSummary').innerHTML=
+    `<div class="periodMetric"><span>Objectif semaine · ${fmt(weeklyGoal)}</span><strong>${fmt(statsThisWeekCA)} · ${statsWeekPct.toFixed(0)} %</strong></div>`+
+    `<div class="progress"><div style="width:${statsWeekPct}%"></div></div>`+
+    `<p class="small muted">${fmt(Math.max(0,weeklyGoal-statsThisWeekCA))} restant pour atteindre l’objectif hebdomadaire.</p>`+
+    `<div class="periodMetric"><span>Objectif mois · ${fmt(monthlyGoal)}</span><strong>${fmt(cur)} · ${statsMonthPct.toFixed(0)} %</strong></div>`+
+    `<div class="progress"><div style="width:${statsMonthPct}%"></div></div>`+
+    `<p class="small muted">${fmt(Math.max(0,monthlyGoal-cur))} restant pour atteindre l’objectif mensuel.</p>`+
+    `<div class="periodMetric"><span>CA semaine précédente</span><strong>${fmt(statsPreviousWeekCA)}</strong></div>`+
+    `<div class="periodMetric"><span>Évolution semaine en cours</span><strong>${statsWeekChange===null?'Comparaison indisponible':`${statsWeekChange>=0?'+':''}${statsWeekChange.toFixed(1).replace('.',',')} %`}</strong></div>`+
+    `<p class="statNote">La semaine est calculée du lundi à aujourd’hui. La comparaison porte sur la semaine précédente complète et peut donc évoluer jusqu’à dimanche.</p>`;
+  // Les anciennes fiches gardent leur date fictive du 5 octobre 2026 et comptent dans les statistiques d'octobre.
+  const legacyDate = new Date(LEGACY_CLIENT_DATE).getTime();
+  const legacyClients = clients.filter(c=>new Date(c.createdAt).getTime()===legacyDate).length;
+  const newClients=clients.filter(c=>{
+    const created = new Date(c.createdAt);
+    return Number.isFinite(created.getTime()) &&
+      created.getMonth()===now.getMonth() &&
+      created.getFullYear()===now.getFullYear();
+  }).length;
+  const activeClients=clients.filter(c=>c.purchases>0);
+  const repeatClients=clients.filter(c=>c.purchases>=2);
+  const neverPurchased=clients.filter(c=>c.purchases===0);
+  const repeatRate=activeClients.length?repeatClients.length/activeClients.length*100:0;
+  const avgPurchases=activeClients.length?activeClients.reduce((sum,c)=>sum+c.purchases,0)/activeClients.length:0;
+  const monthReturning=clients.filter(c=>{
+    const hist=(c.history||[]).map(p=>dateOf(p)).filter(d=>Number.isFinite(d.getTime())).sort((a,b)=>a-b);
+    return hist.some(d=>monthKey(d)===monthKey(now)) && hist.some(d=>monthKey(d)!==monthKey(now) && d<new Date(now.getFullYear(),now.getMonth(),1));
+  });
+  const monthPurchases=ps.filter(p=>monthKey(dateOf(p))===monthKey(now));
+  const monthBuyerIds=new Set(monthPurchases.map(p=>String(p.client||'').toLocaleLowerCase('fr')));
+  const monthlyUniqueBuyers=monthBuyerIds.size;
+  document.getElementById('statsRetentionSummary').innerHTML=
+    `<div class="stat"><strong>${newClients}</strong><span class="kpiTitle">Nouveaux clients ce mois</span></div>`+
+    `<div class="stat"><strong>${monthlyUniqueBuyers}</strong><span class="kpiTitle">Clients acheteurs ce mois</span></div>`+
+    `<div class="stat"><strong>${monthReturning.length}</strong><span class="kpiTitle">Clients revenus ce mois</span></div>`+
+    `<div class="stat"><strong>${repeatRate.toLocaleString('fr-FR',{maximumFractionDigits:1})} %</strong><span class="kpiTitle">Clients ayant acheté 2 fois ou plus</span></div>`;
+  const frequencyRows=clients.map(c=>({client:c,metrics:clientVisitMetrics(c)})).filter(x=>x.metrics.average!==null).sort((a,b)=>a.metrics.average-b.metrics.average);
+  const averageClientInterval=frequencyRows.length?frequencyRows.reduce((sum,x)=>sum+x.metrics.average,0)/frequencyRows.length:null;
+  const enoughHistory=frequencyRows.length;
+  const allVisitDays=clients.reduce((sum,c)=>sum+clientVisitMetrics(c).days,0);
+  document.getElementById('visitFrequencySummary').innerHTML=
+    `<div class="stat"><strong>${averageClientInterval===null?'—':Math.round(averageClientInterval)+' jours'}</strong><span class="kpiTitle">Intervalle moyen entre visites, par client</span></div>`+
+    `<div class="stat"><strong>${enoughHistory}</strong><span class="kpiTitle">Clients avec au moins 2 jours de visite</span></div>`;
+  const visibleFrequencyRows=showAllVisitFrequencyStats?frequencyRows:frequencyRows.slice(0,5);
+  document.getElementById('visitFrequencyTable').innerHTML=frequencyRows.length?
+    `<div style="overflow-x:auto;margin-top:12px"><table><thead><tr><th>Client</th><th>Visites distinctes</th><th>Intervalle moyen</th><th>Dernière visite</th></tr></thead><tbody>`+
+    visibleFrequencyRows.map(x=>`<tr><td>${esc(x.client.name)}</td><td>${x.metrics.days}</td><td>${Math.round(x.metrics.average)} jour(s)</td><td>${x.metrics.last===0?'Aujourd’hui':x.metrics.last===null?'Aucun achat':`Il y a ${x.metrics.last} jour(s)`}</td></tr>`).join('')+
+    `</tbody></table></div><p class="statNote">Top 5 par défaut, classé de l’intervalle le plus court au plus long. Les clients avec une seule journée de visite ne sont pas classés faute d’intervalle calculable.</p>`:
+    `<p class="muted">Pas encore assez d’historique : il faut au moins deux jours de visite enregistrés pour calculer un intervalle.</p>`;
+  const frequencyToggle=document.getElementById('visitFrequencyToggle');
+  frequencyToggle.style.display=frequencyRows.length>5?'block':'none';
+  frequencyToggle.textContent=showAllVisitFrequencyStats?'Réduire la liste':'Afficher les '+frequencyRows.length+' clients';
+  document.getElementById('clientStats').innerHTML=
+    `<div class="clientMetricGrid">`+
+    `<div class="stat"><strong>${clients.length}</strong><span class="kpiTitle">Clients enregistrés</span></div>`+
+    `<div class="stat"><strong>${newClients}</strong><span class="kpiTitle">Nouveaux clients ce mois</span></div>`+
+    `<div class="stat"><strong>${activeClients.length}</strong><span class="kpiTitle">Clients ayant déjà acheté</span></div>`+
+    `<div class="stat"><strong>${repeatClients.length}</strong><span class="kpiTitle">Clients revenus (2 achats ou +)</span></div>`+
+    `<div class="stat"><strong>${repeatRate.toLocaleString('fr-FR',{maximumFractionDigits:1})} %</strong><span class="kpiTitle">Taux de clients fidèles</span></div>`+
+    `<div class="stat"><strong>${avgPurchases.toLocaleString('fr-FR',{maximumFractionDigits:1})}</strong><span class="kpiTitle">Achats moyens par client actif</span></div>`+
+    `<div class="stat"><strong>${monthlyUniqueBuyers}</strong><span class="kpiTitle">Clients ayant acheté ce mois</span></div>`+
+    `<div class="stat"><strong>${monthReturning.length}</strong><span class="kpiTitle">Clients revenus ce mois</span></div>`+
+    `<div class="stat"><strong>${neverPurchased.length}</strong><span class="kpiTitle">Aucun achat enregistré</span></div>`+
+    `</div>`+
+    `<p class="statNote">Un client est considéré comme revenu s’il a effectué au moins 2 achats enregistrés. « Revenus ce mois » désigne les clients ayant acheté ce mois-ci et avant le mois en cours. Les calculs reposent sur l’historique présent dans l’application.</p>`+
+    (legacyClients?`<p class="statNote">${legacyClients} ancienne(s) fiche(s) conservent la date attribuée du 05/10/2026 et sont incluses dans les statistiques des nouveaux clients.</p>`:'');
+  // Comparatif des 9 semaines couvrant environ deux mois : CA, ventes, panier moyen et nouveaux clients.
+  const weekStartFor = d => { const x=new Date(d); x.setHours(0,0,0,0); x.setDate(x.getDate()-((x.getDay()+6)%7)); return x; };
+  const currentWeekStart=weekStartFor(now);
+  const weeklyBuckets=[];
+  for(let i=8;i>=0;i--){
+    const start=new Date(currentWeekStart); start.setDate(start.getDate()-i*7);
+    const end=new Date(start); end.setDate(end.getDate()+7);
+    const weekSales=ps.filter(p=>{const d=dateOf(p);return d>=start&&d<end;});
+    const registrations=clients.filter(c=>{const d=new Date(c.createdAt);return Number.isFinite(d.getTime())&&d>=start&&d<end;}).length;
+    const revenue=weekSales.reduce((sum,p)=>sum+Number(p.paid||0),0);
+    weeklyBuckets.push({start,end,registrations,purchases:weekSales.length,revenue,basket:weekSales.length?revenue/weekSales.length:0,current:i===0});
+  }
+  const weekLabel=w=>`${w.start.toLocaleDateString('fr-FR',{day:'2-digit',month:'2-digit'})}–${new Date(Math.min(w.end.getTime()-86400000,now.getTime())).toLocaleDateString('fr-FR',{day:'2-digit',month:'2-digit'})}${w.current?' · en cours':''}`;
+  const renderWeeklyTable=(rows,field,label,format=v=>String(v))=>`<h4>${label}</h4><div class="tableWrap"><table><thead><tr><th>Semaine</th><th>Résultat</th><th>Évolution</th></tr></thead><tbody>${rows.map((w,i)=>{const prev=i?rows[i-1][field]:null;const val=w[field];const diff=prev===null||prev===0?null:(val-prev)/prev*100;return `<tr><td>${weekLabel(w)}</td><td><strong>${format(val)}</strong></td><td>${diff===null?'—':`${diff>=0?'+':''}${diff.toFixed(1).replace('.',',')} %`}</td></tr>`;}).join('')}</tbody></table></div>`;
+  document.getElementById('weeklyCAStats').innerHTML=renderWeeklyTable(weeklyBuckets,'revenue','💶 Chiffre d’affaires encaissé par semaine',fmt)+`<h4>🧺 Panier moyen par semaine</h4><div class="tableWrap"><table><thead><tr><th>Semaine</th><th>Panier moyen</th><th>Ventes</th></tr></thead><tbody>${weeklyBuckets.map(w=>`<tr><td>${weekLabel(w)}</td><td><strong>${fmt(w.basket)}</strong></td><td>${w.purchases}</td></tr>`).join('')}</tbody></table></div>`;
+  document.getElementById('weeklyNewClientsStats').innerHTML=renderWeeklyTable(weeklyBuckets,'registrations','👤 Nouveaux clients par semaine');
+  document.getElementById('weeklyPurchasesStats').innerHTML=renderWeeklyTable(weeklyBuckets,'purchases','🛍️ Nombre de ventes par semaine');
+  const maxWeeklyCA=Math.max(1,...weeklyBuckets.map(w=>w.revenue));
+  document.getElementById('weeklyCAChart').innerHTML=`<h4>📉 Courbe visuelle du CA hebdomadaire</h4><div style="display:flex;align-items:flex-end;gap:5px;height:150px;padding:8px 2px 0;border-bottom:1px solid var(--border)">${weeklyBuckets.map(w=>`<div title="${weekLabel(w)} : ${fmt(w.revenue)}" style="flex:1;min-width:12px;height:${Math.max(3,w.revenue/maxWeeklyCA*125)}px;background:${w.current?'#b7791f':'#1f7a46'};border-radius:5px 5px 0 0;position:relative"><span style="position:absolute;bottom:-22px;left:50%;transform:translateX(-50%);font-size:10px;white-space:nowrap;color:var(--muted)">${w.start.toLocaleDateString('fr-FR',{day:'2-digit',month:'2-digit'})}</span></div>`).join('')}</div><p class="statNote" style="margin-top:28px">Barres vertes : semaines terminées · barre dorée : semaine en cours (partielle). Montants calculés à partir des ventes enregistrées dans l’application.</p>`;
+  // Alerte comparable : CA de cette semaine à date contre les mêmes jours d'ouverture de la semaine précédente.
+  const elapsedOpenDays=Math.max(1,Math.min(6,((now.getDay()+6)%7)+1));
+  const comparableStart=new Date(currentWeekStart);comparableStart.setDate(comparableStart.getDate()-7);
+  const comparableEnd=new Date(comparableStart);comparableEnd.setDate(comparableEnd.getDate()+elapsedOpenDays-1);comparableEnd.setHours(23,59,59,999);
+  const currentComparableCA=weeklyBuckets[weeklyBuckets.length-1].revenue;
+  const previousComparableCA=ps.filter(p=>dateOf(p)>=comparableStart&&dateOf(p)<=comparableEnd).reduce((sum,p)=>sum+Number(p.paid||0),0);
+  const alertBox=document.getElementById('weeklyAlert');
+  if(previousComparableCA>0){const change=(currentComparableCA-previousComparableCA)/previousComparableCA*100;alertBox.innerHTML=change<=-15?`<div class="alert red"><strong>⚠️ Baisse à surveiller : ${change.toFixed(1).replace('.',',')} %</strong><br>Le CA de cette semaine est inférieur d’au moins 15 % à celui des mêmes jours de la semaine précédente (${fmt(currentComparableCA)} contre ${fmt(previousComparableCA)}). Vérifie le nombre de ventes et le panier moyen ci-dessous.</div>`:change>=10?`<div class="alert"><strong>📈 Bonne dynamique : +${change.toFixed(1).replace('.',',')} %</strong><br>Le CA est en hausse par rapport aux mêmes jours de la semaine précédente (${fmt(currentComparableCA)} contre ${fmt(previousComparableCA)}).</div>`:`<div class="alert"><strong>📊 Évolution du CA : ${change>=0?'+':''}${change.toFixed(1).replace('.',',')} %</strong><br>Comparaison à jours équivalents avec la semaine précédente.</div>`;}else{alertBox.innerHTML='<p class="statNote">Pas encore assez de ventes sur la période précédente pour établir une alerte fiable.</p>'; }
+  const top=[...clients].sort((a,b)=>b.total-a.total).slice(0,5);document.getElementById('topClient').innerHTML=top.length?top.map((c,i)=>`<div class="row"><span>${i+1}. <strong>${esc(c.name)}</strong></span><span>${fmt(c.total)} · ${c.purchases} achat(s)</span></div>`).join(''):'<p class="muted">Aucun achat.</p>';
+  // Analyse complémentaire : les estimations utilisent uniquement les ventes enregistrées, pas le CA historique saisi manuellement.
+  const regular=[...clients].filter(c=>c.purchases>=2).sort((a,b)=>{
+    const ma=clientVisitMetrics(a),mb=clientVisitMetrics(b);
+    const ga=ma.average===null?1e9:ma.average,gb=mb.average===null?1e9:mb.average;
+    return (gb-ga) || b.purchases-a.purchases || b.total-a.total;
+  }).slice(0,5);
+  const revenueTop=[...clients].filter(c=>c.purchases>0).sort((a,b)=>b.total-a.total).slice(0,5);
+  const basketTop=[...clients].filter(c=>c.purchases>0).sort((a,b)=>(b.total/b.purchases)-(a.total/a.purchases)).slice(0,5);
+  const buyerNames=new Set(thisMonth.map(p=>String(p.client||'').toLocaleLowerCase('fr')));
+  const returnedNames=new Set(monthReturning.map(c=>c.name.toLocaleLowerCase('fr')));
+  const returnRate=buyerNames.size?returnedNames.size/buyerNames.size*100:0;
+  // Prévision fondée sur les derniers chiffres enregistrés, avec ouverture du lundi au samedi.
+  const isOpenDay=d=>d.getDay()!==0;
+  const dayStart=d=>{const x=new Date(d);x.setHours(0,0,0,0);return x;};
+  const salesCA=arr=>arr.reduce((sum,p)=>sum+Number(p.paid||0),0);
+  const todayStart=dayStart(now);
+  // Moyenne par jour d'ouverture sur les 7 derniers jours ouverts (jours sans vente inclus).
+  let recentOpenDays=0,recentCA=0;
+  for(let offset=1;recentOpenDays<7&&offset<=20;offset++){
+    const d=new Date(todayStart);d.setDate(d.getDate()-offset);
+    if(isOpenDay(d)){recentOpenDays++;recentCA+=salesCA(ps.filter(p=>sameDay(dateOf(p),d)));}
+  }
+  const recentDailyAverage=recentOpenDays?recentCA/recentOpenDays:0;
+  const todayRecordedCA=salesCA(ps.filter(p=>sameDay(dateOf(p),now)));
+  const forecastDay=Math.max(todayRecordedCA,recentDailyAverage);
+  const countOpenDays=(start,end)=>{let count=0;for(let d=dayStart(start);d<=dayStart(end);d.setDate(d.getDate()+1)){if(isOpenDay(d))count++;}return count;};
+  const monday=new Date(todayStart);monday.setDate(monday.getDate()-((monday.getDay()+6)%7));
+  const sunday=new Date(monday);sunday.setDate(sunday.getDate()+6);
+  const weekToDate=ps.filter(p=>{const d=dateOf(p);return d>=monday&&d<new Date(todayStart.getTime()+86400000);});
+  const remainingWeekDays=countOpenDays(new Date(todayStart.getTime()+86400000),sunday);
+  const elapsedWeekOpenDays=countOpenDays(monday,now);
+  const weekRecordedCA=salesCA(weekToDate);
+  const weekObservedAverage=elapsedWeekOpenDays?weekRecordedCA/elapsedWeekOpenDays:0;
+  // En début de semaine, conserver la moyenne récente ; ensuite mélanger le rythme hebdomadaire et le rythme récent.
+  const weekDailyRate=elapsedWeekOpenDays>=3?(weekObservedAverage*0.6+recentDailyAverage*0.4):(recentDailyAverage||weekObservedAverage);
+  const forecastWeek=weekRecordedCA+weekDailyRate*remainingWeekDays;
+  const monthStart=new Date(now.getFullYear(),now.getMonth(),1);
+  const monthEnd=new Date(now.getFullYear(),now.getMonth()+1,0);
+  const monthToDate=ps.filter(p=>{const d=dateOf(p);return d>=monthStart&&d<new Date(todayStart.getTime()+86400000);});
+  const remainingMonthDays=countOpenDays(new Date(todayStart.getTime()+86400000),monthEnd);
+  const elapsedMonthOpenDays=countOpenDays(monthStart,now);
+  const monthRecordedCA=salesCA(monthToDate);
+  const monthObservedAverage=elapsedMonthOpenDays?monthRecordedCA/elapsedMonthOpenDays:0;
+  // Le mois courant pèse davantage lorsqu'il contient assez de jours d'ouverture observés.
+  const monthDailyRate=elapsedMonthOpenDays>=5?(monthObservedAverage*0.7+recentDailyAverage*0.3):(recentDailyAverage||monthObservedAverage);
+  const forecastMonth=monthRecordedCA+monthDailyRate*remainingMonthDays;
+  const yearStart=new Date(now.getFullYear(),0,1),yearEnd=new Date(now.getFullYear(),11,31);
+  // Prévision annuelle : reprendre le CA historique saisi pour les mois terminés,
+  // sinon les ventes enregistrées dans l'application ; pour le mois courant,
+  // prendre les ventes déjà saisies et projeter les jours d'ouverture restants.
+  let realizedBeforeCurrentMonth=0;
+  for(let m=0;m<now.getMonth();m++){
+    const d=new Date(now.getFullYear(),m,1),key=monthKey(d);
+    const monthSales=ps.filter(p=>monthKey(dateOf(p))===key);
+    const hasHistorical=Object.prototype.hasOwnProperty.call(historicalCA,key)&&historicalCA[key]!==null&&historicalCA[key]!==''&&Number.isFinite(Number(historicalCA[key]));
+    realizedBeforeCurrentMonth+=hasHistorical?Number(historicalCA[key]):salesCA(monthSales);
+  }
+  const monthToDateCA=salesCA(monthToDate);
+  const remainingYearDays=countOpenDays(new Date(todayStart.getTime()+86400000),yearEnd);
+  const yearDailyRate=elapsedMonthOpenDays>=5?monthDailyRate:recentDailyAverage;
+  const forecastYearEnd=realizedBeforeCurrentMonth+monthToDateCA+yearDailyRate*remainingYearDays;
+  const renderRank=(arr,metric)=>arr.length?arr.map((c,i)=>`<div class="row"><span>${i+1}. <strong>${esc(c.name)}</strong><br><span class="small muted">${c.purchases} achat(s)</span></span><strong>${metric(c)}</strong></div>`).join(''):'<p class="muted small">Pas assez de données.</p>';
+  document.getElementById('clientInsightsContent').innerHTML=
+    `<div class="clientMetricGrid">`+
+    `<div class="stat"><strong>${returnRate.toLocaleString('fr-FR',{maximumFractionDigits:1})} %</strong><span class="kpiTitle">Taux de retour mensuel</span></div>`+
+    `<div class="stat"><strong>${fmt(forecastWeek)}</strong><span class="kpiTitle">Prévision CA semaine</span></div>`+
+    `<div class="stat"><strong>${fmt(forecastMonth)}</strong><span class="kpiTitle">Prévision CA mois</span></div>`+
+    `<div class="stat"><strong>${fmt(weeklyGoal)}</strong><span class="kpiTitle">Objectif semaine</span></div>`+
+    `</div>`+
+    `<p class="statNote">Prévision indicative calculée au rythme moyen observé depuis le début de la semaine/du mois, uniquement sur les jours d’ouverture (lundi à samedi ; boutique fermée le dimanche). Le taux de retour mesure la part des acheteurs du mois qui avaient déjà acheté avant ce mois. Les données sont limitées à l’historique enregistré.</p>`+
+    `<div class="grid">`+
+    `<div><h4>🔁 Top 5 des clients réguliers</h4>${renderRank(regular,c=>{const m=clientVisitMetrics(c);return m.average===null?'—':'~ '+Math.round(m.average)+' j entre visites'})}</div>`+
+    `<div><h4>💶 Top 5 par chiffre d’affaires</h4>${renderRank(revenueTop,c=>fmt(c.total))}</div>`+
+    `<div><h4>🧺 Top 5 par panier moyen</h4>${renderRank(basketTop,c=>fmt(c.purchases?c.total/c.purchases:0))}</div>`+
+    `<div><h4>🔮 Trajectoire des objectifs — prévisionnel</h4><div class="periodMetric"><span>Journée estimée</span><strong>${fmt(forecastDay)}</strong></div><div class="periodMetric"><span>Semaine estimée / objectif 1 000 €</span><strong>${fmt(forecastWeek)} · ${weeklyGoal>0?(forecastWeek/weeklyGoal*100).toFixed(0):'—'} %</strong></div><div class="periodMetric"><span>Mois estimé / objectif 4 000 €</span><strong>${fmt(forecastMonth)} · ${monthlyGoal>0?(forecastMonth/monthlyGoal*100).toFixed(0):'—'} %</strong></div><div class="periodMetric"><span>Prévision cumulée au 31 décembre ${now.getFullYear()}</span><strong>${fmt(forecastYearEnd)}</strong></div><p class="statNote">Méthode : journée basée sur la moyenne des 7 derniers jours d’ouverture (ou le CA déjà réalisé si supérieur) ; semaine basée sur les ventes de la semaine et, à partir de 3 jours d’ouverture observés, sur une moyenne mêlant le rythme de la semaine et la moyenne récente ; mois basé sur les ventes du mois et, à partir de 5 jours d’ouverture, sur une moyenne mêlant le rythme mensuel et la moyenne récente ; année basée sur le CA historique des mois terminés (ou les ventes enregistrées à défaut), le CA du mois en cours et le rythme estimé pour les jours d’ouverture restants. Boutique fermée le dimanche. Ce sont des estimations, pas des garanties ; elles sont plus fiables si les achats sont saisis régulièrement.</p></div>`+
+    `</div>`;
+  renderPurchaseStats(ps,now);
+  renderHistoricalCA();
+}
+
+function renderV15Insights(ps, now){
+  const money = n => fmt(n);
+  const gross = ps.reduce((a,p)=>a+Number(p.amount||0),0);
+  const paid = ps.reduce((a,p)=>a+Number(p.paid||0),0);
+  const loyalty = ps.reduce((a,p)=>a+Number(p.rewardDiscount||0),0);
+  const exceptional = ps.reduce((a,p)=>a+Number(p.exceptionalDiscount||0),0);
+  // Legacy purchases may contain a total discount but no split by discount type.
+  const recordedDiscounts = ps.reduce((a,p)=>a+Math.max(0,Number(p.amount||0)-Number(p.paid??p.amount??0)),0);
+  const knownDiscounts = loyalty + exceptional;
+  const legacyUnclassified = Math.max(0,Math.round((recordedDiscounts-knownDiscounts)*100)/100);
+  const box=document.getElementById('discountStats');
+  if(box) box.innerHTML=`<div class="periodMetric"><span>CA avant réductions (achats enregistrés)</span><strong>${money(gross)}</strong></div><div class="periodMetric"><span>Réductions fidélité identifiées</span><strong>${money(loyalty)}</strong></div><div class="periodMetric"><span>Réductions exceptionnelles identifiées</span><strong>${money(exceptional)}</strong></div><div class="periodMetric"><span>Anciennes réductions non détaillées</span><strong>${money(legacyUnclassified)}</strong></div><div class="periodMetric"><span>Total des réductions constatées</span><strong>${money(recordedDiscounts)}</strong></div><div class="periodMetric"><span>CA encaissé après réductions</span><strong>${money(paid)}</strong></div><p class="statNote">Les anciens achats peuvent ne pas préciser si une remise était un bon de fidélité ou une réduction exceptionnelle. Ces remises sont affichées séparément comme « non détaillées » et ne sont pas attribuées arbitrairement à la fidélité. Les données historiques saisies manuellement restent séparées.</p>`;
+  const netDiscounts=recordedDiscounts;
+  const todayPurchases=ps.filter(p=>sameDay(new Date(p.date),now));
+  const monthPurchases=ps.filter(p=>monthKey(new Date(p.date))===monthKey(now));
+  const sumField=(arr,key)=>arr.reduce((sum,p)=>sum+Number(p[key]||0),0);
+  const todayPaid=sumField(todayPurchases,'paid'), monthPaid=sumField(monthPurchases,'paid');
+  const profit=document.getElementById('profitabilityStats');
+  if(profit) profit.innerHTML=`<div class="stat"><strong>${money(gross)}</strong><span class="kpiTitle">Total avant réductions</span></div><div class="stat"><strong>${money(netDiscounts)}</strong><span class="kpiTitle">Total des réductions</span></div><div class="stat"><strong>${money(paid)}</strong><span class="kpiTitle">Total encaissé</span></div><div class="stat"><strong>${money(todayPaid)}</strong><span class="kpiTitle">Encaissé aujourd’hui</span></div><div class="stat"><strong>${money(monthPaid)}</strong><span class="kpiTitle">Encaissé ce mois</span></div><div class="stat"><strong>${ps.length?money(paid/ps.length):money(0)}</strong><span class="kpiTitle">Panier moyen encaissé</span></div><p class="statNote">Les montants sont calculés à partir des achats enregistrés. Les achats annulés et supprimés ne sont plus comptabilisés. La marge réelle nécessite aussi les coûts d’achat des produits.</p>`;
+  const cutoff=new Date(now);cutoff.setHours(0,0,0,0);cutoff.setDate(cutoff.getDate()-30);
+  const stale=clients.map(c=>{const dates=(c.history||[]).map(p=>new Date(p.date)).filter(d=>Number.isFinite(d.getTime()));const last=dates.length?new Date(Math.max(...dates.map(d=>d.getTime()))):null;return {c,last};}).filter(x=>x.last&&x.last<cutoff).sort((a,b)=>a.last-b.last);
+  const list=document.getElementById('relanceList');
+  if(list) list.innerHTML=stale.length?stale.slice(0,10).map(({c,last})=>`<div class="row" style="border-bottom:1px solid var(--border);padding:8px 0"><div><strong>${esc(c.name)}</strong><br><span class="small muted">Dernier achat : ${dateFmt(last)} · ${Math.floor((now-last)/(86400000))} jours</span></div><button class="secondary" onclick="showClient('${escJs(c.name)}')">Ouvrir la fiche</button></div>`).join(''):'<p class="muted">Aucun client avec un achat datant de plus de 30 jours, ou pas assez d’historique.</p>';
+}
+
+function renderPurchaseStats(ps,now){
+  const ca=arr=>arr.reduce((s,p)=>s+Number(p.paid||0),0);
+  const monday=new Date(now);monday.setHours(0,0,0,0);monday.setDate(monday.getDate()-((monday.getDay()+6)%7));
+  const nextMonday=new Date(monday);nextMonday.setDate(nextMonday.getDate()+7);
+  const week=ps.filter(p=>{const d=dateOf(p);return d>=monday&&d<nextMonday;});
+  const today=ps.filter(p=>sameDay(dateOf(p),now));
+  document.getElementById('purchasePeriodStats').innerHTML=
+    `<div class="periodMetric"><span>Aujourd’hui</span><strong>${today.length} achat(s) · ${fmt(ca(today))}</strong></div>`+
+    `<div class="periodMetric"><span>Cette semaine (lundi à aujourd’hui)</span><strong>${ps.filter(p=>dateOf(p)>=monday&&dateOf(p)<=now).length} achat(s) · ${fmt(ca(ps.filter(p=>dateOf(p)>=monday&&dateOf(p)<=now)))}</strong></div>`+
+    `<div class="periodMetric"><span>Semaine complète (lundi à dimanche)</span><strong>${week.length} achat(s) · ${fmt(ca(week))}</strong></div>`;
+  const daily=[];
+  for(let i=6;i>=0;i--){
+    const d=new Date(now);d.setHours(0,0,0,0);d.setDate(d.getDate()-i);
+    const end=new Date(d);end.setDate(end.getDate()+1);
+    const entries=ps.filter(p=>dateOf(p)>=d&&dateOf(p)<end);
+    daily.push({d,entries});
+  }
+  document.getElementById('dailyPurchaseStats').innerHTML=
+    `<h4>Les 7 derniers jours</h4><div class="tableWrap"><table><thead><tr><th>Jour</th><th>Nombre d’achats</th><th>CA enregistré</th></tr></thead><tbody>`+
+    daily.map(x=>`<tr><td>${dateFmt(x.d)}</td><td>${x.entries.length}</td><td>${fmt(ca(x.entries))}</td></tr>`).join('')+
+    `</tbody></table></div>`;
+  const ranked=[...clients].sort((a,b)=>b.purchases-a.purchases||(b.purchases?b.total/b.purchases:0)-(a.purchases?a.total/a.purchases:0)||a.name.localeCompare(b.name,'fr'));
+  const visible=showAllPurchaseStats?ranked:ranked.slice(0,5);
+  document.getElementById('purchaseClientStats').innerHTML=visible.length?
+    visible.map((c,i)=>`<div class="purchaseRank"><span class="rankNum">${i+1}</span><div class="rankInfo"><strong>${esc(c.name)}</strong><small>${fmt(c.total)} cumulés</small></div><div class="rankValues"><strong>${c.purchases} achat${c.purchases>1?'s':''}</strong><small>Moy. ${fmt(c.purchases?c.total/c.purchases:0)}</small></div></div>`).join(''):
+    '<p class="muted">Aucun client enregistré.</p>';
+  const toggle=document.getElementById('purchaseStatsToggle');
+  toggle.style.display=ranked.length>5?'block':'none';
+  toggle.textContent=showAllPurchaseStats?'Réduire la liste':'Afficher les '+ranked.length+' clients';
+}
+
+function togglePurchaseStats(){showAllPurchaseStats=!showAllPurchaseStats;renderPurchaseStats(allPurchases(),new Date())}
+function toggleVisitFrequencyStats(){showAllVisitFrequencyStats=!showAllVisitFrequencyStats;renderPurchaseStats(allPurchases(),new Date())}
+
+function exportData(){
+  const payload={version:'V16',exportedAt:new Date().toISOString(),storageKey:KEY,settings,clients,historicalCA};
+  const blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='Vap_et_Moi_sauvegarde_V16.json';a.click();URL.revokeObjectURL(a.href);
+}
+function restoreData(e){
+  const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{
+    try{const data=JSON.parse(r.result);if(!Array.isArray(data.clients))throw new Error();if(data.clients.some(c=>!c||typeof c.name!=='string'||!c.name.trim()))throw new Error();
+      if(!confirm('Restaurer cette sauvegarde et remplacer les données actuelles ?'))return;
+      clients=data.clients.map(normalizeClient);settings=data.settings||settings;if(data.historicalCA&&typeof data.historicalCA==='object'){historicalCA=data.historicalCA;localStorage.setItem(HISTORICAL_KEY,JSON.stringify(historicalCA));}else{historicalCA={...JSON.parse(localStorage.getItem(HISTORICAL_KEY)||'{}')};}localStorage.setItem(KEY,JSON.stringify(clients));localStorage.setItem(KEY+'_settings',JSON.stringify(settings));updateAll();alert('Sauvegarde restaurée.');
+    }catch(err){alert('Fichier de sauvegarde invalide.')}
+  };r.readAsText(f);e.target.value='';
+}
+function renderDailyOps(now){
+  const ps=allPurchases().filter(p=>{const d=new Date(p.date);return Number.isFinite(d.getTime())&&sameDay(d,now)});
+  const sum=(key)=>ps.reduce((n,p)=>n+Math.max(0,Number(p[key]||0)),0);
+  const gross=ps.reduce((n,p)=>n+Math.max(0,Number(p.amount??p.paid??0)),0);
+  const paid=ps.reduce((n,p)=>n+Math.max(0,Number(p.paid??p.amount??0)),0);
+  const totalDiscount=Math.max(sum('discount'),Math.round((gross-paid)*100)/100);
+  const set=(id,val)=>{const el=document.getElementById(id);if(el)el.textContent=val};
+  set('opsTodayCount',String(ps.length));set('opsTodayDiscount',fmt(totalDiscount));set('opsTodayLoyalty',fmt(sum('rewardDiscount')));set('opsTodayExceptional',fmt(sum('exceptionalDiscount')));
+}
+function updateAll(){clients=clients.map(normalizeClient);updateClientOptions();renderClients();updatePurchaseBox();setDashboard();setStats();renderV15Insights(allPurchases(),new Date());renderDailyOps(new Date())}
+updateAll();
+</script>
+</body>
+</html>
