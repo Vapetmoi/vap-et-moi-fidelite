@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#0b2f20">
-<title>Vap’ et Moi – V22</title>
+<title>Vap’ et Moi – V23</title>
 <link rel="manifest" href="manifest.webmanifest">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -108,7 +108,7 @@ button,input,select,textarea{touch-action:manipulation}button{min-height:42px}bu
 <body>
 <header>
   <h1>🌿 Vap' et Moi</h1>
-  <p>V22 · votre boutique, partout avec vous</p>
+  <p>V23 · votre boutique, partout avec vous</p>
 </header>
 <div id="offlineNotice" role="status" hidden>📴 Hors connexion : consultation uniquement. Les modifications sont désactivées.</div>
 <nav class="appNav">
@@ -240,7 +240,7 @@ button,input,select,textarea{touch-action:manipulation}button{min-height:42px}bu
 
 <section id="stats" class="page">
   <div class="card">
-    <h2>📊 Tableau de bord — V22</h2>
+    <h2>📊 Tableau de bord — V23</h2>
     <p class="muted small">Statistiques regroupées par sujet : chiffre d’affaires, ventes et panier moyen, clients, encaissements, puis prévisions.</p>
     <div class="actionRow"><button class="secondary" onclick="exportSalesCSV()">📄 Exporter les ventes (CSV)</button><button class="secondary" onclick="exportData()">💾 Sauvegarder les données (JSON)</button></div>
     <div class="grid4">
@@ -308,10 +308,13 @@ button,input,select,textarea{touch-action:manipulation}button{min-height:42px}bu
     <div id="analysisSummary" aria-live="polite"></div>
   </div>
   <div class="card"><h3>📈 Indicateurs comparés</h3><div id="analysisMetrics" class="clientMetricGrid"></div></div>
-  <div class="card"><h3>💡 Pistes d’action</h3><div id="analysisActions"></div><p class="small muted">Les recommandations sont des suggestions calculées à partir des tendances observées, pas des garanties de résultat.</p></div>
+  <details class="statsTheme" open><summary class="statsThemeHead"><span>👥</span><div><strong>Clients à suivre</strong><small>Inactivité, fréquence et fidélité</small></div></summary><div class="card"><div id="analysisRetention"></div></div></details>
+  <details class="statsTheme"><summary class="statsThemeHead"><span>🏆</span><div><strong>Meilleurs clients</strong><small>Classement calculé à partir des achats enregistrés</small></div></summary><div class="card"><div id="analysisTopClients"></div></div></details>
+  <details class="statsTheme"><summary class="statsThemeHead"><span>🎯</span><div><strong>Prévision et objectif</strong><small>Projection indicative basée sur les jours d’ouverture</small></div></summary><div class="card"><div id="analysisForecast"></div></div></details>
+  <div class="card"><h3>💡 Plan d’action conseillé</h3><div id="analysisActions"></div><p class="small muted">Les recommandations sont calculées à partir des données enregistrées. Une projection n’est pas une garantie. La marge réelle nécessite les coûts d’achat.</p><div class="actions" style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px"><button class="btn" onclick="exportAnalysisCSV()">Exporter l’analyse CSV</button><button class="btn secondary" onclick="window.print()">Imprimer le bilan</button></div></div>
 </section>
 </main>
-<footer>Vap’ et Moi · V22 · analyse & pilotage</footer>
+<footer>Vap’ et Moi · V23 · analyse & pilotage</footer>
 
 <script>
 const KEY='vapetmoi_fidelite_v1';
@@ -909,27 +912,42 @@ function trendPhrase(label,cur,prev,format='number'){
   if(diff===0)return `${label} est stable (${fmtVal(cur)}).`;
   return `${label} ${diff>0?'est en hausse':'est en baisse'} de ${Math.abs(diff).toLocaleString('fr-FR',{maximumFractionDigits:1})} % (${fmtVal(cur)} contre ${fmtVal(prev)} sur la période précédente).`;
 }
+function analysisClientLabel(c){return [c.firstName,c.name].filter(Boolean).join(' ')||c.name||'Client'}
+function analysisDate(p){return new Date(p.date)}
+function daysBetween(a,b){return Math.floor((b-a)/86400000)}
 function renderAnalysis(){
-  const root=document.getElementById('analysisSummary'); if(!root)return;
-  const kind=document.getElementById('analysisPeriod')?.value||'month', d=analysisData(kind);
-  const periodName=kind==='week'?'la semaine':kind==='year'?'l’année':'le mois';
-  const insights=[];
-  insights.push({icon:d.ca>=d.prevCA?'↗':'↘',title:'Chiffre d’affaires',text:trendPhrase(`Le CA de ${periodName}`,d.ca,d.prevCA,'money'),good:d.ca>=d.prevCA});
-  insights.push({icon:d.tx>=d.prevTx?'🛍️':'⚠️',title:'Nombre de ventes',text:trendPhrase(`Le nombre de ventes sur ${periodName}`,d.tx,d.prevTx),good:d.tx>=d.prevTx});
-  insights.push({icon:d.newCurrent>=d.newPrev?'👥':'⚠️',title:'Nouveaux clients',text:trendPhrase(`Les nouveaux clients sur ${periodName}`,d.newCurrent,d.newPrev),good:d.newCurrent>=d.newPrev});
-  insights.push({icon:'🧺',title:'Panier moyen',text:trendPhrase(`Le panier moyen sur ${periodName}`,d.basket,d.prevBasket,'money'),good:d.basket>=d.prevBasket});
-  root.innerHTML=insights.map(i=>`<div class="analysisInsight"><div class="analysisIcon">${i.icon}</div><div><strong>${esc(i.title)}</strong><p>${esc(i.text)}</p></div></div>`).join('');
-  const metrics=[['CA période',fmt(d.ca)],['CA période précédente',fmt(d.prevCA)],['Ventes',String(d.tx)],['Ventes précédentes',String(d.prevTx)],['Nouveaux clients',String(d.newCurrent)],['Panier moyen',fmt(d.basket)]];
-  document.getElementById('analysisMetrics').innerHTML=metrics.map(([l,v])=>`<div class="metricCard"><span>${esc(l)}</span><strong>${esc(v)}</strong></div>`).join('');
-  const actions=[];
-  if(d.ca<d.prevCA)actions.push('Le CA recule : examine les jours moins actifs et les clients habituels qui ne sont pas revenus récemment.');
-  if(d.tx<d.prevTx)actions.push('Le nombre de ventes baisse : vérifie si les visites sont moins fréquentes, même si le panier moyen progresse.');
-  if(d.newCurrent<d.newPrev)actions.push('Les nouveaux clients sont moins nombreux : pense à demander aux clients satisfaits de recommander la boutique.');
-  if(d.basket<d.prevBasket)actions.push('Le panier moyen diminue : observe les catégories et les achats associés, si ces informations sont enregistrées dans tes ventes.');
-  if(!actions.length)actions.push('Les indicateurs suivis ne montrent pas de baisse simultanée : continue à surveiller le CA, le nombre de ventes et les nouveaux clients chaque semaine.');
-  actions.push(`Clients enregistrés au total : ${clients.length}. Les clients créés avant l’existence de la date de création sont comptés avec une date technique historique ; les comparaisons de nouveaux clients anciens peuvent donc être approximatives.`);
-  document.getElementById('analysisActions').innerHTML=actions.map(a=>`<p class="analysisAction">💡 ${esc(a)}</p>`).join('');
+ const root=document.getElementById('analysisSummary');if(!root)return;
+ const kind=document.getElementById('analysisPeriod')?.value||'month',d=analysisData(kind),now=new Date(),periodName=kind==='week'?'la semaine':kind==='year'?'l’année':'le mois';
+ const insights=[];
+ insights.push({icon:d.ca>=d.prevCA?'↗':'↘',title:'Chiffre d’affaires',text:trendPhrase(`Le CA de ${periodName}`,d.ca,d.prevCA,'money')});
+ insights.push({icon:d.tx>=d.prevTx?'🛍️':'⚠️',title:'Nombre de ventes',text:trendPhrase(`Le nombre de ventes sur ${periodName}`,d.tx,d.prevTx)});
+ insights.push({icon:d.newCurrent>=d.newPrev?'👥':'⚠️',title:'Nouveaux clients',text:trendPhrase(`Les nouveaux clients sur ${periodName}`,d.newCurrent,d.newPrev)});
+ insights.push({icon:d.basket>=d.prevBasket?'🧺':'⚠️',title:'Panier moyen',text:trendPhrase(`Le panier moyen sur ${periodName}`,d.basket,d.prevBasket,'money')});
+ root.innerHTML=insights.map(i=>`<div class="analysisInsight"><div class="analysisIcon">${i.icon}</div><div><strong>${esc(i.title)}</strong><p>${esc(i.text)}</p></div></div>`).join('');
+ const metrics=[['CA période',fmt(d.ca)],['CA période précédente',fmt(d.prevCA)],['Ventes',String(d.tx)],['Ventes précédentes',String(d.prevTx)],['Nouveaux clients',String(d.newCurrent)],['Panier moyen',fmt(d.basket)],['Clients enregistrés',String(clients.length)],['Achats enregistrés',String(allPurchases().length)]];
+ document.getElementById('analysisMetrics').innerHTML=metrics.map(([l,v])=>`<div class="metricCard"><span>${esc(l)}</span><strong>${esc(v)}</strong></div>`).join('');
+ const purchases=allPurchases().map(p=>({...p,_date:analysisDate(p)})).filter(p=>Number.isFinite(p._date.getTime()));
+ const clientStats=clients.map(c=>{const ps=(c.history||[]).map(p=>({...p,_date:analysisDate(p)})).filter(p=>Number.isFinite(p._date.getTime()));ps.sort((a,b)=>b._date-a._date);const total=ps.reduce((s,p)=>s+safelyPaid(p),0);const last=ps[0]?ps[0]._date:null;return {c,ps,total,last,days:last?daysBetween(last,now):null}});
+ const inactive=clientStats.filter(x=>x.ps.length&&x.days>=30).sort((a,b)=>b.days-a.days);
+ const never=clientStats.filter(x=>!x.ps.length);
+ document.getElementById('analysisRetention').innerHTML=`<div class="clientMetricGrid"><div class="metricCard"><span>Clients avec achat</span><strong>${clientStats.filter(x=>x.ps.length).length}</strong></div><div class="metricCard"><span>Sans achat depuis 30 j+</span><strong>${inactive.length}</strong></div><div class="metricCard"><span>Sans achat enregistré</span><strong>${never.length}</strong></div><div class="metricCard"><span>Achats par client acheteur</span><strong>${clientStats.some(x=>x.ps.length)?(purchases.length/clientStats.filter(x=>x.ps.length).length).toLocaleString('fr-FR',{maximumFractionDigits:1}):'0'}</strong></div></div><p class="small muted">${inactive.length?`À examiner en priorité : ${inactive.slice(0,5).map(x=>`${esc(analysisClientLabel(x.c))} (${x.days} j)`).join(', ')}.`:'Aucun client avec achat enregistré n’a dépassé 30 jours d’inactivité.'}</p>`;
+ const top=[...clientStats].filter(x=>x.ps.length).sort((a,b)=>b.total-a.total).slice(0,5);
+ document.getElementById('analysisTopClients').innerHTML=top.length?`<ol>${top.map(x=>`<li style="margin:8px 0"><strong>${esc(analysisClientLabel(x.c))}</strong> — ${fmt(x.total)} cumulés · ${x.ps.length} achat(s)${x.last?' · dernier achat '+x.last.toLocaleDateString('fr-FR'):''}</li>`).join('')}</ol><p class="small muted">Classement fondé sur les achats enregistrés dans les fiches, pas sur le CA historique saisi manuellement.</p>`:'Aucun achat enregistré permettant d’établir un classement.';
+ const openDaysBetween=(a,b)=>{let n=0;const cur=new Date(a);cur.setHours(12,0,0,0);while(cur<=b){if(cur.getDay()!==0)n++;cur.setDate(cur.getDate()+1)}return n};
+ const monthStart=new Date(now.getFullYear(),now.getMonth(),1);const monthEnd=new Date(now.getFullYear(),now.getMonth()+1,0);const elapsedOpen=Math.max(1,openDaysBetween(monthStart,now));const totalOpen=Math.max(1,openDaysBetween(monthStart,monthEnd));const monthSales=purchases.filter(p=>p._date.getFullYear()===now.getFullYear()&&p._date.getMonth()===now.getMonth());const monthCA=monthSales.reduce((s,p)=>s+safelyPaid(p),0);const forecast=monthCA/elapsedOpen*totalOpen;const goal=Math.max(0,Number(settings.goal||0));const remaining=Math.max(0,goal-monthCA);const openLeft=Math.max(0,totalOpen-elapsedOpen);
+ document.getElementById('analysisForecast').innerHTML=`<div class="clientMetricGrid"><div class="metricCard"><span>CA du mois enregistré</span><strong>${fmt(monthCA)}</strong></div><div class="metricCard"><span>Projection fin de mois</span><strong>${fmt(forecast)}</strong></div><div class="metricCard"><span>Objectif mensuel</span><strong>${goal?fmt(goal):'Non défini'}</strong></div><div class="metricCard"><span>À réaliser par jour ouvert</span><strong>${goal?fmt(openLeft?remaining/openLeft:remaining):'—'}</strong></div></div><p class="small muted">Projection au rythme actuel sur les jours du lundi au samedi. Elle utilise les ventes enregistrées de ce mois et ne constitue pas une garantie.</p>`;
+ const actions=[];
+ if(d.ca<d.prevCA)actions.push('Le chiffre d’affaires recule : regarde les journées moins actives et compare les achats des clients réguliers.');
+ if(d.tx<d.prevTx)actions.push('Le nombre de ventes baisse : vérifie si la fréquentation diminue, même si le panier moyen monte.');
+ if(d.newCurrent<d.newPrev)actions.push('Les nouveaux clients sont moins nombreux : surveille les recommandations et la visibilité locale.');
+ if(d.basket<d.prevBasket)actions.push('Le panier moyen diminue : examine les ventes associées et les achats complémentaires réellement enregistrés.');
+ if(inactive.length)actions.push(`${inactive.length} client(s) avec un historique d’achat n’ont pas acheté depuis au moins 30 jours : consulte leurs fiches pour décider d’une relance adaptée.`);
+ if(goal&&forecast<goal)actions.push(`Au rythme actuel, la projection est inférieure à l’objectif de ${fmt(goal)}. Il faudrait environ ${fmt(openLeft?remaining/openLeft:remaining)} de CA par jour ouvert restant pour l’atteindre.`);
+ if(!actions.length)actions.push('Aucun signal de baisse détecté dans les indicateurs sélectionnés. Continue à suivre chaque semaine le CA, le nombre de ventes et le panier moyen.');
+ document.getElementById('analysisActions').innerHTML=actions.map(a=>`<p class="analysisAction">💡 ${esc(a)}</p>`).join('');
 }
+function exportAnalysisCSV(){const d=analysisData(document.getElementById('analysisPeriod')?.value||'month');const rows=[['Indicateur','Valeur'],['CA période',d.ca.toFixed(2)],['CA période précédente',d.prevCA.toFixed(2)],['Nombre de ventes',d.tx],['Ventes période précédente',d.prevTx],['Nouveaux clients',d.newCurrent],['Nouveaux clients période précédente',d.newPrev],['Panier moyen',d.basket.toFixed(2)],['Clients enregistrés',clients.length],['Achats enregistrés',allPurchases().length]];const csv='\ufeff'+rows.map(r=>r.map(v=>'"'+String(v).replace(/"/g,'""')+'"').join(';')).join('\r\n');const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8;'}));a.download='Vap_et_Moi_analyse_V23.csv';a.click();URL.revokeObjectURL(a.href)}
+
 function updateAll(){clients=clients.map(normalizeClient);updateClientOptions();renderClients();updatePurchaseBox();setDashboard();setStats();renderV15Insights(allPurchases(),new Date());renderDailyOps(new Date());renderActivityLog();renderBackupStatus();renderAnalysis()}
 updateAll();
 updateOfflineMode();
