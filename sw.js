@@ -1,4 +1,4 @@
-const CACHE_NAME = 'vap-et-moi-v23-shell';
+const CACHE_NAME = 'vap-et-moi-v24-shell';
 const APP_FILES = ['./', './index.html', './manifest.webmanifest'];
 self.addEventListener('install', event => { event.waitUntil(caches.open(CACHE_NAME).then(cache => cache.addAll(APP_FILES)).then(() => self.skipWaiting())); });
 self.addEventListener('activate', event => { event.waitUntil(caches.keys().then(keys => Promise.all(keys.filter(key => key.startsWith('vap-et-moi-') && key !== CACHE_NAME).map(key => caches.delete(key)))).then(() => self.clients.claim())); });

@@ -1,7 +1,7 @@
 {
   "name": "Vap’ et Moi",
   "short_name": "Vap’ et Moi",
-  "description": "Gestion clients, ventes et fidélité de la boutique Vap’ et Moi",
+  "description": "Gestion clients, ventes, fidélité et analyse de Vap’ et Moi",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
