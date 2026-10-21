@@ -1,12 +1,12 @@
 {
-  "name": "Vap’ et Moi",
-  "short_name": "Vap’ et Moi",
-  "description": "Gestion clients, ventes, fidélité et analyse de Vap’ et Moi",
+  "name": "Vap’ & Moi Pro",
+  "short_name": "Vap’ & Moi",
+  "description": "Vap’ & Moi Pro — gestion clients, ventes, fidélité et analyse",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
   "orientation": "portrait-primary",
-  "background_color": "#f0f5f0",
+  "background_color": "#f5f8f4",
   "theme_color": "#123d2b",
   "icons": []
 }

@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#0b2f20">
-<title>Vap’ et Moi – V24</title>
+<title>Vap’ & Moi Pro – V25</title>
 <link rel="manifest" href="manifest.webmanifest">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -15,7 +15,7 @@
 body{margin:0;font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;background:linear-gradient(180deg,#f2f7f3 0,#f7f8f5 260px);color:var(--text);line-height:1.45} button,input,select,textarea{font:inherit} button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible,summary:focus-visible{outline:3px solid #8fc7a2;outline-offset:2px}
 header{background:linear-gradient(135deg,#09271b 0%,#174d32 62%,#2a6b45 100%);color:white;padding:22px 18px 18px;box-shadow:0 5px 18px #0b2f2015}
 header h1{margin:0;font-size:27px} header p{margin:6px 0 0;opacity:.88}
-nav{display:grid;grid-template-columns:repeat(4,1fr);background:rgba(255,255,255,.96);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:5}
+nav{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));background:rgba(255,255,255,.96);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:5}
 nav button{border:0;background:white;padding:12px 3px;font-size:12px;color:#355046}
 nav button.active{color:var(--green2);font-weight:bold;border-bottom:3px solid var(--green2)}
 main{max-width:850px;margin:auto;padding:16px}
@@ -60,7 +60,7 @@ footer{text-align:center;color:var(--muted);padding:20px}
 .backupStatus{font-size:12px;color:var(--muted);margin-top:8px;line-height:1.45}.auditItem{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;padding:10px 0;border-bottom:1px solid var(--border)}.auditItem:last-child{border-bottom:0}.auditItem strong{display:block}.auditItem small{display:block;color:var(--muted);margin-top:3px}.actionRow{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}.actionRow button{flex:1;min-width:145px}
 @media(max-width:650px){
  body{padding-bottom:82px}header{padding:17px 17px 14px}header h1{font-size:24px}header p{font-size:13px}
- nav{position:fixed;top:auto;bottom:0;left:0;right:0;z-index:20;grid-template-columns:repeat(4,1fr);padding:7px 5px calc(7px + env(safe-area-inset-bottom));border-top:1px solid var(--border);border-bottom:0;box-shadow:0 -5px 20px #17312612}
+ nav{position:fixed;top:auto;bottom:0;left:0;right:0;z-index:20;grid-template-columns:repeat(5,minmax(0,1fr));padding:7px 5px calc(7px + env(safe-area-inset-bottom));border-top:1px solid var(--border);border-bottom:0;box-shadow:0 -5px 20px #17312612}
  nav button{border-radius:12px;padding:8px 2px 7px;font-size:11px;display:flex;flex-direction:column;align-items:center;gap:3px}
  nav button.active{border-bottom:0;background:#eaf4ed;color:var(--green2)}
  main{padding:12px}.card{padding:15px;border-radius:18px;margin-bottom:12px}h2{font-size:21px}
@@ -87,10 +87,20 @@ footer{text-align:center;color:var(--muted);padding:20px}
 }
 
 
+/* V25 — confort mobile, lisibilité et sécurité */
+:root{--green:#123d2b;--green2:#28734a;--light:#f5f8f4;--border:#d7e3d9;--card:#fff;--text:#173126;--muted:#64756b}
+.card{box-shadow:0 5px 20px rgba(18,61,43,.055);border-color:#dfe8e0}
+button{touch-action:manipulation;transition:transform .12s ease,filter .12s ease}
+button:active{transform:translateY(1px)}
+button:disabled{opacity:.55;cursor:not-allowed}
+input,select,textarea{min-height:45px}
+.analysisAction{padding:12px 13px;margin:8px 0;border-radius:13px;background:#f0f6f1;border:1px solid #dce9df}
+.dataHealth{padding:12px 14px;border-radius:14px;background:#f5f8f5;border:1px solid var(--border);margin:10px 0}
+.dataHealth.good{background:#edf7ef;border-color:#cbe4d1}.dataHealth.warn{background:#fff8e8;border-color:#f0d9a6}
 /* V21 mobile application shell */
 :root{--green:#123d2b;--green2:#28734a;--light:#f0f5f0;--border:#d7e3d9}
 header{padding:19px 18px 16px;border-radius:0 0 24px 24px}header h1{font-size:25px;letter-spacing:-.4px}
-nav.appNav{position:fixed;top:auto;bottom:0;left:0;right:0;display:grid;grid-template-columns:repeat(4,1fr);padding:7px 8px calc(7px + env(safe-area-inset-bottom));gap:4px;border:1px solid #dbe7dd;border-radius:20px 20px 0 0;box-shadow:0 -8px 28px #17312614;background:rgba(255,255,255,.97);z-index:30}
+nav.appNav{position:fixed;top:auto;bottom:0;left:0;right:0;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));padding:7px 8px calc(7px + env(safe-area-inset-bottom));gap:4px;border:1px solid #dbe7dd;border-radius:20px 20px 0 0;box-shadow:0 -8px 28px #17312614;background:rgba(255,255,255,.97);z-index:30}
 nav.appNav button{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;border:0;border-radius:13px;background:transparent;padding:6px 2px 5px;font-size:11px;font-weight:650;min-height:51px;color:#65776c}
 nav.appNav button span{font-size:20px;line-height:1.1}nav.appNav button.active{background:#e8f3eb;color:#155b36;border:0}
 nav.appNav button.saleNav{background:#246b43;color:white;border-radius:15px;transform:translateY(-8px);box-shadow:0 5px 13px #246b4340;font-weight:750}nav.appNav button.saleNav span{font-size:25px}
@@ -108,7 +118,7 @@ button,input,select,textarea{touch-action:manipulation}button{min-height:42px}bu
 <body>
 <header>
   <h1>🌿 Vap' et Moi</h1>
-  <p>V24 · votre boutique, partout avec vous</p>
+  <p>V25 · votre boutique, partout avec vous</p>
 </header>
 <div id="offlineNotice" role="status" hidden>📴 Hors connexion : consultation uniquement. Les modifications sont désactivées.</div>
 <nav class="appNav">
@@ -240,7 +250,7 @@ button,input,select,textarea{touch-action:manipulation}button{min-height:42px}bu
 
 <section id="stats" class="page">
   <div class="card">
-    <h2>📊 Tableau de bord — V24</h2>
+    <h2>📊 Tableau de bord — V25</h2>
     <p class="muted small">Statistiques regroupées par sujet : chiffre d’affaires, ventes et panier moyen, clients, encaissements, puis prévisions.</p>
     <div class="actionRow"><button class="secondary" onclick="exportSalesCSV()">📄 Exporter les ventes (CSV)</button><button class="secondary" onclick="exportData()">💾 Sauvegarder les données (JSON)</button></div>
     <div class="grid4">
@@ -321,10 +331,11 @@ button,input,select,textarea{touch-action:manipulation}button{min-height:42px}bu
   <details class="statsTheme" open><summary class="statsThemeHead"><span>👥</span><div><strong>Clients à suivre</strong><small>Inactivité, fréquence et fidélité</small></div></summary><div class="card"><div id="analysisRetention"></div></div></details>
   <details class="statsTheme"><summary class="statsThemeHead"><span>🏆</span><div><strong>Meilleurs clients</strong><small>Classement calculé à partir des achats enregistrés</small></div></summary><div class="card"><div id="analysisTopClients"></div></div></details>
   <details class="statsTheme"><summary class="statsThemeHead"><span>🎯</span><div><strong>Prévision et objectif</strong><small>Objectifs quotidien, hebdomadaire et mensuel, selon les horaires réels</small></div></summary><div class="card"><div id="analysisForecast"></div></div></details>
+  <div class="card"><h3>🛡️ Contrôle de cohérence</h3><p class="small muted">Vérification locale des données, sans modification automatique de l’historique.</p><div id="dataHealthReport"></div></div>
   <div class="card"><h3>💡 Plan d’action conseillé</h3><div id="analysisActions"></div><p class="small muted">Les recommandations sont calculées à partir des données enregistrées. Une projection n’est pas une garantie. La marge réelle nécessite les coûts d’achat.</p><div class="actions" style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px"><button class="btn" onclick="exportAnalysisCSV()">Exporter l’analyse CSV</button><button class="btn secondary" onclick="window.print()">Imprimer le bilan</button></div></div>
 </section>
 </main>
-<footer>Vap’ et Moi · V24 · analyse & pilotage</footer>
+<footer>Vap’ & Moi Pro · V25 · analyse & pilotage</footer>
 
 <script>
 const KEY='vapetmoi_fidelite_v1';
@@ -378,7 +389,7 @@ function normalizeClient(c){
   return c;
 }
 clients=clients.map(normalizeClient);
-function save(){clients=clients.map(normalizeClient);localStorage.setItem(KEY,JSON.stringify(clients));updateAll()}
+function save(){clients=clients.map(normalizeClient);try{localStorage.setItem(KEY,JSON.stringify(clients));updateAll();return true}catch(e){alert('La sauvegarde locale a échoué (espace disponible insuffisant ou stockage inaccessible). Exporte tes données dès que possible.');return false}}
 function setGoal(){settings.goal=Math.max(0,Number(document.getElementById('monthlyGoal').value||0));localStorage.setItem(KEY+'_settings',JSON.stringify(settings));updateAll()}
 function setWeeklyGoal(){settings.weeklyGoal=Math.max(0,Number(document.getElementById('weeklyGoal').value||0));localStorage.setItem(KEY+'_settings',JSON.stringify(settings));updateAll()}
 function setDailyGoal(){settings.dailyGoal=Math.max(0,Number(document.getElementById('dailyGoal').value||0));localStorage.setItem(KEY+'_settings',JSON.stringify(settings));updateAll()}
@@ -449,6 +460,8 @@ function addClient(){
   toggleNewClient(false); document.getElementById('search').value='';
 }
 function addPurchase(){
+  if(window.__vapPurchaseBusy)return;window.__vapPurchaseBusy=true;const purchaseButton=document.querySelector('#achat button.primary');if(purchaseButton)purchaseButton.disabled=true;
+  try{
   const name=document.getElementById('clientName').value.trim(),amount=parseFloat(document.getElementById('amount').value),use=document.getElementById('useReward').checked,exceptional=Math.round(Math.max(0,parseFloat(document.getElementById('exceptionalDiscount').value)||0)*100)/100,msg=document.getElementById('message');
   if(!name||!Number.isFinite(amount)||amount<=0){msg.textContent='⚠️ Indique un client et un montant valide.';return}
   const c=clients.find(x=>x.name.toLowerCase()===name.toLowerCase());if(!c)return;
@@ -459,6 +472,7 @@ function addPurchase(){
   const purchase={id:crypto.randomUUID?crypto.randomUUID():String(Date.now()),date:new Date().toISOString(),amount,discount,exceptionalDiscount:exceptional,rewardDiscount,paid};c.history.push(purchase);
   logOperation('Achat enregistré',`${c.name} · payé ${fmt(paid)}`);save();msg.innerHTML=`✅ Achat enregistré pour ${esc(c.name)} · payé ${fmt(paid)} · réduction totale ${fmt(discount)} · cagnotte ${availableReward(c).toFixed(0)} €`;
   document.getElementById('amount').value='';document.getElementById('exceptionalDiscount').value='0';document.getElementById('useReward').checked=false;updatePurchaseBox();
+  }finally{window.__vapPurchaseBusy=false;if(purchaseButton)purchaseButton.disabled=false}
 }
 function renderClients(){
   const q=(document.getElementById('search')?.value||'').toLowerCase(),list=document.getElementById('clientList');
@@ -549,7 +563,7 @@ function saveClientEdits(oldName){
 function cancelPurchase(name,id){
   const c=clients.find(x=>x.name===name);if(!c)return;const i=c.history.findIndex(p=>p.id===id);if(i<0)return;const p=c.history[i];
   if(!confirm(`Annuler l'achat de ${fmt(p.amount)} pour ${c.name} ?`))return;
-  logOperation('Achat annulé',`${c.name} · ${fmt(p.paid??p.amount)}`);c.total=Math.round(Math.max(0,c.total-Number(p.paid))*100)/100;c.purchases=Math.max(0,c.purchases-1);if(p.rewardDiscount)c.usedRewards=Math.max(0,c.usedRewards-Number(p.rewardDiscount));c.history.splice(i,1);save();showClient(name);
+  logOperation('Achat annulé',`${c.name} · ${fmt(p.paid??p.amount)}`);c.total=Math.round(Math.max(0,c.total-Number(p.paid??p.amount??0))*100)/100;c.purchases=Math.max(0,c.purchases-1);if(p.rewardDiscount)c.usedRewards=Math.max(0,c.usedRewards-Number(p.rewardDiscount));c.history.splice(i,1);save();showClient(name);
 }
 function deleteClient(name){
   const c=clients.find(x=>x.name===name);if(!c)return;
@@ -895,8 +909,8 @@ function toggleVisitFrequencyStats(){showAllVisitFrequencyStats=!showAllVisitFre
 
 function exportData(){
   const exportedAt=new Date().toISOString();
-  const payload={version:'V24',exportedAt,storageKey:KEY,settings,clients,historicalCA,activityLog};
-  const blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='Vap_et_Moi_sauvegarde_V24.json';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);
+  const payload={version:'V25',exportedAt,storageKey:KEY,settings,clients,historicalCA,activityLog};
+  const blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='Vap_et_Moi_sauvegarde_V25.json';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);
   localStorage.setItem(KEY+'_last_backup',exportedAt);renderBackupStatus();
 }
 function csvCell(value){const s=String(value??'');return '"'+s.replace(/"/g,'""')+'"';}
@@ -907,8 +921,12 @@ function exportSalesCSV(){
 }
 function restoreData(e){
   const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{
-    try{const data=JSON.parse(r.result);if(!Array.isArray(data.clients))throw new Error();if(data.clients.some(c=>!c||typeof c.name!=='string'||!c.name.trim()))throw new Error();
-      if(!confirm('Restaurer cette sauvegarde et remplacer les données actuelles ?'))return;
+    try{const data=JSON.parse(r.result);if(!Array.isArray(data.clients))throw new Error();if(data.clients.some(c=>!c||typeof c.name!=='string'||!c.name.trim()||(c.history!==undefined&&!Array.isArray(c.history))))throw new Error();
+      // Accepte aussi les anciennes sauvegardes avec champs incomplets : les anomalies seront signalées après restauration, sans effacer l'historique.
+      if(!confirm(`Restaurer ${data.clients.length} fiche(s) client et remplacer les données actuelles ? Une sauvegarde de sécurité sera téléchargée avant le remplacement.`))return;
+      // Crée un export de sécurité avant la restauration, sans modifier les clés de stockage.
+      const safetyPayload={version:'V25-securite-avant-restauration',exportedAt:new Date().toISOString(),storageKey:KEY,settings,clients,historicalCA,activityLog};
+      const safetyUrl=URL.createObjectURL(new Blob([JSON.stringify(safetyPayload,null,2)],{type:'application/json'}));const safetyLink=document.createElement('a');safetyLink.href=safetyUrl;safetyLink.download='Vap_et_Moi_securite_avant_restauration.json';document.body.appendChild(safetyLink);safetyLink.click();safetyLink.remove();setTimeout(()=>URL.revokeObjectURL(safetyUrl),1500);
       clients=data.clients.map(normalizeClient);settings=data.settings||settings;if(Array.isArray(data.activityLog)){activityLog=data.activityLog.slice(0,100);localStorage.setItem(AUDIT_KEY,JSON.stringify(activityLog));}if(data.historicalCA&&typeof data.historicalCA==='object'){historicalCA=data.historicalCA;localStorage.setItem(HISTORICAL_KEY,JSON.stringify(historicalCA));}else{historicalCA={...JSON.parse(localStorage.getItem(HISTORICAL_KEY)||'{}')};}localStorage.setItem(KEY,JSON.stringify(clients));localStorage.setItem(KEY+'_settings',JSON.stringify(settings));logOperation('Sauvegarde restaurée',`${clients.length} client(s)`);updateAll();alert('Sauvegarde restaurée.');
     }catch(err){alert('Fichier de sauvegarde invalide.')}
   };r.readAsText(f);e.target.value='';
@@ -993,7 +1011,7 @@ function renderAnalysis(){
  const dailyInput=`<div class="metricCard"><label for="dailyGoal">Objectif quotidien (€)</label><input id="dailyGoal" type="number" min="0" step="10" value="${dailyGoal}" onchange="setDailyGoal()" aria-label="Objectif quotidien en euros"><span>CA du jour : <strong>${fmt(todayCA)}</strong> · ${dayPct.toFixed(0)} % atteint</span><div class="progress"><div style="width:${dayPct}%"></div></div><small>${fmt(Math.max(0,dailyGoal-todayCA))} restant aujourd’hui</small></div>`;
  const weekCard=`<div class="metricCard"><span>Objectif hebdomadaire (€)</span><strong>${fmt(weeklyGoal)}</strong><span>Réalisé : ${fmt(weekCA)} · ${weekPct.toFixed(0)} %</span><div class="progress"><div style="width:${weekPct}%"></div></div><small>${fmt(Math.max(0,weeklyGoal-weekCA))} restant · ${fmt(weekForecast)} projetés en fin de semaine</small><small>${weekLeft?`${fmt(Math.max(0,weeklyGoal-weekCA)/weekLeft)} à réaliser par jour ouvert restant (hors aujourd’hui)`:'Dernier jour ouvert de la semaine atteint ou passé.'}</small></div>`;
  const monthCard=`<div class="metricCard"><span>Objectif mensuel (€)</span><strong>${fmt(goal)}</strong><span>Réalisé : ${fmt(monthCA)} · ${monthPct.toFixed(0)} %</span><div class="progress"><div style="width:${monthPct}%"></div></div><small>${fmt(Math.max(0,goal-monthCA))} restant · ${fmt(monthForecast)} projetés en fin de mois</small><small>${monthLeft?`${fmt(Math.max(0,goal-monthCA)/monthLeft)} à réaliser par jour ouvert restant (hors aujourd’hui)`:'Dernier jour ouvert du mois atteint ou passé.'}</small></div>`;
- document.getElementById('analysisForecast').innerHTML=`<div class="clientMetricGrid">${dailyInput}${weekCard}${monthCard}<div class="metricCard"><span>Rythme de la journée</span><strong>${fmt(todayCA)}</strong><small>${todaySales.length} vente(s) aujourd’hui. La boutique est ${now.getDay()===0?'fermée le dimanche':'ouverte selon l’horaire 09 h 30–19 h 00'}.</small></div></div><p class="small muted">Les projections de semaine et de mois extrapolent le CA encaissé par jour d’ouverture écoulé (lundi–samedi, 09 h 30–19 h 00). Les objectifs quotidien et hebdomadaire sont modifiables ici et sur l’accueil. Le réglage quotidien est initialisé à partir de l’objectif hebdomadaire divisé par 6. Les projections sont indicatives et ne constituent pas une garantie.</p>`;
+ document.getElementById('analysisForecast').innerHTML=`<div class="clientMetricGrid">${dailyInput}${weekCard}${monthCard}<div class="metricCard"><span>Rythme de la journée</span><strong>${fmt(todayCA)}</strong><small>${todaySales.length} vente(s) aujourd’hui. La boutique est ${now.getDay()===0?'fermée le dimanche':(now.getHours()*60+now.getMinutes()<SHOP_OPEN_MINUTES?'ouverte à 09 h 30':(now.getHours()*60+now.getMinutes()>=SHOP_CLOSE_MINUTES?'fermée depuis 19 h 00':'ouverte jusqu’à 19 h 00'))}.</small></div></div><p class="small muted">Les projections de semaine et de mois extrapolent le CA encaissé par jour d’ouverture écoulé (lundi–samedi, 09 h 30–19 h 00). Les objectifs quotidien et hebdomadaire sont modifiables ici et sur l’accueil. Le réglage quotidien est initialisé à partir de l’objectif hebdomadaire divisé par 6. Les projections sont indicatives et ne constituent pas une garantie.</p>`;
  const actions=[];
  if(d.ca<d.prevCA)actions.push('Le chiffre d’affaires recule : regarde les journées moins actives et compare les achats des clients réguliers.');
  if(d.tx<d.prevTx)actions.push('Le nombre de ventes baisse : vérifie si la fréquentation diminue, même si le panier moyen monte.');
@@ -1002,9 +1020,30 @@ function renderAnalysis(){
  if(inactive.length)actions.push(`${inactive.length} client(s) avec un historique d’achat n’ont pas acheté depuis au moins 30 jours : consulte leurs fiches pour décider d’une relance adaptée.`);
  if(goal&&forecast<goal)actions.push(`Au rythme actuel, la projection est inférieure à l’objectif de ${fmt(goal)}. Il faudrait environ ${fmt(openLeft?remaining/openLeft:remaining)} de CA par jour ouvert restant pour l’atteindre.`);
  if(!actions.length)actions.push('Aucun signal de baisse détecté dans les indicateurs sélectionnés. Continue à suivre chaque semaine le CA, le nombre de ventes et le panier moyen.');
+ // Contrôle de cohérence en lecture seule : aucun historique n'est corrigé silencieusement.
+ const allClientNames=new Map();clients.forEach(c=>{const k=String(c.name||'').trim().toLocaleLowerCase('fr');allClientNames.set(k,(allClientNames.get(k)||0)+1)});
+ const duplicateNames=[...allClientNames.values()].filter(n=>n>1).length;
+ const allHistory=clients.flatMap(c=>(c.history||[]).map(p=>({...p,_client:c.name})));
+ const invalidDates=allHistory.filter(p=>!p||!Number.isFinite(new Date(p.date).getTime())).length;
+ const invalidAmounts=allHistory.filter(p=>!p||!Number.isFinite(Number(p.paid??p.amount))||Number(p.paid??p.amount)<0).length;
+ const duplicateIds=new Set(),repeatedIds=new Set();allHistory.forEach(p=>{if(p&&p.id){const id=String(p.id);if(duplicateIds.has(id))repeatedIds.add(id);duplicateIds.add(id)}});
+ const possibleDuplicates=[];const byClient=new Map();allHistory.forEach(p=>{if(!p||!Number.isFinite(new Date(p.date).getTime()))return;const k=String(p._client).toLocaleLowerCase('fr');if(!byClient.has(k))byClient.set(k,[]);byClient.get(k).push(p)});byClient.forEach(rows=>{rows.sort((a,b)=>new Date(a.date)-new Date(b.date));for(let i=1;i<rows.length;i++){const a=rows[i-1],b=rows[i];const dt=new Date(b.date)-new Date(a.date);if(dt>=0&&dt<=90000&&Number.isFinite(Number(a.paid??a.amount))&&Math.abs(Number(a.paid??a.amount)-Number(b.paid??b.amount))<0.005)possibleDuplicates.push([a,b]);}});
+ const noHistoryCount=clients.filter(c=>!Array.isArray(c.history)).length;
+ const backupDate=localStorage.getItem(KEY+'_last_backup');const backupDays=backupDate?Math.floor((Date.now()-new Date(backupDate).getTime())/86400000):null;
+ const healthIssues=duplicateNames+invalidDates+invalidAmounts+repeatedIds.size+possibleDuplicates.length;
+ const healthEl=document.getElementById('dataHealthReport');if(healthEl){const rows=[];
+ rows.push(`<div class="dataHealth ${healthIssues?'warn':'good'}"><strong>${healthIssues?'⚠️ Vérifications nécessaires':'✓ Aucun problème courant détecté'}</strong><div class="small">${healthIssues?'Certains éléments méritent une vérification manuelle. Les données n’ont pas été modifiées.':'Noms clients, dates, montants et identifiants de ventes contrôlés.'}</div></div>`);
+ rows.push(`<div class="periodMetric"><span>Clients aux noms identiques</span><strong>${duplicateNames}</strong></div>`);
+ rows.push(`<div class="periodMetric"><span>Dates de vente invalides</span><strong>${invalidDates}</strong></div>`);
+ rows.push(`<div class="periodMetric"><span>Montants invalides ou négatifs</span><strong>${invalidAmounts}</strong></div>`);
+ rows.push(`<div class="periodMetric"><span>Identifiants de vente répétés</span><strong>${repeatedIds.size}</strong></div>`);
+ rows.push(`<div class="periodMetric"><span>Ventes potentiellement saisies deux fois</span><strong>${possibleDuplicates.length}</strong></div>`);
+ rows.push(`<div class="periodMetric"><span>Dernière sauvegarde exportée</span><strong>${backupDays===null?'Jamais':backupDays<0?'Date invalide':backupDays===0?'Aujourd’hui':`Il y a ${backupDays} jour(s)`}</strong></div>`);
+ if(backupDays===null||backupDays>=7)rows.push('<p class="small muted">Conseil : exporte une sauvegarde JSON après tes journées de saisie importantes, et conserve-la hors du téléphone.</p>');
+ healthEl.innerHTML=rows.join('');}
  document.getElementById('analysisActions').innerHTML=actions.map(a=>`<p class="analysisAction">💡 ${esc(a)}</p>`).join('');
 }
-function exportAnalysisCSV(){const d=analysisData(document.getElementById('analysisPeriod')?.value||'month');const rows=[['Indicateur','Valeur'],['CA période',d.ca.toFixed(2)],['CA période précédente',d.prevCA.toFixed(2)],['Nombre de ventes',d.tx],['Ventes période précédente',d.prevTx],['Nouveaux clients',d.newCurrent],['Nouveaux clients période précédente',d.newPrev],['Panier moyen',d.basket.toFixed(2)],['Clients enregistrés',clients.length],['Achats enregistrés',allPurchases().length]];const csv='\ufeff'+rows.map(r=>r.map(v=>'"'+String(v).replace(/"/g,'""')+'"').join(';')).join('\r\n');const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8;'}));a.download='Vap_et_Moi_analyse_V24.csv';a.click();URL.revokeObjectURL(a.href)}
+function exportAnalysisCSV(){const d=analysisData(document.getElementById('analysisPeriod')?.value||'month');const rows=[['Indicateur','Valeur'],['CA période',d.ca.toFixed(2)],['CA période précédente',d.prevCA.toFixed(2)],['Nombre de ventes',d.tx],['Ventes période précédente',d.prevTx],['Nouveaux clients',d.newCurrent],['Nouveaux clients période précédente',d.newPrev],['Panier moyen',d.basket.toFixed(2)],['Clients enregistrés',clients.length],['Achats enregistrés',allPurchases().length]];const csv='\ufeff'+rows.map(r=>r.map(v=>'"'+String(v).replace(/"/g,'""')+'"').join(';')).join('\r\n');const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8;'}));a.download='Vap_et_Moi_analyse_V25.csv';a.click();URL.revokeObjectURL(a.href)}
 
 function updateAll(){clients=clients.map(normalizeClient);updateClientOptions();renderClients();updatePurchaseBox();setDashboard();setStats();renderWeekdayStats();renderV15Insights(allPurchases(),new Date());renderDailyOps(new Date());renderActivityLog();renderBackupStatus();renderAnalysis()}
 updateAll();
