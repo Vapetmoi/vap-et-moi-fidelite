@@ -1,7 +1,7 @@
 {
   "name": "Vap’ & Moi Pro",
   "short_name": "Vap’ & Moi",
-  "description": "Vap’ & Moi Pro — gestion clients, ventes, fidélité et analyse",
+  "description": "Vap’ & Moi Pro — clients, ventes, fidélité, copilote commercial et prévisions (V25.1)",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",

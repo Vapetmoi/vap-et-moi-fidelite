@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#0b2f20">
-<title>Vap’ & Moi Pro – V25</title>
+<title>Vap’ & Moi Pro – V25.1 complète</title>
 <link rel="manifest" href="manifest.webmanifest">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -113,6 +113,7 @@ button,input,select,textarea{touch-action:manipulation}button{min-height:42px}bu
 
 .analysisInsight{display:flex;gap:12px;align-items:flex-start;padding:14px 0;border-bottom:1px solid var(--border)}.analysisInsight:last-child{border-bottom:0}.analysisIcon{display:grid;place-items:center;flex:0 0 38px;height:38px;border-radius:12px;background:#e8f3eb;color:#155b36;font-size:20px}.analysisInsight strong{display:block;color:var(--green);margin-bottom:4px}.analysisInsight p,.analysisAction{margin:0;line-height:1.5}.analysisAction{padding:10px 0;border-bottom:1px solid var(--border)}.metricCard{border:1px solid var(--border);border-radius:13px;padding:12px;display:flex;flex-direction:column;gap:6px}.metricCard span{font-size:13px;color:var(--muted)}.metricCard strong{font-size:19px;color:var(--green)}
 @media(max-width:420px){nav.appNav button{font-size:11px}nav.appNav button span{font-size:18px}}
+#commercialCopilot .analysisInsight{margin-top:10px}#commercialCopilot .analysisInsight p{margin:5px 0}#commercialCopilotCard .badge{white-space:nowrap}
 </style>
 </head>
 <body>
@@ -187,6 +188,19 @@ button,input,select,textarea{touch-action:manipulation}button{min-height:42px}bu
   <div id="alertsBox" class="card">
     <h3 style="margin-top:0">🔔 À surveiller</h3>
     <div id="alerts"></div>
+  </div>
+
+  <div class="card" id="commercialCopilotCard">
+    <div class="row" style="align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap">
+      <h3 style="margin:0">🧭 Copilote commercial</h3><span class="badge">Conseils personnalisés</span>
+    </div>
+    <p class="small muted">Des actions concrètes calculées à partir de tes ventes et de tes fiches clients enregistrées.</p>
+    <div id="commercialCopilot"><p class="small muted">Analyse de l’activité…</p></div>
+    <div class="actions" style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px">
+      <button class="primary" onclick="showPage('clients')">Voir les clients à relancer</button>
+      <button class="secondary" onclick="showPage('analyse')">Ouvrir l’analyse complète</button>
+      <button class="secondary" onclick="showPage('achat')">Enregistrer une vente</button>
+    </div>
   </div>
 
   <div class="card">
@@ -335,7 +349,7 @@ button,input,select,textarea{touch-action:manipulation}button{min-height:42px}bu
   <div class="card"><h3>💡 Plan d’action conseillé</h3><div id="analysisActions"></div><p class="small muted">Les recommandations sont calculées à partir des données enregistrées. Une projection n’est pas une garantie. La marge réelle nécessite les coûts d’achat.</p><div class="actions" style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px"><button class="btn" onclick="exportAnalysisCSV()">Exporter l’analyse CSV</button><button class="btn secondary" onclick="window.print()">Imprimer le bilan</button></div></div>
 </section>
 </main>
-<footer>Vap’ & Moi Pro · V25 · analyse & pilotage</footer>
+<footer>Vap’ & Moi Pro · V25.1 · pilotage commercial</footer>
 
 <script>
 const KEY='vapetmoi_fidelite_v1';
@@ -1045,7 +1059,36 @@ function renderAnalysis(){
 }
 function exportAnalysisCSV(){const d=analysisData(document.getElementById('analysisPeriod')?.value||'month');const rows=[['Indicateur','Valeur'],['CA période',d.ca.toFixed(2)],['CA période précédente',d.prevCA.toFixed(2)],['Nombre de ventes',d.tx],['Ventes période précédente',d.prevTx],['Nouveaux clients',d.newCurrent],['Nouveaux clients période précédente',d.newPrev],['Panier moyen',d.basket.toFixed(2)],['Clients enregistrés',clients.length],['Achats enregistrés',allPurchases().length]];const csv='\ufeff'+rows.map(r=>r.map(v=>'"'+String(v).replace(/"/g,'""')+'"').join(';')).join('\r\n');const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8;'}));a.download='Vap_et_Moi_analyse_V25.csv';a.click();URL.revokeObjectURL(a.href)}
 
-function updateAll(){clients=clients.map(normalizeClient);updateClientOptions();renderClients();updatePurchaseBox();setDashboard();setStats();renderWeekdayStats();renderV15Insights(allPurchases(),new Date());renderDailyOps(new Date());renderActivityLog();renderBackupStatus();renderAnalysis()}
+function renderCommercialCopilot(){
+  const root=document.getElementById('commercialCopilot');if(!root)return;
+  const now=new Date(),ps=allPurchases().filter(p=>Number.isFinite(new Date(p.date).getTime()));
+  const dayStart=new Date(now);dayStart.setHours(0,0,0,0);
+  const weekStart=new Date(dayStart);weekStart.setDate(weekStart.getDate()-((weekStart.getDay()+6)%7));
+  const monthStart=new Date(now.getFullYear(),now.getMonth(),1);
+  const sum=(list)=>list.reduce((s,p)=>s+safelyPaid(p),0);
+  const today=ps.filter(p=>new Date(p.date)>=dayStart),week=ps.filter(p=>new Date(p.date)>=weekStart),month=ps.filter(p=>new Date(p.date)>=monthStart);
+  const basket=ps.length?sum(ps)/ps.length:0;
+  const weeklyGoal=Math.max(0,Number(settings.weeklyGoal??1000)),monthlyGoal=Math.max(0,Number(settings.goal??4000));
+  const openDaysElapsed=(()=>{let n=0;for(let d=new Date(weekStart);d<=dayStart;d.setDate(d.getDate()+1))if(d.getDay()!==0)n++;return n;})();
+  const weekPace=openDaysElapsed?sum(week)/openDaysElapsed:0;
+  const remainingOpenDays=(()=>{let n=0;for(let d=new Date(dayStart);d.getDay()!==0;d.setDate(d.getDate()+1)){if(d>dayStart)n++;}return n;})();
+  const weekProjection=sum(week)+weekPace*remainingOpenDays;
+  const clientStats=clients.map(c=>{const h=(c.history||[]).filter(p=>Number.isFinite(new Date(p.date).getTime()));const last=h.reduce((m,p)=>Math.max(m,new Date(p.date).getTime()),0);return {c,h,last,days:last?Math.floor((dayStart.getTime()-new Date(last).setHours(0,0,0,0))/86400000):null};});
+  const inactive=clientStats.filter(x=>x.h.length&&x.days>=30).sort((a,b)=>b.days-a.days);
+  const noPurchase=clientStats.filter(x=>!x.h.length);
+  const rec=[];
+  if(!ps.length)rec.push({icon:'📝',title:'Démarre le suivi des ventes',text:'Enregistre chaque achat pour rendre les comparaisons et prévisions plus fiables.',action:'La qualité des conseils augmente avec l’historique.'});
+  else {
+    if(weeklyGoal>0&&weekProjection<weeklyGoal)rec.push({icon:'🎯',title:'Objectif hebdomadaire à surveiller',text:`Rythme estimé : ${fmt(weekProjection)} pour un objectif de ${fmt(weeklyGoal)}.`,action:'Mise sur les ventes utiles et les retours clients, sans remise automatique.'});
+    if(basket>0)rec.push({icon:'🧺',title:'Travaille le panier moyen',text:`Le panier moyen enregistré est de ${fmt(basket)}.`,action:'Propose un complément réellement adapté au matériel du client, sans pousser à l’achat inutile.'});
+    if(inactive.length)rec.push({icon:'🔁',title:`${inactive.length} client(s) sans achat depuis 30 jours ou plus`,text:`À examiner en priorité : ${inactive.slice(0,3).map(x=>`${esc(x.c.name)} (${x.days} j)`).join(', ')}.`,action:'Vérifie si un conseil ou un besoin de consommable justifie une prise de contact.'});
+    if(noPurchase.length)rec.push({icon:'👋',title:`${noPurchase.length} fiche(s) sans achat enregistré`,text:'Ces fiches peuvent correspondre à des inscriptions récentes ou à un historique incomplet.',action:'Vérifie les fiches avant de conclure à une absence de fidélité.'});
+    if(monthlyGoal>0&&sum(month)<monthlyGoal)rec.push({icon:'📅',title:'Suis la trajectoire mensuelle',text:`CA du mois enregistré : ${fmt(sum(month))} sur ${fmt(monthlyGoal)}.`,action:'La prévision détaillée et les comparaisons sont disponibles dans Analyse.'});
+  }
+  if(!rec.length)rec.push({icon:'✅',title:'Activité suivie',text:'Aucun signal prioritaire calculable à partir des données actuelles.',action:'Continue à enregistrer les ventes et à vérifier les sauvegardes.'});
+  root.innerHTML=rec.slice(0,5).map(r=>`<div class="analysisInsight"><div class="analysisIcon">${r.icon}</div><div><strong>${esc(r.title)}</strong><p>${esc(r.text)}</p><p class="small muted">${esc(r.action)}</p></div></div>`).join('')+`<p class="small muted">Les conseils reposent sur les données actuellement enregistrées. Les fiches sans historique ou les ventes non saisies peuvent modifier les résultats. Les projections sont indicatives.</p>`;
+}
+function updateAll(){clients=clients.map(normalizeClient);updateClientOptions();renderClients();updatePurchaseBox();setDashboard();setStats();renderWeekdayStats();renderV15Insights(allPurchases(),new Date());renderDailyOps(new Date());renderActivityLog();renderBackupStatus();renderAnalysis();renderCommercialCopilot()}
 updateAll();
 updateOfflineMode();
 if("serviceWorker" in navigator && location.protocol.startsWith("http")){navigator.serviceWorker.register("./sw.js").catch(()=>{});}
