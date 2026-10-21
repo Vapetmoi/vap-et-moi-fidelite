@@ -4,9 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#163f2d">
-<meta name="description" content="Vap’ & Moi Pro Signature : clients, ventes, fidélité et analyses de boutique.">
-<title>Vap’ & Moi Pro — Signature V26</title>
+<meta name="description" content="Vap’ & Moi Pro Signature : gestion des clients, ventes, fidélité, analyses et sauvegardes.">
+<title>Vap’ & Moi Pro — Signature V26.1</title>
 <link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="./icon-192.png">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -88,7 +89,7 @@ footer{text-align:center;color:var(--muted);padding:20px}
 }
 
 
-/* V26 Signature — confort mobile, lisibilité et sécurité */
+/* V26.1 Signature — fiabilité des données, confort mobile et sécurité */
 :root{--green:#123d2b;--green2:#28734a;--light:#f5f8f4;--border:#d7e3d9;--card:#fff;--text:#173126;--muted:#64756b}
 .card{box-shadow:0 5px 20px rgba(18,61,43,.055);border-color:#dfe8e0}
 button{touch-action:manipulation;transition:transform .12s ease,filter .12s ease}
@@ -116,7 +117,7 @@ button,input,select,textarea{touch-action:manipulation}button{min-height:42px}bu
 @media(max-width:420px){nav.appNav button{font-size:11px}nav.appNav button span{font-size:18px}}
 #commercialCopilot .analysisInsight{margin-top:10px}#commercialCopilot .analysisInsight p{margin:5px 0}#commercialCopilotCard .badge{white-space:nowrap}
 
-/* V26 Signature — refonte visuelle sans toucher au modèle de données */
+/* V26.1 Signature — fiabilité renforcée et données préservées */
 :root{--green:#163f2d;--green2:#2d7650;--light:#f5f7f2;--card:#fff;--text:#1c3025;--muted:#68776d;--border:#dce5dc;--sage:#eaf1e8;--cream:#faf9f4;--gold:#a76e1d}
 body{background:linear-gradient(180deg,#edf3eb 0,#f7f8f4 300px);letter-spacing:-.01em}
 header{background:linear-gradient(125deg,#102f22 0%,#194a33 64%,#376b4b 100%);padding:19px 18px 17px;box-shadow:0 8px 24px rgba(16,47,34,.13)}
@@ -135,7 +136,7 @@ nav.appNav{border-color:#dbe5da;box-shadow:0 -8px 26px rgba(22,63,45,.09);backdr
 </head>
 <body>
 <header>
-  <div class="brandLockup"><div class="brandMark" aria-hidden="true">V<span>&</span>M</div><div><h1>Vap’ & Moi <span class="proLabel">PRO</span></h1><p>Signature V26 · votre boutique, simplement</p></div></div>
+  <div class="brandLockup"><div class="brandMark" aria-hidden="true">V<span>&</span>M</div><div><h1>Vap’ & Moi <span class="proLabel">PRO</span></h1><p>Signature V26.1 · votre boutique, simplement</p></div></div>
 </header>
 <div id="offlineNotice" role="status" hidden>📴 Hors connexion : consultation uniquement. Les modifications sont désactivées.</div>
 <nav class="appNav">
@@ -287,7 +288,7 @@ nav.appNav{border-color:#dbe5da;box-shadow:0 -8px 26px rgba(22,63,45,.09);backdr
 
 <section id="stats" class="page">
   <div class="card">
-    <h2>📊 Tableau de bord — V26 Signature</h2>
+    <h2>📊 Tableau de bord — V26.1 Signature</h2>
     <p class="muted small">Statistiques regroupées par sujet : chiffre d’affaires, ventes et panier moyen, clients, encaissements, puis prévisions.</p>
     <div class="actionRow"><button class="secondary" onclick="exportSalesCSV()">📄 Exporter les ventes (CSV)</button><button class="secondary" onclick="exportData()">💾 Sauvegarder les données (JSON)</button></div>
     <div class="grid4">
@@ -305,7 +306,7 @@ nav.appNav{border-color:#dbe5da;box-shadow:0 -8px 26px rgba(22,63,45,.09);backdr
     </div>
     <div class="card" id="historicalCASection">
       <h3 style="margin-top:0">🗓️ Historique mensuel du chiffre d’affaires</h3>
-      <p class="muted small">Chiffres historiques saisis manuellement. Ils restent séparés des achats enregistrés dans l’application et ne sont pas ajoutés au CA calculé à partir des ventes.</p>
+      <p class="muted small">Chiffres historiques séparés des achats enregistrés dans l’application. Vérifie leur exactitude si ces montants proviennent d’une ancienne version : l’application ne peut pas certifier leur origine.</p>
       <div class="grid4" id="historicalSummary"></div>
       <div class="chartWrap" id="historicalChart" aria-label="Graphique d’évolution du chiffre d’affaires historique"></div>
       <div class="tableWrap" id="historicalTable"></div>
@@ -372,7 +373,7 @@ nav.appNav{border-color:#dbe5da;box-shadow:0 -8px 26px rgba(22,63,45,.09);backdr
   <div class="card"><h3>💡 Plan d’action conseillé</h3><div id="analysisActions"></div><p class="small muted">Les recommandations sont calculées à partir des données enregistrées. Une projection n’est pas une garantie. La marge réelle nécessite les coûts d’achat.</p><div class="actions" style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px"><button class="btn" onclick="exportAnalysisCSV()">Exporter l’analyse CSV</button><button class="btn secondary" onclick="window.print()">Imprimer le bilan</button></div></div>
 </section>
 </main>
-<footer>Vap’ & Moi Pro · V25.1 · pilotage commercial</footer>
+<footer>Vap’ & Moi Pro · Signature V26.1 · pilotage commercial</footer>
 
 <script>
 const KEY='vapetmoi_fidelite_v1';
@@ -388,22 +389,19 @@ const SHOP_OPENING_HOURS={
   6:{open:'09:30',close:'19:00'}
 };
 const SHOP_OPEN_MINUTES=570, SHOP_CLOSE_MINUTES=1140, SHOP_OPEN_HOURS=9.5;
-const INITIAL_HISTORICAL_CA={
-  '2025-11':1458.96,'2025-12':2336.45,'2026-01':2639.70,'2026-02':2657.42,
-  '2026-03':4381.29,'2026-04':3914.19,'2026-05':4518.34,'2026-06':3981.55,
-  '2026-07':3385.42,'2026-08':1820.61,'2026-09':3637.57
-};
-// Initialisation uniquement si aucun historique n’existe : ne jamais écraser un historique déjà enregistré.
-if(!localStorage.getItem(HISTORICAL_KEY)) localStorage.setItem(HISTORICAL_KEY,JSON.stringify(INITIAL_HISTORICAL_CA));
-let historicalCA={...INITIAL_HISTORICAL_CA,...JSON.parse(localStorage.getItem(HISTORICAL_KEY)||'{}')};
-const LEGACY_CLIENT_DATE='2026-10-05T10:00:00';
-let clients=JSON.parse(localStorage.getItem(KEY)||'[]');
-let settings=JSON.parse(localStorage.getItem(KEY+'_settings')||'{}');
+// Ne jamais préremplir de chiffre d'affaires historique : seules les données déjà enregistrées ou saisies par le commerçant sont utilisées.
+// Les anciennes données présentes dans localStorage sont conservées telles quelles.
+let storageReadIssues=[];
+let historicalCA={};
+try{const historicalRaw=localStorage.getItem(HISTORICAL_KEY);const savedHistorical=historicalRaw?JSON.parse(historicalRaw):{};if(savedHistorical&&typeof savedHistorical==='object'&&!Array.isArray(savedHistorical))historicalCA=savedHistorical;else storageReadIssues.push(HISTORICAL_KEY);}catch(e){storageReadIssues.push(HISTORICAL_KEY);historicalCA={};}
+function readStoredJSON(key,fallback){try{const raw=localStorage.getItem(key);return raw===null||raw===''?fallback:JSON.parse(raw)}catch(e){storageReadIssues.push(key);return fallback}}
+let clients=readStoredJSON(KEY,[]);if(!Array.isArray(clients)){storageReadIssues.push(KEY);clients=[];}
+let settings=readStoredJSON(KEY+'_settings',{});if(!settings||typeof settings!=='object'||Array.isArray(settings)){storageReadIssues.push(KEY+'_settings');settings={};}
 let showAllPurchaseStats=false;
 let showAllVisitFrequencyStats=false;
 const AUDIT_KEY=KEY+'_activity_log';
 let activityLog=[];
-try{activityLog=JSON.parse(localStorage.getItem(AUDIT_KEY)||'[]');if(!Array.isArray(activityLog))activityLog=[];}catch(e){activityLog=[];}
+try{activityLog=JSON.parse(localStorage.getItem(AUDIT_KEY)||'[]');if(!Array.isArray(activityLog)){storageReadIssues.push(AUDIT_KEY);activityLog=[];}}catch(e){storageReadIssues.push(AUDIT_KEY);activityLog=[];}
 function logOperation(type,detail){
   const entry={id:(crypto.randomUUID?crypto.randomUUID():String(Date.now())+'-'+Math.random().toString(16).slice(2)),date:new Date().toISOString(),type:String(type||'Opération'),detail:String(detail||'')};
   activityLog.unshift(entry);activityLog=activityLog.slice(0,100);
@@ -421,37 +419,37 @@ function normalizeClient(c){
   c.total=Number(c.total||0); c.purchases=Number(c.purchases||0); c.usedRewards=Number(c.usedRewards||0); c.manualRewards=Number(c.manualRewards||0); c.manualRewardHistory=Array.isArray(c.manualRewardHistory)?c.manualRewardHistory:[];
   c.phone=c.phone||''; c.email=c.email||''; c.notes=c.notes||'';
   c.history=Array.isArray(c.history)?c.history:[];
-  // Requested fictitious date for old client records that did not have one.
-  if(!c.createdAt) c.createdAt=LEGACY_CLIENT_DATE;
+  // Ne jamais inventer la date de création d'une ancienne fiche.
   return c;
 }
 clients=clients.map(normalizeClient);
-function save(){clients=clients.map(normalizeClient);try{localStorage.setItem(KEY,JSON.stringify(clients));updateAll();return true}catch(e){alert('La sauvegarde locale a échoué (espace disponible insuffisant ou stockage inaccessible). Exporte tes données dès que possible.');return false}}
-function setGoal(){settings.goal=Math.max(0,Number(document.getElementById('monthlyGoal').value||0));localStorage.setItem(KEY+'_settings',JSON.stringify(settings));updateAll()}
-function setWeeklyGoal(){settings.weeklyGoal=Math.max(0,Number(document.getElementById('weeklyGoal').value||0));localStorage.setItem(KEY+'_settings',JSON.stringify(settings));updateAll()}
-function setDailyGoal(){settings.dailyGoal=Math.max(0,Number(document.getElementById('dailyGoal').value||0));localStorage.setItem(KEY+'_settings',JSON.stringify(settings));updateAll()}
+function save(){if(storageReadIssues.includes(KEY)){alert('Écriture bloquée pour protéger les données : la base clients existante est illisible. Restaure une sauvegarde valide avant de modifier les ventes.');return false;}const previous=localStorage.getItem(KEY);clients=clients.map(normalizeClient);try{const payload=JSON.stringify(clients);localStorage.setItem(KEY,payload);const check=JSON.parse(localStorage.getItem(KEY)||'null');if(!Array.isArray(check)||check.length!==clients.length)throw new Error('Vérification après écriture impossible');updateAll();return true}catch(e){try{clients=JSON.parse(previous||'[]').map(normalizeClient)}catch(rollbackError){}alert('La sauvegarde locale a échoué. Les données précédemment enregistrées ont été rechargées lorsque possible. Exporte une sauvegarde dès que le stockage fonctionne.');try{updateAll()}catch(renderError){}return false}}
+function setGoal(){if(storageReadIssues.includes(KEY+'_settings')){alert('Les réglages existants sont illisibles. Restaure une sauvegarde valide avant de les modifier.');return}settings.goal=Math.max(0,Number(document.getElementById('monthlyGoal').value||0));localStorage.setItem(KEY+'_settings',JSON.stringify(settings));updateAll()}
+function setWeeklyGoal(){if(storageReadIssues.includes(KEY+'_settings')){alert('Les réglages existants sont illisibles. Restaure une sauvegarde valide avant de les modifier.');return}settings.weeklyGoal=Math.max(0,Number(document.getElementById('weeklyGoal').value||0));localStorage.setItem(KEY+'_settings',JSON.stringify(settings));updateAll()}
+function setDailyGoal(){if(storageReadIssues.includes(KEY+'_settings')){alert('Les réglages existants sont illisibles. Restaure une sauvegarde valide avant de les modifier.');return}settings.dailyGoal=Math.max(0,Number(document.getElementById('dailyGoal').value||0));localStorage.setItem(KEY+'_settings',JSON.stringify(settings));updateAll()}
 function showPage(id,btn){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.getElementById(id).classList.add('active');
   document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('active',b.dataset.page===id));
   updateAll();
 }
-function updateOfflineMode(){const off=!navigator.onLine;const n=document.getElementById('offlineNotice');if(n)n.hidden=!off;document.body.classList.toggle('offline-readonly',off);document.querySelectorAll('button,input,select,textarea').forEach(el=>{if(el.closest('nav')||el.id==='restoreFile'||el.type==='file')return;if(off){if(!el.dataset.v21WasDisabled)el.dataset.v21WasDisabled=el.disabled?'1':'0';el.disabled=true}else if(el.dataset.v21WasDisabled!==undefined){el.disabled=el.dataset.v21WasDisabled==='1';delete el.dataset.v21WasDisabled}})}
+function updateOfflineMode(){const off=!navigator.onLine;const n=document.getElementById('offlineNotice');if(n)n.hidden=!off;document.body.classList.toggle('offline-readonly',off);document.querySelectorAll('button,input,select,textarea').forEach(el=>{const action=el.getAttribute('onclick')||'';const offlineAllowed=el.closest('nav')||el.id==='restoreFile'||el.type==='file'||/exportData|exportSalesCSV|exportAnalysisCSV|restoreData|restoreFile|installApp/.test(action);if(offlineAllowed)return;if(off){if(!el.dataset.v21WasDisabled)el.dataset.v21WasDisabled=el.disabled?'1':'0';el.disabled=true}else if(el.dataset.v21WasDisabled!==undefined){el.disabled=el.dataset.v21WasDisabled==='1';delete el.dataset.v21WasDisabled}})}
 window.addEventListener('online',updateOfflineMode);window.addEventListener('offline',updateOfflineMode);
 function rewards(total){return Math.floor(total/50)*5}
 function availableReward(c){return Math.max(0,rewards(Number(c.total||0))+Number(c.manualRewards||0)-Number(c.usedRewards||0))}
 function rewardSummary(c){const regularEarned=rewards(Number(c.total||0));const manualEarned=Math.max(0,Number(c.manualRewards||0));const earned=regularEarned+manualEarned;const used=Math.max(0,Number(c.usedRewards||0));const available=availableReward(c);return {earned,used,available,earnedCount:Math.floor(Number(c.total||0)/50)+Math.floor(manualEarned/5),usedCount:Math.floor(used/5),availableCount:Math.floor(available/5),manualEarned}}
 function esc(s){return String(s||'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]))}
 function escJs(s){return String(s||'').replace(/\\/g,'\\\\').replace(/'/g,"\\'")}
-function allPurchases(){return clients.flatMap(c=>(c.history||[]).map(p=>({...p,client:c.name})))}
+function isActivePurchase(p){return !!p&&!p.cancelled&&!p.voided&&!p.cancelledAt}
+function allPurchases(){return clients.flatMap(c=>(c.history||[]).filter(isActivePurchase).map(p=>({...p,client:c.name})))}
 function dateOf(p){return new Date(p.date)}
 function safelyPaid(p){const n=Number(p&&p.paid);return Number.isFinite(n)?n:0}
 function sameDay(d,a){return d.toDateString()===a.toDateString()}
 function monthKey(d){return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')}
 function fmt(n){return Number(n||0).toLocaleString('fr-FR',{minimumFractionDigits:2,maximumFractionDigits:2})+' €'}
-function dateFmt(d){return new Date(d).toLocaleDateString('fr-FR')}
+function dateFmt(d){const t=new Date(d).getTime();return Number.isFinite(t)?new Date(t).toLocaleDateString('fr-FR'):'Date inconnue'}
 function clientVisitMetrics(c){
-  const days=[...new Set((c.history||[]).map(p=>{const d=new Date(p.date);if(!Number.isFinite(d.getTime()))return null;d.setHours(0,0,0,0);return d.getTime()}).filter(v=>v!==null))].sort((a,b)=>a-b);
+  const days=[...new Set((c.history||[]).filter(isActivePurchase).map(p=>{const d=new Date(p.date);if(!Number.isFinite(d.getTime()))return null;d.setHours(0,0,0,0);return d.getTime()}).filter(v=>v!==null))].sort((a,b)=>a-b);
   const gaps=[];for(let i=1;i<days.length;i++)gaps.push(Math.round((days[i]-days[i-1])/86400000));
   const average=gaps.length?gaps.reduce((a,b)=>a+b,0)/gaps.length:null;
   const last=days.length?Math.max(0,Math.floor((new Date().setHours(0,0,0,0)-days[days.length-1])/86400000)):null;
@@ -504,18 +502,19 @@ function addPurchase(){
   const c=clients.find(x=>x.name.toLowerCase()===name.toLowerCase());if(!c)return;
   if(use&&availableReward(c)<5){msg.textContent='⚠️ Aucun bon de 5 € disponible.';return}
   if(exceptional>amount){msg.textContent='⚠️ La réduction exceptionnelle ne peut pas dépasser le montant de l’achat.';return}
+  const previousClient=JSON.stringify(c);
   const rewardDiscount=use?5:0,discount=rewardDiscount+exceptional,paid=Math.max(0,Math.round((amount-discount)*100)/100);
   c.total=Math.round((c.total+paid)*100)/100;c.purchases++;if(use)c.usedRewards+=5;
   const purchase={id:crypto.randomUUID?crypto.randomUUID():String(Date.now()),date:new Date().toISOString(),amount,discount,exceptionalDiscount:exceptional,rewardDiscount,paid};c.history.push(purchase);
-  logOperation('Achat enregistré',`${c.name} · payé ${fmt(paid)}`);save();msg.innerHTML=`✅ Achat enregistré pour ${esc(c.name)} · payé ${fmt(paid)} · réduction totale ${fmt(discount)} · cagnotte ${availableReward(c).toFixed(0)} €`;
+  if(!save()){const restored=JSON.parse(previousClient);Object.keys(c).forEach(k=>delete c[k]);Object.assign(c,restored);updateAll();msg.textContent='⚠️ Vente non enregistrée : vérifie le stockage et réessaie.';return;}logOperation('Achat enregistré',`${c.name} · payé ${fmt(paid)}`);msg.innerHTML=`✅ Achat enregistré pour ${esc(c.name)} · payé ${fmt(paid)} · réduction totale ${fmt(discount)} · cagnotte ${availableReward(c).toFixed(0)} €`;
   document.getElementById('amount').value='';document.getElementById('exceptionalDiscount').value='0';document.getElementById('useReward').checked=false;updatePurchaseBox();
   }finally{window.__vapPurchaseBusy=false;if(purchaseButton)purchaseButton.disabled=false}
 }
 function renderClients(){
   const q=(document.getElementById('search')?.value||'').toLowerCase(),list=document.getElementById('clientList');
   const sort=document.getElementById('clientSort')?.value||'name';
-  const arr=clients.filter(c=>c.name.toLowerCase().includes(q));
-  const lastPurchase=c=>c.history&&c.history.length?Math.max(...c.history.map(p=>new Date(p.date).getTime()).filter(Number.isFinite)):0;
+  const arr=clients.filter(c=>c.name.toLocaleLowerCase('fr').includes(q)||String(c.phone||'').toLocaleLowerCase('fr').includes(q)||String(c.email||'').toLocaleLowerCase('fr').includes(q));
+  const lastPurchase=c=>{const h=(c.history||[]).filter(isActivePurchase);return h.length?Math.max(...h.map(p=>new Date(p.date).getTime()).filter(Number.isFinite)):0};
   arr.sort((a,b)=>{
     if(sort==='nameDesc') return b.name.localeCompare(a.name,'fr');
     if(sort==='totalDesc') return b.total-a.total || a.name.localeCompare(b.name,'fr');
@@ -525,7 +524,7 @@ function renderClients(){
     if(sort==='rewardsDesc') return availableReward(b)-availableReward(a) || a.name.localeCompare(b.name,'fr');
     return a.name.localeCompare(b.name,'fr');
   });
-  list.innerHTML=arr.length?arr.map(c=>`<div class="client" onclick="showClient('${escJs(c.name)}')" style="cursor:pointer"><div><strong>${esc(c.name)}</strong><br><span class="small muted">${c.purchases} achat(s) · ${fmt(c.total)} · panier moyen ${fmt(c.purchases?c.total/c.purchases:0)} · créé le ${dateFmt(c.createdAt)}</span></div><span class="badge">🎁 ${availableReward(c)} €</span></div>`).join(''):'<p class="muted">Aucun client trouvé.</p>';
+  list.innerHTML=arr.length?arr.map(c=>`<div class="client" onclick="showClient('${escJs(c.name)}')" style="cursor:pointer"><div><strong>${esc(c.name)}</strong><br><span class="small muted">${c.purchases} achat(s) · ${fmt(c.total)} · panier moyen ${fmt(c.purchases?c.total/c.purchases:0)} · créé le ${c.createdAt?dateFmt(c.createdAt):'date inconnue'}</span></div><span class="badge">🎁 ${availableReward(c)} €</span></div>`).join(''):'<p class="muted">Aucun client trouvé.</p>';
   const ranked=[...clients].sort((a,b)=>b.total-a.total).slice(0,5);
   document.getElementById('clientRanking').innerHTML=ranked.length?ranked.map((c,i)=>`<div class="row"><span>${i+1}. <strong>${esc(c.name)}</strong></span><strong>${fmt(c.total)}</strong></div>`).join(''):'<span class="muted">Aucun client.</span>';
 }
@@ -536,11 +535,11 @@ function showClient(name){
   const lastVisit=visit.last===null?'Aucun achat':visit.last===0?'Aujourd’hui':`Il y a ${visit.last} jour(s)`;
   const box=document.createElement('div');box.id='clientDetail';box.className='card';box.style.border='2px solid #d8eadf';
   box.innerHTML=`<div class="row"><h3 style="margin:0">👤 ${esc(c.name)}</h3><button class="secondary" onclick="document.getElementById('clientDetail').remove()">Fermer</button></div>
-  <p class="small muted">Création : ${dateFmt(c.createdAt)} · ${c.purchases} achat(s)</p>
+  <p class="small muted">Création : ${c.createdAt?dateFmt(c.createdAt):'date inconnue'} · ${c.purchases} achat(s) actifs</p>
   <div class="actions" style="margin:12px 0"><button class="primary" style="flex:1;min-height:52px;font-size:1.05rem" onclick="selectClientForPurchase('${escJs(c.name)}')">🛒 Faire un achat pour ce client</button></div>
   <h3>💶 Résumé du client</h3>
   <div class="grid"><div><strong>CA client</strong><br>${fmt(c.total)}</div><div><strong>Panier moyen</strong><br>${fmt(avg)}</div><div><strong>Nombre d’achats</strong><br>${c.purchases}</div></div>
-  <h3>🧾 Historique des achats</h3>${hist.length?hist.map(p=>`<div class="row small" style="border-bottom:1px solid var(--border);padding:8px 0"><span>📅 ${dateFmt(p.date)} · ${fmt(p.amount)}${p.discount?' · 🎁 -'+fmt(p.discount):''}${p.exceptionalDiscount?' (dont remise exceptionnelle '+fmt(p.exceptionalDiscount)+')':''} · payé ${fmt(p.paid)}</span><button class="secondary" onclick="cancelPurchase('${escJs(c.name)}','${escJs(p.id)}')">Annuler</button></div>`).join(''):'<p class="muted">Aucun achat.</p>'}
+  <h3>🧾 Historique des achats</h3>${hist.length?hist.map(p=>`<div class="row small" style="border-bottom:1px solid var(--border);padding:8px 0;${p.cancelled?'opacity:.7;background:#fff5f4;':''}"><span>📅 ${dateFmt(p.date)} · ${fmt(p.amount)}${p.discount?' · 🎁 -'+fmt(p.discount):''}${p.exceptionalDiscount?' (dont remise exceptionnelle '+fmt(p.exceptionalDiscount)+')':''} · payé ${fmt(p.paid)}${p.cancelled?` · <strong style="color:var(--red)">ANNULÉ le ${dateFmt(p.cancelledAt)}</strong>`:''}</span>${isActivePurchase(p)?`<button class="secondary" onclick="cancelPurchase('${escJs(c.name)}','${escJs(p.id)}')">Annuler</button>`:''}</div>`).join(''):'<p class="muted">Aucun achat.</p>'}
   <h3>🎁 Fidélité</h3>
   <div class="grid grid4">
     <div class="stat"><strong>${reward.earnedCount}</strong><span class="kpiTitle">Bons gagnés</span><div class="small muted">${fmt(reward.earned)}</div></div>
@@ -598,9 +597,17 @@ function saveClientEdits(oldName){
   logOperation('Fiche client modifiée',previousName===name?name:`${previousName} → ${name}`);save();showClient(name);
 }
 function cancelPurchase(name,id){
-  const c=clients.find(x=>x.name===name);if(!c)return;const i=c.history.findIndex(p=>p.id===id);if(i<0)return;const p=c.history[i];
-  if(!confirm(`Annuler l'achat de ${fmt(p.amount)} pour ${c.name} ?`))return;
-  logOperation('Achat annulé',`${c.name} · ${fmt(p.paid??p.amount)}`);c.total=Math.round(Math.max(0,c.total-Number(p.paid??p.amount??0))*100)/100;c.purchases=Math.max(0,c.purchases-1);if(p.rewardDiscount)c.usedRewards=Math.max(0,c.usedRewards-Number(p.rewardDiscount));c.history.splice(i,1);save();showClient(name);
+  const c=clients.find(x=>x.name===name);if(!c)return;
+  const p=c.history.find(x=>String(x.id)===String(id));if(!p||!isActivePurchase(p))return;
+  const reason=prompt(`Motif de l’annulation (facultatif) pour ${fmt(p.paid??p.amount)} :`,'');if(reason===null)return;
+  if(!confirm(`Confirmer l’annulation de l’achat de ${fmt(p.paid??p.amount)} pour ${c.name} ? L’opération restera visible dans l’historique mais sera exclue des statistiques.`))return;
+  p.cancelled=true;p.cancelledAt=new Date().toISOString();p.cancellationReason=String(reason||'').trim();
+  // Mise à jour des totaux par soustraction ciblée : ne reconstruit pas toute la fiche depuis l'historique, car les anciennes versions peuvent contenir des totaux cumulés plus anciens que l'historique détaillé.
+  c.total=Math.round(Math.max(0,Number(c.total||0)-Number(p.paid??p.amount??0))*100)/100;
+  c.purchases=Math.max(0,Number(c.purchases||0)-1);
+  c.usedRewards=Math.round(Math.max(0,Number(c.usedRewards||0)-Number(p.rewardDiscount||0))*100)/100;
+  if(!save()){alert('L’annulation n’a pas pu être enregistrée. Vérifie les données avant de poursuivre.');return;}
+  logOperation('Achat annulé',`${c.name} · ${fmt(p.paid??p.amount)}${p.cancellationReason?' · '+p.cancellationReason:''}`);showClient(name);
 }
 function deleteClient(name){
   const c=clients.find(x=>x.name===name);if(!c)return;
@@ -618,7 +625,7 @@ function setDashboard(){
   const pct=goal?Math.min(100,monthCA/goal*100):0;document.getElementById('goalBar').style.width=pct+'%';document.getElementById('goalMessage').textContent=`${pct.toFixed(0)} % atteint · ${fmt(Math.max(0,goal-monthCA))} restant pour l'objectif mensuel.`;
   const weeklyGoal=Number(settings.weeklyGoal??1000);document.getElementById('weeklyGoal').value=weeklyGoal;document.getElementById('weeklyGoalText').textContent=fmt(weeklyGoal);
   const weeklyPct=weeklyGoal?Math.min(100,weekCA/weeklyGoal*100):0;document.getElementById('weeklyGoalBar').style.width=weeklyPct+'%';document.getElementById('weeklyGoalMessage').textContent=`Cette semaine : ${fmt(weekCA)} · ${weeklyPct.toFixed(0)} % atteint · ${fmt(Math.max(0,weeklyGoal-weekCA))} restant.`;
-  const inactive=clients.filter(c=>c.history.length&&((Date.now()-new Date(c.history[c.history.length-1].date).getTime())/86400000)>=30).sort((a,b)=>new Date(a.history.at(-1).date)-new Date(b.history.at(-1).date));
+  const inactive=clients.map(c=>({c,last:(c.history||[]).filter(isActivePurchase).map(p=>new Date(p.date)).filter(d=>Number.isFinite(d.getTime())).sort((a,b)=>b-a)[0]})).filter(x=>x.last&&((Date.now()-x.last.getTime())/86400000)>=30).sort((a,b)=>a.last-b.last);
   const rewardsReady=clients.filter(c=>availableReward(c)>=5);
   let a='';if(inactive.length)a+=`<div class="alert">👥 <strong>${inactive.length} client(s)</strong> n'ont pas acheté depuis au moins 30 jours.</div>`;
   if(rewardsReady.length)a+=`<div class="alert">🎁 <strong>${rewardsReady.length} client(s)</strong> ont un bon disponible.</div>`;
@@ -698,22 +705,22 @@ function setStats(){
     `<div class="periodMetric"><span>CA semaine précédente</span><strong>${fmt(statsPreviousWeekCA)}</strong></div>`+
     `<div class="periodMetric"><span>Évolution semaine en cours</span><strong>${statsWeekChange===null?'Comparaison indisponible':`${statsWeekChange>=0?'+':''}${statsWeekChange.toFixed(1).replace('.',',')} %`}</strong></div>`+
     `<p class="statNote">La semaine est calculée du lundi à aujourd’hui. La comparaison porte sur la semaine précédente complète et peut donc évoluer jusqu’à dimanche.</p>`;
-  // Les anciennes fiches gardent leur date fictive du 5 octobre 2026 et comptent dans les statistiques d'octobre.
-  const legacyDate = new Date(LEGACY_CLIENT_DATE).getTime();
-  const legacyClients = clients.filter(c=>new Date(c.createdAt).getTime()===legacyDate).length;
+  // Les fiches anciennes sans date fiable sont exclues du compteur de nouveaux clients.
   const newClients=clients.filter(c=>{
+    if(!c.createdAt)return false;
     const created = new Date(c.createdAt);
     return Number.isFinite(created.getTime()) &&
       created.getMonth()===now.getMonth() &&
       created.getFullYear()===now.getFullYear();
   }).length;
+  const clientsWithoutCreationDate=clients.filter(c=>!c.createdAt||!Number.isFinite(new Date(c.createdAt).getTime())).length;
   const activeClients=clients.filter(c=>c.purchases>0);
   const repeatClients=clients.filter(c=>c.purchases>=2);
   const neverPurchased=clients.filter(c=>c.purchases===0);
   const repeatRate=activeClients.length?repeatClients.length/activeClients.length*100:0;
   const avgPurchases=activeClients.length?activeClients.reduce((sum,c)=>sum+c.purchases,0)/activeClients.length:0;
   const monthReturning=clients.filter(c=>{
-    const hist=(c.history||[]).map(p=>dateOf(p)).filter(d=>Number.isFinite(d.getTime())).sort((a,b)=>a-b);
+    const hist=(c.history||[]).filter(isActivePurchase).map(p=>dateOf(p)).filter(d=>Number.isFinite(d.getTime())).sort((a,b)=>a-b);
     return hist.some(d=>monthKey(d)===monthKey(now)) && hist.some(d=>monthKey(d)!==monthKey(now) && d<new Date(now.getFullYear(),now.getMonth(),1));
   });
   const monthPurchases=ps.filter(p=>monthKey(dateOf(p))===monthKey(now));
@@ -753,7 +760,7 @@ function setStats(){
     `<div class="stat"><strong>${neverPurchased.length}</strong><span class="kpiTitle">Aucun achat enregistré</span></div>`+
     `</div>`+
     `<p class="statNote">Un client est considéré comme revenu s’il a effectué au moins 2 achats enregistrés. « Revenus ce mois » désigne les clients ayant acheté ce mois-ci et avant le mois en cours. Les calculs reposent sur l’historique présent dans l’application.</p>`+
-    (legacyClients?`<p class="statNote">${legacyClients} ancienne(s) fiche(s) conservent la date attribuée du 05/10/2026 et sont incluses dans les statistiques des nouveaux clients.</p>`:'');
+    (clientsWithoutCreationDate?`<p class="statNote">${clientsWithoutCreationDate} ancienne(s) fiche(s) n’ont pas de date de création fiable et sont exclues du compteur de nouveaux clients afin de ne pas inventer de statistiques.</p>`:'');
   // Comparatif des 9 semaines couvrant environ deux mois : CA, ventes, panier moyen et nouveaux clients.
   const weekStartFor = d => { const x=new Date(d); x.setHours(0,0,0,0); x.setDate(x.getDate()-((x.getDay()+6)%7)); return x; };
   const currentWeekStart=weekStartFor(now);
@@ -882,7 +889,7 @@ function renderV15Insights(ps, now){
   const profit=document.getElementById('profitabilityStats');
   if(profit) profit.innerHTML=`<div class="stat"><strong>${money(gross)}</strong><span class="kpiTitle">Total avant réductions</span></div><div class="stat"><strong>${money(netDiscounts)}</strong><span class="kpiTitle">Total des réductions</span></div><div class="stat"><strong>${money(paid)}</strong><span class="kpiTitle">Total encaissé</span></div><div class="stat"><strong>${money(todayPaid)}</strong><span class="kpiTitle">Encaissé aujourd’hui</span></div><div class="stat"><strong>${money(monthPaid)}</strong><span class="kpiTitle">Encaissé ce mois</span></div><div class="stat"><strong>${ps.length?money(paid/ps.length):money(0)}</strong><span class="kpiTitle">Panier moyen encaissé</span></div><p class="statNote">Les montants sont calculés à partir des achats enregistrés. Les achats annulés et supprimés ne sont plus comptabilisés. La marge réelle nécessite aussi les coûts d’achat des produits.</p>`;
   const cutoff=new Date(now);cutoff.setHours(0,0,0,0);cutoff.setDate(cutoff.getDate()-30);
-  const stale=clients.map(c=>{const dates=(c.history||[]).map(p=>new Date(p.date)).filter(d=>Number.isFinite(d.getTime()));const last=dates.length?new Date(Math.max(...dates.map(d=>d.getTime()))):null;return {c,last};}).filter(x=>x.last&&x.last<cutoff).sort((a,b)=>a.last-b.last);
+  const stale=clients.map(c=>{const dates=(c.history||[]).filter(isActivePurchase).map(p=>new Date(p.date)).filter(d=>Number.isFinite(d.getTime()));const last=dates.length?new Date(Math.max(...dates.map(d=>d.getTime()))):null;return {c,last};}).filter(x=>x.last&&x.last<cutoff).sort((a,b)=>a.last-b.last);
   const list=document.getElementById('relanceList');
   if(list) list.innerHTML=stale.length?stale.slice(0,10).map(({c,last})=>`<div class="row" style="border-bottom:1px solid var(--border);padding:8px 0"><div><strong>${esc(c.name)}</strong><br><span class="small muted">Dernier achat : ${dateFmt(last)} · ${Math.floor((now-last)/(86400000))} jours</span></div><button class="secondary" onclick="showClient('${escJs(c.name)}')">Ouvrir la fiche</button></div>`).join(''):'<p class="muted">Aucun client avec un achat datant de plus de 30 jours, ou pas assez d’historique.</p>';
 }
@@ -945,9 +952,10 @@ function togglePurchaseStats(){showAllPurchaseStats=!showAllPurchaseStats;render
 function toggleVisitFrequencyStats(){showAllVisitFrequencyStats=!showAllVisitFrequencyStats;renderPurchaseStats(allPurchases(),new Date())}
 
 function exportData(){
+  if(storageReadIssues.length){alert('Export bloqué : une ou plusieurs données locales sont illisibles ('+storageReadIssues.join(', ')+'). Restaure une sauvegarde valide avant de créer un nouvel export incomplet.');return;}
   const exportedAt=new Date().toISOString();
-  const payload={version:'V26 Signature',exportedAt,storageKey:KEY,settings,clients,historicalCA,activityLog};
-  const blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='Vap_et_Moi_sauvegarde_V26_Signature.json';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);
+  const payload={version:'Vap’ & Moi Pro Signature V26.1',exportedAt,storageKey:KEY,settings,clients,historicalCA,activityLog};
+  const blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='Vap_et_Moi_sauvegarde_V26_1_Signature.json';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);
   localStorage.setItem(KEY+'_last_backup',exportedAt);renderBackupStatus();
 }
 function csvCell(value){const s=String(value??'');return '"'+s.replace(/"/g,'""')+'"';}
@@ -956,17 +964,44 @@ function exportSalesCSV(){
   allPurchases().sort((a,b)=>new Date(a.date)-new Date(b.date)).forEach(p=>rows.push([p.date||'',p.client||'',Number(p.amount??p.paid??0).toFixed(2),Number(p.discount||0).toFixed(2),Number(p.rewardDiscount||0).toFixed(2),Number(p.exceptionalDiscount||0).toFixed(2),Number(p.paid??p.amount??0).toFixed(2)]));
   const csv='\ufeff'+rows.map(r=>r.map(csvCell).join(';')).join('\r\n');const blob=new Blob([csv],{type:'text/csv;charset=utf-8;'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='Vap_et_Moi_ventes.csv';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);
 }
+function validateBackupPayload(data){
+  if(!data||typeof data!=='object'||!Array.isArray(data.clients))throw new Error('Le fichier ne contient pas de liste de clients valide.');
+  if(data.clients.some(c=>!c||typeof c.name!=='string'||!c.name.trim()||(c.history!==undefined&&!Array.isArray(c.history))))throw new Error('Une ou plusieurs fiches clients sont invalides.');
+  for(const c of data.clients){for(const p of (c.history||[])){if(!p||typeof p!=='object')throw new Error('Un enregistrement d’achat est invalide.');}}
+  if(data.historicalCA!==undefined&&(!data.historicalCA||typeof data.historicalCA!=='object'||Array.isArray(data.historicalCA)))throw new Error('L’historique mensuel est invalide.');
+  return true;
+}
 function restoreData(e){
-  const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{
-    try{const data=JSON.parse(r.result);if(!Array.isArray(data.clients))throw new Error();if(data.clients.some(c=>!c||typeof c.name!=='string'||!c.name.trim()||(c.history!==undefined&&!Array.isArray(c.history))))throw new Error();
-      // Accepte aussi les anciennes sauvegardes avec champs incomplets : les anomalies seront signalées après restauration, sans effacer l'historique.
-      if(!confirm(`Restaurer ${data.clients.length} fiche(s) client et remplacer les données actuelles ? Une sauvegarde de sécurité sera téléchargée avant le remplacement.`))return;
-      // Crée un export de sécurité avant la restauration, sans modifier les clés de stockage.
-      const safetyPayload={version:'V26 Signature - sécurité avant restauration',exportedAt:new Date().toISOString(),storageKey:KEY,settings,clients,historicalCA,activityLog};
+  const f=e.target.files&&e.target.files[0];if(!f)return;
+  const r=new FileReader();r.onload=()=>{
+    const oldValues={};const keys=[KEY,KEY+'_settings',HISTORICAL_KEY,AUDIT_KEY];keys.forEach(k=>oldValues[k]=localStorage.getItem(k));
+    try{
+      const data=JSON.parse(r.result);validateBackupPayload(data);
+      const stagedClients=data.clients.map(c=>normalizeClient({...c,history:Array.isArray(c.history)?c.history.map(p=>({...p})):[]}));
+      const stagedSettings=data.settings&&typeof data.settings==='object'&&!Array.isArray(data.settings)?data.settings:settings;
+      const stagedHistorical=data.historicalCA&&typeof data.historicalCA==='object'&&!Array.isArray(data.historicalCA)?data.historicalCA:historicalCA;
+      const stagedLog=Array.isArray(data.activityLog)?data.activityLog.filter(x=>x&&typeof x==='object').slice(0,100):activityLog;
+      const activeSales=stagedClients.reduce((n,c)=>n+(c.history||[]).filter(isActivePurchase).length,0);
+      if(!confirm(`Sauvegarde reconnue : ${stagedClients.length} client(s), ${activeSales} achat(s) actif(s), ${Object.keys(stagedHistorical).length} mois d’historique. La restauration remplacera les données actuelles. Une copie de sécurité sera téléchargée avant validation. Continuer ?`))return;
+      const safetyPayload={version:'Vap’ & Moi Pro — sécurité avant restauration',exportedAt:new Date().toISOString(),storageKey:KEY,settings,clients,historicalCA,activityLog};
       const safetyUrl=URL.createObjectURL(new Blob([JSON.stringify(safetyPayload,null,2)],{type:'application/json'}));const safetyLink=document.createElement('a');safetyLink.href=safetyUrl;safetyLink.download='Vap_et_Moi_securite_avant_restauration.json';document.body.appendChild(safetyLink);safetyLink.click();safetyLink.remove();setTimeout(()=>URL.revokeObjectURL(safetyUrl),1500);
-      clients=data.clients.map(normalizeClient);settings=data.settings||settings;if(Array.isArray(data.activityLog)){activityLog=data.activityLog.slice(0,100);localStorage.setItem(AUDIT_KEY,JSON.stringify(activityLog));}if(data.historicalCA&&typeof data.historicalCA==='object'){historicalCA=data.historicalCA;localStorage.setItem(HISTORICAL_KEY,JSON.stringify(historicalCA));}else{historicalCA={...JSON.parse(localStorage.getItem(HISTORICAL_KEY)||'{}')};}localStorage.setItem(KEY,JSON.stringify(clients));localStorage.setItem(KEY+'_settings',JSON.stringify(settings));logOperation('Sauvegarde restaurée',`${clients.length} client(s)`);updateAll();alert('Sauvegarde restaurée.');
-    }catch(err){alert('Fichier de sauvegarde invalide.')}
-  };r.readAsText(f);e.target.value='';
+      // Écriture préparée puis vérification ; en cas d’erreur, restauration des valeurs précédentes.
+      localStorage.setItem(KEY,JSON.stringify(stagedClients));
+      localStorage.setItem(KEY+'_settings',JSON.stringify(stagedSettings));
+      localStorage.setItem(HISTORICAL_KEY,JSON.stringify(stagedHistorical));
+      localStorage.setItem(AUDIT_KEY,JSON.stringify(stagedLog));
+      const checkClients=JSON.parse(localStorage.getItem(KEY)||'null');
+      const checkSettings=JSON.parse(localStorage.getItem(KEY+'_settings')||'null');
+      const checkHistorical=JSON.parse(localStorage.getItem(HISTORICAL_KEY)||'null');
+      if(!Array.isArray(checkClients)||checkClients.length!==stagedClients.length||JSON.stringify(checkClients)!==JSON.stringify(stagedClients)||!checkSettings||!checkHistorical)throw new Error('La vérification après écriture a échoué.');
+      clients=checkClients.map(normalizeClient);settings=checkSettings;historicalCA=checkHistorical;activityLog=stagedLog;storageReadIssues=[];
+      logOperation('Sauvegarde restaurée',`${clients.length} client(s), ${activeSales} achat(s) actif(s)`);updateAll();alert('Restauration terminée et vérifiée. Vérifie les fiches, la fidélité et les statistiques avant de reprendre les ventes.');
+    }catch(err){
+      try{keys.forEach(k=>{if(oldValues[k]===null)localStorage.removeItem(k);else localStorage.setItem(k,oldValues[k]);});}catch(rollbackError){}
+      try{clients=JSON.parse(oldValues[KEY]||'[]').map(normalizeClient);settings=JSON.parse(oldValues[KEY+'_settings']||'{}');historicalCA=JSON.parse(oldValues[HISTORICAL_KEY]||'{}');activityLog=JSON.parse(oldValues[AUDIT_KEY]||'[]');}catch(reloadError){}
+      updateAll();alert('Restauration interrompue : '+(err&&err.message?err.message:'fichier invalide')+'. Les données précédentes ont été rétablies lorsque le stockage le permettait.');
+    }finally{e.target.value='';}
+  };r.onerror=()=>{alert('Impossible de lire ce fichier de sauvegarde.');e.target.value='';};r.readAsText(f);
 }
 function renderDailyOps(now){
   const ps=allPurchases().filter(p=>{const d=new Date(p.date);return Number.isFinite(d.getTime())&&sameDay(d,now)});
@@ -998,7 +1033,7 @@ function analysisData(kind){
   const current=ps.filter(p=>inRange(p.date,b.start,b.end));
   const previous=ps.filter(p=>inRange(p.date,b.prevStart,b.prevEnd));
   const sum=arr=>arr.reduce((n,p)=>n+safelyPaid(p),0);
-  const countNew=(a,z)=>clients.filter(c=>inRange(c.createdAt||LEGACY_CLIENT_DATE,a,z)).length;
+  const countNew=(a,z)=>clients.filter(c=>c.createdAt&&Number.isFinite(new Date(c.createdAt).getTime())&&inRange(c.createdAt,a,z)).length;
   const ca=sum(current), prevCA=sum(previous), basket=current.length?ca/current.length:0, prevBasket=previous.length?prevCA/previous.length:0;
   const newCurrent=countNew(b.start,b.end), newPrev=countNew(b.prevStart,b.prevEnd);
   return {kind,b,current,previous,ca,prevCA,basket,prevBasket,newCurrent,newPrev,tx:current.length,prevTx:previous.length,allClients:clients.length};
@@ -1027,7 +1062,7 @@ function renderAnalysis(){
  const metrics=[['CA période',fmt(d.ca)],['CA période précédente',fmt(d.prevCA)],['Ventes',String(d.tx)],['Ventes précédentes',String(d.prevTx)],['Nouveaux clients',String(d.newCurrent)],['Panier moyen',fmt(d.basket)],['Clients enregistrés',String(clients.length)],['Achats enregistrés',String(allPurchases().length)]];
  document.getElementById('analysisMetrics').innerHTML=metrics.map(([l,v])=>`<div class="metricCard"><span>${esc(l)}</span><strong>${esc(v)}</strong></div>`).join('');
  const purchases=allPurchases().map(p=>({...p,_date:analysisDate(p)})).filter(p=>Number.isFinite(p._date.getTime()));
- const clientStats=clients.map(c=>{const ps=(c.history||[]).map(p=>({...p,_date:analysisDate(p)})).filter(p=>Number.isFinite(p._date.getTime()));ps.sort((a,b)=>b._date-a._date);const total=ps.reduce((s,p)=>s+safelyPaid(p),0);const last=ps[0]?ps[0]._date:null;return {c,ps,total,last,days:last?daysBetween(last,now):null}});
+ const clientStats=clients.map(c=>{const ps=(c.history||[]).filter(isActivePurchase).map(p=>({...p,_date:analysisDate(p)})).filter(p=>Number.isFinite(p._date.getTime()));ps.sort((a,b)=>b._date-a._date);const total=ps.reduce((s,p)=>s+safelyPaid(p),0);const last=ps[0]?ps[0]._date:null;return {c,ps,total,last,days:last?daysBetween(last,now):null}});
  const inactive=clientStats.filter(x=>x.ps.length&&x.days>=30).sort((a,b)=>b.days-a.days);
  const never=clientStats.filter(x=>!x.ps.length);
  document.getElementById('analysisRetention').innerHTML=`<div class="clientMetricGrid"><div class="metricCard"><span>Clients avec achat</span><strong>${clientStats.filter(x=>x.ps.length).length}</strong></div><div class="metricCard"><span>Sans achat depuis 30 j+</span><strong>${inactive.length}</strong></div><div class="metricCard"><span>Sans achat enregistré</span><strong>${never.length}</strong></div><div class="metricCard"><span>Achats par client acheteur</span><strong>${clientStats.some(x=>x.ps.length)?(purchases.length/clientStats.filter(x=>x.ps.length).length).toLocaleString('fr-FR',{maximumFractionDigits:1}):'0'}</strong></div></div><p class="small muted">${inactive.length?`À examiner en priorité : ${inactive.slice(0,5).map(x=>`${esc(analysisClientLabel(x.c))} (${x.days} j)`).join(', ')}.`:'Aucun client avec achat enregistré n’a dépassé 30 jours d’inactivité.'}</p>`;
@@ -1055,7 +1090,7 @@ function renderAnalysis(){
  if(d.newCurrent<d.newPrev)actions.push('Les nouveaux clients sont moins nombreux : surveille les recommandations et la visibilité locale.');
  if(d.basket<d.prevBasket)actions.push('Le panier moyen diminue : examine les ventes associées et les achats complémentaires réellement enregistrés.');
  if(inactive.length)actions.push(`${inactive.length} client(s) avec un historique d’achat n’ont pas acheté depuis au moins 30 jours : consulte leurs fiches pour décider d’une relance adaptée.`);
- if(goal&&forecast<goal)actions.push(`Au rythme actuel, la projection est inférieure à l’objectif de ${fmt(goal)}. Il faudrait environ ${fmt(openLeft?remaining/openLeft:remaining)} de CA par jour ouvert restant pour l’atteindre.`);
+ if(kind==='month'&&goal&&monthForecast<goal)actions.push(`Au rythme actuel, la projection mensuelle est inférieure à l’objectif de ${fmt(goal)}. Il faudrait environ ${fmt(monthLeft?(goal-monthCA)/monthLeft:Math.max(0,goal-monthCA))} de CA par jour ouvert restant pour l’atteindre.`);
  if(!actions.length)actions.push('Aucun signal de baisse détecté dans les indicateurs sélectionnés. Continue à suivre chaque semaine le CA, le nombre de ventes et le panier moyen.');
  // Contrôle de cohérence en lecture seule : aucun historique n'est corrigé silencieusement.
  const allClientNames=new Map();clients.forEach(c=>{const k=String(c.name||'').trim().toLocaleLowerCase('fr');allClientNames.set(k,(allClientNames.get(k)||0)+1)});
@@ -1080,7 +1115,7 @@ function renderAnalysis(){
  healthEl.innerHTML=rows.join('');}
  document.getElementById('analysisActions').innerHTML=actions.map(a=>`<p class="analysisAction">💡 ${esc(a)}</p>`).join('');
 }
-function exportAnalysisCSV(){const d=analysisData(document.getElementById('analysisPeriod')?.value||'month');const rows=[['Indicateur','Valeur'],['CA période',d.ca.toFixed(2)],['CA période précédente',d.prevCA.toFixed(2)],['Nombre de ventes',d.tx],['Ventes période précédente',d.prevTx],['Nouveaux clients',d.newCurrent],['Nouveaux clients période précédente',d.newPrev],['Panier moyen',d.basket.toFixed(2)],['Clients enregistrés',clients.length],['Achats enregistrés',allPurchases().length]];const csv='\ufeff'+rows.map(r=>r.map(v=>'"'+String(v).replace(/"/g,'""')+'"').join(';')).join('\r\n');const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8;'}));a.download='Vap_et_Moi_analyse_V25.csv';a.click();URL.revokeObjectURL(a.href)}
+function exportAnalysisCSV(){const d=analysisData(document.getElementById('analysisPeriod')?.value||'month');const rows=[['Indicateur','Valeur'],['CA période',d.ca.toFixed(2)],['CA période précédente',d.prevCA.toFixed(2)],['Nombre de ventes',d.tx],['Ventes période précédente',d.prevTx],['Nouveaux clients',d.newCurrent],['Nouveaux clients période précédente',d.newPrev],['Panier moyen',d.basket.toFixed(2)],['Clients enregistrés',clients.length],['Achats enregistrés',allPurchases().length]];const csv='\ufeff'+rows.map(r=>r.map(v=>'"'+String(v).replace(/"/g,'""')+'"').join(';')).join('\r\n');const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8;'}));a.download='Vap_et_Moi_analyse_V26_1.csv';a.click();URL.revokeObjectURL(a.href)}
 
 function renderCommercialCopilot(){
   const root=document.getElementById('commercialCopilot');if(!root)return;
@@ -1096,7 +1131,7 @@ function renderCommercialCopilot(){
   const weekPace=openDaysElapsed?sum(week)/openDaysElapsed:0;
   const remainingOpenDays=(()=>{let n=0;for(let d=new Date(dayStart);d.getDay()!==0;d.setDate(d.getDate()+1)){if(d>dayStart)n++;}return n;})();
   const weekProjection=sum(week)+weekPace*remainingOpenDays;
-  const clientStats=clients.map(c=>{const h=(c.history||[]).filter(p=>Number.isFinite(new Date(p.date).getTime()));const last=h.reduce((m,p)=>Math.max(m,new Date(p.date).getTime()),0);return {c,h,last,days:last?Math.floor((dayStart.getTime()-new Date(last).setHours(0,0,0,0))/86400000):null};});
+  const clientStats=clients.map(c=>{const h=(c.history||[]).filter(isActivePurchase).filter(p=>Number.isFinite(new Date(p.date).getTime()));const last=h.reduce((m,p)=>Math.max(m,new Date(p.date).getTime()),0);return {c,h,last,days:last?Math.floor((dayStart.getTime()-new Date(last).setHours(0,0,0,0))/86400000):null};});
   const inactive=clientStats.filter(x=>x.h.length&&x.days>=30).sort((a,b)=>b.days-a.days);
   const noPurchase=clientStats.filter(x=>!x.h.length);
   const rec=[];
@@ -1104,16 +1139,16 @@ function renderCommercialCopilot(){
   else {
     if(weeklyGoal>0&&weekProjection<weeklyGoal)rec.push({icon:'🎯',title:'Objectif hebdomadaire à surveiller',text:`Rythme estimé : ${fmt(weekProjection)} pour un objectif de ${fmt(weeklyGoal)}.`,action:'Mise sur les ventes utiles et les retours clients, sans remise automatique.'});
     if(basket>0)rec.push({icon:'🧺',title:'Travaille le panier moyen',text:`Le panier moyen enregistré est de ${fmt(basket)}.`,action:'Propose un complément réellement adapté au matériel du client, sans pousser à l’achat inutile.'});
-    if(inactive.length)rec.push({icon:'🔁',title:`${inactive.length} client(s) sans achat depuis 30 jours ou plus`,text:`À examiner en priorité : ${inactive.slice(0,3).map(x=>`${esc(x.c.name)} (${x.days} j)`).join(', ')}.`,action:'Vérifie si un conseil ou un besoin de consommable justifie une prise de contact.'});
+    if(inactive.length)rec.push({icon:'🔁',title:`${inactive.length} client(s) sans achat depuis 30 jours ou plus`,text:`À examiner en priorité : ${inactive.slice(0,3).map(x=>`${x.c.name} (${x.days} j)`).join(', ')}.`,links:inactive.slice(0,3).map(x=>({name:x.c.name,days:x.days})),action:'Ouvre une fiche, vérifie le dernier achat et envisage une prise de contact utile uniquement si elle est pertinente.'});
     if(noPurchase.length)rec.push({icon:'👋',title:`${noPurchase.length} fiche(s) sans achat enregistré`,text:'Ces fiches peuvent correspondre à des inscriptions récentes ou à un historique incomplet.',action:'Vérifie les fiches avant de conclure à une absence de fidélité.'});
     if(monthlyGoal>0&&sum(month)<monthlyGoal)rec.push({icon:'📅',title:'Suis la trajectoire mensuelle',text:`CA du mois enregistré : ${fmt(sum(month))} sur ${fmt(monthlyGoal)}.`,action:'La prévision détaillée et les comparaisons sont disponibles dans Analyse.'});
   }
   if(!rec.length)rec.push({icon:'✅',title:'Activité suivie',text:'Aucun signal prioritaire calculable à partir des données actuelles.',action:'Continue à enregistrer les ventes et à vérifier les sauvegardes.'});
-  root.innerHTML=rec.slice(0,5).map(r=>`<div class="analysisInsight"><div class="analysisIcon">${r.icon}</div><div><strong>${esc(r.title)}</strong><p>${esc(r.text)}</p><p class="small muted">${esc(r.action)}</p></div></div>`).join('')+`<p class="small muted">Les conseils reposent sur les données actuellement enregistrées. Les fiches sans historique ou les ventes non saisies peuvent modifier les résultats. Les projections sont indicatives.</p>`;
+  root.innerHTML=rec.slice(0,5).map(r=>`<div class="analysisInsight"><div class="analysisIcon">${r.icon}</div><div><strong>${esc(r.title)}</strong><p>${esc(r.text)}</p>${r.links?`<div class="actions">${r.links.map(x=>`<button class="secondary" onclick="showPage('clients');showClient('${escJs(x.name)}')">Ouvrir ${esc(x.name)} · ${x.days} j</button>`).join('')}</div>`:''}<p class="small muted">${esc(r.action)}</p></div></div>`).join('')+`<p class="small muted">Les conseils reposent sur les données actuellement enregistrées. Les fiches sans historique ou les ventes non saisies peuvent modifier les résultats. Les projections sont indicatives.</p>`;
 }
 function renderDataIntegrity(){
   const badge=document.getElementById('dataIntegrityBadge');if(!badge)return;
-  let issues=[];let storedClients=[];
+  let issues=[];let storedClients=[];if(storageReadIssues.length)issues.push('Une ou plusieurs données locales n’ont pas pu être lues correctement : '+storageReadIssues.join(', ')+'. Restaure une sauvegarde valide avant toute modification.');
   try{const raw=localStorage.getItem(KEY);if(raw===null){issues.push('Les données clients ne sont pas encore enregistrées dans le stockage local.');}else{storedClients=JSON.parse(raw);if(!Array.isArray(storedClients))issues.push('Le format de la base clients est inattendu.');}}
   catch(e){issues.push('La base clients enregistrée ne peut pas être relue en JSON.');}
   const purchases=allPurchases();let invalidDates=0,invalidAmounts=0;
