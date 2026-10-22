@@ -1,0 +1,7 @@
+Vap’ & Moi Pro — V26.4 Signature harmonisée
+
+Cette version harmonise les couleurs, cartes, boutons, navigation et accents décoratifs autour de l’identité vert forêt / olive / or doux et de la mascotte officielle. Les écrans métier gardent leur structure et leurs fonctions ; la mascotte reste discrète en filigrane pour préserver la lisibilité.
+
+Installation : sauvegardez d’abord les données JSON. Décompressez l’archive et publiez tous les fichiers à la racine du dépôt GitHub Pages, en conservant les noms et emplacements. Gardez la même URL et ne supprimez pas les données locales du navigateur.
+
+Les vérifications de syntaxe et d’archive ne remplacent pas un test fonctionnel complet sur téléphone avec une copie des données réelles.

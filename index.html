@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#163f2d">
 <meta name="description" content="Vap’ & Moi Pro Signature : gestion des clients, ventes, fidélité, analyses et sauvegardes.">
-<title>Vap’ & Moi Pro — Signature V26.3 Mascotte</title>
+<title>Vap’ & Moi Pro — Signature V26.4 Signature harmonisée</title>
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="./icon-192.png">
 <meta name="mobile-web-app-capable" content="yes">
@@ -152,11 +152,38 @@ nav.appNav{border-color:#dbe5da;box-shadow:0 -8px 26px rgba(22,63,45,.09);backdr
 .appGreetingMascot #greetingSubtitle{max-width:100%;text-wrap:balance}
 @media(max-width:420px){.appGreetingMascot{min-height:132px;padding:13px 12px!important}.appGreetingMascot .greetingContent{width:70%;max-width:70%}.appGreetingMascot .mascotGreetingImg{width:46%;object-position:50% 15%}.appGreetingMascot .appGreeting h2{font-size:20px}.appGreetingMascot .eyebrow{font-size:9px}.appGreetingMascot #greetingSubtitle{font-size:12px}}
 
+
+/* V26.4 Signature harmonisée — identité mascotte dans toute l'application */
+:root{--green:#173d2b;--green2:#2f7048;--light:#f5f5ed;--card:#fffdf8;--text:#202d23;--muted:#6e7569;--border:#dcded0;--sage:#e9eee0;--cream:#fbf7eb;--gold:#b49a48;--red:#a83a2c}
+body{background:radial-gradient(ellipse at 95% 0%,rgba(180,154,72,.09),transparent 280px),linear-gradient(180deg,#f0f2e8 0,#f8f8f3 320px);color:var(--text)}
+header{background:linear-gradient(125deg,#102c20 0%,#19432e 58%,#3c5632 100%);border-bottom:2px solid rgba(180,154,72,.65)}
+.brandMark{background:linear-gradient(145deg,rgba(255,255,255,.13),rgba(180,154,72,.10));border-color:rgba(213,194,117,.65);box-shadow:inset 0 0 0 2px rgba(255,255,255,.035)}
+.proLabel{border-color:rgba(211,194,126,.75)!important;color:#e8dfb8!important}
+.card,.homeStats .stat,.quickTile{background:linear-gradient(145deg,#fffefa 0%,#fbfcf7 100%);border-color:#dfe2d5;box-shadow:0 5px 18px rgba(26,47,30,.055)}
+.stat{background:#edf1e5}.stat strong,.homeStats .stat strong,.clientMetricGrid .stat strong,.metricCard strong{color:#2f7048}
+button.primary{background:linear-gradient(135deg,#245b3b,#3b7448);box-shadow:0 3px 9px rgba(32,81,49,.13)}
+button.secondary{color:#28583a;border-color:#6b8a62;background:#fffdf8}
+.badge{background:#edf0d9;color:#3c5c32}.progress>div{background:linear-gradient(90deg,#2f7048,#91a54f)}
+nav.appNav{border-color:#e0e0d3;background:rgba(255,254,249,.97)}
+nav.appNav button.active{background:#e9eee0;color:#28583a}
+nav.appNav button.saleNav{background:linear-gradient(145deg,#285f3d,#467847);box-shadow:0 5px 13px rgba(36,83,49,.24)}
+.statsThemeHead{background:linear-gradient(110deg,#e9eee0,#f5f1df);border-color:#dfe2d1;color:#234b32}
+.analysisInsight .analysisIcon,.rankNum{background:#e9eee0;color:#2d6740}
+.analysisAction{background:#f5f4e9;border-color:#e6e1cb}
+.dataHealth{background:#f7f7ef}.dataHealth.good{background:#edf4e7;border-color:#cbd9bb}.dataHealth.warn{background:#fff7e5;border-color:#e8d5a5}
+/* Subtile empreinte de la mascotte sur les écrans métier : décor seulement, contenu prioritaire */
+.page:not(#accueil)>.card:first-child{position:relative;isolation:isolate;overflow:hidden}
+.page:not(#accueil)>.card:first-child:after{content:"";position:absolute;z-index:-1;right:-18px;top:-18px;width:112px;height:112px;background-image:url('./mascotte-vap-moi.jpg');background-size:cover;background-position:center 18%;border-radius:50%;opacity:.075;filter:sepia(.22);pointer-events:none}
+.page:not(#accueil)>.card:first-child>h2{color:#234832}
+.appGreetingMascot{border:1px solid rgba(190,169,91,.42);box-shadow:0 10px 24px rgba(15,48,31,.17)}
+.greetingTopline .eyebrow{color:#e5d9a6!important}
+@media(max-width:650px){header{border-radius:0 0 24px 24px}.page:not(#accueil)>.card:first-child:after{width:88px;height:88px;right:-14px;top:-10px}.card{box-shadow:0 4px 15px rgba(26,47,30,.045)}}
+
 </style>
 </head>
 <body>
 <header>
-  <div class="brandLockup"><div class="brandMark" aria-hidden="true">V<span>&</span>M</div><div><h1>Vap’ & Moi <span class="proLabel">PRO</span></h1><p>Signature V26.3 · votre boutique, simplement</p></div></div>
+  <div class="brandLockup"><div class="brandMark" aria-hidden="true">V<span>&</span>M</div><div><h1>Vap’ & Moi <span class="proLabel">PRO</span></h1><p>Signature V26.4 · votre boutique, simplement</p></div></div>
 </header>
 <div id="offlineNotice" role="status" hidden>📴 Hors connexion : consultation uniquement. Les modifications sont désactivées.</div>
 <nav class="appNav">
@@ -317,7 +344,7 @@ nav.appNav{border-color:#dbe5da;box-shadow:0 -8px 26px rgba(22,63,45,.09);backdr
 
 <section id="stats" class="page">
   <div class="card">
-    <h2>📊 Tableau de bord — V26.2 Signature</h2>
+    <h2>📊 Tableau de bord — V26.4 Signature</h2>
     <p class="muted small">Statistiques regroupées par sujet : chiffre d’affaires, ventes et panier moyen, clients, encaissements, puis prévisions.</p>
     <div class="actionRow"><button class="secondary" onclick="exportSalesCSV()">📄 Exporter les ventes (CSV)</button><button class="secondary" onclick="exportData()">💾 Sauvegarder les données (JSON)</button></div>
     <div class="grid4">
@@ -402,7 +429,7 @@ nav.appNav{border-color:#dbe5da;box-shadow:0 -8px 26px rgba(22,63,45,.09);backdr
   <div class="card"><h3>💡 Plan d’action conseillé</h3><div id="analysisActions"></div><p class="small muted">Les recommandations sont calculées à partir des données enregistrées. Une projection n’est pas une garantie. La marge réelle nécessite les coûts d’achat.</p><div class="actions" style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px"><button class="btn" onclick="exportAnalysisCSV()">Exporter l’analyse CSV</button><button class="btn secondary" onclick="window.print()">Imprimer le bilan</button></div></div>
 </section>
 </main>
-<footer>Vap’ & Moi Pro · Signature V26.3 Mascotte · pilotage commercial</footer>
+<footer>Vap’ & Moi Pro · Signature V26.4 Signature harmonisée · pilotage commercial</footer>
 
 <script>
 const KEY='vapetmoi_fidelite_v1';
