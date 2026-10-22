@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#163f2d">
 <meta name="description" content="Vap’ & Moi Pro Signature : gestion des clients, ventes, fidélité, analyses et sauvegardes.">
-<title>Vap’ & Moi Pro — Signature V26.2</title>
+<title>Vap’ & Moi Pro — Signature V26.3 Mascotte</title>
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="./icon-192.png">
 <meta name="mobile-web-app-capable" content="yes">
@@ -140,11 +140,23 @@ nav.appNav{border-color:#dbe5da;box-shadow:0 -8px 26px rgba(22,63,45,.09);backdr
 @media(max-width:650px){header{padding:12px 15px 13px}.brandMark{width:44px;height:44px;flex-basis:44px;border-radius:14px;font-size:16px}.brandLockup h1{font-size:22px}.brandLockup p{font-size:12px}.appGreetingCompact{padding:13px 14px 12px}.appGreetingCompact h2{font-size:21px}.homeGoalCard{padding:10px}.homeGoalHead{font-size:11px}.homeGoalHead strong{font-size:14px}.homeStats{gap:8px}.homeStats .stat{min-height:78px;padding:12px}.homeStats .stat strong{font-size:20px}.homeQuickCompact .quickTile{min-height:66px}.homeDetails>summary{padding:12px}.homeGoalStrip{gap:8px}}
 @media(max-width:360px){.greetingTopline{align-items:flex-start}.appGreetingCompact .statusPill{font-size:10px}.homeGoalHead{align-items:flex-start;flex-direction:column;gap:2px}.homeStats .stat strong{font-size:18px}}
 
+
+/* Signature Mascotte V26.3 : intégration légère de la mascotte sans masquer les chiffres */
+.appGreetingMascot{min-height:142px;display:flex;align-items:stretch;position:relative;isolation:isolate;padding-right:14px!important;background:linear-gradient(110deg,#123c2a 0%,#1d5538 58%,#2d6b43 100%)}
+.appGreetingMascot .mascotGreetingImg{position:absolute;z-index:0;right:0;bottom:0;height:100%;width:43%;object-fit:cover;object-position:50% 18%;opacity:.93;pointer-events:none;mask-image:linear-gradient(to right,transparent 0%,rgba(0,0,0,.45) 16%,#000 38%);-webkit-mask-image:linear-gradient(to right,transparent 0%,rgba(0,0,0,.45) 16%,#000 38%)}
+.appGreetingMascot:after{z-index:0;pointer-events:none}.appGreetingMascot .greetingContent{position:relative;z-index:1;width:72%;max-width:72%;min-width:0}
+.appGreetingMascot .greetingTopline{justify-content:flex-start}
+.appGreetingMascot .greetingTopline>div{min-width:0}
+.appGreetingMascot .statusPill{display:none}
+.appGreetingMascot .eyebrow{max-width:100%;letter-spacing:.07em}
+.appGreetingMascot #greetingSubtitle{max-width:100%;text-wrap:balance}
+@media(max-width:420px){.appGreetingMascot{min-height:132px;padding:13px 12px!important}.appGreetingMascot .greetingContent{width:70%;max-width:70%}.appGreetingMascot .mascotGreetingImg{width:46%;object-position:50% 15%}.appGreetingMascot .appGreeting h2{font-size:20px}.appGreetingMascot .eyebrow{font-size:9px}.appGreetingMascot #greetingSubtitle{font-size:12px}}
+
 </style>
 </head>
 <body>
 <header>
-  <div class="brandLockup"><div class="brandMark" aria-hidden="true">V<span>&</span>M</div><div><h1>Vap’ & Moi <span class="proLabel">PRO</span></h1><p>Signature V26.2 · votre boutique, simplement</p></div></div>
+  <div class="brandLockup"><div class="brandMark" aria-hidden="true">V<span>&</span>M</div><div><h1>Vap’ & Moi <span class="proLabel">PRO</span></h1><p>Signature V26.3 · votre boutique, simplement</p></div></div>
 </header>
 <div id="offlineNotice" role="status" hidden>📴 Hors connexion : consultation uniquement. Les modifications sont désactivées.</div>
 <nav class="appNav">
@@ -157,9 +169,10 @@ nav.appNav{border-color:#dbe5da;box-shadow:0 -8px 26px rgba(22,63,45,.09);backdr
 <main>
 
 <section id="accueil" class="page active">
-  <div class="appGreeting appGreetingCompact">
-    <div class="greetingTopline"><div><div class="eyebrow">VOTRE BOUTIQUE · BRAY-SUR-SEINE</div><h2>Bonjour 👋</h2></div><span class="statusPill"><i></i><span id="storeStatusText">Espace boutique</span></span></div>
-    <p id="greetingSubtitle">Votre activité en un coup d’œil.</p><div class="greetingMeta"><button id="installAppBtn" class="installAppBtn" type="button" hidden onclick="installApp()">＋ Installer l’application</button></div>
+  <div class="appGreeting appGreetingCompact appGreetingMascot">
+    <img class="mascotGreetingImg" src="./mascotte-vap-moi.jpg" alt="Mascotte officielle Vap’ & Moi, chat roux en costume et casquette" loading="eager">
+    <div class="greetingContent"><div class="greetingTopline"><div><div class="eyebrow">VOTRE BOUTIQUE · BRAY-SUR-SEINE</div><h2>Bonjour 👋</h2></div><span class="statusPill"><i></i><span id="storeStatusText">Espace boutique</span></span></div>
+    <p id="greetingSubtitle">Votre activité en un coup d’œil.</p><div class="greetingMeta"><button id="installAppBtn" class="installAppBtn" type="button" hidden onclick="installApp()">＋ Installer l’application</button></div></div>
   </div>
   <div class="homeStats" style="margin-bottom:14px">
     <div class="stat"><strong id="dToday">0 €</strong><span class="kpiTitle">💶 CA aujourd’hui</span></div>
@@ -389,7 +402,7 @@ nav.appNav{border-color:#dbe5da;box-shadow:0 -8px 26px rgba(22,63,45,.09);backdr
   <div class="card"><h3>💡 Plan d’action conseillé</h3><div id="analysisActions"></div><p class="small muted">Les recommandations sont calculées à partir des données enregistrées. Une projection n’est pas une garantie. La marge réelle nécessite les coûts d’achat.</p><div class="actions" style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px"><button class="btn" onclick="exportAnalysisCSV()">Exporter l’analyse CSV</button><button class="btn secondary" onclick="window.print()">Imprimer le bilan</button></div></div>
 </section>
 </main>
-<footer>Vap’ & Moi Pro · Signature V26.2 · pilotage commercial</footer>
+<footer>Vap’ & Moi Pro · Signature V26.3 Mascotte · pilotage commercial</footer>
 
 <script>
 const KEY='vapetmoi_fidelite_v1';

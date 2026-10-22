@@ -1,7 +1,7 @@
 {
-  "name": "Vap’ & Moi Pro — Signature V26.2",
+  "name": "Vap’ & Moi Pro — Signature V26.3 Mascotte",
   "short_name": "Vap’ & Moi",
-  "description": "Vap’ & Moi Pro Signature : gestion des clients, ventes, fidélité, analyses et sauvegardes (V26.1).",
+  "description": "Vap’ & Moi Pro Signature : gestion des clients, ventes, fidélité, analyses et sauvegardes (V26.3).",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
