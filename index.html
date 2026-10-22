@@ -4,8 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#163f2d">
-<meta name="description" content="Vap’ & Moi Pro Signature : gestion des clients, ventes, fidélité, analyses et sauvegardes.">
-<title>Vap’ & Moi Pro — Signature V26.4 Signature harmonisée</title>
+<meta name="description" content="Vap’ & Moi Pro Signature : gestion des clients, ventes, fidélité, analyses, suivi commercial et sauvegardes.">
+<title>Vap’ & Moi Pro — Signature V27 Signature Intégrale</title>
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="./icon-192.png">
 <meta name="mobile-web-app-capable" content="yes">
@@ -153,7 +153,7 @@ nav.appNav{border-color:#dbe5da;box-shadow:0 -8px 26px rgba(22,63,45,.09);backdr
 @media(max-width:420px){.appGreetingMascot{min-height:132px;padding:13px 12px!important}.appGreetingMascot .greetingContent{width:70%;max-width:70%}.appGreetingMascot .mascotGreetingImg{width:46%;object-position:50% 15%}.appGreetingMascot .appGreeting h2{font-size:20px}.appGreetingMascot .eyebrow{font-size:9px}.appGreetingMascot #greetingSubtitle{font-size:12px}}
 
 
-/* V26.4 Signature harmonisée — identité mascotte dans toute l'application */
+/* V27 Signature Intégrale — identité mascotte dans toute l'application */
 :root{--green:#173d2b;--green2:#2f7048;--light:#f5f5ed;--card:#fffdf8;--text:#202d23;--muted:#6e7569;--border:#dcded0;--sage:#e9eee0;--cream:#fbf7eb;--gold:#b49a48;--red:#a83a2c}
 body{background:radial-gradient(ellipse at 95% 0%,rgba(180,154,72,.09),transparent 280px),linear-gradient(180deg,#f0f2e8 0,#f8f8f3 320px);color:var(--text)}
 header{background:linear-gradient(125deg,#102c20 0%,#19432e 58%,#3c5632 100%);border-bottom:2px solid rgba(180,154,72,.65)}
@@ -179,11 +179,23 @@ nav.appNav button.saleNav{background:linear-gradient(145deg,#285f3d,#467847);box
 .greetingTopline .eyebrow{color:#e5d9a6!important}
 @media(max-width:650px){header{border-radius:0 0 24px 24px}.page:not(#accueil)>.card:first-child:after{width:88px;height:88px;right:-14px;top:-10px}.card{box-shadow:0 4px 15px rgba(26,47,30,.045)}}
 
+
+/* V27 Signature Intégrale — composants agenda et confort mobile */
+.settingsRow{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 0}
+.settingsRow select{max-width:150px;border:1px solid var(--border);border-radius:10px;padding:9px;background:#fff;color:var(--text)}
+.followupList{display:grid;gap:10px;margin:12px 0}
+.followupItem{display:flex;align-items:center;gap:12px;border:1px solid var(--border);border-radius:14px;padding:12px;background:#fff}
+.followupAvatar{width:40px;height:40px;border-radius:12px;background:#e4eee5;color:var(--green);display:flex;align-items:center;justify-content:center;font-weight:800;flex-shrink:0}
+.followupBody{min-width:0;flex:1}.followupBody strong{display:block;overflow-wrap:anywhere}.followupBody small{display:block;color:var(--muted);margin-top:2px}
+.followupActions{display:flex;gap:6px;flex-wrap:wrap}.followupActions button{font-size:12px;padding:7px 9px}
+.followupEmpty{border:1px dashed var(--border);border-radius:14px;padding:16px;color:var(--muted);text-align:center}
+@media(max-width:420px){.followupItem{align-items:flex-start}.followupActions{flex-direction:column}.followupActions button{width:100%}}
+
 </style>
 </head>
 <body>
 <header>
-  <div class="brandLockup"><div class="brandMark" aria-hidden="true">V<span>&</span>M</div><div><h1>Vap’ & Moi <span class="proLabel">PRO</span></h1><p>Signature V26.4 · votre boutique, simplement</p></div></div>
+  <div class="brandLockup"><div class="brandMark" aria-hidden="true">V<span>&</span>M</div><div><h1>Vap’ & Moi <span class="proLabel">PRO</span></h1><p>Signature V27 · votre boutique, simplement</p></div></div>
 </header>
 <div id="offlineNotice" role="status" hidden>📴 Hors connexion : consultation uniquement. Les modifications sont désactivées.</div>
 <nav class="appNav">
@@ -344,7 +356,7 @@ nav.appNav button.saleNav{background:linear-gradient(145deg,#285f3d,#467847);box
 
 <section id="stats" class="page">
   <div class="card">
-    <h2>📊 Tableau de bord — V26.4 Signature</h2>
+    <h2>📊 Tableau de bord — V27 Signature</h2>
     <p class="muted small">Statistiques regroupées par sujet : chiffre d’affaires, ventes et panier moyen, clients, encaissements, puis prévisions.</p>
     <div class="actionRow"><button class="secondary" onclick="exportSalesCSV()">📄 Exporter les ventes (CSV)</button><button class="secondary" onclick="exportData()">💾 Sauvegarder les données (JSON)</button></div>
     <div class="grid4">
@@ -425,11 +437,18 @@ nav.appNav button.saleNav{background:linear-gradient(145deg,#285f3d,#467847);box
   <details class="statsTheme" open><summary class="statsThemeHead"><span>👥</span><div><strong>Clients à suivre</strong><small>Inactivité, fréquence et fidélité</small></div></summary><div class="card"><div id="analysisRetention"></div></div></details>
   <details class="statsTheme"><summary class="statsThemeHead"><span>🏆</span><div><strong>Meilleurs clients</strong><small>Classement calculé à partir des achats enregistrés</small></div></summary><div class="card"><div id="analysisTopClients"></div></div></details>
   <details class="statsTheme"><summary class="statsThemeHead"><span>🎯</span><div><strong>Prévision et objectif</strong><small>Objectifs quotidien, hebdomadaire et mensuel, selon les horaires réels</small></div></summary><div class="card"><div id="analysisForecast"></div></div></details>
+  <div class="card" id="followupAgendaCard">
+    <h3>🗓️ Agenda commercial & clients à suivre</h3>
+    <p class="small muted">Liste locale calculée à partir des achats enregistrés. Aucun message n’est envoyé automatiquement.</p>
+    <div class="settingsRow"><label for="inactiveThreshold">Seuil d’inactivité</label><select id="inactiveThreshold" onchange="saveFollowupSettings()"><option value="14">14 jours</option><option value="30" selected>30 jours</option><option value="45">45 jours</option><option value="60">60 jours</option><option value="90">90 jours</option></select></div>
+    <div id="followupAgenda"></div>
+    <div class="buttonRow"><button type="button" class="secondary" onclick="exportFollowupCSV()">Exporter la liste de suivi (CSV)</button><button type="button" class="secondary" onclick="showPage('clients')">Ouvrir les clients</button></div>
+  </div>
   <div class="card"><h3>🛡️ Contrôle de cohérence</h3><p class="small muted">Vérification locale des données, sans modification automatique de l’historique.</p><div id="dataHealthReport"></div></div>
   <div class="card"><h3>💡 Plan d’action conseillé</h3><div id="analysisActions"></div><p class="small muted">Les recommandations sont calculées à partir des données enregistrées. Une projection n’est pas une garantie. La marge réelle nécessite les coûts d’achat.</p><div class="actions" style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px"><button class="btn" onclick="exportAnalysisCSV()">Exporter l’analyse CSV</button><button class="btn secondary" onclick="window.print()">Imprimer le bilan</button></div></div>
 </section>
 </main>
-<footer>Vap’ & Moi Pro · Signature V26.4 Signature harmonisée · pilotage commercial</footer>
+<footer>Vap’ & Moi Pro · Signature V27 Signature Intégrale · pilotage commercial</footer>
 
 <script>
 const KEY='vapetmoi_fidelite_v1';
@@ -1225,7 +1244,35 @@ window.addEventListener('appinstalled',()=>{const b=document.getElementById('ins
 async function installApp(){if(deferredInstallPrompt){deferredInstallPrompt.prompt();try{await deferredInstallPrompt.userChoice;}catch(e){}deferredInstallPrompt=null;const b=document.getElementById('installAppBtn');if(b)b.hidden=true;return;}alert('Pour installer Vap’ & Moi Pro : ouvre le menu du navigateur puis choisis « Ajouter à l’écran d’accueil » ou « Installer l’application », si cette option est proposée.');}
 function updateGreeting(){const el=document.getElementById('greetingSubtitle');if(!el)return;const h=new Date().getHours();const phrase=h<12?'Votre activité en un coup d’œil.':h<18?'Vos ventes et vos clients, au même endroit.':'Le bilan de votre boutique, en un coup d’œil.';el.textContent=phrase;const status=document.getElementById('storeStatusText');if(status)status.textContent=navigator.onLine?'Espace boutique':'Mode hors connexion';}
 
-function updateAll(){clients=clients.map(normalizeClient);updateClientOptions();renderClients();updatePurchaseBox();setDashboard();setStats();renderWeekdayStats();renderV15Insights(allPurchases(),new Date());renderDailyOps(new Date());renderActivityLog();renderBackupStatus();renderAnalysis();renderCommercialCopilot();renderDataIntegrity();updateGreeting()}
+
+function saveFollowupSettings(){
+  if(storageReadIssues.includes(KEY+'_settings')){alert('Les réglages sont illisibles. Restaure une sauvegarde valide avant de les modifier.');return;}
+  const n=Number(document.getElementById('inactiveThreshold')?.value||30);
+  settings.inactiveThreshold=[14,30,45,60,90].includes(n)?n:30;
+  try{localStorage.setItem(KEY+'_settings',JSON.stringify(settings));renderFollowupAgenda();logOperation('Réglage modifié',`Seuil d’inactivité : ${settings.inactiveThreshold} jours`);}
+  catch(e){alert('Impossible d’enregistrer le réglage. Vérifie le stockage.');}
+}
+function renderFollowupAgenda(){
+  const root=document.getElementById('followupAgenda');if(!root)return;
+  const threshold=Number(settings.inactiveThreshold||30),today=new Date();today.setHours(0,0,0,0);
+  const rows=clients.map(c=>{
+    const hist=(c.history||[]).filter(isActivePurchase).filter(p=>Number.isFinite(new Date(p.date).getTime()));
+    if(!hist.length)return null;
+    const last=hist.reduce((best,p)=>new Date(p.date)>new Date(best.date)?p:best,hist[0]);
+    const d=new Date(last.date);d.setHours(0,0,0,0);
+    return {c,days:Math.floor((today-d)/86400000),last:last.date,count:hist.length,total:hist.reduce((s,p)=>s+safelyPaid(p),0)};
+  }).filter(Boolean).filter(x=>x.days>=threshold).sort((a,b)=>b.days-a.days);
+  if(!rows.length){root.innerHTML=`<div class="followupEmpty">Aucun client avec un achat enregistré n’a dépassé ${threshold} jours d’inactivité. Les clients sans historique sont exclus de ce calcul.</div>`;return;}
+  root.innerHTML=`<p class="small muted">${rows.length} client(s) à suivre · seuil ${threshold} jours</p><div class="followupList">${rows.slice(0,20).map(x=>`<div class="followupItem"><div class="followupAvatar">${esc((x.c.name||'?').trim().slice(0,1).toUpperCase())}</div><div class="followupBody"><strong>${esc(x.c.name)}</strong><small>Dernier achat : ${dateFmt(x.last)} · il y a ${x.days} jours</small><small>${x.count} achat(s) actif(s) enregistré(s) · CA historique suivi : ${fmt(x.total)}</small></div><div class="followupActions"><button type="button" class="secondary" onclick="showClient('${escJs(x.c.name)}')">Fiche</button><button type="button" class="secondary" onclick="selectClientForPurchase('${escJs(x.c.name)}')">Vente</button></div></div>`).join('')}</div>${rows.length>20?`<p class="small muted">Affichage des 20 premiers clients sur ${rows.length}. Exporte la liste pour consulter les autres.</p>`:''}`;
+}
+function exportFollowupCSV(){
+  const threshold=Number(settings.inactiveThreshold||30),today=new Date();today.setHours(0,0,0,0);
+  const rows=clients.map(c=>{const hist=(c.history||[]).filter(isActivePurchase).filter(p=>Number.isFinite(new Date(p.date).getTime()));if(!hist.length)return null;const last=hist.reduce((best,p)=>new Date(p.date)>new Date(best.date)?p:best,hist[0]);const d=new Date(last.date);d.setHours(0,0,0,0);return {c,days:Math.floor((today-d)/86400000),last:last.date,hist,total:hist.reduce((s,p)=>s+safelyPaid(p),0)}}).filter(Boolean).filter(x=>x.days>=threshold).sort((a,b)=>b.days-a.days);
+  const lines=[['Client','Dernier achat','Jours depuis achat','Achats actifs','CA suivi'],...rows.map(x=>[x.c.name,dateFmt(x.last),x.days,x.hist.length,x.total.toFixed(2)])];
+  const csv='\uFEFF'+lines.map(r=>r.map(csvCell).join(';')).join('\r\n');const blob=new Blob([csv],{type:'text/csv;charset=utf-8;'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='vap-et-moi-suivi-clients.csv';a.click();URL.revokeObjectURL(url);
+}
+
+function updateAll(){clients=clients.map(normalizeClient);updateClientOptions();renderClients();updatePurchaseBox();setDashboard();setStats();renderWeekdayStats();renderV15Insights(allPurchases(),new Date());renderDailyOps(new Date());renderActivityLog();renderBackupStatus();renderAnalysis();renderCommercialCopilot();renderDataIntegrity();renderFollowupAgenda();const threshold=document.getElementById("inactiveThreshold");if(threshold)threshold.value=String(settings.inactiveThreshold||30);updateGreeting()}
 updateAll();
 updateOfflineMode();
 if("serviceWorker" in navigator && location.protocol.startsWith("http")){navigator.serviceWorker.register("./sw.js").catch(()=>{});}
