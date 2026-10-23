@@ -1,6 +1,6 @@
 Vap’ & Moi Pro — V28 Pilotage Intelligent
 
-Cette version part de la V27 Signature Intégrale et conserve la clé de stockage existante : vapetmoi_fidelite_v1.
+Cette version part de la V28 Signature Intégrale et conserve la clé de stockage existante : vapetmoi_fidelite_v1.
 
 Modifications :
 - Agenda des clients inactifs limité aux 5 premiers clients par défaut.
