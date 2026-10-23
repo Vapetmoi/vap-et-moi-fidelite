@@ -1,0 +1,14 @@
+VAP’ & MOI PRO — V30 SIGNATURE PREMIUM
+
+Cette version apporte une refonte visuelle mobile : vert forêt premium, touches dorées discrètes, fond crème, cartes plus raffinées et mascotte plus visible.
+
+La logique métier de la V29 est conservée : clients, ventes, fidélité, analyses, prévisions, suivi commercial, contrôles d’intégrité et sauvegardes/restaurations. La clé de stockage existante vapetmoi_fidelite_v1 est conservée.
+
+DÉPLOIEMENT GITHUB PAGES
+1. Exportez une sauvegarde JSON depuis l’application actuelle.
+2. Décompressez ce ZIP.
+3. Remplacez dans le dépôt les fichiers index.html, sw.js et manifest.webmanifest (conservez aussi les images/icônes incluses).
+4. Attendez la fin du déploiement GitHub Pages, puis fermez complètement et rouvrez l’application.
+5. Vérifiez clients, historique et ventes. Gardez votre sauvegarde JSON jusqu’à validation.
+
+Note : le contrôle réalisé est statique (archive, JavaScript et clé de stockage), pas un test réel sur votre téléphone avec vos données.
