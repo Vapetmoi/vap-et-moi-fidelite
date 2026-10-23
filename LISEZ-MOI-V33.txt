@@ -1,0 +1,9 @@
+VAP’ & MOI PRO — V33 ACHATS LISIBLES
+
+Cette version remplace les graphiques d’achats par des listes lisibles et des barres proportionnelles pour les vues jour/semaine/mois.
+
+Fichiers nécessaires au site : index.html, sw.js, manifest.webmanifest, icon-192.png, icon-512.png, mascotte-vap-moi.jpg. Les fichiers LISEZ-MOI et CORRECTIF sont des notes.
+
+IMPORTANT : avant publication, exporter une sauvegarde JSON depuis l’application. Ne pas restaurer ce fichier JSON après la mise à jour : il sert à protéger les données.
+
+Clé de stockage conservée dans le HTML : vapetmoi_fidelite_v1. Le cache hors ligne est versionné v33 afin de forcer le renouvellement des ressources.
