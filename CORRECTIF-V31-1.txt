@@ -1,0 +1,4 @@
+Vap’ & Moi Pro — Correctif V31.1
+Correction : le panneau de suggestions de recherche client dans la rubrique Vente reste désormais visible et n'est plus coupé par la carte. Le champ utilise les suggestions intégrées à l'interface plutôt que la liste native du navigateur.
+La clé de stockage vapetmoi_fidelite_v1 et les données existantes sont conservées.
+Installation : sauvegarder les données JSON, remplacer index.html dans le dépôt GitHub, puis actualiser le site. Garder les autres fichiers du ZIP.

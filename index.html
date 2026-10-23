@@ -279,7 +279,11 @@ input:focus,select:focus,textarea:focus{border-color:#9eaa7b;box-shadow:0 0 0 3p
 
 
 /* V31 — suggestions de clients pendant la saisie */
-.purchaseSearchWrap{position:relative;width:100%;z-index:20}
+.purchaseSearchWrap{position:relative;width:100%;z-index:1002}
+/* Correctif V31.1 : le panneau de suggestions ne doit pas être coupé par la carte de vente */
+#achat.page.active>.card{overflow:visible!important}
+#achat .purchaseSearchWrap{isolation:isolate}
+#achat .purchaseSuggestions{z-index:1003}
 .purchaseSearchWrap input{width:100%;box-sizing:border-box}
 .purchaseSuggestions{display:none;position:absolute;top:calc(100% + 4px);left:0;right:0;max-height: min(52vh,340px);overflow-y:auto;background:var(--card,#fffdf7);border:1px solid var(--border,#ddd);border-radius:14px;box-shadow:0 12px 28px rgba(10,30,20,.18);z-index:1000;padding:5px}
 .purchaseSuggestions.isOpen{display:block}
@@ -435,8 +439,7 @@ input:focus,select:focus,textarea:focus{border-color:#9eaa7b;box-shadow:0 0 0 3p
     <h2>💶 Nouvel achat</h2>
     <label for="clientName">Rechercher un client par nom</label>
     <div class="purchaseSearchWrap">
-      <input id="clientName" type="text" list="purchaseClientOptions" placeholder="🔎 Tape « Na », « M », un nom…" autocomplete="off" oninput="updatePurchaseBox();renderPurchaseSuggestions()" onchange="updatePurchaseBox();renderPurchaseSuggestions()" onkeydown="purchaseSuggestionKeydown(event)" aria-describedby="purchaseClientHelp" aria-controls="purchaseSuggestions" aria-autocomplete="list">
-      <datalist id="purchaseClientOptions"></datalist>
+      <input id="clientName" type="text" placeholder="🔎 Tape « Na », « M », un nom…" autocomplete="off" oninput="updatePurchaseBox();renderPurchaseSuggestions()" onchange="updatePurchaseBox();renderPurchaseSuggestions()" onkeydown="purchaseSuggestionKeydown(event)" aria-describedby="purchaseClientHelp" aria-controls="purchaseSuggestions" aria-autocomplete="list">
       <div id="purchaseSuggestions" class="purchaseSuggestions" role="listbox" aria-label="Clients correspondants"></div>
     </div>
     <p id="purchaseClientHelp" class="small muted" style="margin-top:-7px">Tapez un nom, un prénom, un téléphone ou un e-mail, puis sélectionnez le client dans les suggestions.</p>
