@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#163f2d">
 <meta name="description" content="Vap’ & Moi Pro Signature : gestion des clients, ventes, fidélité, analyses, suivi commercial et sauvegardes.">
-<title>Vap’ & Moi Pro — V28 Pilotage Intelligent</title>
+<title>Vap’ & Moi Pro — V29 Confort & Pilotage</title>
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="./icon-192.png">
 <meta name="mobile-web-app-capable" content="yes">
@@ -14,7 +14,7 @@
 <style>
 :root{--green:#0b2f20;--green2:#1f7a46;--light:#f3f7f4;--card:#fff;--text:#173126;--muted:#66756e;--border:#dce6df;--gold:#b7791f;--red:#b42318}
 *{box-sizing:border-box}
-body{margin:0;font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;background:linear-gradient(180deg,#f2f7f3 0,#f7f8f5 260px);color:var(--text);line-height:1.45} button,input,select,textarea{font:inherit} button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible,summary:focus-visible{outline:3px solid #8fc7a2;outline-offset:2px}
+body{margin:0;font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;background:linear-gradient(180deg,#f2f7f3 0,#f7f8f5 260px);color:var(--text);line-height:1.45} button,input,select,textarea{font:inherit}button,input,select{min-height:42px}input[type="checkbox"]{min-height:21px}button{touch-action:manipulation}input,select,textarea{max-width:100%} button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible,summary:focus-visible{outline:3px solid #8fc7a2;outline-offset:2px}
 header{background:linear-gradient(135deg,#09271b 0%,#174d32 62%,#2a6b45 100%);color:white;padding:22px 18px 18px;box-shadow:0 5px 18px #0b2f2015}
 header h1{margin:0;font-size:27px} header p{margin:6px 0 0;opacity:.88}
 nav{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));background:rgba(255,255,255,.96);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:5}
@@ -198,7 +198,7 @@ nav.appNav button.saleNav{background:linear-gradient(145deg,#285f3d,#467847);box
 </head>
 <body>
 <header>
-  <div class="brandLockup"><div class="brandMark" aria-hidden="true">V<span>&</span>M</div><div><h1>Vap’ & Moi <span class="proLabel">PRO</span></h1><p>Signature V28 · votre boutique, simplement</p></div></div>
+  <div class="brandLockup"><div class="brandMark" aria-hidden="true">V<span>&</span>M</div><div><h1>Vap’ & Moi <span class="proLabel">PRO</span></h1><p>Signature V29 · votre boutique, simplement</p></div></div>
 </header>
 <div id="offlineNotice" role="status" hidden>📴 Hors connexion : consultation uniquement. Les modifications sont désactivées.</div>
 <nav class="appNav">
@@ -325,7 +325,7 @@ nav.appNav button.saleNav{background:linear-gradient(145deg,#285f3d,#467847);box
       <div class="actions"><button class="primary" onclick="addClient()">Créer le client</button><button class="secondary" onclick="toggleNewClient(false)">Annuler</button></div>
       <p id="clientMessage" class="muted"></p>
     </div>
-    <input id="search" placeholder="🔎 Rechercher un nom..." oninput="renderClients()"><label for="clientSort">Trier les clients par</label><select id="clientSort" onchange="renderClients()"><option value="name">Nom (A à Z)</option><option value="nameDesc">Nom (Z à A)</option><option value="totalDesc">Chiffre d’affaires cumulé</option><option value="avgDesc">Panier moyen</option><option value="purchasesDesc">Nombre d’achats</option><option value="recent">Dernier achat récent</option><option value="rewardsDesc">Bons disponibles</option></select>
+    <input id="search" placeholder="🔎 Rechercher un nom..." oninput="renderClients()" autocomplete="off" aria-label="Rechercher un client"><label for="clientFilter">Afficher les clients</label><select id="clientFilter" onchange="renderClients()"><option value="all">Tous les clients</option><option value="regular">Clients réguliers (2 achats ou plus)</option><option value="inactive">Clients inactifs (30 jours ou plus)</option><option value="new">Nouveaux clients (30 derniers jours)</option><option value="noPurchase">Sans achat enregistré</option></select><label for="clientSort">Trier les clients par</label><select id="clientSort" onchange="renderClients()"><option value="name">Nom (A à Z)</option><option value="nameDesc">Nom (Z à A)</option><option value="totalDesc">Chiffre d’affaires cumulé</option><option value="avgDesc">Panier moyen</option><option value="purchasesDesc">Nombre d’achats</option><option value="recent">Dernier achat récent</option><option value="rewardsDesc">Bons disponibles</option></select>
     <div id="clientList"></div>
   </div>
   <div class="card">
@@ -343,13 +343,13 @@ nav.appNav button.saleNav{background:linear-gradient(145deg,#285f3d,#467847);box
     <p id="purchaseClientHelp" class="small muted" style="margin-top:-7px">Tapez un nom, un prénom, un téléphone ou un e-mail, puis sélectionnez le client dans les suggestions.</p>
     <div id="linkedClientInfo" class="small muted"></div>
     <label>Montant avant réduction (€)</label>
-    <input id="amount" type="number" min="0" step="0.01" placeholder="17.00" oninput="updatePurchaseBox()">
+    <input id="amount" type="number" inputmode="decimal" min="0" step="0.01" placeholder="17,00" oninput="updatePurchaseBox()" aria-label="Montant avant réduction en euros">
     <div id="rewardBox" class="card" style="display:none;background:#eef6f0;padding:13px">
       <div class="row"><strong>🎁 Bon disponible</strong><strong id="availableReward">0 €</strong></div>
       <label style="display:flex;align-items:center;gap:9px"><input id="useReward" type="checkbox" onchange="updatePurchaseBox()" style="width:21px;margin:0"><span>Utiliser 5 € de la cagnotte</span></label>
     </div>
     <label for="exceptionalDiscount">🎟️ Réduction exceptionnelle (€) — facultatif</label>
-    <input id="exceptionalDiscount" type="number" min="0" step="0.01" value="0" placeholder="0,00" oninput="updatePurchaseBox()">
+    <input id="exceptionalDiscount" type="number" inputmode="decimal" min="0" step="0.01" value="0" placeholder="0,00" oninput="updatePurchaseBox()" aria-label="Réduction exceptionnelle en euros">
     <p class="small muted" style="margin-top:-7px">À utiliser pour une remise ponctuelle, en plus ou à la place du bon de fidélité.</p>
     <div id="payableBox" class="small muted" style="margin:8px 0 12px"></div>
     <button class="primary" onclick="addPurchase()">Enregistrer l'achat</button>
@@ -589,10 +589,20 @@ function addPurchase(){
   }finally{window.__vapPurchaseBusy=false;if(purchaseButton)purchaseButton.disabled=false}
 }
 function renderClients(){
-  const q=(document.getElementById('search')?.value||'').toLowerCase(),list=document.getElementById('clientList');
+  const q=(document.getElementById('search')?.value||'').trim().toLocaleLowerCase('fr'),list=document.getElementById('clientList');
   const sort=document.getElementById('clientSort')?.value||'name';
-  const arr=clients.filter(c=>c.name.toLocaleLowerCase('fr').includes(q)||String(c.phone||'').toLocaleLowerCase('fr').includes(q)||String(c.email||'').toLocaleLowerCase('fr').includes(q));
-  const lastPurchase=c=>{const h=(c.history||[]).filter(isActivePurchase);return h.length?Math.max(...h.map(p=>new Date(p.date).getTime()).filter(Number.isFinite)):0};
+  const filter=document.getElementById('clientFilter')?.value||'all';
+  const today=new Date();today.setHours(0,0,0,0);
+  const lastPurchase=c=>{const h=(c.history||[]).filter(isActivePurchase).map(p=>new Date(p.date).getTime()).filter(Number.isFinite);return h.length?Math.max(...h):0};
+  const arr=clients.filter(c=>c.name.toLocaleLowerCase('fr').includes(q)||String(c.phone||'').toLocaleLowerCase('fr').includes(q)||String(c.email||'').toLocaleLowerCase('fr').includes(q)).filter(c=>{
+    const last=lastPurchase(c),days=last?Math.floor((today.getTime()-new Date(last).setHours(0,0,0,0))/86400000):null;
+    const created=c.createdAt?new Date(c.createdAt):null;const isNew=created&&Number.isFinite(created.getTime())&&((today-created)/86400000)<=30&&created<=new Date();
+    if(filter==='regular')return c.purchases>=2;
+    if(filter==='inactive')return days!==null&&days>=30;
+    if(filter==='new')return !!isNew;
+    if(filter==='noPurchase')return !last;
+    return true;
+  });
   arr.sort((a,b)=>{
     if(sort==='nameDesc') return b.name.localeCompare(a.name,'fr');
     if(sort==='totalDesc') return b.total-a.total || a.name.localeCompare(b.name,'fr');
@@ -602,7 +612,7 @@ function renderClients(){
     if(sort==='rewardsDesc') return availableReward(b)-availableReward(a) || a.name.localeCompare(b.name,'fr');
     return a.name.localeCompare(b.name,'fr');
   });
-  list.innerHTML=arr.length?arr.map(c=>`<div class="client" onclick="showClient('${escJs(c.name)}')" style="cursor:pointer"><div><strong>${esc(c.name)}</strong><br><span class="small muted">${c.purchases} achat(s) · ${fmt(c.total)} · panier moyen ${fmt(c.purchases?c.total/c.purchases:0)} · créé le ${c.createdAt?dateFmt(c.createdAt):'date inconnue'}</span></div><span class="badge">🎁 ${availableReward(c)} €</span></div>`).join(''):'<p class="muted">Aucun client trouvé.</p>';
+  list.innerHTML=arr.length?arr.map(c=>{const visit=clientVisitMetrics(c);return `<div class="client" onclick="showClient('${escJs(c.name)}')" style="cursor:pointer"><div><strong>${esc(c.name)}</strong><br><span class="small muted">${c.purchases} achat(s) · ${fmt(c.total)} · panier moyen ${fmt(c.purchases?c.total/c.purchases:0)} · dernier achat ${visit.last===null?'inconnu':visit.last===0?'aujourd’hui':'il y a '+visit.last+' j'}${visit.average!==null?' · fréquence '+frequencyLabel(visit.average):''}</span></div><span class="badge">🎁 ${availableReward(c)} €</span></div>`}).join(''):'<p class="muted">Aucun client ne correspond à ces critères.</p>';
   const ranked=[...clients].sort((a,b)=>b.total-a.total).slice(0,5);
   document.getElementById('clientRanking').innerHTML=ranked.length?ranked.map((c,i)=>`<div class="row"><span>${i+1}. <strong>${esc(c.name)}</strong></span><strong>${fmt(c.total)}</strong></div>`).join(''):'<span class="muted">Aucun client.</span>';
 }
@@ -1263,10 +1273,10 @@ function renderFollowupAgenda(){
     if(!hist.length)return null;
     const last=hist.reduce((best,p)=>new Date(p.date)>new Date(best.date)?p:best,hist[0]);
     const d=new Date(last.date);d.setHours(0,0,0,0);
-    return {c,days:Math.floor((today-d)/86400000),last:last.date,count:hist.length,total:hist.reduce((s,p)=>s+safelyPaid(p),0)};
-  }).filter(Boolean).filter(x=>x.days>=threshold).sort((a,b)=>b.days-a.days);
+    const days=Math.floor((today-d)/86400000),visit=clientVisitMetrics(c),ratio=visit.average&&visit.average>0?days/visit.average:null;return {c,days,last:last.date,count:hist.length,total:hist.reduce((s,p)=>s+safelyPaid(p),0),average:visit.average,ratio};
+  }).filter(Boolean).filter(x=>x.days>=threshold).sort((a,b)=>{const ap=a.ratio===null?-1:a.ratio,bp=b.ratio===null?-1:b.ratio;return bp-ap||b.days-a.days;});
   if(!rows.length){root.innerHTML=`<div class="followupEmpty">Aucun client avec un achat enregistré n’a dépassé ${threshold} jours d’inactivité. Les clients sans historique sont exclus de ce calcul.</div>`;return;}
-  const renderRows=list=>list.map(x=>`<div class="followupItem"><div class="followupAvatar">${esc((x.c.name||'?').trim().slice(0,1).toUpperCase())}</div><div class="followupBody"><strong>${esc(x.c.name)}</strong><small>Dernier achat : ${dateFmt(x.last)} · il y a ${x.days} jours</small><small>${x.count} achat(s) actif(s) enregistré(s) · CA historique suivi : ${fmt(x.total)}</small></div><div class="followupActions"><button type="button" class="secondary" onclick="showClient('${escJs(x.c.name)}')">Fiche</button><button type="button" class="secondary" onclick="selectClientForPurchase('${escJs(x.c.name)}')">Vente</button></div></div>`).join('');
+  const renderRows=list=>list.map(x=>`<div class="followupItem"><div class="followupAvatar">${esc((x.c.name||'?').trim().slice(0,1).toUpperCase())}</div><div class="followupBody"><strong>${esc(x.c.name)}</strong><small>Dernier achat : ${dateFmt(x.last)} · il y a ${x.days} jours</small><small>${x.count} achat(s) actif(s) · CA suivi : ${fmt(x.total)}${x.average!==null?` · fréquence habituelle ${frequencyLabel(x.average)} · ${x.ratio>=1.5?'nettement en retard':x.ratio>=1?'en retard sur son rythme':'à surveiller'}`:''}</small></div><div class="followupActions"><button type="button" class="secondary" onclick="showClient('${escJs(x.c.name)}')">Fiche</button><button type="button" class="secondary" onclick="selectClientForPurchase('${escJs(x.c.name)}')">Vente</button></div></div>`).join('');
   const first=rows.slice(0,5),rest=rows.slice(5);
   root.innerHTML=`<p class="small muted">${rows.length} client(s) à suivre · seuil ${threshold} jours</p><div class="followupList">${renderRows(first)}</div>${rest.length?`<details class="followupMore"><summary>Afficher les ${rest.length} autres clients</summary><div class="followupList">${renderRows(rest)}</div><button type="button" class="secondary" onclick="this.closest('details').open=false">Réduire la liste</button></details>`:''}`;
 }
