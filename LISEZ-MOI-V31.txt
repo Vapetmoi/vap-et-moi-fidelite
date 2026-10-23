@@ -1,0 +1,18 @@
+VAP’ & MOI PRO — V31 RECHERCHE CLIENT
+
+Nouveauté :
+- Dans la rubrique Vente, commencez à taper un nom ou un prénom (ex. « Na » ou « M »).
+- Une liste de clients correspondants apparaît immédiatement.
+- Les noms commençant par la saisie sont proposés en premier ; les correspondances dans les autres parties du nom, téléphone ou e-mail suivent.
+- Touchez un client pour sélectionner sa fiche et afficher ses informations de fidélité.
+- La sélection au clavier est également prise en charge avec les flèches et Entrée.
+
+Compatibilité et données :
+- La clé de stockage locale existante « vapetmoi_fidelite_v1 » est conservée.
+- Les fonctions existantes et l’historique ne sont pas volontairement modifiés.
+- Avant de remplacer des fichiers dans GitHub, exportez une sauvegarde JSON depuis l’application.
+
+Déploiement :
+1. Décompressez l’archive.
+2. Remplacez les fichiers correspondants dans le dépôt GitHub, dont index.html, sw.js et manifest.webmanifest.
+3. Attendez la fin du déploiement GitHub Pages puis fermez/réouvrez l’application.

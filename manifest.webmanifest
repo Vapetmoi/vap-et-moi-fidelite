@@ -1,7 +1,7 @@
 {
-  "name": "Vap’ & Moi Pro — Signature Premium V30",
-  "short_name": "Vap’ & Moi",
-  "description": "Vap’ & Moi Pro Signature Premium : gestion des clients, ventes, fidélité, analyses et sauvegardes (V30).",
+  "name": "Vap’ & Moi Pro — V31 Recherche Client",
+  "short_name": "Vap’ & Moi Pro",
+  "description": "Vap’ & Moi Pro : recherche instantanée des clients, ventes, fidélité et analyses.",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
@@ -9,7 +9,17 @@
   "background_color": "#f5f3e9",
   "theme_color": "#123626",
   "icons": [
-    {"src":"./icon-192.png","sizes":"192x192","type":"image/png","purpose":"any"},
-    {"src":"./icon-512.png","sizes":"512x512","type":"image/png","purpose":"any maskable"}
+    {
+      "src": "./icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "./icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
   ]
 }

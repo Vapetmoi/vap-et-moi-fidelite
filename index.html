@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#163f2d">
 <meta name="description" content="Vap’ & Moi Pro Signature Premium : gestion des clients, ventes, fidélité, analyses, suivi commercial et sauvegardes.">
-<title>Vap’ & Moi Pro — V30 Signature Premium</title>
+<title>Vap’ & Moi Pro — V31 Recherche Client</title>
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="./icon-192.png">
 <meta name="mobile-web-app-capable" content="yes">
@@ -277,11 +277,24 @@ input:focus,select:focus,textarea:focus{border-color:#9eaa7b;box-shadow:0 0 0 3p
 }
 @media(prefers-reduced-motion:reduce){*,*:before,*:after{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
 
+
+/* V31 — suggestions de clients pendant la saisie */
+.purchaseSearchWrap{position:relative;width:100%;z-index:20}
+.purchaseSearchWrap input{width:100%;box-sizing:border-box}
+.purchaseSuggestions{display:none;position:absolute;top:calc(100% + 4px);left:0;right:0;max-height: min(52vh,340px);overflow-y:auto;background:var(--card,#fffdf7);border:1px solid var(--border,#ddd);border-radius:14px;box-shadow:0 12px 28px rgba(10,30,20,.18);z-index:1000;padding:5px}
+.purchaseSuggestions.isOpen{display:block}
+.purchaseSuggestion{display:flex;flex-direction:column;align-items:flex-start;gap:3px;width:100%;text-align:left;border:0;border-radius:10px;background:transparent;color:var(--text,#202d24);padding:11px 12px;min-height:48px;cursor:pointer}
+.purchaseSuggestion+.purchaseSuggestion{border-top:1px solid var(--border,#e0dfd0)}
+.purchaseSuggestion:active,.purchaseSuggestion:hover,.purchaseSuggestion:focus{background:var(--sage,#e8ecdf);outline:2px solid transparent}
+.purchaseSuggestion strong{font-size:15px}
+.purchaseSuggestion small{font-size:12px;color:var(--muted,#70776c)}
+.purchaseSuggestionsHint{padding:9px 11px;font-size:12px;color:var(--muted,#70776c)}
+
 </style>
 </head>
 <body>
 <header>
-  <div class="brandLockup"><div class="brandMark" aria-hidden="true">V<span>&</span>M</div><div><h1>Vap’ & Moi <span class="proLabel">PRO</span></h1><p>Signature V30 · l’élégance au service de votre boutique</p></div></div>
+  <div class="brandLockup"><div class="brandMark" aria-hidden="true">V<span>&</span>M</div><div><h1>Vap’ & Moi <span class="proLabel">PRO</span></h1><p>Signature Premium · recherche client instantanée</p></div></div>
 </header>
 <div id="offlineNotice" role="status" hidden>📴 Hors connexion : consultation uniquement. Les modifications sont désactivées.</div>
 <nav class="appNav">
@@ -421,8 +434,11 @@ input:focus,select:focus,textarea:focus{border-color:#9eaa7b;box-shadow:0 0 0 3p
   <div class="card">
     <h2>💶 Nouvel achat</h2>
     <label for="clientName">Rechercher un client par nom</label>
-    <input id="clientName" type="text" list="purchaseClientOptions" placeholder="🔎 Nom, prénom, téléphone ou e-mail…" autocomplete="off" oninput="updatePurchaseBox()" onchange="updatePurchaseBox()" aria-describedby="purchaseClientHelp">
-    <datalist id="purchaseClientOptions"></datalist>
+    <div class="purchaseSearchWrap">
+      <input id="clientName" type="text" list="purchaseClientOptions" placeholder="🔎 Tape « Na », « M », un nom…" autocomplete="off" oninput="updatePurchaseBox();renderPurchaseSuggestions()" onchange="updatePurchaseBox();renderPurchaseSuggestions()" onkeydown="purchaseSuggestionKeydown(event)" aria-describedby="purchaseClientHelp" aria-controls="purchaseSuggestions" aria-autocomplete="list">
+      <datalist id="purchaseClientOptions"></datalist>
+      <div id="purchaseSuggestions" class="purchaseSuggestions" role="listbox" aria-label="Clients correspondants"></div>
+    </div>
     <p id="purchaseClientHelp" class="small muted" style="margin-top:-7px">Tapez un nom, un prénom, un téléphone ou un e-mail, puis sélectionnez le client dans les suggestions.</p>
     <div id="linkedClientInfo" class="small muted"></div>
     <label>Montant avant réduction (€)</label>
@@ -628,6 +644,57 @@ function updateClientOptions(){
   list.innerHTML=[...clients].filter(c=>!q||c.name.toLocaleLowerCase('fr').includes(q)||String(c.phone||'').includes(q)||String(c.email||'').toLocaleLowerCase('fr').includes(q)).sort((a,b)=>a.name.localeCompare(b.name,'fr')).slice(0,50).map(c=>`<option value="${esc(c.name)}"></option>`).join('');
   if(clients.some(c=>c.name===cur))input.value=cur;
 }
+let purchaseSuggestionIndex=-1;
+function normalizeSearchText(value){return String(value||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLocaleLowerCase('fr').trim();}
+function renderPurchaseSuggestions(){
+  const input=document.getElementById('clientName'), panel=document.getElementById('purchaseSuggestions');
+  if(!input||!panel)return;
+  const raw=input.value.trim(), q=normalizeSearchText(raw);
+  if(!q){panel.innerHTML='';panel.classList.remove('isOpen');input.setAttribute('aria-expanded','false');purchaseSuggestionIndex=-1;return;}
+  const matches=clients.map(c=>{
+    const name=String(c.name||''), phone=String(c.phone||''), email=String(c.email||'');
+    const n=normalizeSearchText(name), p=normalizeSearchText(phone), e=normalizeSearchText(email);
+    let rank=n.startsWith(q)?0:(n.split(/\s+/).some(part=>part.startsWith(q))?1:(n.includes(q)?2:((p.includes(q)||e.includes(q))?3:99)));
+    return {c,rank};
+  }).filter(x=>x.rank<99).sort((a,b)=>a.rank-b.rank||String(a.c.name).localeCompare(String(b.c.name),'fr')).slice(0,10);
+  purchaseSuggestionIndex=-1;
+  if(!matches.length){
+    panel.innerHTML='<div class="purchaseSuggestionsHint">Aucun client correspondant. Vérifie l’orthographe ou crée une nouvelle fiche dans « Mes clients ».</div>';
+    panel.classList.add('isOpen');input.setAttribute('aria-expanded','true');return;
+  }
+  panel.innerHTML=matches.map(({c},i)=>{
+    const detail=[c.phone,c.email].filter(Boolean).join(' · ')||`${Number(c.purchases)||0} achat(s) enregistré(s)`;
+    return `<button type="button" class="purchaseSuggestion" role="option" aria-selected="false" data-client-name="${esc(c.name)}" data-index="${i}" onmousedown="event.preventDefault()" onclick="choosePurchaseSuggestion(this.dataset.clientName)"><strong>${esc(c.name)}</strong><small>${esc(detail)}</small></button>`;
+  }).join('');
+  panel.classList.add('isOpen');input.setAttribute('aria-expanded','true');
+}
+function choosePurchaseSuggestion(name){
+  const input=document.getElementById('clientName'),panel=document.getElementById('purchaseSuggestions');
+  if(!input)return;
+  input.value=name;
+  if(panel){panel.classList.remove('isOpen');panel.innerHTML='';}
+  input.setAttribute('aria-expanded','false');
+  updatePurchaseBox();
+}
+function purchaseSuggestionKeydown(event){
+  const panel=document.getElementById('purchaseSuggestions');
+  if(!panel||!panel.classList.contains('isOpen'))return;
+  const options=[...panel.querySelectorAll('.purchaseSuggestion')];
+  if(event.key==='Escape'){panel.classList.remove('isOpen');document.getElementById('clientName')?.setAttribute('aria-expanded','false');return;}
+  if(!options.length)return;
+  if(event.key==='ArrowDown'||event.key==='ArrowUp'){
+    event.preventDefault();
+    purchaseSuggestionIndex=(purchaseSuggestionIndex+(event.key==='ArrowDown'?1:-1)+options.length)%options.length;
+    options.forEach((el,i)=>{el.setAttribute('aria-selected',String(i===purchaseSuggestionIndex));el.style.background=i===purchaseSuggestionIndex?'var(--sage,#e8ecdf)':'';});
+    options[purchaseSuggestionIndex].scrollIntoView({block:'nearest'});
+  }else if(event.key==='Enter'&&purchaseSuggestionIndex>=0){
+    event.preventDefault();choosePurchaseSuggestion(options[purchaseSuggestionIndex].dataset.clientName);
+  }
+}
+document.addEventListener('click',event=>{
+  const wrap=document.querySelector('.purchaseSearchWrap'),panel=document.getElementById('purchaseSuggestions'),input=document.getElementById('clientName');
+  if(wrap&&panel&&!wrap.contains(event.target)){panel.classList.remove('isOpen');if(input)input.setAttribute('aria-expanded','false');}
+});
 function updatePurchaseBox(){
   const name=document.getElementById('clientName')?.value||'', amount=Math.max(0,parseFloat(document.getElementById('amount')?.value)||0);
   const exceptional=Math.max(0,parseFloat(document.getElementById('exceptionalDiscount')?.value)||0);
