@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#163f2d">
 <meta name="description" content="Vap’ & Moi Pro Signature Premium : gestion des clients, ventes, fidélité, analyses, suivi commercial et sauvegardes.">
-<title>Vap’ & Moi Pro — V33 Achats lisibles</title>
+<title>Vap’ & Moi Pro — V34 Statistiques visuelles</title>
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="./icon-192.png">
 <meta name="mobile-web-app-capable" content="yes">
@@ -296,7 +296,7 @@ input:focus,select:focus,textarea:focus{border-color:#9eaa7b;box-shadow:0 0 0 3p
 
 
 /* V33 — chiffres d’achats lisibles sur mobile, sans graphiques SVG serrés */
-.purchaseCountGroup{margin:16px 0 20px;padding:0}.purchaseCountGroup h4{font-size:16px;line-height:1.35;margin:0 0 12px;color:var(--text,#26382e)}.purchaseCountRows{display:grid;gap:10px}.purchaseCountRow{padding:10px 12px;border:1px solid var(--border,#dfe2d5);border-radius:12px;background:rgba(255,255,255,.55)}.purchaseCountRowHead{display:flex;justify-content:space-between;align-items:center;gap:12px;font-size:14px;line-height:1.35}.purchaseCountRowHead>span{min-width:0;text-transform:capitalize;color:var(--text,#26382e)}.purchaseCountRowHead>strong{white-space:nowrap;color:#326747;font-size:15px;font-variant-numeric:tabular-nums}.purchaseCountTrack{height:5px;margin-top:8px;background:#e8ece3;border-radius:99px;overflow:hidden}.purchaseCountTrack span{display:block;height:100%;background:linear-gradient(90deg,#326747,#bca66a);border-radius:99px}@media(max-width:420px){.purchaseCountRow{padding:9px 10px}.purchaseCountRowHead{font-size:13px}.purchaseCountRowHead>strong{font-size:14px}}
+.purchaseCountGroup{margin:16px 0 20px;padding:0}.purchaseCountGroup h4{font-size:16px;line-height:1.35;margin:0 0 12px;color:var(--text,#26382e)}.purchaseCountRows{display:grid;gap:10px}.purchaseCountRow{padding:10px 12px;border:1px solid var(--border,#dfe2d5);border-radius:12px;background:rgba(255,255,255,.55)}.purchaseCountRowHead{display:flex;justify-content:space-between;align-items:center;gap:12px;font-size:14px;line-height:1.35}.purchaseCountRowHead>span{min-width:0;text-transform:capitalize;color:var(--text,#26382e)}.purchaseCountRowHead>strong{white-space:nowrap;color:#326747;font-size:15px;font-variant-numeric:tabular-nums}.purchaseCountTrack{height:5px;margin-top:8px;background:#e8ece3;border-radius:99px;overflow:hidden}.purchaseCountTrack span{display:block;height:100%;background:linear-gradient(90deg,#326747,#bca66a);border-radius:99px}.purchaseCountSub{margin-top:5px;color:var(--muted,#66736a);font-size:12px;line-height:1.4;font-variant-numeric:tabular-nums}.purchaseCountKpis{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:10px 0 14px}.purchaseCountKpis>div{min-width:0;padding:10px 8px;border-radius:10px;background:rgba(50,103,71,.08);display:flex;flex-direction:column;gap:4px}.purchaseCountKpis span{font-size:11px;color:var(--muted,#66736a)}.purchaseCountKpis strong{font-size:15px;color:var(--text,#26382e);font-variant-numeric:tabular-nums;overflow-wrap:anywhere}.purchaseCountNote{font-size:10px;font-style:normal;color:#8b6e2e;margin-left:3px}.purchaseCountClosed{opacity:.58;background:rgba(120,120,120,.06)}.purchaseCountZero .purchaseCountTrack span{background:#c5ccc2}.purchaseCountInsight{font-size:12px;margin:12px 0 0;color:var(--muted,#66736a)}@media(max-width:420px){.purchaseCountKpis{gap:5px}.purchaseCountKpis>div{padding:8px 6px}.purchaseCountKpis strong{font-size:13px}.purchaseCountKpis span{font-size:10px}.purchaseCountSub{font-size:11px}}@media(max-width:420px){.purchaseCountRow{padding:9px 10px}.purchaseCountRowHead{font-size:13px}.purchaseCountRowHead>strong{font-size:14px}}
 </style>
 </head>
 <body>
@@ -468,7 +468,7 @@ input:focus,select:focus,textarea:focus{border-color:#9eaa7b;box-shadow:0 0 0 3p
 
 <section id="stats" class="page">
   <div class="card">
-    <h2>📊 Tableau de bord — V28 Pilotage Intelligent</h2>
+    <h2>📊 Tableau de bord — V34 Statistiques visuelles</h2>
     <p class="muted small">Statistiques regroupées par sujet : chiffre d’affaires, ventes et panier moyen, clients, encaissements, puis prévisions.</p>
     <div class="actionRow"><button class="secondary" onclick="exportSalesCSV()">📄 Exporter les ventes (CSV)</button><button class="secondary" onclick="exportData()">💾 Sauvegarder les données (JSON)</button></div>
     <div class="grid4">
@@ -560,7 +560,7 @@ input:focus,select:focus,textarea:focus{border-color:#9eaa7b;box-shadow:0 0 0 3p
   <div class="card"><h3>💡 Plan d’action conseillé</h3><div id="analysisActions"></div><p class="small muted">Les recommandations sont calculées à partir des données enregistrées. Une projection n’est pas une garantie. La marge réelle nécessite les coûts d’achat.</p><div class="actions" style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px"><button class="btn" onclick="exportAnalysisCSV()">Exporter l’analyse CSV</button><button class="btn secondary" onclick="window.print()">Imprimer le bilan</button></div></div>
 </section>
 </main>
-<footer>Vap’ & Moi Pro · V33 Achats lisibles · pilotage commercial</footer>
+<footer>Vap’ & Moi Pro · V34 Statistiques visuelles · pilotage commercial</footer>
 
 <script>
 const KEY='vapetmoi_fidelite_v1';
@@ -1168,11 +1168,30 @@ function renderWeekdayStats(){
 }
 
 function renderPurchaseCountCharts(ps,now){
-  const draw=(id,title,items)=>{const el=document.getElementById(id);if(!el)return;if(!items.length){el.innerHTML='<p class="muted">Pas encore assez de ventes datées pour afficher cette période.</p>';return;}const max=Math.max(1,...items.map(x=>x.value));const rows=items.map(x=>{const pct=Math.max(0,Math.min(100,x.value/max*100));return `<div class="purchaseCountRow"><div class="purchaseCountRowHead"><span>${esc(x.label)}</span><strong>${x.value} ${x.value===1?'achat':'achats'}</strong></div><div class="purchaseCountTrack" aria-hidden="true"><span style="width:${pct}%"></span></div></div>`;}).join('');el.innerHTML=`<section class="purchaseCountGroup"><h4>${title}</h4><div class="purchaseCountRows">${rows}</div></section>`;};
-  const dayItems=[];for(let i=6;i>=0;i--){const d=new Date(now);d.setHours(0,0,0,0);d.setDate(d.getDate()-i);if(d.getDay()===0)continue;const key=d.toDateString();dayItems.push({label:d.toLocaleDateString('fr-FR',{weekday:'long',day:'numeric',month:'short'}),value:ps.filter(p=>dateOf(p).toDateString()===key).length});}
-  const weekItems=[];for(let i=7;i>=0;i--){const start=new Date(now);start.setHours(0,0,0,0);start.setDate(start.getDate()-((start.getDay()+6)%7)-i*7);const end=new Date(start);end.setDate(end.getDate()+7);weekItems.push({label:`Semaine du ${start.toLocaleDateString('fr-FR',{day:'2-digit',month:'2-digit'})}`,value:ps.filter(p=>dateOf(p)>=start&&dateOf(p)<end).length});}
-  const monthItems=[];for(let i=5;i>=0;i--){const d=new Date(now.getFullYear(),now.getMonth()-i,1),end=new Date(d.getFullYear(),d.getMonth()+1,1);monthItems.push({label:d.toLocaleDateString('fr-FR',{month:'long',year:'numeric'}),value:ps.filter(p=>dateOf(p)>=d&&dateOf(p)<end).length});}
-  draw('purchaseDailyChart','📅 Achats par jour — 7 derniers jours',dayItems);draw('purchaseWeeklyChart','📆 Achats par semaine — 8 dernières semaines',weekItems);draw('purchaseMonthlyChart','🗓️ Achats par mois — 6 derniers mois',monthItems);
+  const money= n=>fmt(n);
+  const stats=entries=>({count:entries.length,ca:entries.reduce((sum,p)=>sum+safelyPaid(p),0),basket:entries.length?entries.reduce((sum,p)=>sum+safelyPaid(p),0)/entries.length:0});
+  const draw=(id,title,items,periodType)=>{
+    const el=document.getElementById(id);if(!el)return;
+    if(!items.length){el.innerHTML='<p class="muted">Pas encore assez de ventes datées pour afficher cette période.</p>';return;}
+    const max=Math.max(1,...items.map(x=>x.value));
+    const rows=items.map(x=>{
+      const pct=Math.max(0,Math.min(100,x.value/max*100));
+      const sub=`${money(x.ca)} de CA${x.value?` · panier moyen ${money(x.basket)}`:''}`;
+      const zero=x.closed?'purchaseCountClosed':(x.value===0?'purchaseCountZero':'');
+      return `<div class="purchaseCountRow ${zero}"><div class="purchaseCountRowHead"><span>${esc(x.label)}${x.note?` <em class="purchaseCountNote">${esc(x.note)}</em>`:''}</span><strong>${x.closed?'Fermé':`${x.value} ${x.value===1?'achat':'achats'}`}</strong></div><div class="purchaseCountTrack" role="img" aria-label="${x.value} achats sur un maximum de ${max}"><span style="width:${pct}%"></span></div><div class="purchaseCountSub">${sub}</div></div>`;
+    }).join('');
+    const total=items.reduce((a,x)=>a+x.value,0),ca=items.reduce((a,x)=>a+x.ca,0);
+    const avg=total?ca/total:0;
+    const peak=items.filter(x=>!x.closed).reduce((best,x)=>!best||x.value>best.value?x:best,null);
+    el.innerHTML=`<section class="purchaseCountGroup"><h4>${title}</h4><div class="purchaseCountKpis"><div><span>Total achats</span><strong>${total}</strong></div><div><span>Chiffre d’affaires</span><strong>${money(ca)}</strong></div><div><span>Panier moyen</span><strong>${money(avg)}</strong></div></div><div class="purchaseCountRows">${rows}</div>${peak&&total?`<p class="purchaseCountInsight">📈 Période la plus active : <strong>${esc(peak.label)}</strong> avec ${peak.value} achat(s).</p>`:''}</section>`;
+  };
+  const dayItems=[];
+  for(let i=6;i>=0;i--){const d=new Date(now);d.setHours(0,0,0,0);d.setDate(d.getDate()-i);const entries=d.getDay()===0?[]:ps.filter(p=>dateOf(p).toDateString()===d.toDateString());const st=stats(entries);dayItems.push({label:d.toLocaleDateString('fr-FR',{weekday:'long',day:'numeric',month:'short'}),value:st.count,ca:st.ca,basket:st.basket,closed:d.getDay()===0,note:d.toDateString()===new Date(now).toDateString()?'aujourd’hui':''});}
+  const weekItems=[];
+  for(let i=7;i>=0;i--){const start=new Date(now);start.setHours(0,0,0,0);start.setDate(start.getDate()-((start.getDay()+6)%7)-i*7);const end=new Date(start);end.setDate(end.getDate()+7);const entries=ps.filter(p=>dateOf(p)>=start&&dateOf(p)<end);const st=stats(entries);const incomplete=end>new Date(now.getFullYear(),now.getMonth(),now.getDate()+1);weekItems.push({label:`Sem. du ${start.toLocaleDateString('fr-FR',{day:'2-digit',month:'2-digit'})}`,value:st.count,ca:st.ca,basket:st.basket,note:incomplete?'en cours':''});}
+  const monthItems=[];
+  for(let i=5;i>=0;i--){const d=new Date(now.getFullYear(),now.getMonth()-i,1),end=new Date(d.getFullYear(),d.getMonth()+1,1);const entries=ps.filter(p=>dateOf(p)>=d&&dateOf(p)<end);const st=stats(entries);monthItems.push({label:d.toLocaleDateString('fr-FR',{month:'long',year:'numeric'}),value:st.count,ca:st.ca,basket:st.basket,note:d.getFullYear()===now.getFullYear()&&d.getMonth()===now.getMonth()?'en cours':''});}
+  draw('purchaseDailyChart','📅 Achats par jour — 7 derniers jours',dayItems,'day');draw('purchaseWeeklyChart','📆 Achats par semaine — 8 dernières semaines',weekItems,'week');draw('purchaseMonthlyChart','🗓️ Achats par mois — 6 derniers mois',monthItems,'month');
 }
 function renderPurchaseStats(ps,now){
   renderPurchaseCountCharts(ps,now);

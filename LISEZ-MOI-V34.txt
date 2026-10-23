@@ -1,0 +1,16 @@
+VAP’ & MOI PRO — V34 STATISTIQUES VISUELLES
+
+Cette version améliore la rubrique « Achats par jour et par semaine » :
+- achats par jour sur les 7 derniers jours ;
+- achats par semaine sur les 8 dernières semaines ;
+- achats par mois sur les 6 derniers mois ;
+- nombre d’achats, chiffre d’affaires et panier moyen pour chaque période ;
+- barres proportionnelles, meilleure période mise en évidence ;
+- dimanche signalé comme jour fermé ;
+- semaines et mois en cours signalés comme incomplets.
+
+Les fonctionnalités existantes, l’historique et la clé de stockage vapetmoi_fidelite_v1 sont conservés.
+
+Installation GitHub : remplacer les fichiers du dépôt par ceux de cette archive, en conservant les noms de fichiers. Avant toute mise à jour, exporter une sauvegarde JSON depuis l’application. Après publication, recharger le site ; si l’ancienne version reste visible, fermer/réouvrir l’application ou attendre la mise à jour du cache.
+
+Contrôles effectués : archive ZIP vérifiée et syntaxe JavaScript intégrée contrôlée. Les essais complets avec les données réelles et sur téléphone restent à effectuer.
