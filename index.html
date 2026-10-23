@@ -189,6 +189,9 @@ nav.appNav button.saleNav{background:linear-gradient(145deg,#285f3d,#467847);box
 .followupBody{min-width:0;flex:1}.followupBody strong{display:block;overflow-wrap:anywhere}.followupBody small{display:block;color:var(--muted);margin-top:2px}
 .followupActions{display:flex;gap:6px;flex-wrap:wrap}.followupActions button{font-size:12px;padding:7px 9px}
 .followupEmpty{border:1px dashed var(--border);border-radius:14px;padding:16px;color:var(--muted);text-align:center}
+.followupMore{border:1px solid var(--border);border-radius:14px;padding:12px;margin-top:10px;background:rgba(228,238,229,.28)}
+.followupMore>summary{cursor:pointer;font-weight:750;color:var(--green);padding:4px 0;list-style-position:inside}
+.followupMore>button{margin-top:8px}
 @media(max-width:420px){.followupItem{align-items:flex-start}.followupActions{flex-direction:column}.followupActions button{width:100%}}
 
 </style>
@@ -1263,7 +1266,9 @@ function renderFollowupAgenda(){
     return {c,days:Math.floor((today-d)/86400000),last:last.date,count:hist.length,total:hist.reduce((s,p)=>s+safelyPaid(p),0)};
   }).filter(Boolean).filter(x=>x.days>=threshold).sort((a,b)=>b.days-a.days);
   if(!rows.length){root.innerHTML=`<div class="followupEmpty">Aucun client avec un achat enregistré n’a dépassé ${threshold} jours d’inactivité. Les clients sans historique sont exclus de ce calcul.</div>`;return;}
-  root.innerHTML=`<p class="small muted">${rows.length} client(s) à suivre · seuil ${threshold} jours</p><div class="followupList">${rows.slice(0,20).map(x=>`<div class="followupItem"><div class="followupAvatar">${esc((x.c.name||'?').trim().slice(0,1).toUpperCase())}</div><div class="followupBody"><strong>${esc(x.c.name)}</strong><small>Dernier achat : ${dateFmt(x.last)} · il y a ${x.days} jours</small><small>${x.count} achat(s) actif(s) enregistré(s) · CA historique suivi : ${fmt(x.total)}</small></div><div class="followupActions"><button type="button" class="secondary" onclick="showClient('${escJs(x.c.name)}')">Fiche</button><button type="button" class="secondary" onclick="selectClientForPurchase('${escJs(x.c.name)}')">Vente</button></div></div>`).join('')}</div>${rows.length>20?`<p class="small muted">Affichage des 20 premiers clients sur ${rows.length}. Exporte la liste pour consulter les autres.</p>`:''}`;
+  const renderRows=list=>list.map(x=>`<div class="followupItem"><div class="followupAvatar">${esc((x.c.name||'?').trim().slice(0,1).toUpperCase())}</div><div class="followupBody"><strong>${esc(x.c.name)}</strong><small>Dernier achat : ${dateFmt(x.last)} · il y a ${x.days} jours</small><small>${x.count} achat(s) actif(s) enregistré(s) · CA historique suivi : ${fmt(x.total)}</small></div><div class="followupActions"><button type="button" class="secondary" onclick="showClient('${escJs(x.c.name)}')">Fiche</button><button type="button" class="secondary" onclick="selectClientForPurchase('${escJs(x.c.name)}')">Vente</button></div></div>`).join('');
+  const first=rows.slice(0,5),rest=rows.slice(5);
+  root.innerHTML=`<p class="small muted">${rows.length} client(s) à suivre · seuil ${threshold} jours</p><div class="followupList">${renderRows(first)}</div>${rest.length?`<details class="followupMore"><summary>Afficher les ${rest.length} autres clients</summary><div class="followupList">${renderRows(rest)}</div><button type="button" class="secondary" onclick="this.closest('details').open=false">Réduire la liste</button></details>`:''}`;
 }
 function exportFollowupCSV(){
   const threshold=Number(settings.inactiveThreshold||30),today=new Date();today.setHours(0,0,0,0);
