@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#163f2d">
 <meta name="description" content="Vap’ & Moi Pro Signature Premium : gestion des clients, ventes, fidélité, analyses, suivi commercial et sauvegardes.">
-<title>Vap’ & Moi Pro — V36 Fiabilisation & audit</title>
+<title>Vap’ & Moi Pro — V37 Stock intégré & fiabilisation</title>
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="./icon-192.png">
 <meta name="mobile-web-app-capable" content="yes">
@@ -324,6 +324,7 @@ input:focus,select:focus,textarea:focus{border-color:#9eaa7b;box-shadow:0 0 0 3p
   <button class="active" data-page="accueil" onclick="showPage('accueil',this)"><span>⌂</span>Accueil</button>
   <button data-page="clients" onclick="showPage('clients',this)"><span>♙</span>Clients</button>
   <button class="saleNav" data-page="achat" onclick="showPage('achat',this)"><span>＋</span>Vente</button>
+  <button data-page="stock" onclick="showPage('stock',this)"><span>▤</span>Stock</button>
   <button data-page="stats" onclick="showPage('stats',this)"><span>▥</span>Stats</button>
   <button data-page="analyse" onclick="showPage('analyse',this)"><span>↗</span>Analyse</button>
 </nav>
@@ -469,6 +470,24 @@ input:focus,select:focus,textarea:focus{border-color:#9eaa7b;box-shadow:0 0 0 3p
     <div id="linkedClientInfo" class="small muted"></div>
     <label>Montant avant réduction (€)</label>
     <input id="amount" type="number" inputmode="decimal" min="0" step="0.01" placeholder="17,00" oninput="updatePurchaseBox()" aria-label="Montant avant réduction en euros">
+    <details id="categoryAllocation" class="card" style="padding:13px;margin:12px 0;background:#f8f7ef">
+      <summary style="font-weight:700;cursor:pointer">📊 Répartir l’achat par catégorie (facultatif)</summary>
+      <p class="small muted">Renseigne uniquement les catégories connues. Les montants doivent totaliser le montant avant réduction. Si tu ne détailles pas l’achat, laisse tout à 0 €. Cette répartition sert aux analyses et ne modifie jamais le stock.</p>
+      <div class="grid grid2">
+        <div><label for="catEliquides">E-liquides (€)</label><input id="catEliquides" class="categoryAmount" type="number" min="0" step="0.01" value="0" inputmode="decimal" oninput="updateCategoryAllocation()"></div>
+        <div><label for="catResistances">Résistances (€)</label><input id="catResistances" class="categoryAmount" type="number" min="0" step="0.01" value="0" inputmode="decimal" oninput="updateCategoryAllocation()"></div>
+        <div><label for="catCartouches">Cartouches (€)</label><input id="catCartouches" class="categoryAmount" type="number" min="0" step="0.01" value="0" inputmode="decimal" oninput="updateCategoryAllocation()"></div>
+        <div><label for="catClearomiseurs">Clearomiseurs (€)</label><input id="catClearomiseurs" class="categoryAmount" type="number" min="0" step="0.01" value="0" inputmode="decimal" oninput="updateCategoryAllocation()"></div>
+        <div><label for="catAccessoires">Accessoires (€)</label><input id="catAccessoires" class="categoryAmount" type="number" min="0" step="0.01" value="0" inputmode="decimal" oninput="updateCategoryAllocation()"></div>
+      </div>
+      <p id="categoryAllocationStatus" class="small muted" aria-live="polite">Répartition non renseignée — facultatif.</p>
+    </details>
+    <div class="card" style="padding:13px;margin:12px 0;background:#f5f8f1">
+      <h3 style="margin-top:0">📦 Produit vendu (facultatif)</h3>
+      <p class="small muted">Le stock ne diminue que si tu sélectionnes explicitement un produit de l’inventaire et sa quantité. Une vente au montant seul ne touche jamais au stock.</p>
+      <label for="saleStockProduct">Produit identifié</label><select id="saleStockProduct"><option value="">Aucun produit identifié — ne pas déstocker</option></select>
+      <label for="saleStockQty">Quantité vendue</label><input id="saleStockQty" type="number" min="1" step="1" value="1" inputmode="numeric">
+    </div>
     <div id="rewardBox" class="card" style="display:none;background:#eef6f0;padding:13px">
       <div class="row"><strong>🎁 Bon disponible</strong><strong id="availableReward">0 €</strong></div>
       <label style="display:flex;align-items:center;gap:9px"><input id="useReward" type="checkbox" onchange="updatePurchaseBox()" style="width:21px;margin:0"><span>Utiliser 5 € de la cagnotte</span></label>
@@ -480,6 +499,16 @@ input:focus,select:focus,textarea:focus{border-color:#9eaa7b;box-shadow:0 0 0 3p
     <button class="primary" onclick="addPurchase()">Enregistrer l'achat</button>
     <p id="message" class="muted"></p>
   </div>
+</section>
+
+<section id="stock" class="page">
+ <div class="card"><h2>📦 Gestion du stock</h2><p class="small muted">Les données de stock sont conservées séparément des clients et ventes. Les ventes au montant seul ne modifient pas le stock.</p>
+ <div class="grid grid4"><div class="stat"><strong id="stockSkuCount">0</strong>Références</div><div class="stat"><strong id="stockUnits">0</strong>Unités en stock</div><div class="stat"><strong id="stockAlerts">0</strong>Alertes</div><div class="stat"><strong id="stockMoves">0</strong>Mouvements</div></div></div>
+ <div class="card"><h3>➕ Ajouter un produit</h3><label for="stName">Nom du produit</label><input id="stName" placeholder="Ex. Ragnarok Fruits rouges frais 50 ml"><label for="stCategory">Catégorie</label><select id="stCategory"><option>E-liquides</option><option>Résistances</option><option>Cartouches</option><option>Clearomiseurs</option><option>Accessoires</option></select><label for="stSku">Référence (facultative)</label><input id="stSku" placeholder="Référence fournisseur / code"><div class="grid grid2"><div><label for="stQty">Quantité initiale</label><input id="stQty" type="number" min="0" step="1" value="0"></div><div><label for="stThreshold">Seuil d’alerte</label><input id="stThreshold" type="number" min="0" step="1" value="2"></div></div><button class="primary" onclick="stockAddProduct()">Ajouter au catalogue</button><p id="stockMessage" class="small muted"></p></div>
+ <div class="card"><h3>📋 Inventaire</h3><input id="stockSearch" placeholder="Rechercher un produit…" oninput="renderStock()"><div id="stockInventory"></div></div>
+ <div class="card"><h3>↕️ Mouvement manuel</h3><label for="stockMoveProduct">Produit</label><select id="stockMoveProduct"></select><div class="grid grid2"><div><label for="stockMoveType">Type</label><select id="stockMoveType"><option value="in">Entrée de stock</option><option value="out">Sortie manuelle</option></select></div><div><label for="stockMoveQty">Quantité</label><input id="stockMoveQty" type="number" min="1" step="1" value="1"></div></div><label for="stockMoveReason">Motif</label><input id="stockMoveReason" placeholder="Réception fournisseur, casse…"><button class="primary" onclick="stockManualMove()">Enregistrer le mouvement</button></div>
+ <div class="card"><h3>🛒 Panier fournisseur</h3><p class="small muted">Ajoute des quantités à commander depuis les produits en alerte ou l’inventaire.</p><label for="orderProduct">Produit</label><select id="orderProduct"></select><label for="orderQty">Quantité à commander</label><input id="orderQty" type="number" min="1" step="1" value="1"><button class="secondary" onclick="stockAddOrderItem()">Ajouter au panier</button><div id="stockOrderBasket"></div><button class="primary" onclick="stockValidateOrder()">Valider la commande / réceptionner</button><div id="stockOrdersHistory"></div></div>
+ <div class="card"><h3>🧾 Historique des mouvements</h3><div id="stockMovementHistory"></div><h3>📊 Statistiques</h3><div id="stockStatistics"></div></div>
 </section>
 
 <section id="stats" class="page">
@@ -494,6 +523,8 @@ input:focus,select:focus,textarea:focus{border-color:#9eaa7b;box-shadow:0 0 0 3p
       <div class="stat"><strong id="sClients">0</strong>clients</div>
     </div>
   </div>
+
+  <div class="card"><h3>🧺 Répartition des ventes par catégorie</h3><p class="small muted">Calculée uniquement sur les ventes dont la répartition a été renseignée. Les ventes sans détail restent dans le CA global mais ne sont pas attribuées à une catégorie.</p><div id="categoryAnalytics"><p class="small muted">Aucune répartition de catégorie enregistrée.</p></div></div>
 
   <div class="statsOverview" aria-label="Accès aux statistiques détaillées">
     <button type="button" onclick="openStatsDetail('statsCA')"><span class="overviewIcon">💶</span><strong>Chiffre d’affaires</strong><small>CA par période, historique et comparaisons</small><span class="openHint">Voir le détail →</span></button>
@@ -584,7 +615,7 @@ input:focus,select:focus,textarea:focus{border-color:#9eaa7b;box-shadow:0 0 0 3p
   <div class="card"><h3>💡 Plan d’action conseillé</h3><div id="analysisActions"></div><p class="small muted">Les recommandations sont calculées à partir des données enregistrées. Une projection n’est pas une garantie. La marge réelle nécessite les coûts d’achat.</p><div class="actions" style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px"><button class="btn" onclick="exportAnalysisCSV()">Exporter l’analyse CSV</button><button class="btn secondary" onclick="window.print()">Imprimer le bilan</button></div></div>
 </section>
 </main>
-<footer>Vap’ & Moi Pro · V36 Fiabilisation & audit · pilotage commercial</footer>
+<footer>Vap’ & Moi Pro · V37 Stock intégré & fiabilisation · pilotage commercial</footer>
 
 <script>
 const KEY='vapetmoi_fidelite_v1';
@@ -748,7 +779,13 @@ function updatePurchaseBox(){
   if(exceptional>amount && amount>0){payableBox.innerHTML='<span style="color:#b42318">⚠️ La réduction exceptionnelle ne peut pas dépasser le montant de l’achat.</span>';return;}
   if(amount>0)payableBox.innerHTML=`Réduction fidélité : <strong>${fmt(rewardDiscount)}</strong> · Réduction exceptionnelle : <strong>${fmt(exceptional)}</strong><br>Réduction totale : <strong>${fmt(totalDiscount)}</strong> · À payer : <strong>${fmt(Math.max(0,amount-totalDiscount))}</strong>`;
   else payableBox.textContent='';
+  updateCategoryAllocation();
 }
+const SALE_CATEGORIES=[['eliquides','E-liquides'],['resistances','Résistances'],['cartouches','Cartouches'],['clearomiseurs','Clearomiseurs'],['accessoires','Accessoires']];
+function readCategoryAmounts(){const out={};SALE_CATEGORIES.forEach(([key])=>{const el=document.getElementById('cat'+key.charAt(0).toUpperCase()+key.slice(1));out[key]=Math.round(Math.max(0,Number(el?.value)||0)*100)/100});return out}
+function categoryAmountTotal(obj){return Math.round(SALE_CATEGORIES.reduce((sum,[key])=>sum+Math.round(Math.max(0,Number(obj?.[key])||0)*100),0))/100}
+function updateCategoryAllocation(){const amount=Math.round(Math.max(0,Number(document.getElementById('amount')?.value)||0)*100)/100,vals=readCategoryAmounts(),sum=categoryAmountTotal(vals),status=document.getElementById('categoryAllocationStatus');if(!status)return;const allocated=sum>0;if(!allocated){status.textContent='Répartition non renseignée — facultatif.';status.style.color='';return}const diff=Math.round((amount-sum)*100)/100;if(Math.abs(diff)<0.005){status.textContent='✓ Répartition complète : '+fmt(sum)+'.';status.style.color='#28744a'}else{status.textContent='⚠ Répartition : '+fmt(sum)+' sur '+fmt(amount)+' (écart '+fmt(Math.abs(diff))+').';status.style.color='#b42318'}}
+function renderCategoryAnalytics(){const root=document.getElementById('categoryAnalytics');if(!root)return;const ps=allPurchases(),totals={};SALE_CATEGORIES.forEach(([key,label])=>totals[key]={label,amount:0,transactions:0,clients:new Set()});let allocatedSales=0,allocatedTotal=0;ps.forEach(p=>{const a=p.categoryAmounts;if(!a||categoryAmountTotal(a)<=0)return;allocatedSales++;SALE_CATEGORIES.forEach(([key])=>{const v=Math.max(0,Number(a[key])||0);if(v>0){totals[key].amount+=v;totals[key].transactions++;totals[key].clients.add(p.client)}});allocatedTotal+=categoryAmountTotal(a)});const used=SALE_CATEGORIES.filter(([key])=>totals[key].amount>0);if(!used.length){root.innerHTML='<p class="small muted">Aucune répartition de catégorie enregistrée. Les répartitions sont facultatives à la caisse.</p>';return}root.innerHTML='<div class="grid grid2"><div class="stat"><strong>'+fmt(allocatedTotal)+'</strong><span class="kpiTitle">Montant réparti</span></div><div class="stat"><strong>'+allocatedSales+'</strong><span class="kpiTitle">Ventes détaillées</span></div></div>'+used.map(([key])=>{const x=totals[key],pct=allocatedTotal?x.amount/allocatedTotal*100:0;return '<div style="margin:12px 0"><div class="row" style="justify-content:space-between;gap:8px"><strong>'+esc(x.label)+'</strong><strong>'+fmt(x.amount)+' · '+pct.toLocaleString('fr-FR',{maximumFractionDigits:1})+' %</strong></div><div style="height:6px;background:#e8ece3;border-radius:99px;overflow:hidden"><div style="height:100%;width:'+Math.min(100,pct)+'%;background:#326747"></div></div><p class="small muted">Présente dans '+x.transactions+' vente(s) · '+x.clients.size+' client(s)</p></div>'}).join('')+'<p class="small muted">Les ventes annulées sont exclues. Les montants sont avant réductions, comme saisis à la caisse.</p>'}
 function toggleNewClient(show){
   const b=document.getElementById('newClientBox');const v=typeof show==='boolean'?show:b.style.display==='none';b.style.display=v?'block':'none';
   if(v)document.getElementById('newClientName').focus();
@@ -762,6 +799,22 @@ function addClient(){
   ['newClientName','newClientPhone','newClientEmail','newClientNotes'].forEach(id=>document.getElementById(id).value='');
   toggleNewClient(false); document.getElementById('search').value='';
 }
+// V37 — stock isolé, compatible avec les sauvegardes historiques.
+const STOCK_KEY=KEY+'_stock_v1';
+let stockData={products:[],movements:[],orders:[],orderBasket:[]};
+try{const raw=localStorage.getItem(STOCK_KEY);if(raw){const parsed=JSON.parse(raw);if(parsed&&typeof parsed==='object'&&Array.isArray(parsed.products)&&Array.isArray(parsed.movements)&&Array.isArray(parsed.orders))stockData={products:parsed.products,movements:parsed.movements,orders:parsed.orders,orderBasket:Array.isArray(parsed.orderBasket)?parsed.orderBasket:[]};else throw new Error('Format stock invalide');}}catch(e){window.__stockReadError=true;}
+function stockSave(){if(window.__stockReadError){alert('Stock illisible : écriture bloquée pour protéger les données.');return false}try{const raw=JSON.stringify(stockData);localStorage.setItem(STOCK_KEY,raw);if(localStorage.getItem(STOCK_KEY)!==raw)throw Error('Vérification impossible');return true}catch(e){alert('Stock non enregistré : stockage indisponible.');return false}}
+function stockEsc(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function stockProduct(id){return stockData.products.find(p=>String(p.id)===String(id))}
+function stockMove(id,type,qty,reason,ref){const p=stockProduct(id);qty=Math.floor(Number(qty));if(!p||!Number.isFinite(qty)||qty<1)return false;if(type==='out'&&p.qty<qty){alert('Stock insuffisant pour '+p.name+' : '+p.qty+' disponible(s).');return false}const old=JSON.stringify(stockData);p.qty+=type==='in'?qty:-qty;stockData.movements.unshift({id:'m'+Date.now()+Math.random().toString(36).slice(2,7),date:new Date().toISOString(),productId:p.id,type,qty,reason:String(reason||''),ref:ref||null});if(!stockSave()){stockData=JSON.parse(old);return false}return true}
+function stockRefreshSelects(){const opts=stockData.products.map(p=>`<option value="${stockEsc(p.id)}">${stockEsc(p.name)} (${p.qty} en stock)</option>`).join('');['stockMoveProduct','orderProduct'].forEach(id=>{const el=document.getElementById(id);if(el){const v=el.value;el.innerHTML=opts||'<option value="">Aucun produit</option>';if(stockProduct(v))el.value=v}});const sale=document.getElementById('saleStockProduct');if(sale){const v=sale.value;sale.innerHTML='<option value="">Aucun produit identifié — ne pas déstocker</option>'+stockData.products.map(p=>`<option value="${stockEsc(p.id)}">${stockEsc(p.name)} (${p.qty} en stock)</option>`).join('');if(stockProduct(v))sale.value=v}}
+function stockAddProduct(){const name=document.getElementById('stName').value.trim(),cat=document.getElementById('stCategory').value,sku=document.getElementById('stSku').value.trim(),qty=Number(document.getElementById('stQty').value),threshold=Number(document.getElementById('stThreshold').value);if(!name||!Number.isInteger(qty)||qty<0||!Number.isInteger(threshold)||threshold<0){alert('Vérifie le nom, la quantité et le seuil.');return}if(stockData.products.some(p=>p.name.toLowerCase()===name.toLowerCase())){alert('Un produit porte déjà ce nom. Utilise la fiche existante pour éviter les doublons.');return}const old=JSON.stringify(stockData);const p={id:'p'+Date.now()+Math.random().toString(36).slice(2,6),name,category:cat,sku,qty,threshold,createdAt:new Date().toISOString()};stockData.products.push(p);if(qty)stockData.movements.unshift({id:'m'+Date.now(),date:new Date().toISOString(),productId:p.id,type:'in',qty,reason:'Stock initial',ref:null});if(!stockSave()){stockData=JSON.parse(old);return}document.getElementById('stName').value='';document.getElementById('stSku').value='';document.getElementById('stockMessage').textContent='Produit ajouté.';renderStock()}
+function stockManualMove(){const id=document.getElementById('stockMoveProduct').value,type=document.getElementById('stockMoveType').value,qty=Number(document.getElementById('stockMoveQty').value),reason=document.getElementById('stockMoveReason').value.trim();if(!reason){alert('Indique un motif pour garder un historique exploitable.');return}if(stockMove(id,type,qty,reason,null)){document.getElementById('stockMoveReason').value='';renderStock()}}
+function stockAddOrderItem(){const id=document.getElementById('orderProduct').value,qty=Number(document.getElementById('orderQty').value);if(!stockProduct(id)||!Number.isInteger(qty)||qty<1){alert('Choisis un produit et une quantité valide.');return}const found=stockData.orderBasket.find(x=>x.productId===id);if(found)found.qty+=qty;else stockData.orderBasket.push({productId:id,qty});if(stockSave())renderStock()}
+function stockValidateOrder(){if(!stockData.orderBasket.length){alert('Le panier fournisseur est vide.');return}if(!confirm('Valider cette commande et ajouter les quantités au stock comme réceptionnées ? À utiliser uniquement à la réception réelle des produits.'))return;const old=JSON.stringify(stockData),order={id:'o'+Date.now(),date:new Date().toISOString(),items:stockData.orderBasket.map(x=>({...x})),status:'Réceptionnée'};for(const item of order.items){const p=stockProduct(item.productId);if(!p){stockData=JSON.parse(old);alert('Produit introuvable : opération annulée.');return}p.qty+=item.qty;stockData.movements.unshift({id:'m'+Date.now()+Math.random().toString(36).slice(2,6),date:new Date().toISOString(),productId:p.id,type:'in',qty:item.qty,reason:'Commande fournisseur '+order.id,ref:order.id})}stockData.orders.unshift(order);stockData.orderBasket=[];if(!stockSave()){stockData=JSON.parse(old);return}renderStock()}
+function stockReverseSale(p){if(!p||!p.stockMovementId||p.stockReversed)return true;const m=stockData.movements.find(x=>x.id===p.stockMovementId);if(!m)return true;const product=stockProduct(m.productId);if(!product)return true;const old=JSON.stringify(stockData);product.qty+=m.qty;stockData.movements.unshift({id:'m'+Date.now()+Math.random().toString(36).slice(2,6),date:new Date().toISOString(),productId:product.id,type:'in',qty:m.qty,reason:'Annulation vente — contre-mouvement',ref:String(p.id)});p.stockReversed=true;if(!stockSave()){stockData=JSON.parse(old);p.stockReversed=false;return false}return true}
+function renderStock(){stockRefreshSelects();const el=document.getElementById('stockInventory');if(!el)return;const q=(document.getElementById('stockSearch')?.value||'').toLowerCase();const products=stockData.products.filter(p=>(p.name+' '+p.category+' '+p.sku).toLowerCase().includes(q));document.getElementById('stockSkuCount').textContent=stockData.products.length;document.getElementById('stockUnits').textContent=stockData.products.reduce((n,p)=>n+p.qty,0);document.getElementById('stockAlerts').textContent=stockData.products.filter(p=>p.qty<=p.threshold).length;document.getElementById('stockMoves').textContent=stockData.movements.length;el.innerHTML=products.length?'<div style="overflow-x:auto"><table><thead><tr><th>Produit</th><th>Catégorie</th><th>Qté</th><th>Seuil</th><th>État</th></tr></thead><tbody>'+products.map(p=>`<tr><td><strong>${stockEsc(p.name)}</strong><br><small>${stockEsc(p.sku)}</small></td><td>${stockEsc(p.category)}</td><td>${p.qty}</td><td>${p.threshold}</td><td>${p.qty<=p.threshold?'⚠️ À réapprovisionner':'OK'}</td></tr>`).join('')+'</tbody></table></div>':'<p class="small muted">Aucun produit. Ajoute les références réellement présentes en boutique.</p>';document.getElementById('stockOrderBasket').innerHTML=stockData.orderBasket.length?stockData.orderBasket.map(x=>`<p>${stockEsc(stockProduct(x.productId)?.name||'Produit supprimé')} — ${x.qty} unité(s) <button class="secondary" onclick="stockRemoveOrderItem('${stockEsc(x.productId)}')">Retirer</button></p>`).join(''):'<p class="small muted">Panier vide.</p>';document.getElementById('stockOrdersHistory').innerHTML='<h4>Commandes réceptionnées</h4>'+(stockData.orders.slice(0,20).map(o=>`<p>${new Date(o.date).toLocaleDateString('fr-FR')} — ${o.id} — ${o.items.reduce((n,x)=>n+x.qty,0)} unité(s) réceptionnée(s)</p>`).join('')||'<p class="small muted">Aucune commande.</p>');document.getElementById('stockMovementHistory').innerHTML=stockData.movements.slice(0,40).map(m=>`<p>${new Date(m.date).toLocaleString('fr-FR')} — ${stockEsc(stockProduct(m.productId)?.name||'Produit inconnu')} — ${m.type==='in'?'+':'−'}${m.qty} — ${stockEsc(m.reason)}</p>`).join('')||'<p class="small muted">Aucun mouvement.</p>';const counts={};stockData.products.forEach(p=>counts[p.category]=(counts[p.category]||0)+1);document.getElementById('stockStatistics').innerHTML=Object.keys(counts).map(c=>`<p>${stockEsc(c)} : ${counts[c]} référence(s)</p>`).join('')||'<p class="small muted">Les statistiques apparaîtront après ajout des produits.</p>';}
+function stockRemoveOrderItem(id){stockData.orderBasket=stockData.orderBasket.filter(x=>x.productId!==id);if(stockSave())renderStock()}
 function addPurchase(){
   if(window.__vapPurchaseBusy)return;window.__vapPurchaseBusy=true;const purchaseButton=document.querySelector('#achat button.primary');if(purchaseButton)purchaseButton.disabled=true;
   try{
@@ -770,12 +823,18 @@ function addPurchase(){
   const c=clients.find(x=>x.name.toLowerCase()===name.toLowerCase());if(!c)return;
   if(use&&availableReward(c)<5){msg.textContent='⚠️ Aucun bon de 5 € disponible.';return}
   if(exceptional>amount){msg.textContent='⚠️ La réduction exceptionnelle ne peut pas dépasser le montant de l’achat.';return}
+  const categoryAmounts=readCategoryAmounts(),categoryTotal=categoryAmountTotal(categoryAmounts);
+  if(categoryTotal>0&&Math.abs(Math.round((categoryTotal-amount)*100))>0){msg.textContent='⚠️ La répartition par catégorie doit totaliser exactement le montant avant réduction, ou être remise entièrement à 0 si tu ne souhaites pas la renseigner.';return}
   const previousClient=JSON.stringify(c);
+  const stockId=document.getElementById('saleStockProduct')?.value||'',stockQty=Number(document.getElementById('saleStockQty')?.value||1);
+  if(stockId&&(!stockProduct(stockId)||!Number.isInteger(stockQty)||stockQty<1)){msg.textContent='⚠️ Produit ou quantité de stock invalide.';return}
+  if(stockId&&stockProduct(stockId).qty<stockQty){msg.textContent='⚠️ Stock insuffisant pour ce produit.';return}
   const rewardDiscount=use?5:0,discount=rewardDiscount+exceptional,paid=Math.max(0,Math.round((amount-discount)*100)/100);
   c.total=Math.round((c.total+paid)*100)/100;c.purchases++;if(use)c.usedRewards+=5;
-  const purchase={id:crypto.randomUUID?crypto.randomUUID():String(Date.now()),date:new Date().toISOString(),amount,discount,exceptionalDiscount:exceptional,rewardDiscount,paid};c.history.push(purchase);
-  if(!save()){const restored=JSON.parse(previousClient);Object.keys(c).forEach(k=>delete c[k]);Object.assign(c,restored);updateAll();msg.textContent='⚠️ Vente non enregistrée : vérifie le stockage et réessaie.';return;}logOperation('Achat enregistré',`${c.name} · payé ${fmt(paid)}`);msg.innerHTML=`✅ Achat enregistré pour ${esc(c.name)} · payé ${fmt(paid)} · réduction totale ${fmt(discount)} · cagnotte ${availableReward(c).toFixed(0)} €`;
-  document.getElementById('amount').value='';document.getElementById('exceptionalDiscount').value='0';document.getElementById('useReward').checked=false;updatePurchaseBox();
+  const purchase={id:crypto.randomUUID?crypto.randomUUID():String(Date.now()),date:new Date().toISOString(),amount,discount,exceptionalDiscount:exceptional,rewardDiscount,paid,stockProductId:stockId||null,stockQty:stockId?stockQty:0,...(categoryTotal>0?{categoryAmounts}: {})};c.history.push(purchase);
+  if(!save()){const restored=JSON.parse(previousClient);Object.keys(c).forEach(k=>delete c[k]);Object.assign(c,restored);updateAll();msg.textContent='⚠️ Vente non enregistrée : vérifie le stockage et réessaie.';return;}if(stockId){const oldStock=JSON.stringify(stockData);const sp=stockProduct(stockId);sp.qty-=stockQty;const sm={id:'m'+Date.now()+Math.random().toString(36).slice(2,6),date:new Date().toISOString(),productId:stockId,type:'out',qty:stockQty,reason:'Vente identifiée',ref:String(purchase.id)};stockData.movements.unshift(sm);purchase.stockMovementId=sm.id;if(!stockSave()){stockData=JSON.parse(oldStock);c.history=c.history.filter(x=>x!==purchase);c.total=Math.round((c.total-paid)*100)/100;c.purchases=Math.max(0,c.purchases-1);if(use)c.usedRewards=Math.max(0,c.usedRewards-5);save();msg.textContent='⚠️ Stock non enregistré : vente annulée pour éviter une incohérence.';return}save();renderStock()}
+  logOperation('Achat enregistré',`${c.name} · payé ${fmt(paid)}`);msg.innerHTML=`✅ Achat enregistré pour ${esc(c.name)} · payé ${fmt(paid)} · réduction totale ${fmt(discount)} · cagnotte ${availableReward(c).toFixed(0)} €`;
+  document.getElementById('amount').value='';document.getElementById('exceptionalDiscount').value='0';document.getElementById('useReward').checked=false;SALE_CATEGORIES.forEach(([key])=>{const el=document.getElementById('cat'+key.charAt(0).toUpperCase()+key.slice(1));if(el)el.value='0'});updatePurchaseBox();
   }finally{window.__vapPurchaseBusy=false;if(purchaseButton)purchaseButton.disabled=false}
 }
 function renderClients(){
@@ -817,7 +876,8 @@ function showClient(name){
   <div class="actions" style="margin:12px 0"><button class="primary" style="flex:1;min-height:52px;font-size:1.05rem" onclick="selectClientForPurchase('${escJs(c.name)}')">🛒 Faire un achat pour ce client</button></div>
   <h3>💶 Résumé du client</h3>
   <div class="grid"><div><strong>CA client</strong><br>${fmt(c.total)}</div><div><strong>Panier moyen</strong><br>${fmt(avg)}</div><div><strong>Nombre d’achats</strong><br>${c.purchases}</div></div>
-  <h3>🧾 Historique des achats</h3>${hist.length?hist.map(p=>`<div class="row small" style="border-bottom:1px solid var(--border);padding:8px 0;${p.cancelled?'opacity:.7;background:#fff5f4;':''}"><span>📅 ${dateFmt(p.date)} · ${fmt(p.amount)}${p.discount?' · 🎁 -'+fmt(p.discount):''}${p.exceptionalDiscount?' (dont remise exceptionnelle '+fmt(p.exceptionalDiscount)+')':''} · payé ${fmt(p.paid)}${p.cancelled?` · <strong style="color:var(--red)">ANNULÉ le ${dateFmt(p.cancelledAt)}</strong>`:''}</span>${isActivePurchase(p)?`<button class="secondary" onclick="cancelPurchase('${escJs(c.name)}','${escJs(p.id)}')">Annuler</button>`:''}</div>`).join(''):'<p class="muted">Aucun achat.</p>'}
+  <h3>🧺 Achats par catégorie</h3>${(()=>{const sums={};SALE_CATEGORIES.forEach(([key,label])=>sums[key]={label,amount:0});(c.history||[]).filter(isActivePurchase).forEach(p=>SALE_CATEGORIES.forEach(([key])=>sums[key].amount+=Math.max(0,Number(p.categoryAmounts?.[key])||0)));const rows=SALE_CATEGORIES.filter(([key])=>sums[key].amount>0);return rows.length?rows.map(([key])=>`<div class="row small"><span>${esc(sums[key].label)}</span><strong>${fmt(sums[key].amount)}</strong></div>`).join(''):'<p class="small muted">Aucune répartition renseignée pour ce client.</p>'})()}
+  <h3>🧾 Historique des achats</h3>${hist.length?hist.map(p=>`<div class="row small" style="border-bottom:1px solid var(--border);padding:8px 0;${p.cancelled?'opacity:.7;background:#fff5f4;':''}"><span>📅 ${dateFmt(p.date)} · ${fmt(p.amount)}${p.discount?' · 🎁 -'+fmt(p.discount):''}${p.exceptionalDiscount?' (dont remise exceptionnelle '+fmt(p.exceptionalDiscount)+')':''} · payé ${fmt(p.paid)}${p.categoryAmounts&&categoryAmountTotal(p.categoryAmounts)>0?' · Catégories : '+SALE_CATEGORIES.filter(([key])=>Number(p.categoryAmounts[key])>0).map(([key,label])=>label+' '+fmt(p.categoryAmounts[key])).join(', '):''}${p.cancelled?` · <strong style="color:var(--red)">ANNULÉ le ${dateFmt(p.cancelledAt)}</strong>`:''}</span>${isActivePurchase(p)?`<button class="secondary" onclick="cancelPurchase('${escJs(c.name)}','${escJs(p.id)}')">Annuler</button>`:''}</div>`).join(''):'<p class="muted">Aucun achat.</p>'}
   <h3>🎁 Fidélité</h3>
   <div class="grid grid4">
     <div class="stat"><strong>${reward.earnedCount}</strong><span class="kpiTitle">Bons gagnés</span><div class="small muted">${fmt(reward.earned)}</div></div>
@@ -879,6 +939,7 @@ function cancelPurchase(name,id){
   const p=c.history.find(x=>String(x.id)===String(id));if(!p||!isActivePurchase(p))return;
   const reason=prompt(`Motif de l’annulation (facultatif) pour ${fmt(p.paid??p.amount)} :`,'');if(reason===null)return;
   if(!confirm(`Confirmer l’annulation de l’achat de ${fmt(p.paid??p.amount)} pour ${c.name} ? L’opération restera visible dans l’historique mais sera exclue des statistiques.`))return;
+  if(!stockReverseSale(p)){alert('Annulation interrompue : impossible d’enregistrer le contre-mouvement de stock.');return}
   p.cancelled=true;p.cancelledAt=new Date().toISOString();p.cancellationReason=String(reason||'').trim();
   // Mise à jour des totaux par soustraction ciblée : ne reconstruit pas toute la fiche depuis l'historique, car les anciennes versions peuvent contenir des totaux cumulés plus anciens que l'historique détaillé.
   c.total=Math.round(Math.max(0,Number(c.total||0)-Number(p.paid??p.amount??0))*100)/100;
@@ -1261,14 +1322,14 @@ function toggleVisitFrequencyStats(){showAllVisitFrequencyStats=!showAllVisitFre
 function exportData(){
   if(storageReadIssues.length){alert('Export bloqué : une ou plusieurs données locales sont illisibles ('+storageReadIssues.join(', ')+'). Restaure une sauvegarde valide avant de créer un nouvel export incomplet.');return;}
   const exportedAt=new Date().toISOString();
-  const payload={version:'Vap’ & Moi Pro Signature V26.2',exportedAt,storageKey:KEY,settings,clients,historicalCA,activityLog};
+  const payload={version:'Vap’ & Moi Pro V37 Stock intégré',exportedAt,storageKey:KEY,settings,clients,historicalCA,activityLog,stockData};
   const blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='Vap_et_Moi_sauvegarde_V26_2_Signature.json';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);
   localStorage.setItem(KEY+'_last_backup',exportedAt);renderBackupStatus();
 }
 function csvCell(value){const s=String(value??'');return '"'+s.replace(/"/g,'""')+'"';}
 function exportSalesCSV(){
-  const rows=[['Date','Client','Montant avant remise (€)','Remise totale (€)','Bon fidélité (€)','Remise exceptionnelle (€)','Montant payé (€)']];
-  allPurchases().sort((a,b)=>new Date(a.date)-new Date(b.date)).forEach(p=>rows.push([p.date||'',p.client||'',Number(p.amount??p.paid??0).toFixed(2),Number(p.discount||0).toFixed(2),Number(p.rewardDiscount||0).toFixed(2),Number(p.exceptionalDiscount||0).toFixed(2),Number(p.paid??p.amount??0).toFixed(2)]));
+  const rows=[['Date','Client','Montant avant remise (€)','Remise totale (€)','Bon fidélité (€)','Remise exceptionnelle (€)','Montant payé (€)','E-liquides (€)','Résistances (€)','Cartouches (€)','Clearomiseurs (€)','Accessoires (€)']];
+  allPurchases().sort((a,b)=>new Date(a.date)-new Date(b.date)).forEach(p=>{const a=p.categoryAmounts||{};rows.push([p.date||'',p.client||'',Number(p.amount??p.paid??0).toFixed(2),Number(p.discount||0).toFixed(2),Number(p.rewardDiscount||0).toFixed(2),Number(p.exceptionalDiscount||0).toFixed(2),Number(p.paid??p.amount??0).toFixed(2),...SALE_CATEGORIES.map(([key])=>Number(a[key]||0).toFixed(2))])});
   const csv='\ufeff'+rows.map(r=>r.map(csvCell).join(';')).join('\r\n');const blob=new Blob([csv],{type:'text/csv;charset=utf-8;'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='Vap_et_Moi_ventes.csv';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);
 }
 function validateBackupPayload(data){
@@ -1281,32 +1342,35 @@ function validateBackupPayload(data){
 function restoreData(e){
   const f=e.target.files&&e.target.files[0];if(!f)return;
   const r=new FileReader();r.onload=()=>{
-    const oldValues={};const keys=[KEY,KEY+'_settings',HISTORICAL_KEY,AUDIT_KEY];keys.forEach(k=>oldValues[k]=localStorage.getItem(k));
+    const oldValues={};const keys=[KEY,KEY+'_settings',HISTORICAL_KEY,AUDIT_KEY,STOCK_KEY];keys.forEach(k=>oldValues[k]=localStorage.getItem(k));
     try{
       const data=JSON.parse(r.result);validateBackupPayload(data);
       const stagedClients=data.clients.map(c=>normalizeClient({...c,history:Array.isArray(c.history)?c.history.map(p=>({...p})):[]}));
       const stagedSettings=data.settings&&typeof data.settings==='object'&&!Array.isArray(data.settings)?data.settings:settings;
       const stagedHistorical=data.historicalCA&&typeof data.historicalCA==='object'&&!Array.isArray(data.historicalCA)?data.historicalCA:historicalCA;
       const stagedLog=Array.isArray(data.activityLog)?data.activityLog.filter(x=>x&&typeof x==='object').slice(0,100):activityLog;
+      const stagedStock=data.stockData&&typeof data.stockData==='object'&&Array.isArray(data.stockData.products)&&Array.isArray(data.stockData.movements)&&Array.isArray(data.stockData.orders)?data.stockData:stockData;
       const activeSales=stagedClients.reduce((n,c)=>n+(c.history||[]).filter(isActivePurchase).length,0);
       if(!confirm(`Sauvegarde reconnue : ${stagedClients.length} client(s), ${activeSales} achat(s) actif(s), ${Object.keys(stagedHistorical).length} mois d’historique. La restauration remplacera les données actuelles. Une copie de sécurité sera téléchargée avant validation. Continuer ?`))return;
-      const safetyPayload={version:'Vap’ & Moi Pro — sécurité avant restauration',exportedAt:new Date().toISOString(),storageKey:KEY,settings,clients,historicalCA,activityLog};
+      const safetyPayload={version:'Vap’ & Moi Pro — sécurité avant restauration',exportedAt:new Date().toISOString(),storageKey:KEY,settings,clients,historicalCA,activityLog,stockData};
       const safetyUrl=URL.createObjectURL(new Blob([JSON.stringify(safetyPayload,null,2)],{type:'application/json'}));const safetyLink=document.createElement('a');safetyLink.href=safetyUrl;safetyLink.download='Vap_et_Moi_securite_avant_restauration.json';document.body.appendChild(safetyLink);safetyLink.click();safetyLink.remove();setTimeout(()=>URL.revokeObjectURL(safetyUrl),1500);
       // Écriture préparée puis vérification ; en cas d’erreur, restauration des valeurs précédentes.
       localStorage.setItem(KEY,JSON.stringify(stagedClients));
       localStorage.setItem(KEY+'_settings',JSON.stringify(stagedSettings));
       localStorage.setItem(HISTORICAL_KEY,JSON.stringify(stagedHistorical));
       localStorage.setItem(AUDIT_KEY,JSON.stringify(stagedLog));
+      localStorage.setItem(STOCK_KEY,JSON.stringify(stagedStock));
       const checkClients=JSON.parse(localStorage.getItem(KEY)||'null');
       const checkSettings=JSON.parse(localStorage.getItem(KEY+'_settings')||'null');
       const checkHistorical=JSON.parse(localStorage.getItem(HISTORICAL_KEY)||'null');
-      if(!Array.isArray(checkClients)||checkClients.length!==stagedClients.length||JSON.stringify(checkClients)!==JSON.stringify(stagedClients)||!checkSettings||!checkHistorical)throw new Error('La vérification après écriture a échoué.');
-      clients=checkClients.map(normalizeClient);settings=checkSettings;historicalCA=checkHistorical;activityLog=stagedLog;storageReadIssues=[];
+      const checkStock=JSON.parse(localStorage.getItem(STOCK_KEY)||'null');
+      if(!Array.isArray(checkClients)||checkClients.length!==stagedClients.length||JSON.stringify(checkClients)!==JSON.stringify(stagedClients)||!checkSettings||!checkHistorical||!checkStock||!Array.isArray(checkStock.products)||!Array.isArray(checkStock.movements)||!Array.isArray(checkStock.orders)||JSON.stringify(checkStock)!==JSON.stringify(stagedStock))throw new Error('La vérification après écriture a échoué.');
+      clients=checkClients.map(normalizeClient);settings=checkSettings;historicalCA=checkHistorical;activityLog=stagedLog;stockData={products:checkStock.products,movements:checkStock.movements,orders:checkStock.orders,orderBasket:Array.isArray(checkStock.orderBasket)?checkStock.orderBasket:[]};window.__stockReadError=false;storageReadIssues=[];
       logOperation('Sauvegarde restaurée',`${clients.length} client(s), ${activeSales} achat(s) actif(s)`);updateAll();alert('Restauration terminée et vérifiée. Vérifie les fiches, la fidélité et les statistiques avant de reprendre les ventes.');
     }catch(err){
       try{keys.forEach(k=>{if(oldValues[k]===null)localStorage.removeItem(k);else localStorage.setItem(k,oldValues[k]);});}catch(rollbackError){}
-      try{clients=JSON.parse(oldValues[KEY]||'[]').map(normalizeClient);settings=JSON.parse(oldValues[KEY+'_settings']||'{}');historicalCA=JSON.parse(oldValues[HISTORICAL_KEY]||'{}');activityLog=JSON.parse(oldValues[AUDIT_KEY]||'[]');}catch(reloadError){}
-      updateAll();alert('Restauration interrompue : '+(err&&err.message?err.message:'fichier invalide')+'. Les données précédentes ont été rétablies lorsque le stockage le permettait.');
+      try{clients=JSON.parse(oldValues[KEY]||'[]').map(normalizeClient);settings=JSON.parse(oldValues[KEY+'_settings']||'{}');historicalCA=JSON.parse(oldValues[HISTORICAL_KEY]||'{}');activityLog=JSON.parse(oldValues[AUDIT_KEY]||'[]');const restoredStock=JSON.parse(oldValues[STOCK_KEY]||'null');if(restoredStock&&Array.isArray(restoredStock.products)&&Array.isArray(restoredStock.movements)&&Array.isArray(restoredStock.orders))stockData={products:restoredStock.products,movements:restoredStock.movements,orders:restoredStock.orders,orderBasket:Array.isArray(restoredStock.orderBasket)?restoredStock.orderBasket:[]};}catch(reloadError){}
+      updateAll();renderStock();alert('Restauration interrompue : '+(err&&err.message?err.message:'fichier invalide')+'. Les données précédentes ont été rétablies lorsque le stockage le permettait.');
     }finally{e.target.value='';}
   };r.onerror=()=>{alert('Impossible de lire ce fichier de sauvegarde.');e.target.value='';};r.readAsText(f);
 }
@@ -1512,10 +1576,11 @@ function openStatsDetail(id){
   target.scrollIntoView({behavior:'smooth',block:'start'});
 }
 
-function updateAll(){clients=clients.map(normalizeClient);updateClientOptions();renderClients();updatePurchaseBox();setDashboard();setStats();renderWeekdayStats();renderV15Insights(allPurchases(),new Date());renderDailyOps(new Date());renderActivityLog();renderBackupStatus();renderAnalysis();renderCommercialCopilot();renderDataIntegrity();renderFollowupAgenda();const threshold=document.getElementById("inactiveThreshold");if(threshold)threshold.value=String(settings.inactiveThreshold||30);updateGreeting()}
+function updateAll(){clients=clients.map(normalizeClient);updateClientOptions();renderClients();updatePurchaseBox();renderCategoryAnalytics();setDashboard();setStats();renderWeekdayStats();renderV15Insights(allPurchases(),new Date());renderDailyOps(new Date());renderActivityLog();renderBackupStatus();renderAnalysis();renderCommercialCopilot();renderDataIntegrity();renderFollowupAgenda();const threshold=document.getElementById("inactiveThreshold");if(threshold)threshold.value=String(settings.inactiveThreshold||30);updateGreeting()}
 updateAll();
 updateOfflineMode();
 if("serviceWorker" in navigator && location.protocol.startsWith("http")){navigator.serviceWorker.register("./sw.js").catch(()=>{});}
+document.addEventListener('DOMContentLoaded',()=>{try{renderStock();}catch(e){console.error('Stock V37',e)}});
 </script>
 </body>
 </html>

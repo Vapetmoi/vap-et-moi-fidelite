@@ -1,0 +1,9 @@
+Vap’ & Moi Pro — V37 Stock + répartition facultative des ventes par catégorie
+
+Base : archive V37 Stock intégré dérivée du ZIP V36 Fiabilisation fourni.
+
+Nouveauté : la caisse permet, facultativement, de répartir le montant avant réduction entre E-liquides, Résistances, Cartouches, Clearomiseurs et Accessoires. Si la répartition est utilisée, les montants doivent totaliser le montant de vente avant réduction. Tout à 0 € signifie « non renseigné » et ne bloque pas la vente.
+
+La répartition est enregistrée dans l’historique de l’achat avec les données client, donc incluse dans les sauvegardes JSON existantes étendues. Elle alimente l’analyse globale, la fiche client et l’export CSV. Elle ne modifie jamais les quantités de stock. Le déstockage physique reste lié uniquement au produit explicitement identifié dans le champ produit vendu.
+
+Précaution : tester sur une copie / une sauvegarde avant publication. Le contrôle syntaxique JavaScript est prévu ; les scénarios fonctionnels complets dans un navigateur doivent être testés avant mise en production.
