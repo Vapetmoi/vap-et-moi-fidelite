@@ -1,0 +1,20 @@
+VAP’ & MOI PRO — V36 FIABILISATION
+
+Objectif : corriger plusieurs scénarios de gestion d’erreur repérés pendant l’audit statique de la V35, sans changer la clé de stockage existante.
+
+Corrections :
+- Ajout client : ne vide plus le formulaire et ne poursuit pas si l’enregistrement local échoue.
+- Modification client : vérifie l’enregistrement et restaure les valeurs précédentes en cas d’échec.
+- Suppression client : ne confirme pas la suppression si l’écriture échoue.
+- Attribution d’un bon manuel : restaure la fiche si la sauvegarde échoue.
+- Réglages des objectifs : écriture vérifiée et tentative de restauration des anciens réglages en cas d’erreur.
+- Cache du service worker renommé pour déclencher le chargement de la nouvelle version.
+- Clé de stockage conservée : vapetmoi_fidelite_v1.
+
+À FAIRE AVANT UTILISATION :
+1. Exporter une sauvegarde JSON depuis l’application actuelle.
+2. Déployer les fichiers de cette archive à la racine du dépôt GitHub.
+3. Après publication, fermer puis rouvrir l’application ou actualiser le site pour renouveler le cache.
+4. Vérifier sur le téléphone avec une sauvegarde et des scénarios de test avant de reprendre les opérations réelles.
+
+Limite : cette version a fait l’objet de corrections de code et de contrôles statiques/syntaxiques. Elle n’a pas été testée de bout en bout sur le téléphone avec les données réelles de la boutique. Ce document ne certifie pas l’absence de tous les défauts.

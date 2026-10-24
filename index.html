@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#163f2d">
 <meta name="description" content="Vap’ & Moi Pro Signature Premium : gestion des clients, ventes, fidélité, analyses, suivi commercial et sauvegardes.">
-<title>Vap’ & Moi Pro — V35 Accueil épuré et stats détaillées</title>
+<title>Vap’ & Moi Pro — V36 Fiabilisation & audit</title>
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="./icon-192.png">
 <meta name="mobile-web-app-capable" content="yes">
@@ -584,7 +584,7 @@ input:focus,select:focus,textarea:focus{border-color:#9eaa7b;box-shadow:0 0 0 3p
   <div class="card"><h3>💡 Plan d’action conseillé</h3><div id="analysisActions"></div><p class="small muted">Les recommandations sont calculées à partir des données enregistrées. Une projection n’est pas une garantie. La marge réelle nécessite les coûts d’achat.</p><div class="actions" style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px"><button class="btn" onclick="exportAnalysisCSV()">Exporter l’analyse CSV</button><button class="btn secondary" onclick="window.print()">Imprimer le bilan</button></div></div>
 </section>
 </main>
-<footer>Vap’ & Moi Pro · V35 Accueil épuré et stats détaillées · pilotage commercial</footer>
+<footer>Vap’ & Moi Pro · V36 Fiabilisation & audit · pilotage commercial</footer>
 
 <script>
 const KEY='vapetmoi_fidelite_v1';
@@ -635,9 +635,15 @@ function normalizeClient(c){
 }
 clients=clients.map(normalizeClient);
 function save(){if(storageReadIssues.includes(KEY)){alert('Écriture bloquée pour protéger les données : la base clients existante est illisible. Restaure une sauvegarde valide avant de modifier les ventes.');return false;}const previous=localStorage.getItem(KEY);clients=clients.map(normalizeClient);try{const payload=JSON.stringify(clients);localStorage.setItem(KEY,payload);const check=JSON.parse(localStorage.getItem(KEY)||'null');if(!Array.isArray(check)||check.length!==clients.length)throw new Error('Vérification après écriture impossible');updateAll();return true}catch(e){try{clients=JSON.parse(previous||'[]').map(normalizeClient)}catch(rollbackError){}alert('La sauvegarde locale a échoué. Les données précédemment enregistrées ont été rechargées lorsque possible. Exporte une sauvegarde dès que le stockage fonctionne.');try{updateAll()}catch(renderError){}return false}}
-function setGoal(){if(storageReadIssues.includes(KEY+'_settings')){alert('Les réglages existants sont illisibles. Restaure une sauvegarde valide avant de les modifier.');return}settings.goal=Math.max(0,Number(document.getElementById('monthlyGoal').value||0));localStorage.setItem(KEY+'_settings',JSON.stringify(settings));updateAll()}
-function setWeeklyGoal(){if(storageReadIssues.includes(KEY+'_settings')){alert('Les réglages existants sont illisibles. Restaure une sauvegarde valide avant de les modifier.');return}settings.weeklyGoal=Math.max(0,Number(document.getElementById('weeklyGoal').value||0));localStorage.setItem(KEY+'_settings',JSON.stringify(settings));updateAll()}
-function setDailyGoal(){if(storageReadIssues.includes(KEY+'_settings')){alert('Les réglages existants sont illisibles. Restaure une sauvegarde valide avant de les modifier.');return}settings.dailyGoal=Math.max(0,Number(document.getElementById('dailyGoal').value||0));localStorage.setItem(KEY+'_settings',JSON.stringify(settings));updateAll()}
+function persistSettings(){
+  if(storageReadIssues.includes(KEY+'_settings')){alert('Les réglages existants sont illisibles. Restaure une sauvegarde valide avant de les modifier.');return false;}
+  const previous=localStorage.getItem(KEY+'_settings');
+  try{const payload=JSON.stringify(settings);localStorage.setItem(KEY+'_settings',payload);if(localStorage.getItem(KEY+'_settings')!==payload)throw new Error('Vérification des réglages impossible');updateAll();return true;}
+  catch(e){try{if(previous===null)localStorage.removeItem(KEY+'_settings');else localStorage.setItem(KEY+'_settings',previous);settings=JSON.parse(previous||'{}');}catch(rollbackError){}alert('Les réglages n’ont pas pu être enregistrés. Les valeurs précédentes ont été restaurées lorsque possible.');return false;}
+}
+function setGoal(){settings.goal=Math.max(0,Number(document.getElementById('monthlyGoal').value||0));persistSettings()}
+function setWeeklyGoal(){settings.weeklyGoal=Math.max(0,Number(document.getElementById('weeklyGoal').value||0));persistSettings()}
+function setDailyGoal(){settings.dailyGoal=Math.max(0,Number(document.getElementById('dailyGoal').value||0));persistSettings()}
 function showPage(id,btn){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.getElementById(id).classList.add('active');
@@ -752,7 +758,7 @@ function addClient(){
   if(!name){msg.textContent='⚠️ Indique le nom et le prénom.';return}
   if(clients.some(c=>c.name.toLowerCase()===name.toLowerCase())){msg.textContent='⚠️ Ce client existe déjà.';return}
   const c={name,phone:document.getElementById('newClientPhone').value.trim(),email:document.getElementById('newClientEmail').value.trim(),notes:document.getElementById('newClientNotes').value.trim(),total:0,purchases:0,usedRewards:0,history:[],createdAt:new Date().toISOString()};
-  clients.push(c);logOperation('Client créé',c.name);save();
+  clients.push(c);if(!save()){clients=clients.filter(x=>x!==c);msg.textContent='⚠️ Client non enregistré : le stockage a échoué. Les champs ont été conservés pour réessayer.';return;}logOperation('Client créé',c.name);
   ['newClientName','newClientPhone','newClientEmail','newClientNotes'].forEach(id=>document.getElementById(id).value='');
   toggleNewClient(false); document.getElementById('search').value='';
 }
@@ -853,10 +859,10 @@ function showClient(name){
 function addManualReward(name){
   const c=clients.find(x=>x.name===name);if(!c)return;
   if(!confirm(`Ajouter un bon exceptionnel de 5 € à la cagnotte de ${c.name} ?`))return;
-  c.manualRewards=Math.round((Number(c.manualRewards||0)+5)*100)/100;logOperation('Bon manuel ajouté',`${c.name} · 5 €`);
+  const previous=JSON.stringify(c);c.manualRewards=Math.round((Number(c.manualRewards||0)+5)*100)/100;
   if(!Array.isArray(c.manualRewardHistory))c.manualRewardHistory=[];
   c.manualRewardHistory.push({amount:5,date:new Date().toISOString(),type:'manual'});
-  save();showClient(name);
+  if(!save()){const restored=JSON.parse(previous);Object.keys(c).forEach(k=>delete c[k]);Object.assign(c,restored);return;}logOperation('Bon manuel ajouté',`${c.name} · 5 €`);showClient(name);
 }
 function startEditClient(name){const box=document.getElementById('editClientBox');if(box)box.style.display='block';}
 function saveClientEdits(oldName){
@@ -865,8 +871,8 @@ function saveClientEdits(oldName){
   const msg=document.getElementById('editClientMessage');
   if(!name){msg.textContent='⚠️ Le nom et le prénom sont obligatoires.';return;}
   if(clients.some(x=>x!==c&&x.name.toLocaleLowerCase('fr')===name.toLocaleLowerCase('fr'))){msg.textContent='⚠️ Un autre client porte déjà ce nom.';return;}
-  const previousName=c.name;c.name=name;c.phone=document.getElementById('editClientPhone').value.trim();c.email=document.getElementById('editClientEmail').value.trim();c.notes=document.getElementById('editClientNotes').value.trim();
-  logOperation('Fiche client modifiée',previousName===name?name:`${previousName} → ${name}`);save();showClient(name);
+  const previous=JSON.stringify(c),previousName=c.name;c.name=name;c.phone=document.getElementById('editClientPhone').value.trim();c.email=document.getElementById('editClientEmail').value.trim();c.notes=document.getElementById('editClientNotes').value.trim();
+  if(!save()){const restored=JSON.parse(previous);Object.keys(c).forEach(k=>delete c[k]);Object.assign(c,restored);msg.textContent='⚠️ Modifications non enregistrées : les données précédentes sont conservées.';return;}logOperation('Fiche client modifiée',previousName===name?name:`${previousName} → ${name}`);showClient(name);
 }
 function cancelPurchase(name,id){
   const c=clients.find(x=>x.name===name);if(!c)return;
@@ -884,7 +890,7 @@ function cancelPurchase(name,id){
 function deleteClient(name){
   const c=clients.find(x=>x.name===name);if(!c)return;
   if(!confirm(`Supprimer définitivement ${c.name} et son historique ?`))return;
-  logOperation('Fiche client supprimée',`${c.name} · historique supprimé`);clients=clients.filter(x=>x.name!==name);save();const d=document.getElementById('clientDetail');if(d)d.remove();
+  clients=clients.filter(x=>x!==c);if(!save()){updateAll();alert('Suppression non enregistrée : la fiche a été conservée lorsque le stockage précédent était récupérable.');return;}logOperation('Fiche client supprimée',`${c.name} · historique supprimé`);const d=document.getElementById('clientDetail');if(d)d.remove();
 }
 function selectClientForPurchase(name){document.getElementById('clientName').value=name;updatePurchaseBox();showPage('achat')}
 function setDashboard(){
