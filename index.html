@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#163f2d">
 <meta name="description" content="Vap’ & Moi Pro Signature Premium : gestion des clients, ventes, fidélité, analyses, suivi commercial et sauvegardes.">
-<title>Vap’ & Moi Pro — V37 Stock intégré & fiabilisation</title>
+<title>Vap’ & Moi Pro — V37.1 Interface réorganisée</title>
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="./icon-192.png">
 <meta name="mobile-web-app-capable" content="yes">
@@ -313,6 +313,53 @@ input:focus,select:focus,textarea:focus{border-color:#9eaa7b;box-shadow:0 0 0 3p
 #stats .statsTheme:not([open])>.statsThemeHead{cursor:pointer}
 @media(min-width:650px){#stats .statsOverview{grid-template-columns:repeat(3,minmax(0,1fr))}}
 
+
+/* V37.1 — réorganisation visuelle des onglets, fiches, statistiques et pied de page */
+:root{--section-gap:16px}
+main{padding-bottom:calc(34px + env(safe-area-inset-bottom))}
+.page{scroll-margin-top:76px}
+.page> .card:first-child h2{display:flex;align-items:center;gap:9px;line-height:1.25}
+.page .card h3{line-height:1.3}
+.page .card p.muted{line-height:1.55}
+.page .card + .card{margin-top:14px}
+.page .card{overflow-wrap:anywhere}
+.page .grid4,.page .homeStats{align-items:stretch}
+.page .stat{min-width:0;display:flex;flex-direction:column;justify-content:center;gap:4px}
+.page .stat strong{overflow-wrap:anywhere;line-height:1.2}
+.page label{display:block;font-weight:650;font-size:14px;color:#42594b;margin:8px 0 2px}
+.page .actions,.page .actionRow{gap:8px}
+.page .actions button,.page .actionRow button{flex:1 1 160px}
+.page details{scroll-margin-top:76px}
+.page .statsTheme{padding:0}
+.page .statsThemeBody{padding:0 2px}
+.page .statsThemeHead{position:relative}
+.page .statsThemeHead small{line-height:1.4}
+#clients .client{align-items:flex-start}
+#clients .client>div{min-width:0}
+#achat .card,#stock .card,#stats .card,#analyse .card{margin-bottom:15px}
+#stock .grid4 .stat{min-height:88px}
+#stock .grid4 .stat strong{font-size:22px}
+footer.versionFooter{margin:12px auto 0;padding:22px 14px calc(105px + env(safe-area-inset-bottom));max-width:850px;text-align:center;color:#52685a}
+.versionFooter .versionChip{display:inline-flex;align-items:center;gap:7px;border:1px solid #d9dfcc;background:#f0f1e6;border-radius:999px;padding:8px 13px;font-size:12px;font-weight:750;color:#31563b;letter-spacing:.02em}
+.versionFooter .versionDot{width:7px;height:7px;border-radius:50%;background:#3f8555;display:inline-block}
+@media(max-width:650px){
+  nav.appNav{grid-template-columns:repeat(6,minmax(0,1fr))!important;gap:2px;padding:6px 5px calc(7px + env(safe-area-inset-bottom))}
+  nav.appNav button{font-size:10px!important;min-width:0;white-space:normal;line-height:1.15;padding:7px 1px!important}
+  nav.appNav button span{font-size:18px!important}
+  nav.appNav button.saleNav{transform:translateY(-5px)}
+  main{padding:12px 11px calc(98px + env(safe-area-inset-bottom))}
+  .page .card{padding:15px}
+  .page .grid4{gap:7px}
+  .page .grid4 .stat{padding:10px 7px;font-size:12px}
+  .page .grid4 .stat strong{font-size:18px}
+  .page .actions button,.page .actionRow button{flex:1 1 100%}
+  footer.versionFooter{padding-bottom:calc(112px + env(safe-area-inset-bottom))}
+}
+@media(min-width:651px){
+  nav.appNav{grid-template-columns:repeat(6,minmax(0,1fr))}
+  footer.versionFooter{padding-bottom:24px}
+}
+
 </style>
 </head>
 <body>
@@ -609,7 +656,7 @@ input:focus,select:focus,textarea:focus{border-color:#9eaa7b;box-shadow:0 0 0 3p
   <div class="card"><h3>💡 Plan d’action conseillé</h3><div id="analysisActions"></div><p class="small muted">Les recommandations sont calculées à partir des données enregistrées. Une projection n’est pas une garantie. La marge réelle nécessite les coûts d’achat.</p><div class="actions" style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px"><button class="btn" onclick="exportAnalysisCSV()">Exporter l’analyse CSV</button><button class="btn secondary" onclick="window.print()">Imprimer le bilan</button></div></div>
 </section>
 </main>
-<footer>Vap’ & Moi Pro · V37 Stock intégré & fiabilisation · pilotage commercial</footer>
+<footer class="versionFooter" aria-label="Version installée"><span class="versionChip"><span class="versionDot" aria-hidden="true"></span> Vap’ & Moi Pro · Version installée : V37 — Stock intégré & fiabilisation</span><p class="small muted">Données enregistrées sur cet appareil · Pense à effectuer régulièrement une sauvegarde JSON.</p></footer>
 
 <script>
 const KEY='vapetmoi_fidelite_v1';

@@ -10,3 +10,9 @@ Précaution : tester sur une copie / une sauvegarde avant publication. Le contr�
 
 
 Modification : dans l’écran Vente/Achat, le sélecteur de référence produit et de quantité vendue est retiré. La vente permet uniquement une répartition facultative des montants par catégorie. Cette répartition sert aux analyses et ne déstocke jamais automatiquement. Le stock physique se gère depuis l’onglet Stock via les mouvements manuels et les réceptions fournisseurs. Les données et mouvements historiques sont conservés.
+
+
+V37.1 — Réorganisation visuelle : hiérarchie plus claire des cartes, champs et statistiques, ajustement de la navigation à six onglets sur mobile, pied de page visible avec le nom de la version installée. Cette mise à jour vise la présentation et ne modifie volontairement ni les clés de stockage ni la logique de ventes/fidélité/stock.
+
+
+V37.2 — Modification d'achat client : depuis la fiche client, le bouton « Modifier » permet de changer le montant avant réduction et, si une répartition existait, les montants par catégorie. La répartition doit totaliser le montant de l'achat. Le CA client est ajusté de la différence et les statistiques sont recalculées à partir des achats actifs. Pour prévenir les incohérences, les achats historiquement liés à un mouvement de stock doivent être annulés puis recréés plutôt que modifiés directement. Les achats sans répartition restent sans détail par catégorie, sauf si l'utilisateur les annule et les recrée avec détail.
