@@ -360,6 +360,27 @@ footer.versionFooter{margin:12px auto 0;padding:22px 14px calc(105px + env(safe-
   footer.versionFooter{padding-bottom:24px}
 }
 
+
+/* V37.4 — catégories supplémentaires et saisie compacte */
+#categoryAllocation{padding:10px!important}
+#categoryAllocation .grid.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+#categoryAllocation .grid.grid2>div{min-width:0;border:1px solid var(--border,#d9dfd2);border-radius:11px;padding:7px 9px;background:rgba(255,255,255,.55)}
+#categoryAllocation label{font-size:13px!important;margin:0 0 4px!important;line-height:1.2}
+#categoryAllocation input.categoryAmount{width:100%;min-width:0;box-sizing:border-box;min-height:39px;padding:7px 9px;font-size:15px;border-radius:8px}
+#purchaseEditModal h3{font-size:1rem;margin:14px 0 7px}
+#purchaseEditModal .grid.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}
+#purchaseEditModal .grid.grid2>div{min-width:0}
+#purchaseEditModal label{font-size:13px;margin:4px 0 3px;line-height:1.2}
+#purchaseEditModal input[type=number]{width:100%;box-sizing:border-box;min-height:40px;padding:7px 9px;font-size:15px;border-radius:9px}
+#purchaseEditModal .stat{padding:8px;min-width:0}
+#purchaseEditModal .stat strong{font-size:15px}
+@media(max-width:430px){
+ #categoryAllocation .grid.grid2,#purchaseEditModal .grid.grid2{grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}
+ #categoryAllocation .grid.grid2>div{padding:6px}
+ #categoryAllocation input.categoryAmount,#purchaseEditModal input[type=number]{min-height:37px;font-size:14px}
+ #purchaseEditModal>div{padding:15px!important}
+}
+
 </style>
 </head>
 <body>
@@ -526,6 +547,9 @@ footer.versionFooter{margin:12px auto 0;padding:22px 14px calc(105px + env(safe-
         <div><label for="catCartouches">Cartouches (€)</label><input id="catCartouches" class="categoryAmount" type="number" min="0" step="0.01" value="0" inputmode="decimal" oninput="updateCategoryAllocation()"></div>
         <div><label for="catClearomiseurs">Clearomiseurs (€)</label><input id="catClearomiseurs" class="categoryAmount" type="number" min="0" step="0.01" value="0" inputmode="decimal" oninput="updateCategoryAllocation()"></div>
         <div><label for="catAccessoires">Accessoires (€)</label><input id="catAccessoires" class="categoryAmount" type="number" min="0" step="0.01" value="0" inputmode="decimal" oninput="updateCategoryAllocation()"></div>
+        <div><label for="catPuffs">Puffs (€)</label><input id="catPuffs" class="categoryAmount" type="number" min="0" step="0.01" value="0" inputmode="decimal" oninput="updateCategoryAllocation()"></div>
+        <div><label for="catEcigarettes">E-cigarettes (€)</label><input id="catEcigarettes" class="categoryAmount" type="number" min="0" step="0.01" value="0" inputmode="decimal" oninput="updateCategoryAllocation()"></div>
+        <div><label for="catBoosters">Boosters (€)</label><input id="catBoosters" class="categoryAmount" type="number" min="0" step="0.01" value="0" inputmode="decimal" oninput="updateCategoryAllocation()"></div>
       </div>
       <p id="categoryAllocationStatus" class="small muted" aria-live="polite">Répartition non renseignée — facultatif.</p>
     </details>
@@ -822,7 +846,7 @@ function updatePurchaseBox(){
   else payableBox.textContent='';
   updateCategoryAllocation();
 }
-const SALE_CATEGORIES=[['eliquides','E-liquides'],['resistances','Résistances'],['cartouches','Cartouches'],['clearomiseurs','Clearomiseurs'],['accessoires','Accessoires']];
+const SALE_CATEGORIES=[['eliquides','E-liquides'],['resistances','Résistances'],['cartouches','Cartouches'],['clearomiseurs','Clearomiseurs'],['accessoires','Accessoires'],['puffs','Puffs'],['ecigarettes','E-cigarettes'],['boosters','Boosters']];
 function readCategoryAmounts(){const out={};SALE_CATEGORIES.forEach(([key])=>{const el=document.getElementById('cat'+key.charAt(0).toUpperCase()+key.slice(1));out[key]=Math.round(Math.max(0,Number(el?.value)||0)*100)/100});return out}
 function categoryAmountTotal(obj){return Math.round(SALE_CATEGORIES.reduce((sum,[key])=>sum+Math.round(Math.max(0,Number(obj?.[key])||0)*100),0))/100}
 function updateCategoryAllocation(){const amount=Math.round(Math.max(0,Number(document.getElementById('amount')?.value)||0)*100)/100,vals=readCategoryAmounts(),sum=categoryAmountTotal(vals),status=document.getElementById('categoryAllocationStatus');if(!status)return;const allocated=sum>0;if(!allocated){status.textContent='Répartition non renseignée — facultatif.';status.style.color='';return}const diff=Math.round((amount-sum)*100)/100;if(Math.abs(diff)<0.005){status.textContent='✓ Répartition complète : '+fmt(sum)+'.';status.style.color='#28744a'}else{status.textContent='⚠ Répartition : '+fmt(sum)+' sur '+fmt(amount)+' (écart '+fmt(Math.abs(diff))+').';status.style.color='#b42318'}}
