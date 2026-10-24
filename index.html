@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#163f2d">
 <meta name="description" content="Vap’ & Moi Pro Signature Premium : gestion des clients, ventes, fidélité, analyses, suivi commercial et sauvegardes.">
-<title>Vap’ &amp; Moi Pro — V39.0 Interface modale complète</title>
+<title>Vap’ &amp; Moi Pro — V39.2 Suggestions recherche client</title>
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="./icon-192.png">
 <meta name="mobile-web-app-capable" content="yes">
@@ -557,7 +557,7 @@ footer.versionFooter{width:100%;max-width:850px;margin:12px auto 0;padding:18px 
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*:before,*:after{transition:none!important;animation:none!important}}
 
 
-/* V38.2 — Navigation S25 agrandie + base visuelle commune aux fenêtres */
+/* V39.2 — Navigation S25 agrandie + base visuelle commune aux fenêtres */
 :root{--dialog-radius:27px;--dialog-shadow:0 22px 60px rgba(12,31,20,.25)}
 /* Navigation plus large et plus facile à toucher sur Galaxy S25 */
 .appNav{gap:5px!important;padding:9px 8px calc(10px + env(safe-area-inset-bottom))!important}
@@ -597,43 +597,22 @@ footer.versionFooter{width:100%;max-width:850px;margin:12px auto 0;padding:18px 
 main{padding-bottom:calc(132px + env(safe-area-inset-bottom))!important}
 footer.versionFooter{padding-bottom:calc(135px + env(safe-area-inset-bottom))!important}
 
-/* V39.0 — navigation tactile plus large et fenêtres cohérentes */
-.appNav{gap:5px!important;padding:9px 8px calc(10px + env(safe-area-inset-bottom))!important}
-.appNav button{min-height:72px!important;padding:9px 3px!important;border-radius:18px!important;font-size:12px!important;gap:5px!important}
-.appNav button span{font-size:25px!important}.appNav button.saleNav{min-height:78px!important;transform:translateY(-7px)!important}.appNav button.saleNav span{font-size:30px!important}
-@media(max-width:420px){.appNav{gap:2px!important;padding-left:4px!important;padding-right:4px!important}.appNav button{min-height:66px!important;font-size:10px!important;padding:7px 1px!important}.appNav button span{font-size:22px!important}}
-#newClientBox.modalLike{position:fixed!important;z-index:10015!important;left:50%!important;top:50%!important;transform:translate(-50%,-50%)!important;width:min(620px,calc(100% - 20px))!important;max-height:calc(100dvh - 24px)!important;overflow:auto!important;background:#fffef9!important;border:1px solid #e1e3d6!important;padding:18px!important;border-radius:25px!important;box-shadow:0 18px 55px rgba(12,31,20,.22)}
-#clientModalBackdrop{position:fixed;inset:0;z-index:10014;background:rgba(10,25,18,.58);backdrop-filter:blur(5px);-webkit-backdrop-filter:blur(5px)}
-@media(max-width:600px){#newClientBox.modalLike{padding:15px!important}}
 
+/* V39.2 corrections: mobile search visibility */
+input,select,textarea{scroll-margin-top:90px;scroll-margin-bottom:220px}
+#search{scroll-margin-top:100px;scroll-margin-bottom:240px}
+#clientList{scroll-margin-bottom:200px}
+@media(max-width:700px){input:focus,select:focus,textarea:focus{scroll-margin-bottom:260px}}
 
-/* V39 — système modal unifié pour les actions de l'application */
-.actionHub{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:10px 0 14px}
-.actionHub button{min-height:54px;text-align:left;white-space:normal;line-height:1.25}
-.actionHub button strong{display:block}
-.modalLauncherCard{border:1px solid var(--border);border-radius:20px;padding:18px;background:linear-gradient(145deg,#fff,#f3f8f3);margin-bottom:14px}
-.modalLauncherCard p{margin:6px 0 12px}
-.v39ModalBackdrop{position:fixed;inset:0;z-index:10020;display:flex;align-items:center;justify-content:center;padding:10px;background:rgba(8,25,17,.62);backdrop-filter:blur(5px);-webkit-backdrop-filter:blur(5px)}
-.v39ModalPanel{width:min(680px,100%);max-height:calc(100dvh - 20px);overflow:auto;overscroll-behavior:contain;background:#fffef9;color:var(--text);border:1px solid var(--border);border-radius:24px;padding:18px;box-shadow:0 22px 70px rgba(0,0,0,.28)}
-.v39ModalHeader{display:flex;align-items:center;justify-content:space-between;gap:12px;position:sticky;top:-18px;background:#fffef9;padding:3px 0 12px;z-index:2;border-bottom:1px solid var(--border);margin-bottom:12px}
-.v39ModalHeader h2,.v39ModalHeader h3{margin:0;font-size:20px}
-.v39ModalClose{flex-shrink:0;min-width:44px;min-height:44px;border-radius:12px}
-.v39ModalPanel .card{box-shadow:none;margin:0;padding:0;border:0;border-radius:0;background:transparent}
-.v39ModalPanel .card h2:first-child,.v39ModalPanel .card h3:first-child{margin-top:0}
-.v39ModalPanel .actions{display:grid;grid-template-columns:1fr;gap:8px}
-.v39ModalPanel .actions button,.v39ModalPanel button.primary,.v39ModalPanel button.secondary{min-height:48px}
-body.v39ModalOpen{overflow:hidden}
-@media(max-width:520px){
- .actionHub{grid-template-columns:1fr}
- .modalLauncherCard{padding:15px;border-radius:18px}
- .v39ModalPanel{padding:15px;border-radius:21px;max-height:calc(100dvh - 14px)}
- .v39ModalHeader{top:-15px}
-}
-
-
-#editClientBox.v39ClientEditModal{position:fixed!important;z-index:10025!important;left:50%!important;top:50%!important;transform:translate(-50%,-50%)!important;width:min(620px,calc(100% - 20px))!important;max-height:calc(100dvh - 24px)!important;overflow:auto!important;overscroll-behavior:contain!important;background:#fffef9!important;border:1px solid var(--border)!important;padding:18px!important;border-radius:25px!important;box-shadow:0 18px 55px rgba(12,31,20,.22)!important}
-#editClientModalBackdrop{position:fixed;inset:0;z-index:10024;background:rgba(10,25,18,.58);backdrop-filter:blur(5px);-webkit-backdrop-filter:blur(5px)}
-
+/* V39.2 — liste déroulante de suggestions client */
+.clientSearchSuggestWrap{position:relative;width:100%;z-index:30;margin:8px 0 14px}
+.clientSearchSuggestWrap>#search{width:100%;display:block}
+.clientSearchSuggestions{position:absolute;top:calc(100% + 5px);left:0;right:0;max-height:min(45vh,340px);overflow-y:auto;overscroll-behavior:contain;background:#fffef9;border:1px solid var(--border);border-radius:16px;box-shadow:0 12px 32px rgba(12,31,20,.2);z-index:10030}
+.clientSearchSuggestions[hidden]{display:none}
+.clientSearchSuggestion{display:block;width:100%;text-align:left;background:transparent;color:var(--text);border:0;border-bottom:1px solid var(--border);padding:13px 15px;min-height:48px;border-radius:0}
+.clientSearchSuggestion:last-child{border-bottom:0}
+.clientSearchSuggestion:active,.clientSearchSuggestion:focus{background:#e8f2e9;outline:2px solid var(--green2);outline-offset:-2px}
+.clientSearchSuggestion small{display:block;color:var(--muted);font-size:.85em;margin-top:3px}
 </style>
 </head>
 <body>
@@ -770,7 +749,7 @@ body.v39ModalOpen{overflow:hidden}
       <div class="actions"><button class="primary" onclick="addClient()">Créer le client</button><button class="secondary" onclick="toggleNewClient(false)">Annuler</button></div>
       <p id="clientMessage" class="muted"></p>
     </div>
-    <input id="search" placeholder="🔎 Rechercher un nom..." oninput="renderClients()" autocomplete="off" aria-label="Rechercher un client"><label for="clientFilter">Afficher les clients</label><select id="clientFilter" onchange="renderClients()"><option value="all">Tous les clients</option><option value="regular">Clients réguliers (2 achats ou plus)</option><option value="inactive">Clients inactifs (30 jours ou plus)</option><option value="new">Nouveaux clients (30 derniers jours)</option><option value="noPurchase">Sans achat enregistré</option></select><label for="clientSort">Trier les clients par</label><select id="clientSort" onchange="renderClients()"><option value="name">Nom (A à Z)</option><option value="nameDesc">Nom (Z à A)</option><option value="totalDesc">Chiffre d’affaires cumulé</option><option value="avgDesc">Panier moyen</option><option value="purchasesDesc">Nombre d’achats</option><option value="recent">Dernier achat récent</option><option value="rewardsDesc">Bons disponibles</option></select>
+    <div class="clientSearchSuggestWrap"><input id="search" placeholder="🔎 Rechercher un nom..." oninput="renderClients()" onkeydown="clientSearchKeydown(event)" autocomplete="off" aria-label="Rechercher un client" aria-controls="clientSearchSuggestions" aria-expanded="false"><div id="clientSearchSuggestions" class="clientSearchSuggestions" role="listbox" hidden></div></div><label for="clientFilter">Afficher les clients</label><select id="clientFilter" onchange="renderClients()"><option value="all">Tous les clients</option><option value="regular">Clients réguliers (2 achats ou plus)</option><option value="inactive">Clients inactifs (30 jours ou plus)</option><option value="new">Nouveaux clients (30 derniers jours)</option><option value="noPurchase">Sans achat enregistré</option></select><label for="clientSort">Trier les clients par</label><select id="clientSort" onchange="renderClients()"><option value="name">Nom (A à Z)</option><option value="nameDesc">Nom (Z à A)</option><option value="totalDesc">Chiffre d’affaires cumulé</option><option value="avgDesc">Panier moyen</option><option value="purchasesDesc">Nombre d’achats</option><option value="recent">Dernier achat récent</option><option value="rewardsDesc">Bons disponibles</option></select>
     <div id="clientList"></div>
   </div>
   <div class="card">
@@ -780,12 +759,7 @@ body.v39ModalOpen{overflow:hidden}
 </section>
 
 <section id="achat" class="page">
-  <div class="modalLauncherCard" id="purchaseLauncher">
-    <h2>💶 Enregistrer une vente</h2>
-    <p class="small muted">Ouvre le formulaire de vente dans une fenêtre adaptée au téléphone. La recherche client, les réductions, la fidélité et la répartition par catégorie restent disponibles.</p>
-    <button class="primary" type="button" onclick="openV39Modal('purchase')">➕ Nouvelle vente</button>
-  </div>
-  <div class="card" id="purchaseFormCard">
+  <div class="card">
     <h2>💶 Nouvel achat</h2>
     <label for="clientName">Rechercher un client par nom</label>
     <div class="purchaseSearchWrap">
@@ -827,7 +801,6 @@ body.v39ModalOpen{overflow:hidden}
 <section id="stock" class="page">
  <div class="card"><h2>📦 Gestion du stock</h2><p class="small muted">Les données de stock sont conservées séparément des clients et ventes. Les ventes au montant seul ne modifient pas le stock.</p>
  <div class="grid grid4"><div class="stat"><strong id="stockSkuCount">0</strong>Références</div><div class="stat"><strong id="stockUnits">0</strong>Unités en stock</div><div class="stat"><strong id="stockAlerts">0</strong>Alertes</div><div class="stat"><strong id="stockMoves">0</strong>Mouvements</div></div></div>
- <div class="card"><h3 style="margin-top:0">⚡ Actions de stock</h3><p class="small muted">Les opérations de saisie s’ouvrent dans des fenêtres dédiées. Le catalogue et l’historique restent visibles sur cette page.</p><div class="actionHub" id="stockActionHub"></div></div>
  <div class="card"><h3>➕ Ajouter un produit</h3><label for="stName">Nom du produit</label><input id="stName" placeholder="Ex. Ragnarok Fruits rouges frais 50 ml"><label for="stCategory">Catégorie</label><select id="stCategory"><option>E-liquides</option><option>Résistances</option><option>Cartouches</option><option>Clearomiseurs</option><option>Accessoires</option></select><label for="stSku">Référence (facultative)</label><input id="stSku" placeholder="Référence fournisseur / code"><div class="grid grid2"><div><label for="stQty">Quantité initiale</label><input id="stQty" type="number" min="0" step="1" value="0"></div><div><label for="stThreshold">Seuil d’alerte</label><input id="stThreshold" type="number" min="0" step="1" value="2"></div></div><button class="primary" onclick="stockAddProduct()">Ajouter au catalogue</button><p id="stockMessage" class="small muted"></p></div>
  <div class="card"><h3>📋 Catalogue par catégorie</h3><p class="small muted">Choisis une catégorie pour afficher uniquement les références correspondantes. Chaque nouveau produit est rangé selon la catégorie choisie lors de sa création.</p><div id="stockCategoryNav" class="grid grid2" style="gap:8px;margin:12px 0"></div><label for="stockSearch">Rechercher dans le catalogue</label><input id="stockSearch" placeholder="Rechercher un produit…" oninput="renderStock()"><div id="stockInventory"></div></div>
  <div class="card"><h3>↕️ Mouvement manuel</h3><label for="stockMoveProduct">Produit</label><select id="stockMoveProduct"></select><div class="grid grid2"><div><label for="stockMoveType">Type</label><select id="stockMoveType"><option value="in">Entrée de stock</option><option value="out">Sortie manuelle</option></select></div><div><label for="stockMoveQty">Quantité</label><input id="stockMoveQty" type="number" min="1" step="1" value="1"></div></div><label for="stockMoveReason">Motif</label><input id="stockMoveReason" placeholder="Réception fournisseur, casse…"><button class="primary" onclick="stockManualMove()">Enregistrer le mouvement</button></div>
@@ -939,7 +912,7 @@ body.v39ModalOpen{overflow:hidden}
   <div class="card"><h3>💡 Plan d’action conseillé</h3><div id="analysisActions"></div><p class="small muted">Les recommandations sont calculées à partir des données enregistrées. Une projection n’est pas une garantie. La marge réelle nécessite les coûts d’achat.</p><div class="actions" style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px"><button class="btn" onclick="exportAnalysisCSV()">Exporter l’analyse CSV</button><button class="btn secondary" onclick="window.print()">Imprimer le bilan</button></div></div>
 </section>
 </main>
-<footer class="versionFooter" aria-label="Version installée"><span class="versionChip"><span class="versionDot" aria-hidden="true"></span> Vap’ & Moi Pro · Version installée : V39.0 — Fenêtres & statistiques</span><p class="small muted">Données enregistrées sur cet appareil · Pense à effectuer régulièrement une sauvegarde JSON.</p></footer>
+<footer class="versionFooter" aria-label="Version installée"><span class="versionChip"><span class="versionDot" aria-hidden="true"></span> Vap’ & Moi Pro · Version installée : V39.2 — Fenêtres & navigation S25</span><p class="small muted">Données enregistrées sur cet appareil · Pense à effectuer régulièrement une sauvegarde JSON.</p></footer>
 
 <script>
 const KEY='vapetmoi_fidelite_v1';
@@ -1012,7 +985,7 @@ function availableReward(c){return Math.max(0,rewards(Number(c.total||0))+Number
 function rewardSummary(c){const regularEarned=rewards(Number(c.total||0));const manualEarned=Math.max(0,Number(c.manualRewards||0));const earned=regularEarned+manualEarned;const used=Math.max(0,Number(c.usedRewards||0));const available=availableReward(c);return {earned,used,available,earnedCount:Math.floor(Number(c.total||0)/50)+Math.floor(manualEarned/5),usedCount:Math.floor(used/5),availableCount:Math.floor(available/5),manualEarned}}
 function esc(s){return String(s||'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]))}
 function escJs(s){return String(s||'').replace(/\\/g,'\\\\').replace(/'/g,"\\'")}
-function isActivePurchase(p){if(!p)return false;const truthy=v=>v===true||v===1||v==='1'||(typeof v==='string'&&['true','oui','yes','cancelled','canceled','voided','annule','annulé','annulee','annulée'].includes(v.trim().toLowerCase()));const status=String(p.status||p.state||'').trim().toLowerCase();return ![p.cancelled,p.canceled,p.annule,p.annulee,p.voided,p.isCancelled,p.isCanceled,p.isVoided].some(truthy)&&!p.cancelledAt&&!p.canceledAt&&!p.annulationDate&&!p.voidedAt&&!['cancelled','canceled','voided','annulé','annulée','annule','annulee'].includes(status)}
+function isActivePurchase(p){return !!p&&p.cancelled!==true&&p.voided!==true&&!p.cancelledAt&&!p.voidedAt&&p.status!=='cancelled'&&p.status!=='voided'}
 function allPurchases(){return clients.flatMap(c=>(c.history||[]).filter(isActivePurchase).map(p=>({...p,client:c.name})))}
 function dateOf(p){return new Date(p.date)}
 function safelyPaid(p){const n=Number(p&&p.paid);return Number.isFinite(n)?n:0}
@@ -1111,28 +1084,26 @@ function categoryAmountTotal(obj){return Math.round(SALE_CATEGORIES.reduce((sum,
 function updateCategoryAllocation(){const amount=Math.round(Math.max(0,Number(document.getElementById('amount')?.value)||0)*100)/100,vals=readCategoryAmounts(),sum=categoryAmountTotal(vals),status=document.getElementById('categoryAllocationStatus');if(!status)return;const allocated=sum>0;if(!allocated){status.textContent='Répartition non renseignée — facultatif.';status.style.color='';return}const diff=Math.round((amount-sum)*100)/100;if(Math.abs(diff)<0.005){status.textContent='✓ Répartition complète : '+fmt(sum)+'.';status.style.color='#28744a'}else{status.textContent='⚠ Répartition : '+fmt(sum)+' sur '+fmt(amount)+' (écart '+fmt(Math.abs(diff))+').';status.style.color='#b42318'}}
 function renderCategoryAnalytics(){
  const root=document.getElementById('categoryAnalytics');if(!root)return;
- const ps=clients.flatMap(c=>(c.history||[]).filter(isActivePurchase).map(p=>({...p,client:c.name})));
- const totals={};SALE_CATEGORIES.forEach(([key,label])=>totals[key]={label,amount:0,transactions:0,clients:new Set()});
+ const ps=allPurchases(),totals={};
+ SALE_CATEGORIES.forEach(([key,label])=>totals[key]={label,amount:0,transactions:0,clients:new Set()});
  let allocatedSales=0,allocatedTotal=0;
- ps.forEach(p=>{const a=p.categoryAmounts;if(!a||categoryAmountTotal(a)<=0)return;allocatedSales++;SALE_CATEGORIES.forEach(([key])=>{const v=Math.max(0,Number(a[key])||0);if(v>0){totals[key].amount+=v;totals[key].transactions++;totals[key].clients.add(p.client)}});allocatedTotal+=categoryAmountTotal(a)});
+ const totalCA=ps.reduce((s,p)=>s+Math.max(0,Number(p.paid??p.amount)||0),0);
+ ps.forEach(p=>{
+   const a=p.categoryAmounts;if(!a||categoryAmountTotal(a)<=0)return;
+   allocatedSales++;
+   SALE_CATEGORIES.forEach(([key])=>{const v=Math.max(0,Number(a[key])||0);if(v>0){totals[key].amount+=v;totals[key].transactions++;totals[key].clients.add(p.client)}});
+   allocatedTotal+=categoryAmountTotal(a);
+ });
  const used=SALE_CATEGORIES.filter(([key])=>totals[key].amount>0);
- if(!used.length){root.innerHTML='<p class="small muted">Aucune répartition active enregistrée. Les achats annulés sont exclus.</p>';return}
- root.innerHTML='<div class="grid grid2"><div class="stat"><strong>'+fmt(allocatedTotal)+'</strong><span class="kpiTitle">Montant réparti (achats actifs)</span></div><div class="stat"><strong>'+allocatedSales+'</strong><span class="kpiTitle">Achats détaillés actifs</span></div></div><div class="categoryBars">'+used.map(([key])=>{const t=totals[key],pct=allocatedTotal?Math.round(t.amount/allocatedTotal*100):0;return '<div class="categoryLine" style="margin:12px 0"><div style="display:flex;justify-content:space-between;gap:8px;align-items:baseline"><strong>'+esc(t.label)+'</strong><strong>'+fmt(t.amount)+'</strong></div><div style="height:7px;background:#e8eadf;border-radius:99px;overflow:hidden;margin:5px 0"><div style="height:100%;width:'+pct+'%;background:#477b57;border-radius:99px"></div></div><p class="small muted" style="margin:0">'+pct+' % · '+t.transactions+' achat(s) · '+t.clients.size+' client(s)</p></div>'}).join('')+'</div><p class="small muted">Les achats annulés sont exclus des montants, pourcentages et nombres de ventes détaillées.</p>';
+ if(!ps.length){root.innerHTML='<p class="small muted">Aucune vente active enregistrée.</p>';return}
+ const delta=Math.round((totalCA-allocatedTotal)*100)/100;
+ const summary='<div class="grid grid2"><div class="stat"><strong>'+fmt(totalCA)+'</strong><span class="kpiTitle">CA total des ventes actives</span></div><div class="stat"><strong>'+fmt(allocatedTotal)+'</strong><span class="kpiTitle">CA réparti par catégorie</span></div></div>';
+ if(!used.length){root.innerHTML=summary+'<p class="small muted">Aucune vente active ne contient de répartition par catégorie. Les ventes au montant seul restent dans le CA total mais ne peuvent pas être attribuées automatiquement à une catégorie.</p>';return}
+ root.innerHTML=summary+'<p class="small muted">Ventes avec répartition : '+allocatedSales+' · Écart non réparti : '+fmt(delta)+'. Les ventes annulées sont exclues.</p>'+used.map(([key])=>{const x=totals[key],pct=allocatedTotal?x.amount/allocatedTotal*100:0;return '<div style="margin:12px 0"><div class="row" style="justify-content:space-between;gap:8px"><strong>'+esc(x.label)+'</strong><strong>'+fmt(x.amount)+' · '+pct.toLocaleString('fr-FR',{maximumFractionDigits:1})+' %</strong></div><div style="height:6px;background:#e8ece3;border-radius:99px;overflow:hidden"><div style="height:100%;width:'+Math.min(100,pct)+'%;background:#326747"></div></div><p class="small muted">Présente dans '+x.transactions+' vente(s) · '+x.clients.size+' client(s)</p></div>'}).join('')+'<p class="small muted">Le total par catégorie utilise les montants détaillés enregistrés dans les ventes. L’écart indique les ventes non réparties ou les différences de montants ; aucune catégorie n’est inventée.</p>';
 }
 function toggleNewClient(show){
-  const b=document.getElementById('newClientBox');if(!b)return;
-  const v=typeof show==='boolean'?show:b.style.display==='none';
-  if(v){
-    let back=document.getElementById('clientModalBackdrop');
-    if(!back){back=document.createElement('div');back.id='clientModalBackdrop';back.onclick=()=>toggleNewClient(false);document.body.appendChild(back)}
-    back.style.display='block';document.body.classList.add('v39ModalOpen');b.classList.add('modalLike');b.style.display='block';b.setAttribute('role','dialog');b.setAttribute('aria-modal','true');
-    if(!b.querySelector('.appModalHeader')){const h=document.createElement('div');h.className='appModalHeader';h.innerHTML='<strong>Nouvelle fiche client</strong><button type="button" class="secondary" onclick="toggleNewClient(false)">Fermer</button>';b.prepend(h)}
-    setTimeout(()=>document.getElementById('newClientName')?.focus(),30);
-  }else{
-    b.style.display='none';b.classList.remove('modalLike');b.removeAttribute('role');b.removeAttribute('aria-modal');
-    const back=document.getElementById('clientModalBackdrop');if(back)back.style.display='none';if(!Object.values(v39ModalRegistry||{}).some(x=>x.backdrop.style.display==='flex'))document.body.classList.remove('v39ModalOpen');
-    const h=b.querySelector('.appModalHeader');if(h)h.remove();
-  }
+  const b=document.getElementById('newClientBox');const v=typeof show==='boolean'?show:b.style.display==='none';b.style.display=v?'block':'none';
+  if(v)document.getElementById('newClientName').focus();
 }
 function addClient(){
   const name=document.getElementById('newClientName').value.trim(),msg=document.getElementById('clientMessage');
@@ -1180,7 +1151,40 @@ function addPurchase(){
   document.getElementById('amount').value='';document.getElementById('exceptionalDiscount').value='0';document.getElementById('useReward').checked=false;SALE_CATEGORIES.forEach(([key])=>{const el=document.getElementById('cat'+key.charAt(0).toUpperCase()+key.slice(1));if(el)el.value='0'});updatePurchaseBox();
   }finally{window.__vapPurchaseBusy=false;if(purchaseButton)purchaseButton.disabled=false}
 }
+
+let clientSearchSuggestionIndex=-1;
+function renderClientSearchSuggestions(){
+ const input=document.getElementById('search'),panel=document.getElementById('clientSearchSuggestions');
+ if(!input||!panel)return;
+ const q=normalizeSearchText(input.value.trim());
+ if(!q){panel.hidden=true;panel.innerHTML='';input.setAttribute('aria-expanded','false');clientSearchSuggestionIndex=-1;return}
+ const matches=clients.map(c=>({c,n:normalizeSearchText(c.name||''),phone:normalizeSearchText(c.phone||''),email:normalizeSearchText(c.email||'')}))
+  .map(x=>({...x,rank:x.n.startsWith(q)?0:(x.n.split(/\s+/).some(part=>part.startsWith(q))?1:(x.n.includes(q)?2:(x.phone.includes(q)||x.email.includes(q)?3:99)))}))
+  .filter(x=>x.rank<99).sort((a,b)=>a.rank-b.rank||String(a.c.name).localeCompare(String(b.c.name),'fr')).slice(0,8);
+ clientSearchSuggestionIndex=-1;
+ if(!matches.length){panel.innerHTML='<div class="clientSearchSuggestion">Aucun client correspondant</div>';panel.hidden=false;input.setAttribute('aria-expanded','true');return}
+ panel.innerHTML=matches.map(({c},i)=>'<button type="button" role="option" aria-selected="false" class="clientSearchSuggestion" data-client-index="'+i+'" onclick="chooseClientSearchSuggestion('+i+')">'+esc(c.name)+'<small>'+esc([c.phone,c.email].filter(Boolean).join(' · ')||'Ouvrir la fiche client')+'</small></button>').join('');
+ panel.hidden=false;input.setAttribute('aria-expanded','true');
+ window.__clientSearchSuggestionNames=matches.map(x=>x.c.name);
+}
+function chooseClientSearchSuggestion(index){
+ const names=window.__clientSearchSuggestionNames||[],name=names[index];if(!name)return;
+ const input=document.getElementById('search'),panel=document.getElementById('clientSearchSuggestions');
+ if(input)input.value=name;if(panel){panel.hidden=true;panel.innerHTML=''}if(input)input.setAttribute('aria-expanded','false');
+ renderClients();showClient(name);
+}
+function clientSearchKeydown(e){
+ const panel=document.getElementById('clientSearchSuggestions');if(!panel||panel.hidden)return;
+ const buttons=[...panel.querySelectorAll('button.clientSearchSuggestion')];
+ if(e.key==='ArrowDown'&&buttons.length){e.preventDefault();clientSearchSuggestionIndex=Math.min(buttons.length-1,clientSearchSuggestionIndex+1);buttons.forEach((b,i)=>{b.setAttribute('aria-selected',String(i===clientSearchSuggestionIndex));if(i===clientSearchSuggestionIndex)b.scrollIntoView({block:'nearest'})})}
+ else if(e.key==='ArrowUp'&&buttons.length){e.preventDefault();clientSearchSuggestionIndex=Math.max(0,clientSearchSuggestionIndex-1);buttons.forEach((b,i)=>{b.setAttribute('aria-selected',String(i===clientSearchSuggestionIndex));if(i===clientSearchSuggestionIndex)b.scrollIntoView({block:'nearest'})})}
+ else if(e.key==='Enter'&&clientSearchSuggestionIndex>=0&&buttons[clientSearchSuggestionIndex]){e.preventDefault();chooseClientSearchSuggestion(clientSearchSuggestionIndex)}
+ else if(e.key==='Escape'){panel.hidden=true;document.getElementById('search')?.setAttribute('aria-expanded','false')}
+}
+document.addEventListener('click',e=>{const wrap=document.querySelector('.clientSearchSuggestWrap');if(wrap&&!wrap.contains(e.target)){const panel=document.getElementById('clientSearchSuggestions');if(panel)panel.hidden=true;document.getElementById('search')?.setAttribute('aria-expanded','false')}});
+
 function renderClients(){
+  renderClientSearchSuggestions();
   const q=(document.getElementById('search')?.value||'').trim().toLocaleLowerCase('fr'),list=document.getElementById('clientList');
   const sort=document.getElementById('clientSort')?.value||'name';
   const filter=document.getElementById('clientFilter')?.value||'all';
@@ -1267,20 +1271,7 @@ function addManualReward(name){
   c.manualRewardHistory.push({amount:5,date:new Date().toISOString(),type:'manual'});
   if(!save()){const restored=JSON.parse(previous);Object.keys(c).forEach(k=>delete c[k]);Object.assign(c,restored);return;}logOperation('Bon manuel ajouté',`${c.name} · 5 €`);showClient(name);
 }
-function startEditClient(name){
-  const box=document.getElementById('editClientBox');if(!box)return;
-  let back=document.getElementById('editClientModalBackdrop');
-  if(!back){back=document.createElement('div');back.id='editClientModalBackdrop';back.onclick=()=>closeEditClientModal();document.body.appendChild(back)}
-  back.style.display='block';document.body.classList.add('v39ModalOpen');
-  box.classList.add('v39ClientEditModal');box.style.display='block';box.setAttribute('role','dialog');box.setAttribute('aria-modal','true');
-  if(!box.querySelector('.appModalHeader')){const h=document.createElement('div');h.className='appModalHeader';h.innerHTML='<strong>Modifier la fiche client</strong><button type="button" class="secondary" onclick="closeEditClientModal()">Fermer</button>';box.prepend(h)}
-  setTimeout(()=>document.getElementById('editClientName')?.focus(),40);
-}
-function closeEditClientModal(){
-  const box=document.getElementById('editClientBox');if(box){box.style.display='none';box.classList.remove('v39ClientEditModal');box.removeAttribute('role');box.removeAttribute('aria-modal');const h=box.querySelector('.appModalHeader');if(h)h.remove()}
-  const back=document.getElementById('editClientModalBackdrop');if(back)back.style.display='none';
-  if(!Object.values(v39ModalRegistry||{}).some(x=>x.backdrop.style.display==='flex')&&document.getElementById('clientModalBackdrop')?.style.display!=='block')document.body.classList.remove('v39ModalOpen');
-}
+function startEditClient(name){const box=document.getElementById('editClientBox');if(box)box.style.display='block';}
 function saveClientEdits(oldName){
   const c=clients.find(x=>x.name===oldName);if(!c)return;
   const name=document.getElementById('editClientName').value.trim();
@@ -1288,7 +1279,7 @@ function saveClientEdits(oldName){
   if(!name){msg.textContent='⚠️ Le nom et le prénom sont obligatoires.';return;}
   if(clients.some(x=>x!==c&&x.name.toLocaleLowerCase('fr')===name.toLocaleLowerCase('fr'))){msg.textContent='⚠️ Un autre client porte déjà ce nom.';return;}
   const previous=JSON.stringify(c),previousName=c.name;c.name=name;c.phone=document.getElementById('editClientPhone').value.trim();c.email=document.getElementById('editClientEmail').value.trim();c.notes=document.getElementById('editClientNotes').value.trim();
-  if(!save()){const restored=JSON.parse(previous);Object.keys(c).forEach(k=>delete c[k]);Object.assign(c,restored);msg.textContent='⚠️ Modifications non enregistrées : les données précédentes sont conservées.';return;}logOperation('Fiche client modifiée',previousName===name?name:`${previousName} → ${name}`);closeEditClientModal();showClient(name);
+  if(!save()){const restored=JSON.parse(previous);Object.keys(c).forEach(k=>delete c[k]);Object.assign(c,restored);msg.textContent='⚠️ Modifications non enregistrées : les données précédentes sont conservées.';return;}logOperation('Fiche client modifiée',previousName===name?name:`${previousName} → ${name}`);showClient(name);
 }
 function closePurchaseEdit(){const el=document.getElementById('purchaseEditModal');if(el)el.remove()}
 function updatePurchaseEditPreview(){
@@ -1374,7 +1365,7 @@ function deleteClient(name){
   if(!confirm(`Supprimer définitivement ${c.name} et son historique ?`))return;
   clients=clients.filter(x=>x!==c);if(!save()){updateAll();alert('Suppression non enregistrée : la fiche a été conservée lorsque le stockage précédent était récupérable.');return;}logOperation('Fiche client supprimée',`${c.name} · historique supprimé`);const d=document.getElementById('clientDetail');if(d)d.remove();
 }
-function selectClientForPurchase(name){document.getElementById('clientName').value=name;updatePurchaseBox();showPage('achat');openV39Modal('purchase')}
+function selectClientForPurchase(name){document.getElementById('clientName').value=name;updatePurchaseBox();showPage('achat')}
 function setDashboard(){
   const now=new Date(),ps=allPurchases(),today=ps.filter(p=>sameDay(dateOf(p),now)),mk=monthKey(now),month=ps.filter(p=>monthKey(dateOf(p))===mk);
   const weekStart=new Date(now);weekStart.setHours(0,0,0,0);weekStart.setDate(weekStart.getDate()-((weekStart.getDay()+6)%7));
@@ -1997,63 +1988,7 @@ function openStatsDetail(id){
   target.scrollIntoView({behavior:'smooth',block:'start'});
 }
 
-
-/* V39 — gestion centralisée des fenêtres modales. Les champs existants sont déplacés, jamais recréés,
-   afin de préserver leurs identifiants, événements et intégration aux fonctions métier. */
-const v39ModalRegistry = {};
-function registerV39Modal(key, element, title, launcherLabel, launcherDescription, hubId){
-  if(!element || v39ModalRegistry[key]) return;
-  const placeholder=document.createComment('V39 placeholder '+key);
-  element.parentNode.insertBefore(placeholder,element);
-  const backdrop=document.createElement('div');
-  backdrop.className='v39ModalBackdrop';backdrop.id='v39Backdrop_'+key;backdrop.style.display='none';
-  backdrop.setAttribute('role','presentation');
-  const panel=document.createElement('div');panel.className='v39ModalPanel';panel.setAttribute('role','dialog');panel.setAttribute('aria-modal','true');panel.setAttribute('aria-label',title);
-  const head=document.createElement('div');head.className='v39ModalHeader';
-  const heading=document.createElement('h3');heading.textContent=title;
-  const close=document.createElement('button');close.type='button';close.className='secondary v39ModalClose';close.textContent='✕ Fermer';close.setAttribute('aria-label','Fermer la fenêtre');
-  close.addEventListener('click',()=>closeV39Modal(key));
-  head.append(heading,close);panel.appendChild(head);panel.appendChild(element);backdrop.appendChild(panel);document.body.appendChild(backdrop);
-  backdrop.addEventListener('click',e=>{if(e.target===backdrop)closeV39Modal(key)});
-  v39ModalRegistry[key]={element,placeholder,backdrop,panel,close,title};
-  if(launcherLabel){
-    const launch=document.createElement('button');launch.type='button';launch.className='secondary';launch.innerHTML=launcherLabel;
-    launch.addEventListener('click',()=>openV39Modal(key));
-    const hub=document.getElementById(hubId);
-    if(hub){const wrap=document.createElement('div');wrap.appendChild(launch);if(launcherDescription){const p=document.createElement('p');p.className='small muted';p.textContent=launcherDescription;wrap.appendChild(p)}hub.appendChild(wrap)}
-  }
-}
-function openV39Modal(key){
-  const item=v39ModalRegistry[key];if(!item)return;
-  item.backdrop.style.display='flex';document.body.classList.add('v39ModalOpen');
-  const first=item.element.querySelector('input:not([type=hidden]),select,textarea,button');
-  setTimeout(()=>{if(first&&first.offsetParent!==null)first.focus();},60);
-}
-function closeV39Modal(key){
-  const item=v39ModalRegistry[key];if(!item)return;
-  item.backdrop.style.display='none';
-  if(!Object.values(v39ModalRegistry).some(x=>x.backdrop.style.display==='flex') && document.getElementById('clientModalBackdrop')?.style.display!=='block')document.body.classList.remove('v39ModalOpen');
-  const launcher=document.querySelector('#'+(key==='purchase'?'purchaseLauncher':'stockActionHub')+' button');
-  if(launcher)launcher.focus({preventScroll:true});
-}
-document.addEventListener('keydown',e=>{if(e.key==='Escape'){const open=Object.entries(v39ModalRegistry).find(([k,v])=>v.backdrop.style.display==='flex');if(open)closeV39Modal(open[0]);else if(document.getElementById('newClientBox')?.classList.contains('modalLike'))toggleNewClient(false);else if(document.getElementById('editClientBox')?.classList.contains('v39ClientEditModal'))closeEditClientModal();else if(document.getElementById('purchaseEditModal'))closePurchaseEdit();}});
-function setupV39Modals(){
-  const purchase=document.getElementById('purchaseFormCard');
-  if(purchase)registerV39Modal('purchase',purchase,'Enregistrer une vente',null,null,null);
-  const stock=document.getElementById('stock');
-  if(stock){
-    const cards=[...stock.querySelectorAll(':scope > .card')];
-    const product=cards.find(c=>c.querySelector('#stName'));
-    const movement=cards.find(c=>c.querySelector('#stockMoveProduct'));
-    const order=cards.find(c=>c.querySelector('#orderProduct'));
-    if(product)registerV39Modal('stockProduct',product,'Ajouter un produit','➕ <strong>Ajouter un produit</strong>','Créer une référence et définir son seuil d’alerte.','stockActionHub');
-    if(movement)registerV39Modal('stockMovement',movement,'Mouvement manuel','↕️ <strong>Mouvement manuel</strong>','Enregistrer une entrée ou une sortie de stock.','stockActionHub');
-    if(order)registerV39Modal('stockOrder',order,'Commande fournisseur','🛒 <strong>Commande fournisseur</strong>','Préparer une commande puis la réceptionner.','stockActionHub');
-  }
-}
-
 function updateAll(){clients=clients.map(normalizeClient);updateClientOptions();renderClients();updatePurchaseBox();renderCategoryAnalytics();setDashboard();setStats();renderWeekdayStats();renderV15Insights(allPurchases(),new Date());renderDailyOps(new Date());renderActivityLog();renderBackupStatus();renderAnalysis();renderCommercialCopilot();renderDataIntegrity();renderFollowupAgenda();const threshold=document.getElementById("inactiveThreshold");if(threshold)threshold.value=String(settings.inactiveThreshold||30);updateGreeting()}
-setupV39Modals();
 updateAll();
 updateOfflineMode();
 if("serviceWorker" in navigator && location.protocol.startsWith("http")){navigator.serviceWorker.register("./sw.js").catch(()=>{});}
