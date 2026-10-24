@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#163f2d">
 <meta name="description" content="Vap’ & Moi Pro Signature Premium : gestion des clients, ventes, fidélité, analyses, suivi commercial et sauvegardes.">
-<title>Vap’ & Moi Pro — V34 Statistiques visuelles</title>
+<title>Vap’ & Moi Pro — V35 Accueil épuré et stats détaillées</title>
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="./icon-192.png">
 <meta name="mobile-web-app-capable" content="yes">
@@ -297,6 +297,22 @@ input:focus,select:focus,textarea:focus{border-color:#9eaa7b;box-shadow:0 0 0 3p
 
 /* V33 — chiffres d’achats lisibles sur mobile, sans graphiques SVG serrés */
 .purchaseCountGroup{margin:16px 0 20px;padding:0}.purchaseCountGroup h4{font-size:16px;line-height:1.35;margin:0 0 12px;color:var(--text,#26382e)}.purchaseCountRows{display:grid;gap:10px}.purchaseCountRow{padding:10px 12px;border:1px solid var(--border,#dfe2d5);border-radius:12px;background:rgba(255,255,255,.55)}.purchaseCountRowHead{display:flex;justify-content:space-between;align-items:center;gap:12px;font-size:14px;line-height:1.35}.purchaseCountRowHead>span{min-width:0;text-transform:capitalize;color:var(--text,#26382e)}.purchaseCountRowHead>strong{white-space:nowrap;color:#326747;font-size:15px;font-variant-numeric:tabular-nums}.purchaseCountTrack{height:5px;margin-top:8px;background:#e8ece3;border-radius:99px;overflow:hidden}.purchaseCountTrack span{display:block;height:100%;background:linear-gradient(90deg,#326747,#bca66a);border-radius:99px}.purchaseCountSub{margin-top:5px;color:var(--muted,#66736a);font-size:12px;line-height:1.4;font-variant-numeric:tabular-nums}.purchaseCountKpis{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:10px 0 14px}.purchaseCountKpis>div{min-width:0;padding:10px 8px;border-radius:10px;background:rgba(50,103,71,.08);display:flex;flex-direction:column;gap:4px}.purchaseCountKpis span{font-size:11px;color:var(--muted,#66736a)}.purchaseCountKpis strong{font-size:15px;color:var(--text,#26382e);font-variant-numeric:tabular-nums;overflow-wrap:anywhere}.purchaseCountNote{font-size:10px;font-style:normal;color:#8b6e2e;margin-left:3px}.purchaseCountClosed{opacity:.58;background:rgba(120,120,120,.06)}.purchaseCountZero .purchaseCountTrack span{background:#c5ccc2}.purchaseCountInsight{font-size:12px;margin:12px 0 0;color:var(--muted,#66736a)}@media(max-width:420px){.purchaseCountKpis{gap:5px}.purchaseCountKpis>div{padding:8px 6px}.purchaseCountKpis strong{font-size:13px}.purchaseCountKpis span{font-size:10px}.purchaseCountSub{font-size:11px}}@media(max-width:420px){.purchaseCountRow{padding:9px 10px}.purchaseCountRowHead{font-size:13px}.purchaseCountRowHead>strong{font-size:14px}}
+
+/* V35 — accueil épuré : conserve les données dans le DOM mais retire les KPI déjà détaillés dans Stats */
+#accueil .homeStats:first-of-type .stat:has(#dWeek),
+#accueil .homeStats:first-of-type .stat:has(#dMonth),
+#accueil .homeStats:first-of-type .stat:has(#dClients),
+#accueil .homeStats[aria-label="Achats de la semaine en cours"] {display:none!important}
+#stats .statsOverview{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:14px 0 18px}
+#stats .statsOverview button{appearance:none;text-align:left;background:var(--card, #fff);color:var(--text, #20372a);border:1px solid var(--border,#dce5dc);border-radius:15px;padding:14px;min-height:100px;box-shadow:0 3px 12px rgba(25,55,35,.045);display:flex;flex-direction:column;gap:6px;cursor:pointer}
+#stats .statsOverview button:active{transform:scale(.99)}
+#stats .statsOverview .overviewIcon{font-size:1.35rem}
+#stats .statsOverview strong{font-size:1rem}
+#stats .statsOverview small{font-size:.78rem;color:var(--muted,#68766b);line-height:1.35}
+#stats .statsOverview .openHint{font-size:.78rem;color:#28744a;font-weight:700;margin-top:auto}
+#stats .statsTheme:not([open])>.statsThemeHead{cursor:pointer}
+@media(min-width:650px){#stats .statsOverview{grid-template-columns:repeat(3,minmax(0,1fr))}}
+
 </style>
 </head>
 <body>
@@ -468,8 +484,8 @@ input:focus,select:focus,textarea:focus{border-color:#9eaa7b;box-shadow:0 0 0 3p
 
 <section id="stats" class="page">
   <div class="card">
-    <h2>📊 Tableau de bord — V34 Statistiques visuelles</h2>
-    <p class="muted small">Statistiques regroupées par sujet : chiffre d’affaires, ventes et panier moyen, clients, encaissements, puis prévisions.</p>
+    <h2>📊 Statistiques</h2>
+    <p class="muted small">Vue synthétique en premier. Appuie sur une rubrique pour ouvrir ses indicateurs, graphiques et comparaisons détaillés.</p>
     <div class="actionRow"><button class="secondary" onclick="exportSalesCSV()">📄 Exporter les ventes (CSV)</button><button class="secondary" onclick="exportData()">💾 Sauvegarder les données (JSON)</button></div>
     <div class="grid4">
       <div class="stat"><strong id="sCA">0 €</strong>CA cumulé</div>
@@ -479,7 +495,15 @@ input:focus,select:focus,textarea:focus{border-color:#9eaa7b;box-shadow:0 0 0 3p
     </div>
   </div>
 
-  <details class="statsTheme" open><summary class="statsThemeHead"><span>💶</span><div><strong>1. Chiffre d’affaires</strong><small>Résultats par période et historique mensuel</small></div></summary>
+  <div class="statsOverview" aria-label="Accès aux statistiques détaillées">
+    <button type="button" onclick="openStatsDetail('statsCA')"><span class="overviewIcon">💶</span><strong>Chiffre d’affaires</strong><small>CA par période, historique et comparaisons</small><span class="openHint">Voir le détail →</span></button>
+    <button type="button" onclick="openStatsDetail('statsPurchases')"><span class="overviewIcon">🛍️</span><strong>Achats & panier moyen</strong><small>Par jour, semaine, mois et évolution</small><span class="openHint">Voir le détail →</span></button>
+    <button type="button" onclick="openStatsDetail('statsClients')"><span class="overviewIcon">👥</span><strong>Clients & fidélité</strong><small>Retours, fréquence, top clients et relances</small><span class="openHint">Voir le détail →</span></button>
+    <button type="button" onclick="openStatsDetail('statsDiscounts')"><span class="overviewIcon">🎟️</span><strong>Réductions & encaissements</strong><small>Bons fidélité, remises et encaissements</small><span class="openHint">Voir le détail →</span></button>
+    <button type="button" onclick="openStatsDetail('statsForecast')"><span class="overviewIcon">🎯</span><strong>Prévisions & objectifs</strong><small>Rythme commercial et progression</small><span class="openHint">Voir le détail →</span></button>
+  </div>
+
+  <details id="statsCA" class="statsTheme"><summary class="statsThemeHead"><span>💶</span><div><strong>1. Chiffre d’affaires</strong><small>Résultats par période et historique mensuel</small></div></summary>
     <div class="grid">
       <div class="card"><h3 style="margin-top:0">📅 CA par période</h3><div id="periodStats"></div></div>
       <div class="card"><h3 style="margin-top:0">↔️ Comparaison des périodes</h3><div id="comparisonStats"></div></div>
@@ -503,7 +527,7 @@ input:focus,select:focus,textarea:focus{border-color:#9eaa7b;box-shadow:0 0 0 3p
     <p id="weekdayStatsNote" class="statNote"></p>
   </div>
 
-  <details class="statsTheme" open><summary class="statsThemeHead"><span>🛍️</span><div><strong>2. Ventes et panier moyen</strong><small>Nombre d’achats, panier moyen et comparaison semaine par semaine</small></div></summary>
+  <details id="statsPurchases" class="statsTheme"><summary class="statsThemeHead"><span>🛍️</span><div><strong>2. Ventes et panier moyen</strong><small>Nombre d’achats, panier moyen et comparaison semaine par semaine</small></div></summary>
     <div class="card"><h3 style="margin-top:0">🛍️ Achats par jour et par semaine</h3><div id="purchasePeriodStats"></div><div class="chartWrap" id="purchaseDailyChart" aria-label="Graphique du nombre d’achats par jour"></div><div class="chartWrap" id="purchaseWeeklyChart" aria-label="Graphique du nombre d’achats par semaine"></div><div class="chartWrap" id="purchaseMonthlyChart" aria-label="Graphique du nombre d’achats par mois"></div><div id="dailyPurchaseStats"></div></div>
     <div class="card" id="weeklyClientPurchaseCompare">
       <h3 style="margin-top:0">📅 Comparatif hebdomadaire — 2 derniers mois</h3>
@@ -513,7 +537,7 @@ input:focus,select:focus,textarea:focus{border-color:#9eaa7b;box-shadow:0 0 0 3p
     </div>
   </details>
 
-  <details class="statsTheme" open><summary class="statsThemeHead"><span>👥</span><div><strong>3. Clients et fidélité</strong><small>Fréquence de visite, fidélisation, meilleurs clients et relances</small></div></summary>
+  <details id="statsClients" class="statsTheme"><summary class="statsThemeHead"><span>👥</span><div><strong>3. Clients et fidélité</strong><small>Fréquence de visite, fidélisation, meilleurs clients et relances</small></div></summary>
     <div class="card"><h3 style="margin-top:0">🔁 Fidélisation en un coup d’œil</h3><div id="statsRetentionSummary" class="clientMetricGrid"></div><p class="statNote">Les retours sont calculés uniquement à partir des achats datés enregistrés dans l’application.</p></div>
     <div class="card" id="visitFrequencyStats">
       <h3 style="margin-top:0">⏱️ Fréquence moyenne des visites</h3>
@@ -527,12 +551,12 @@ input:focus,select:focus,textarea:focus{border-color:#9eaa7b;box-shadow:0 0 0 3p
     <div class="card" id="relanceCard"><h3 style="margin-top:0">🔔 Clients à revoir</h3><p class="muted small">Clients dont le dernier achat remonte à au moins 30 jours. La liste est calculée depuis l’historique enregistré.</p><div id="relanceList"></div></div>
   </details>
 
-  <details class="statsTheme" open><summary class="statsThemeHead"><span>🎟️</span><div><strong>4. Réductions et encaissements</strong><small>Bons de fidélité, remises ponctuelles et total encaissé</small></div></summary>
+  <details id="statsDiscounts" class="statsTheme"><summary class="statsThemeHead"><span>🎟️</span><div><strong>4. Réductions et encaissements</strong><small>Bons de fidélité, remises ponctuelles et total encaissé</small></div></summary>
     <div class="card" id="discountStatsCard"><h3 style="margin-top:0">🎟️ Suivi des réductions</h3><div id="discountStats"></div></div>
     <div class="card" id="profitabilityCard"><h3 style="margin-top:0">💶 Encaissements et indicateurs commerciaux</h3><p class="muted small">Vue de pilotage basée sur les achats enregistrés : ce n’est pas une marge comptable, car les coûts d’achat des produits ne sont pas saisis.</p><div id="profitabilityStats" class="clientMetricGrid"></div></div>
   </details>
 
-  <details class="statsTheme" open><summary class="statsThemeHead"><span>🎯</span><div><strong>5. Prévisions et objectifs</strong><small>Rythme de la journée, de la semaine, du mois et de l’année</small></div></summary>
+  <details id="statsForecast" class="statsTheme"><summary class="statsThemeHead"><span>🎯</span><div><strong>5. Prévisions et objectifs</strong><small>Rythme de la journée, de la semaine, du mois et de l’année</small></div></summary>
     <div class="card"><h3 style="margin-top:0">🎯 Objectifs et rythme</h3><div id="statsGoalSummary"></div></div>
   </details>
 </section>
@@ -560,7 +584,7 @@ input:focus,select:focus,textarea:focus{border-color:#9eaa7b;box-shadow:0 0 0 3p
   <div class="card"><h3>💡 Plan d’action conseillé</h3><div id="analysisActions"></div><p class="small muted">Les recommandations sont calculées à partir des données enregistrées. Une projection n’est pas une garantie. La marge réelle nécessite les coûts d’achat.</p><div class="actions" style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px"><button class="btn" onclick="exportAnalysisCSV()">Exporter l’analyse CSV</button><button class="btn secondary" onclick="window.print()">Imprimer le bilan</button></div></div>
 </section>
 </main>
-<footer>Vap’ & Moi Pro · V34 Statistiques visuelles · pilotage commercial</footer>
+<footer>Vap’ & Moi Pro · V35 Accueil épuré et stats détaillées · pilotage commercial</footer>
 
 <script>
 const KEY='vapetmoi_fidelite_v1';
@@ -1473,6 +1497,13 @@ function exportFollowupCSV(){
   const rows=clients.map(c=>{const hist=(c.history||[]).filter(isActivePurchase).filter(p=>Number.isFinite(new Date(p.date).getTime()));if(!hist.length)return null;const last=hist.reduce((best,p)=>new Date(p.date)>new Date(best.date)?p:best,hist[0]);const d=new Date(last.date);d.setHours(0,0,0,0);return {c,days:Math.floor((today-d)/86400000),last:last.date,hist,total:hist.reduce((s,p)=>s+safelyPaid(p),0)}}).filter(Boolean).filter(x=>x.days>=threshold).sort((a,b)=>b.days-a.days);
   const lines=[['Client','Dernier achat','Jours depuis achat','Achats actifs','CA suivi'],...rows.map(x=>[x.c.name,dateFmt(x.last),x.days,x.hist.length,x.total.toFixed(2)])];
   const csv='\uFEFF'+lines.map(r=>r.map(csvCell).join(';')).join('\r\n');const blob=new Blob([csv],{type:'text/csv;charset=utf-8;'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='vap-et-moi-suivi-clients.csv';a.click();URL.revokeObjectURL(url);
+}
+
+
+function openStatsDetail(id){
+  const target=document.getElementById(id); if(!target)return;
+  document.querySelectorAll('#stats details.statsTheme').forEach(el=>{el.open=(el.id===id)});
+  target.scrollIntoView({behavior:'smooth',block:'start'});
 }
 
 function updateAll(){clients=clients.map(normalizeClient);updateClientOptions();renderClients();updatePurchaseBox();setDashboard();setStats();renderWeekdayStats();renderV15Insights(allPurchases(),new Date());renderDailyOps(new Date());renderActivityLog();renderBackupStatus();renderAnalysis();renderCommercialCopilot();renderDataIntegrity();renderFollowupAgenda();const threshold=document.getElementById("inactiveThreshold");if(threshold)threshold.value=String(settings.inactiveThreshold||30);updateGreeting()}
