@@ -682,7 +682,7 @@ function availableReward(c){return Math.max(0,rewards(Number(c.total||0))+Number
 function rewardSummary(c){const regularEarned=rewards(Number(c.total||0));const manualEarned=Math.max(0,Number(c.manualRewards||0));const earned=regularEarned+manualEarned;const used=Math.max(0,Number(c.usedRewards||0));const available=availableReward(c);return {earned,used,available,earnedCount:Math.floor(Number(c.total||0)/50)+Math.floor(manualEarned/5),usedCount:Math.floor(used/5),availableCount:Math.floor(available/5),manualEarned}}
 function esc(s){return String(s||'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]))}
 function escJs(s){return String(s||'').replace(/\\/g,'\\\\').replace(/'/g,"\\'")}
-function isActivePurchase(p){return !!p&&!p.cancelled&&!p.voided&&!p.cancelledAt}
+function isActivePurchase(p){return !!p&&p.cancelled!==true&&p.voided!==true&&!p.cancelledAt&&!p.voidedAt&&p.status!=='cancelled'&&p.status!=='voided'}
 function allPurchases(){return clients.flatMap(c=>(c.history||[]).filter(isActivePurchase).map(p=>({...p,client:c.name})))}
 function dateOf(p){return new Date(p.date)}
 function safelyPaid(p){const n=Number(p&&p.paid);return Number.isFinite(n)?n:0}
@@ -939,7 +939,7 @@ function cancelPurchase(name,id){
   c.purchases=Math.max(0,Number(c.purchases||0)-1);
   c.usedRewards=Math.round(Math.max(0,Number(c.usedRewards||0)-Number(p.rewardDiscount||0))*100)/100;
   if(!save()){alert('L’annulation n’a pas pu être enregistrée. Vérifie les données avant de poursuivre.');return;}
-  logOperation('Achat annulé',`${c.name} · ${fmt(p.paid??p.amount)}${p.cancellationReason?' · '+p.cancellationReason:''}`);showClient(name);
+  logOperation('Achat annulé',`${c.name} · ${fmt(p.paid??p.amount)}${p.cancellationReason?' · '+p.cancellationReason:''}`);updateAll();showClient(name);
 }
 function deleteClient(name){
   const c=clients.find(x=>x.name===name);if(!c)return;
