@@ -16,3 +16,6 @@ V37.1 — Réorganisation visuelle : hiérarchie plus claire des cartes, champs 
 
 
 V37.2 correctif : bouton Modifier dans l’historique des achats actifs. Permet de modifier le montant et, si elle existait, la répartition par catégorie. Les catégories doivent totaliser le montant avant réduction. Les statistiques sont actualisées après sauvegarde. Les achats liés à un mouvement de stock doivent être annulés puis recréés.
+
+
+V37.3 — Refonte du mode « Modifier un achat » : ouvre désormais une fenêtre de formulaire similaire à la saisie d'un achat, avec montant avant réduction, cinq catégories, aperçu du montant à payer et répartition. Les réductions initialement utilisées sont affichées et conservées. La répartition est facultative ; si renseignée, elle doit totaliser le montant avant réduction. L'achat existant est modifié, pas dupliqué. Le CA client est ajusté de la différence, puis les rendus statistiques sont recalculés. Les ventes liées au stock doivent être annulées puis recréées pour protéger l'inventaire.

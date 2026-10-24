@@ -974,23 +974,70 @@ function saveClientEdits(oldName){
   const previous=JSON.stringify(c),previousName=c.name;c.name=name;c.phone=document.getElementById('editClientPhone').value.trim();c.email=document.getElementById('editClientEmail').value.trim();c.notes=document.getElementById('editClientNotes').value.trim();
   if(!save()){const restored=JSON.parse(previous);Object.keys(c).forEach(k=>delete c[k]);Object.assign(c,restored);msg.textContent='⚠️ Modifications non enregistrées : les données précédentes sont conservées.';return;}logOperation('Fiche client modifiée',previousName===name?name:`${previousName} → ${name}`);showClient(name);
 }
+function closePurchaseEdit(){const el=document.getElementById('purchaseEditModal');if(el)el.remove()}
+function updatePurchaseEditPreview(){
+  const modal=document.getElementById('purchaseEditModal');if(!modal)return;
+  const amount=Math.max(0,Number(modal.querySelector('#editPurchaseAmount')?.value)||0);
+  const exceptional=Math.max(0,Number(modal.dataset.exceptional)||0),reward=Math.max(0,Number(modal.dataset.reward)||0);
+  const total=SALE_CATEGORIES.reduce((sum,[key])=>sum+Math.max(0,Number(modal.querySelector('#editCat_'+key)?.value)||0),0);
+  const any=SALE_CATEGORIES.some(([key])=>Math.max(0,Number(modal.querySelector('#editCat_'+key)?.value)||0)>0);
+  const paid=Math.max(0,Math.round((amount-exceptional-reward)*100)/100);
+  const preview=modal.querySelector('#editPurchasePreview');
+  if(preview)preview.innerHTML=`À payer : <strong>${fmt(paid)}</strong><br>Répartition saisie : <strong>${fmt(total)}</strong>${any&&Math.abs(Math.round((total-amount)*100))>0?'<br><span style="color:var(--red)">⚠️ La répartition doit égaler le montant avant réduction.</span>':any?'<br><span style="color:var(--green)">✓ Répartition équilibrée.</span>':'<br><span class="muted">Aucune répartition : cet achat restera sans catégorie.</span>'}`;
+}
 function editPurchase(name,id){
   const c=clients.find(x=>x.name===name);if(!c)return;
   const p=c.history.find(x=>String(x.id)===String(id));if(!p||!isActivePurchase(p))return;
   if(p.stockProductId||p.stockMovementId){alert("Cette vente est liée à un mouvement de stock. Pour éviter une incohérence d'inventaire, annule-la puis recrée-la plutôt que de la modifier directement.");return;}
-  const raw=prompt("Nouveau montant de l'achat AVANT réduction (€) :",String(Number(p.amount||0).toFixed(2)).replace(".",","));if(raw===null)return;
-  const amount=Number(String(raw).trim().replace(/\s/g,"").replace(",","."));
-  if(!Number.isFinite(amount)||amount<=0){alert("Montant invalide. Aucun changement effectué.");return;}
-  const exceptional=Math.max(0,Number(p.exceptionalDiscount)||0),rewardDiscount=Math.max(0,Number(p.rewardDiscount)||0),discount=exceptional+rewardDiscount;
+  closePurchaseEdit();
+  const exceptional=Math.max(0,Number(p.exceptionalDiscount)||0),reward=Math.max(0,Number(p.rewardDiscount)||0);
+  const categories=SALE_CATEGORIES.map(([key,label])=>{
+    const value=Math.max(0,Number(p.categoryAmounts?.[key])||0);
+    return `<div><label for="editCat_${key}">${esc(label)} (€)</label><input id="editCat_${key}" type="number" min="0" step="0.01" inputmode="decimal" value="${value}" oninput="updatePurchaseEditPreview()"></div>`;
+  }).join('');
+  const modal=document.createElement('div');modal.id='purchaseEditModal';modal.dataset.client=name;modal.dataset.purchase=id;modal.dataset.exceptional=String(exceptional);modal.dataset.reward=String(reward);
+  modal.style.cssText='position:fixed;inset:0;z-index:9999;background:rgba(10,25,18,.62);display:flex;align-items:center;justify-content:center;padding:14px;overflow:auto';
+  modal.innerHTML=`<div role="dialog" aria-modal="true" aria-labelledby="editPurchaseTitle" style="background:var(--card,#fff);color:var(--text,#24352b);width:min(620px,100%);max-height:92dvh;overflow:auto;border-radius:22px;padding:20px;box-shadow:0 20px 60px rgba(0,0,0,.25)">
+    <div class="row" style="justify-content:space-between;align-items:center;gap:12px"><h2 id="editPurchaseTitle" style="margin:0;font-size:1.35rem">✏️ Modifier l’achat</h2><button type="button" class="secondary" onclick="closePurchaseEdit()">Fermer</button></div>
+    <p class="small muted">${esc(c.name)} · Achat du ${dateFmt(p.date)}</p>
+    <label for="editPurchaseAmount">Montant avant réduction (€)</label><input id="editPurchaseAmount" type="number" min="0.01" step="0.01" inputmode="decimal" value="${Math.max(0,Number(p.amount)||0)}" oninput="updatePurchaseEditPreview()">
+    <h3>📊 Répartition par catégorie (facultative)</h3>
+    <p class="small muted">Laisse toutes les catégories à 0 € si tu ne souhaites pas détailler. Sinon, leur total doit correspondre exactement au montant avant réduction. Cette répartition sert aux statistiques et ne modifie pas le stock.</p>
+    <div class="grid grid2">${categories}</div>
+    <h3>🎁 Réductions conservées</h3>
+    <div class="grid grid2"><div class="stat"><strong>${fmt(reward)}</strong><span class="kpiTitle">Bon de fidélité utilisé</span></div><div class="stat"><strong>${fmt(exceptional)}</strong><span class="kpiTitle">Réduction exceptionnelle</span></div></div>
+    <div id="editPurchasePreview" class="card" style="margin:12px 0;padding:12px;background:var(--sage,#f0f3e9)"></div>
+    <div class="actions"><button type="button" class="primary" onclick="savePurchaseEdit()">Enregistrer les modifications</button><button type="button" class="secondary" onclick="closePurchaseEdit()">Annuler</button></div>
+    <p class="small muted">L’achat existant sera modifié : aucun nouvel achat ne sera créé.</p>
+  </div>`;
+  document.body.appendChild(modal);
+  updatePurchaseEditPreview();
+}
+function savePurchaseEdit(){
+  const modal=document.getElementById('purchaseEditModal');if(!modal)return;
+  const name=modal.dataset.client,id=modal.dataset.purchase,c=clients.find(x=>x.name===name);
+  if(!c)return;
+  const p=c.history.find(x=>String(x.id)===String(id));if(!p||!isActivePurchase(p)){alert("Cet achat n’est plus actif. Ferme cette fenêtre et actualise la fiche client.");closePurchaseEdit();return;}
+  const amount=Math.round(Math.max(0,Number(modal.querySelector('#editPurchaseAmount')?.value)||0)*100)/100;
+  if(!Number.isFinite(amount)||amount<=0){alert("Saisis un montant supérieur à 0 €.");return;}
+  const exceptional=Math.max(0,Number(p.exceptionalDiscount)||0),reward=Math.max(0,Number(p.rewardDiscount)||0),discount=exceptional+reward;
   if(discount>amount){alert("Le montant ne peut pas être inférieur aux réductions déjà appliquées.");return;}
-  let categoryAmounts=null;const oldCats=p.categoryAmounts&&categoryAmountTotal(p.categoryAmounts)>0?p.categoryAmounts:null;
-  if(oldCats){categoryAmounts={};let sum=0;for(const [key,label] of SALE_CATEGORIES){const prior=Math.max(0,Number(oldCats[key])||0);const value=prompt("Nouvelle répartition — "+label+" (€). Saisis 0 si aucune dépense dans cette catégorie :",String(prior.toFixed(2)).replace(".",","));if(value===null)return;const n=Number(String(value).trim().replace(/\s/g,"").replace(",","."));if(!Number.isFinite(n)||n<0){alert("Montant de catégorie invalide. Aucun changement effectué.");return;}categoryAmounts[key]=Math.round(n*100)/100;sum+=categoryAmounts[key];}if(Math.abs(Math.round((sum-amount)*100))>0){alert("La répartition doit totaliser exactement "+fmt(amount)+". Aucun changement effectué.");return;}}
-  else if(!confirm("Cet achat n'avait pas de répartition par catégorie. Enregistrer le nouveau montant sans détail par catégorie ?"))return;
-  if(!confirm("Confirmer la modification de "+fmt(p.amount)+" à "+fmt(amount)+" ? Les statistiques seront actualisées."))return;
-  const oldPaid=Math.max(0,Number(p.paid??p.amount)||0),newPaid=Math.round((amount-discount)*100)/100,oldEntry={...p,categoryAmounts:p.categoryAmounts?{...p.categoryAmounts}:undefined},oldTotal=c.total;
-  p.amount=Math.round(amount*100)/100;p.paid=newPaid;p.discount=discount;if(categoryAmounts)p.categoryAmounts=categoryAmounts;c.total=Math.round((Number(c.total||0)-oldPaid+newPaid)*100)/100;
-  if(!save()){Object.assign(p,oldEntry);c.total=oldTotal;alert("Modification non enregistrée. Les anciennes valeurs ont été restaurées.");return;}
-  logOperation("Achat modifié",`${c.name} · ${fmt(oldPaid)} → ${fmt(newPaid)}`);updateAll();showClient(name);
+  const categoryAmounts={};let categoryTotal=0;
+  SALE_CATEGORIES.forEach(([key])=>{categoryAmounts[key]=Math.round(Math.max(0,Number(modal.querySelector('#editCat_'+key)?.value)||0)*100)/100;categoryTotal+=categoryAmounts[key]});
+  const hasCategories=categoryTotal>0;
+  if(hasCategories&&Math.abs(Math.round((categoryTotal-amount)*100))>0){alert("La répartition par catégorie doit totaliser exactement "+fmt(amount)+". Corrige les montants avant d’enregistrer.");return;}
+  if(!confirm("Confirmer la modification de cet achat ? Le montant payé, le CA client, la fidélité calculée et les statistiques seront actualisés."))return;
+  const oldPaid=Math.max(0,Number(p.paid??p.amount)||0),newPaid=Math.round((amount-discount)*100)/100;
+  const oldEntry={...p,categoryAmounts:p.categoryAmounts?{...p.categoryAmounts}:undefined},oldTotal=c.total;
+  p.amount=amount;p.paid=newPaid;p.discount=discount;
+  if(hasCategories)p.categoryAmounts=categoryAmounts;else delete p.categoryAmounts;
+  c.total=Math.round((Number(c.total||0)-oldPaid+newPaid)*100)/100;
+  if(!save()){
+    Object.assign(p,oldEntry);c.total=oldTotal;
+    alert("Modification non enregistrée. Les anciennes valeurs ont été restaurées.");return;
+  }
+  logOperation("Achat modifié",`${c.name} · ${fmt(oldPaid)} → ${fmt(newPaid)}`);
+  closePurchaseEdit();updateAll();showClient(name);
 }
 function cancelPurchase(name,id){
   const c=clients.find(x=>x.name===name);if(!c)return;
