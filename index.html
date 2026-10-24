@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#163f2d">
 <meta name="description" content="Vap’ & Moi Pro Signature Premium : gestion des clients, ventes, fidélité, analyses, suivi commercial et sauvegardes.">
-<title>Vap’ &amp; Moi Pro — V38.1 Samsung S25</title>
+<title>Vap’ &amp; Moi Pro — V38.2 Fenêtres et navigation S25</title>
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="./icon-192.png">
 <meta name="mobile-web-app-capable" content="yes">
@@ -556,6 +556,47 @@ footer.versionFooter{width:100%;max-width:850px;margin:12px auto 0;padding:18px 
 }
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*:before,*:after{transition:none!important;animation:none!important}}
 
+
+/* V38.2 — Navigation S25 agrandie + base visuelle commune aux fenêtres */
+:root{--dialog-radius:27px;--dialog-shadow:0 22px 60px rgba(12,31,20,.25)}
+/* Navigation plus large et plus facile à toucher sur Galaxy S25 */
+.appNav{gap:5px!important;padding:9px 8px calc(10px + env(safe-area-inset-bottom))!important}
+.appNav button{min-height:70px!important;padding:9px 3px!important;border-radius:18px!important;font-size:12px!important;gap:5px!important}
+.appNav button span{font-size:24px!important}
+.appNav button.saleNav{min-height:76px!important;transform:translateY(-7px)!important;border-radius:20px!important}
+.appNav button.saleNav span{font-size:29px!important}
+@media(max-width:420px){
+ .appNav{gap:2px!important;padding-left:5px!important;padding-right:5px!important}
+ .appNav button{min-height:66px!important;font-size:10.5px!important;padding:7px 1px!important}
+ .appNav button span{font-size:22px!important}
+ .appNav button.saleNav{min-height:72px!important}
+}
+/* Harmoniser les fenêtres HTML existantes et toute future fenêtre */
+[role="dialog"],.appModal,.actionModal{
+ border-radius:var(--dialog-radius);
+ box-shadow:var(--dialog-shadow);
+}
+#purchaseEditModal{z-index:10020!important}
+#purchaseEditModal>div{border-radius:var(--dialog-radius)!important;box-shadow:var(--dialog-shadow)!important}
+.appModalBackdrop,.actionModalBackdrop{
+ position:fixed;inset:0;z-index:10010;display:flex;align-items:center;justify-content:center;
+ padding:12px;background:rgba(10,25,18,.58);backdrop-filter:blur(5px);-webkit-backdrop-filter:blur(5px)
+}
+.appModal,.actionModal{
+ width:min(620px,100%);max-height:calc(100dvh - 24px);overflow:auto;overscroll-behavior:contain;
+ padding:18px;background:#fffef9;color:#203128;border:1px solid #e1e3d6
+}
+.appModalHeader,.actionModalHeader{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px}
+.appModalFooter,.actionModalFooter{display:grid;grid-template-columns:1fr;gap:8px;margin-top:16px}
+.appModalFooter button,.actionModalFooter button{width:100%;min-height:48px}
+@media(max-width:600px){
+ .appModalBackdrop,.actionModalBackdrop{padding:9px}
+ .appModal,.actionModal{padding:15px;max-height:calc(100dvh - 18px);border-radius:25px}
+}
+/* Keep content reachable above the larger navigation bar */
+main{padding-bottom:calc(132px + env(safe-area-inset-bottom))!important}
+footer.versionFooter{padding-bottom:calc(135px + env(safe-area-inset-bottom))!important}
+
 </style>
 </head>
 <body>
@@ -855,7 +896,7 @@ footer.versionFooter{width:100%;max-width:850px;margin:12px auto 0;padding:18px 
   <div class="card"><h3>💡 Plan d’action conseillé</h3><div id="analysisActions"></div><p class="small muted">Les recommandations sont calculées à partir des données enregistrées. Une projection n’est pas une garantie. La marge réelle nécessite les coûts d’achat.</p><div class="actions" style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px"><button class="btn" onclick="exportAnalysisCSV()">Exporter l’analyse CSV</button><button class="btn secondary" onclick="window.print()">Imprimer le bilan</button></div></div>
 </section>
 </main>
-<footer class="versionFooter" aria-label="Version installée"><span class="versionChip"><span class="versionDot" aria-hidden="true"></span> Vap’ & Moi Pro · Version installée : V38.1 — Samsung S25</span><p class="small muted">Données enregistrées sur cet appareil · Pense à effectuer régulièrement une sauvegarde JSON.</p></footer>
+<footer class="versionFooter" aria-label="Version installée"><span class="versionChip"><span class="versionDot" aria-hidden="true"></span> Vap’ & Moi Pro · Version installée : V38.2 — Fenêtres & navigation S25</span><p class="small muted">Données enregistrées sur cet appareil · Pense à effectuer régulièrement une sauvegarde JSON.</p></footer>
 
 <script>
 const KEY='vapetmoi_fidelite_v1';

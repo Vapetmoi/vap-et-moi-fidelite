@@ -28,3 +28,6 @@ V38 — Refonte visuelle mobile inspirée de Samsung One UI : navigation basse f
 
 
 V38.1 — Optimisation globale pour Samsung Galaxy S25 / Android : prévention du débordement horizontal, grilles adaptatives, cartes et champs uniformisés, tableaux défilants, navigation basse fixe avec safe-area, fenêtres de modification adaptées à la hauteur d'écran, pied de page de version V38.1. Aucun changement volontaire des fonctions métier, des clés de stockage ou du schéma JSON. Contrôles syntaxiques/ZIP uniquement ; tests fonctionnels complets et essai sur appareil réel restent à effectuer.
+
+
+V38.2 — Agrandissement de la navigation inférieure pour le Samsung Galaxy S25 : cibles tactiles plus hautes, icônes et libellés plus grands, espace de sécurité accru. Ajout d'une base CSS commune pour les fenêtres modales et harmonisation de la fenêtre de modification d'achat. Important : toutes les actions de l'application ne sont pas encore converties en fenêtres dédiées ; les formulaires principaux et les dialogues natifs doivent être migrés progressivement puis testés. Aucun changement volontaire des clés de stockage ou de la logique métier.
