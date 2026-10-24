@@ -917,7 +917,7 @@ function showClient(name){
   <h3>💶 Résumé du client</h3>
   <div class="grid"><div><strong>CA client</strong><br>${fmt(c.total)}</div><div><strong>Panier moyen</strong><br>${fmt(avg)}</div><div><strong>Nombre d’achats</strong><br>${c.purchases}</div></div>
   <h3>🧺 Achats par catégorie</h3>${(()=>{const sums={};SALE_CATEGORIES.forEach(([key,label])=>sums[key]={label,amount:0});(c.history||[]).filter(isActivePurchase).forEach(p=>SALE_CATEGORIES.forEach(([key])=>sums[key].amount+=Math.max(0,Number(p.categoryAmounts?.[key])||0)));const rows=SALE_CATEGORIES.filter(([key])=>sums[key].amount>0);return rows.length?rows.map(([key])=>`<div class="row small"><span>${esc(sums[key].label)}</span><strong>${fmt(sums[key].amount)}</strong></div>`).join(''):'<p class="small muted">Aucune répartition renseignée pour ce client.</p>'})()}
-  <h3>🧾 Historique des achats</h3>${hist.length?hist.map(p=>`<div class="row small" style="border-bottom:1px solid var(--border);padding:8px 0;${p.cancelled?'opacity:.7;background:#fff5f4;':''}"><span>📅 ${dateFmt(p.date)} · ${fmt(p.amount)}${p.discount?' · 🎁 -'+fmt(p.discount):''}${p.exceptionalDiscount?' (dont remise exceptionnelle '+fmt(p.exceptionalDiscount)+')':''} · payé ${fmt(p.paid)}${p.categoryAmounts&&categoryAmountTotal(p.categoryAmounts)>0?' · Catégories : '+SALE_CATEGORIES.filter(([key])=>Number(p.categoryAmounts[key])>0).map(([key,label])=>label+' '+fmt(p.categoryAmounts[key])).join(', '):''}${p.cancelled?` · <strong style="color:var(--red)">ANNULÉ le ${dateFmt(p.cancelledAt)}</strong>`:''}</span>${isActivePurchase(p)?`<button class="secondary" onclick="cancelPurchase('${escJs(c.name)}','${escJs(p.id)}')">Annuler</button>`:''}</div>`).join(''):'<p class="muted">Aucun achat.</p>'}
+  <h3>🧾 Historique des achats</h3>${hist.length?hist.map(p=>`<div class="row small" style="border-bottom:1px solid var(--border);padding:8px 0;${p.cancelled?'opacity:.7;background:#fff5f4;':''}"><span>📅 ${dateFmt(p.date)} · ${fmt(p.amount)}${p.discount?' · 🎁 -'+fmt(p.discount):''}${p.exceptionalDiscount?' (dont remise exceptionnelle '+fmt(p.exceptionalDiscount)+')':''} · payé ${fmt(p.paid)}${p.categoryAmounts&&categoryAmountTotal(p.categoryAmounts)>0?' · Catégories : '+SALE_CATEGORIES.filter(([key])=>Number(p.categoryAmounts[key])>0).map(([key,label])=>label+' '+fmt(p.categoryAmounts[key])).join(', '):''}${p.cancelled?` · <strong style="color:var(--red)">ANNULÉ le ${dateFmt(p.cancelledAt)}</strong>`:''}</span>${isActivePurchase(p)?`<button class="secondary" onclick="editPurchase('${escJs(c.name)}','${escJs(p.id)}')">Modifier</button><button class="secondary" onclick="cancelPurchase('${escJs(c.name)}','${escJs(p.id)}')">Annuler</button>`:''}</div>`).join(''):'<p class="muted">Aucun achat.</p>'}
   <h3>🎁 Fidélité</h3>
   <div class="grid grid4">
     <div class="stat"><strong>${reward.earnedCount}</strong><span class="kpiTitle">Bons gagnés</span><div class="small muted">${fmt(reward.earned)}</div></div>
@@ -973,6 +973,24 @@ function saveClientEdits(oldName){
   if(clients.some(x=>x!==c&&x.name.toLocaleLowerCase('fr')===name.toLocaleLowerCase('fr'))){msg.textContent='⚠️ Un autre client porte déjà ce nom.';return;}
   const previous=JSON.stringify(c),previousName=c.name;c.name=name;c.phone=document.getElementById('editClientPhone').value.trim();c.email=document.getElementById('editClientEmail').value.trim();c.notes=document.getElementById('editClientNotes').value.trim();
   if(!save()){const restored=JSON.parse(previous);Object.keys(c).forEach(k=>delete c[k]);Object.assign(c,restored);msg.textContent='⚠️ Modifications non enregistrées : les données précédentes sont conservées.';return;}logOperation('Fiche client modifiée',previousName===name?name:`${previousName} → ${name}`);showClient(name);
+}
+function editPurchase(name,id){
+  const c=clients.find(x=>x.name===name);if(!c)return;
+  const p=c.history.find(x=>String(x.id)===String(id));if(!p||!isActivePurchase(p))return;
+  if(p.stockProductId||p.stockMovementId){alert("Cette vente est liée à un mouvement de stock. Pour éviter une incohérence d'inventaire, annule-la puis recrée-la plutôt que de la modifier directement.");return;}
+  const raw=prompt("Nouveau montant de l'achat AVANT réduction (€) :",String(Number(p.amount||0).toFixed(2)).replace(".",","));if(raw===null)return;
+  const amount=Number(String(raw).trim().replace(/\s/g,"").replace(",","."));
+  if(!Number.isFinite(amount)||amount<=0){alert("Montant invalide. Aucun changement effectué.");return;}
+  const exceptional=Math.max(0,Number(p.exceptionalDiscount)||0),rewardDiscount=Math.max(0,Number(p.rewardDiscount)||0),discount=exceptional+rewardDiscount;
+  if(discount>amount){alert("Le montant ne peut pas être inférieur aux réductions déjà appliquées.");return;}
+  let categoryAmounts=null;const oldCats=p.categoryAmounts&&categoryAmountTotal(p.categoryAmounts)>0?p.categoryAmounts:null;
+  if(oldCats){categoryAmounts={};let sum=0;for(const [key,label] of SALE_CATEGORIES){const prior=Math.max(0,Number(oldCats[key])||0);const value=prompt("Nouvelle répartition — "+label+" (€). Saisis 0 si aucune dépense dans cette catégorie :",String(prior.toFixed(2)).replace(".",","));if(value===null)return;const n=Number(String(value).trim().replace(/\s/g,"").replace(",","."));if(!Number.isFinite(n)||n<0){alert("Montant de catégorie invalide. Aucun changement effectué.");return;}categoryAmounts[key]=Math.round(n*100)/100;sum+=categoryAmounts[key];}if(Math.abs(Math.round((sum-amount)*100))>0){alert("La répartition doit totaliser exactement "+fmt(amount)+". Aucun changement effectué.");return;}}
+  else if(!confirm("Cet achat n'avait pas de répartition par catégorie. Enregistrer le nouveau montant sans détail par catégorie ?"))return;
+  if(!confirm("Confirmer la modification de "+fmt(p.amount)+" à "+fmt(amount)+" ? Les statistiques seront actualisées."))return;
+  const oldPaid=Math.max(0,Number(p.paid??p.amount)||0),newPaid=Math.round((amount-discount)*100)/100,oldEntry={...p,categoryAmounts:p.categoryAmounts?{...p.categoryAmounts}:undefined},oldTotal=c.total;
+  p.amount=Math.round(amount*100)/100;p.paid=newPaid;p.discount=discount;if(categoryAmounts)p.categoryAmounts=categoryAmounts;c.total=Math.round((Number(c.total||0)-oldPaid+newPaid)*100)/100;
+  if(!save()){Object.assign(p,oldEntry);c.total=oldTotal;alert("Modification non enregistrée. Les anciennes valeurs ont été restaurées.");return;}
+  logOperation("Achat modifié",`${c.name} · ${fmt(oldPaid)} → ${fmt(newPaid)}`);updateAll();showClient(name);
 }
 function cancelPurchase(name,id){
   const c=clients.find(x=>x.name===name);if(!c)return;
