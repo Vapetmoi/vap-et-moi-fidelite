@@ -1,13 +1,13 @@
 {
-  "name": "Vap’ & Moi Pro — V31 Recherche Client",
+  "name": "Vap’ & Moi Pro — V45 Refonte Premium",
   "short_name": "Vap’ & Moi Pro",
-  "description": "Vap’ & Moi Pro : recherche instantanée des clients, ventes, fidélité et analyses.",
+  "description": "Vap’ & Moi Pro : gestion de boutique, clients, ventes, fidélité, stock et analyses.",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
   "orientation": "portrait-primary",
-  "background_color": "#f5f3e9",
-  "theme_color": "#123626",
+  "background_color": "#f4f3eb",
+  "theme_color": "#173b2d",
   "icons": [
     {
       "src": "./icon-192.png",

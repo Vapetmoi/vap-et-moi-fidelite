@@ -1,0 +1,9 @@
+VAP’ & MOI PRO — V45 REFONTE PREMIUM
+
+Base : V44.1 Actions calibrées.
+
+Cette version applique une refonte visuelle globale : palette vert forêt / laiton / crème, cartes et formulaires harmonisés, navigation mobile affinée, accueil et mascotte mis en valeur, tableaux et blocs statistiques modernisés.
+
+Préservation : la clé de stockage métier vapetmoi_fidelite_v1 et le JavaScript métier de la V44.1 ont été conservés. Les changements apportés ici sont essentiellement CSS, métadonnées de version et cache du service worker.
+
+IMPORTANT : effectuer une sauvegarde JSON depuis l’application avant publication. Cette version a été contrôlée au niveau de l’intégrité du ZIP et de la syntaxe JavaScript ; elle n’a pas été testée sur un véritable téléphone ni avec des données de boutique réelles. Vérifier vente, annulation, fidélité, stock, sauvegarde/restauration et navigation avant usage quotidien.
