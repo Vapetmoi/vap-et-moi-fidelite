@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#163f2d">
 <meta name="description" content="Vap’ & Moi Pro Signature Premium : gestion des clients, ventes, fidélité, analyses, suivi commercial et sauvegardes.">
-<title>Vap’ &amp; Moi Pro — V43 Livre de comptes</title>
+<title>Vap’ &amp; Moi Pro — V44 Registre à pages</title>
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="./icon-192.png">
 <meta name="mobile-web-app-capable" content="yes">
@@ -915,6 +915,135 @@ nav.appNav button.saleNav.active{background:linear-gradient(145deg,#285b3b,#102f
  nav.appNav button span{width:24px!important;height:24px!important;font-size:16px!important}
 }
 
+
+/* V44 — Registre de boutique : sensation de page tournée, sans toucher aux données */
+:root{
+ --ledger-forest:#173d2b;--ledger-forest-dark:#0e2b1e;--ledger-olive:#66734c;
+ --ledger-paper:#fbf7e9;--ledger-paper-edge:#e7dcc0;--ledger-ink:#2c3b2d;
+ --ledger-muted:#73776a;--ledger-brass:#b79a5b;--ledger-rule:rgba(110,126,89,.13);
+}
+html{background:#e9e6d8}
+body{
+ background:
+  radial-gradient(ellipse at 15% 12%,rgba(255,255,255,.7),transparent 44%),
+  linear-gradient(90deg,#d8d4c3 0,#f1eedf 5%,#f3f0e5 94%,#d6d1bd 100%)!important;
+ color:var(--ledger-ink)!important;
+}
+header{
+ position:relative!important;overflow:hidden!important;
+ padding:14px 17px 16px!important;
+ background:
+  linear-gradient(112deg,rgba(9,38,25,.97),rgba(28,77,49,.96)),
+  repeating-linear-gradient(90deg,transparent 0 18px,rgba(255,255,255,.025) 19px 20px)!important;
+ border-bottom:4px solid var(--ledger-brass)!important;
+ box-shadow:0 5px 0 rgba(130,103,51,.13),0 12px 24px rgba(23,61,43,.12)!important;
+}
+header:after{
+ content:"";position:absolute;left:0;right:0;bottom:0;height:1px;
+ background:rgba(255,245,211,.55);pointer-events:none;
+}
+.brandLockup{align-items:center!important;gap:12px!important}
+.brandMark{flex:0 0 auto!important}
+header h1{font-family:Georgia,"Times New Roman",serif!important;font-size:clamp(23px,6vw,29px)!important;line-height:1.06!important;letter-spacing:-.04em!important}
+header p{font-family:Georgia,"Times New Roman",serif!important;font-size:clamp(12px,3.3vw,15px)!important;line-height:1.25!important;max-width:100%!important;margin-top:5px!important}
+main{
+ position:relative!important;max-width:900px!important;margin:0 auto!important;
+ background:
+  linear-gradient(90deg,rgba(119,96,48,.13) 0,rgba(255,255,255,.2) 7px,transparent 20px),
+  repeating-linear-gradient(180deg,transparent 0 31px,var(--ledger-rule) 32px,transparent 33px),
+  linear-gradient(90deg,#f7f2e2,#fffbee 4%,#fbf7e9 97%,#eee5cf)!important;
+ border-left:1px solid #d8ccb0!important;border-right:1px solid #d8ccb0!important;
+ box-shadow:inset 9px 0 15px rgba(91,72,35,.045),inset -3px 0 8px rgba(91,72,35,.035)!important;
+ padding:17px 15px 35px!important;
+}
+main:before{
+ content:"";position:absolute;top:0;bottom:0;left:8px;width:1px;
+ background:rgba(160,91,76,.28);pointer-events:none;
+}
+.page{transform-origin:top center}
+.page.active{animation:ledgerPageTurn .28s ease-out both}
+@keyframes ledgerPageTurn{
+ from{opacity:.72;transform:perspective(900px) rotateX(-1.2deg) translateY(5px)}
+ to{opacity:1;transform:perspective(900px) rotateX(0) translateY(0)}
+}
+.appGreeting.appGreetingCompact.appGreetingMascot{
+ border:1px solid var(--ledger-brass)!important;
+ box-shadow:0 5px 0 rgba(183,154,91,.18),0 12px 22px rgba(27,56,35,.10)!important;
+ border-radius:23px 12px 23px 12px!important;
+}
+.card,.stat,.quickTile,.client,.homeStats .stat{
+ background:linear-gradient(145deg,#fffdf5,#f4eedc)!important;
+ border:1px solid #e0d5b9!important;
+ box-shadow:0 3px 0 rgba(151,123,66,.06),0 6px 15px rgba(47,53,34,.045)!important;
+ border-radius:15px 9px 15px 9px!important;
+}
+.card h2,.page h2{font-family:Georgia,"Times New Roman",serif!important;letter-spacing:-.025em!important}
+.stat strong,.homeStats .stat strong{font-family:Georgia,"Times New Roman",serif!important;color:#285c40!important}
+button.primary,.primary{
+ background:linear-gradient(135deg,#1b4d32,#2c6845)!important;
+ border:1px solid var(--ledger-brass)!important;border-radius:11px 7px 11px 7px!important;
+}
+input,select,textarea{background:#fffdf7!important;border:1px solid #d9cfb4!important;border-radius:8px!important}
+nav.appNav{
+ background:linear-gradient(180deg,#faf7eb,#eee7d4)!important;
+ border-top:2px solid #c8b780!important;
+ box-shadow:0 -5px 0 rgba(183,154,91,.10),0 -9px 24px rgba(38,53,35,.12)!important;
+}
+nav.appNav button{
+ color:#596452!important;border:1px solid transparent!important;
+ font-family:Georgia,"Times New Roman",serif!important;font-weight:700!important;
+ letter-spacing:-.02em!important;
+}
+nav.appNav button span{
+ display:flex!important;align-items:center!important;justify-content:center!important;
+ width:30px!important;height:30px!important;border-radius:9px!important;
+ font-size:21px!important;line-height:1!important;
+}
+nav.appNav button.active{
+ color:#1a4b30!important;background:#e6e8d6!important;
+ border:1px solid #c9bd91!important;box-shadow:inset 0 1px 0 #fff!important;
+}
+nav.appNav button.saleNav{
+ color:#fff9e9!important;background:linear-gradient(145deg,#285b3b,#102f21)!important;
+ border:2px solid var(--ledger-brass)!important;box-shadow:0 3px 0 #d8c28a,0 6px 14px #173b2b2e!important;
+}
+nav.appNav button.saleNav span{background:#d4bf83!important;color:#173b2b!important}
+nav.appNav button.saleNav.active{background:linear-gradient(145deg,#285b3b,#102f21)!important;color:#fff9e9!important}
+@media(max-width:680px){
+ body{padding-bottom:calc(88px + env(safe-area-inset-bottom))!important}
+ header{padding:12px 14px 14px!important}
+ header h1{font-size:clamp(22px,6vw,27px)!important;white-space:nowrap!important}
+ header p{font-size:clamp(11px,3.1vw,13px)!important;white-space:normal!important;max-width:100%!important}
+ main{padding:13px 12px calc(98px + env(safe-area-inset-bottom))!important}
+ .appGreeting.appGreetingCompact.appGreetingMascot{min-height:185px!important}
+ .homeStats{gap:9px!important}
+ .homeStats .stat{min-width:0!important;padding:13px 10px 13px 14px!important}
+ .homeStats .stat strong{font-size:clamp(19px,5.1vw,25px)!important}
+ .homeStats .stat .kpiTitle{font-size:12px!important;line-height:1.25!important}
+ nav.appNav{
+  grid-template-columns:repeat(6,minmax(0,1fr))!important;gap:2px!important;
+  padding:6px 4px calc(7px + env(safe-area-inset-bottom))!important;
+  border-radius:18px 18px 0 0!important;
+ }
+ nav.appNav button{
+  min-width:0!important;min-height:59px!important;padding:5px 0 4px!important;
+  display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;
+  gap:3px!important;font-size:clamp(9px,2.55vw,11px)!important;line-height:1.05!important;
+  white-space:nowrap!important;overflow:hidden!important;border-radius:10px!important;
+ }
+ nav.appNav button span{width:29px!important;height:29px!important;font-size:20px!important;border-radius:8px!important}
+ nav.appNav button.saleNav{transform:translateY(-4px)!important;min-height:62px!important;border-radius:12px!important}
+ .card{padding:14px!important;margin-bottom:11px!important}
+}
+@media(max-width:360px){
+ header h1{font-size:21px!important}
+ header p{font-size:11px!important}
+ nav.appNav{gap:1px!important;padding-left:2px!important;padding-right:2px!important}
+ nav.appNav button{font-size:8.5px!important}
+ nav.appNav button span{width:26px!important;height:26px!important;font-size:18px!important}
+}
+@media(prefers-reduced-motion:reduce){.page.active{animation:none!important}}
+
 </style>
 </head>
 <body>
@@ -1214,7 +1343,7 @@ nav.appNav button.saleNav.active{background:linear-gradient(145deg,#285b3b,#102f
   <div class="card"><h3>💡 Plan d’action conseillé</h3><div id="analysisActions"></div><p class="small muted">Les recommandations sont calculées à partir des données enregistrées. Une projection n’est pas une garantie. La marge réelle nécessite les coûts d’achat.</p><div class="actions" style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px"><button class="btn" onclick="exportAnalysisCSV()">Exporter l’analyse CSV</button><button class="btn secondary" onclick="window.print()">Imprimer le bilan</button></div></div>
 </section>
 </main>
-<footer class="versionFooter" aria-label="Version installée"><span class="versionChip"><span class="versionDot" aria-hidden="true"></span> Vap’ & Moi Pro · Version installée : V43 — Livre de comptes</span><p class="small muted">Données enregistrées sur cet appareil · Pense à effectuer régulièrement une sauvegarde JSON.</p></footer>
+<footer class="versionFooter" aria-label="Version installée"><span class="versionChip"><span class="versionDot" aria-hidden="true"></span> Vap’ & Moi Pro · Version installée : V44 — Registre à pages</span><p class="small muted">Données enregistrées sur cet appareil · Pense à effectuer régulièrement une sauvegarde JSON.</p></footer>
 
 <script>
 const KEY='vapetmoi_fidelite_v1';
