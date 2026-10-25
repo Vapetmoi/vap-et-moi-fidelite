@@ -659,6 +659,67 @@ input:focus,select:focus,textarea:focus{border-color:#4d805f;box-shadow:0 0 0 3p
  main{padding-top:22px}
 }
 
+
+/* V41 — Refondre réellement la composition mobile, sans toucher à la logique métier */
+:root{
+ --v41-forest:#103b29;--v41-forest-2:#1e593b;--v41-gold:#c6aa68;
+ --v41-cream:#fbfaf5;--v41-ink:#1c3328;--v41-muted:#6c7971;
+ --v41-line:#e0e5da;--v41-soft:#eef3e9;
+}
+body{background:#f2f4ee!important;color:var(--v41-ink)}
+header{
+ background:linear-gradient(120deg,#0b2d1e 0%,#164a31 58%,#23583b 100%)!important;
+ border-bottom:2px solid var(--v41-gold)!important;box-shadow:0 12px 28px rgba(10,45,28,.16)!important
+}
+header h1{letter-spacing:-.035em!important;font-weight:850!important}
+header p{letter-spacing:.01em}
+main{max-width:1080px;margin:0 auto}
+.card,.quickTile,.client,.stat{
+ background:var(--v41-cream)!important;border:1px solid var(--v41-line)!important;
+ box-shadow:0 5px 18px rgba(17,52,34,.045)!important
+}
+.card{border-radius:22px!important}
+.card h2{letter-spacing:-.025em}
+button.primary,.primary{
+ background:linear-gradient(135deg,#164c31,#287249)!important;border:1px solid rgba(198,170,104,.55)!important;
+ box-shadow:0 5px 13px rgba(17,72,44,.16)!important;border-radius:15px!important
+}
+input,select,textarea{border-radius:13px!important;min-height:44px}
+.stat strong,.reward,.kpi strong{color:#205d3c}
+.badge{border:1px solid #dce7d8;border-radius:999px}
+.appNav{
+ background:rgba(255,255,251,.97)!important;backdrop-filter:blur(18px);
+ border-top:1px solid #d8dfd2!important;box-shadow:0 -8px 28px rgba(19,48,30,.10)!important
+}
+.appNav button.active{background:#eaf1e5!important;color:#1d5a39!important;border-bottom-color:var(--v41-gold)!important}
+.appNav button.saleNav{background:linear-gradient(145deg,#1d603d,#103b29)!important;border:2px solid var(--v41-gold)!important;box-shadow:0 5px 14px #123b2a2e!important}
+@media(max-width:680px){
+ body{font-size:15px!important}
+ header{padding:13px 15px 15px!important;border-radius:0 0 25px 25px!important}
+ header h1{font-size:24px!important;line-height:1.08!important}
+ header p{font-size:12px!important}
+ main{padding:11px 12px 26px!important}
+ /* Recomposer les cartes d’accueil : moins de vide, KPI plus compacts et hiérarchisés */
+ .grid4{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:10px!important}
+ .card{padding:15px!important;margin-bottom:11px!important;border-radius:20px!important}
+ .quickTile,.stat{border-radius:19px!important;padding:15px!important}
+ .quickTile strong,.stat strong{font-size:24px!important;letter-spacing:-.035em}
+ .card h2{font-size:19px!important}
+ .appNav{display:grid!important;grid-template-columns:repeat(6,minmax(0,1fr))!important;gap:3px!important;padding:6px 4px calc(7px + env(safe-area-inset-bottom))!important}
+ .appNav button{border:0!important;border-radius:13px!important;min-height:58px!important;padding:7px 0 5px!important;font-size:10px!important;gap:5px!important}
+ .appNav button span{font-size:19px!important}
+ .appNav button.active{border:0!important}
+ .appNav button.saleNav{border-radius:15px!important;transform:translateY(-7px);min-height:62px!important}
+ /* Tables and forms fit narrow phone screens */
+ .tableWrap{overflow-x:auto;max-width:100%}
+ .actions{display:flex;flex-wrap:wrap;gap:8px}
+ .actions button{min-height:42px}
+}
+@media(min-width:681px){
+ main{padding:22px 20px 30px!important}
+ .appNav{position:sticky;top:0;z-index:50}
+}
+
 </style>
 </head>
 <body>
@@ -958,7 +1019,7 @@ input:focus,select:focus,textarea:focus{border-color:#4d805f;box-shadow:0 0 0 3p
   <div class="card"><h3>💡 Plan d’action conseillé</h3><div id="analysisActions"></div><p class="small muted">Les recommandations sont calculées à partir des données enregistrées. Une projection n’est pas une garantie. La marge réelle nécessite les coûts d’achat.</p><div class="actions" style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px"><button class="btn" onclick="exportAnalysisCSV()">Exporter l’analyse CSV</button><button class="btn secondary" onclick="window.print()">Imprimer le bilan</button></div></div>
 </section>
 </main>
-<footer class="versionFooter" aria-label="Version installée"><span class="versionChip"><span class="versionDot" aria-hidden="true"></span> Vap’ & Moi Pro · Version installée : V40.1 — Signature Mobile</span><p class="small muted">Données enregistrées sur cet appareil · Pense à effectuer régulièrement une sauvegarde JSON.</p></footer>
+<footer class="versionFooter" aria-label="Version installée"><span class="versionChip"><span class="versionDot" aria-hidden="true"></span> Vap’ & Moi Pro · Version installée : V41 — Refonte Signature</span><p class="small muted">Données enregistrées sur cet appareil · Pense à effectuer régulièrement une sauvegarde JSON.</p></footer>
 
 <script>
 const KEY='vapetmoi_fidelite_v1';

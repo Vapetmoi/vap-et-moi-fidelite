@@ -1,0 +1,7 @@
+VAP’ & MOI PRO — V41 REFONTE SIGNATURE
+Base : V40.1.
+Objectif : transformation visuelle plus marquée sur mobile : hiérarchie visuelle, cartes KPI compactes, vert forêt et or, navigation tactile fixe et homogénéisation des composants.
+Aucune modification volontaire des fonctions métier ni des clés de stockage. Le JavaScript applicatif est conservé.
+Vérifications réalisées : ZIP intègre, mentions de version mises à jour, nom du cache de service worker incrémenté, syntaxe du script inline vérifiée.
+Non testé : navigation complète dans un navigateur réel, restauration JSON, ventes, fidélité, stock et rendu réel sur Samsung.
+Avant publication : sauvegarder les données en JSON. Remplacer les fichiers à la racine du dépôt, publier, puis tester d'abord les écrans sans modifier les ventes existantes.
