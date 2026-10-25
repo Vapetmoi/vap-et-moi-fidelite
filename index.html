@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#163f2d">
 <meta name="description" content="Vap’ & Moi Pro Signature Premium : gestion des clients, ventes, fidélité, analyses, suivi commercial et sauvegardes.">
-<title>Vap’ &amp; Moi Pro — V45 Refonte Premium</title>
+<title>Vap’ &amp; Moi Pro — V45.2 Graphiques & tendances</title>
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="./icon-192.png">
 <meta name="mobile-web-app-capable" content="yes">
@@ -1116,7 +1116,7 @@ nav.appNav button{min-width:0!important}
 
 
 
-/* V45 — Refonte Premium complète : identité forêt, laiton et interface mobile raffinée.
+/* V45.2 — Graphiques & tendances : identité forêt, laiton et interface mobile raffinée.
    Couche visuelle uniquement : aucune modification du modèle de données ni des fonctions métier. */
 :root{
  --green:#173b2d;--green2:#286348;--light:#f4f3eb;--card:#fffdf7;--text:#202d25;--muted:#68736b;
@@ -1176,11 +1176,61 @@ nav.appNav button{color:#687568;font-weight:700}nav.appNav button.active{backgro
 @media(max-width:360px){.appGreetingMascot{min-height:140px}.appGreetingMascot .greetingContent{width:72%;max-width:72%}.appGreetingMascot .mascotGreetingImg{width:43%}.brandLockup h1{font-size:19px}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}button,.quickTile{transition:none!important}}
 
+
+/* V45.2 — Graphiques, tendances et comparaisons */
+:root{--chart-forest:#174b35;--chart-sage:#73977b;--chart-gold:#c4a15a;--chart-cream:#f7f2e7;--chart-ink:#203b2e}
+#stats .card{background:linear-gradient(155deg,#fff 0%,#fcfdfb 100%);border-color:#e0e8df;box-shadow:0 8px 24px rgba(19,57,39,.055)}
+#stats .statsThemeHead{background:linear-gradient(110deg,#163f2d,#24583e);color:#fff;border:1px solid #c3a15d;box-shadow:0 5px 16px rgba(16,54,36,.12)}
+#stats .statsThemeHead small{color:#e1e9df}
+#stats .statsThemeHead:after{color:#d6b76e}
+#stats .stat{background:linear-gradient(145deg,#f5f8f2,#e9f1e8);border:1px solid #dce7da;border-radius:17px}
+#stats .stat strong{color:#174b35;font-variant-numeric:tabular-nums}
+#stats .statsOverview button{border-radius:17px;border:1px solid #dce6db;box-shadow:0 5px 16px rgba(19,57,39,.055);transition:transform .16s,box-shadow .16s}
+#stats .statsOverview button:active{transform:scale(.99)}
+#stats .chartWrap{border-radius:16px;background:linear-gradient(180deg,#fbfcf9,#f3f7f1);padding:10px;margin:10px 0;border:1px solid #e4ebe1}
+#stats .historyChart{min-height:180px}
+#stats svg text{fill:#5b6f61}
+#stats table{border-radius:12px;overflow:hidden}#stats th{background:#edf3eb;color:#294a37}#stats td,#stats th{padding:10px 9px}
+.categoryViz{display:grid;grid-template-columns:minmax(145px, .8fr) minmax(0,1.2fr);align-items:center;gap:18px;margin:16px 0;padding:16px;border:1px solid #e1e9dd;border-radius:18px;background:linear-gradient(145deg,#fbfcf8,#f0f5ed)}
+.categoryDonut{width:min(100%,190px);aspect-ratio:1;border-radius:50%;margin:auto;position:relative;box-shadow:inset 0 0 0 1px #ffffff80,0 7px 18px #17312614}
+.categoryDonut:after{content:'';position:absolute;inset:25%;background:#fffdf7;border:1px solid #e7e5d9;border-radius:50%;box-shadow:0 2px 8px #17312610}
+.categoryLegend{display:grid;gap:10px}.categoryLegendItem{display:grid;grid-template-columns:10px 1fr auto;gap:9px;align-items:center;font-size:13px}.categoryLegendDot{width:10px;height:10px;border-radius:3px}.categoryLegendItem strong{white-space:nowrap;color:#244b34}.categoryLegendItem small{color:#64756b;display:block;margin-top:2px}
+@media(max-width:430px){.categoryViz{grid-template-columns:1fr;gap:14px}.categoryDonut{width:158px}.categoryLegend{gap:8px}}
+
+
+/* V45.2 — finition des graphiques et des indicateurs */
+#stats .categoryDonut{transition:transform .25s ease,filter .25s ease}
+#stats .categoryDonut:hover{transform:scale(1.025);filter:saturate(1.08)}
+#stats .purchaseCountGroup{border:1px solid #e0e8dd;border-radius:18px;padding:15px;background:linear-gradient(145deg,#fffef9,#f4f7f0);box-shadow:0 5px 16px rgba(19,57,39,.045);margin:12px 0}
+#stats .purchaseCountKpis{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:12px 0}
+#stats .purchaseCountKpis>div{background:#edf3eb;border:1px solid #e0e9dd;border-radius:12px;padding:10px;min-width:0}
+#stats .purchaseCountKpis span{display:block;font-size:11px;color:#637568}
+#stats .purchaseCountKpis strong{display:block;font-size:16px;color:#174b35;overflow-wrap:anywhere;margin-top:4px}
+#stats .purchaseCountRow{padding:10px 0;border-bottom:1px solid #e7ece3}
+#stats .purchaseCountRow:last-child{border-bottom:0}
+#stats .purchaseCountTrack{height:10px;border-radius:99px;background:#e7ece3;overflow:hidden;margin:7px 0}
+#stats .purchaseCountTrack>span{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,#174b35,#719878);box-shadow:0 1px 3px #174b3520}
+#stats .purchaseCountInsight{background:#edf4eb;border-radius:12px;padding:10px;color:#244b34;font-size:13px}
+#stats .purchaseCountClosed{opacity:.55}
+#stats .statsThemeHead{box-shadow:0 3px 12px rgba(19,57,39,.035)}
+@media(max-width:430px){#stats .purchaseCountKpis{grid-template-columns:1fr 1fr}#stats .purchaseCountKpis>div:last-child{grid-column:1/-1}}
+
+
+
+/* V46 — tableau de bord analytique premium */
+:root{--gold:#c6a45c}
+.advancedAnalytics{background:linear-gradient(145deg,#fffdf8,#f5f8f2);border:1px solid #d8c89f;box-shadow:0 10px 28px rgba(18,61,43,.09)}
+.advancedHead{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}.advancedEyebrow{font-size:10px;letter-spacing:.15em;font-weight:800;color:#9b7837}.advancedHead h2{margin:5px 0}.advancedMark{background:#163c2c;color:#e4c981;border-radius:12px;padding:8px 10px;font-weight:800;font-size:12px}
+.advancedKpis{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px;margin:12px 0}
+.advancedKpi{background:#fff;border:1px solid #e4e7dc;border-radius:15px;padding:12px;min-width:0}.advancedKpi span{display:block;font-size:11px;color:#68756a}.advancedKpi strong{display:block;font-size:18px;color:#174b35;margin-top:4px;overflow-wrap:anywhere}
+.advancedCharts{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);gap:12px}.advancedChartCard{background:#fff;border:1px solid #e4e7dc;border-radius:17px;padding:14px;min-width:0}.advancedChartCard h3{font-size:16px;margin:0}.advancedSvgWrap{width:100%;overflow:hidden}.advancedSvgWrap svg{display:block;width:100%;height:auto}.advancedTopRow{display:flex;align-items:center;gap:9px;padding:10px 0;border-bottom:1px solid #edf0e8}.advancedTopRow:last-child{border-bottom:0}.advancedRank{width:28px;height:28px;border-radius:9px;background:#e8f0e8;color:#174b35;display:grid;place-items:center;font-weight:800;flex-shrink:0}.advancedTopName{min-width:0;flex:1;overflow-wrap:anywhere;font-size:13px;font-weight:700}.advancedTopValue{font-size:12px;font-weight:800;white-space:nowrap;color:#174b35}.advancedBar{height:5px;border-radius:99px;background:#edf0e8;margin-top:5px;overflow:hidden}.advancedBar>span{display:block;height:100%;background:linear-gradient(90deg,#174b35,#c6a45c);border-radius:99px}
+@media(max-width:650px){.advancedCharts{grid-template-columns:1fr}.advancedKpis{grid-template-columns:repeat(2,minmax(0,1fr))}.advancedKpi strong{font-size:17px}.advancedChartCard{padding:12px}}
+
 </style>
 </head>
 <body>
 <header>
-  <div class="brandLockup"><div class="brandMark" aria-hidden="true">V<span>&</span>M</div><div><h1>Vap’ & Moi <span class="proLabel">PRO</span></h1><p>Signature Premium · statistiques et graphiques</p></div></div>
+  <div class="brandLockup"><div class="brandMark" aria-hidden="true">V<span>&</span>M</div><div><h1>Vap’ & Moi <span class="proLabel">PRO</span></h1><p>Signature Premium · graphiques et tendances</p></div></div>
 </header>
 <div id="offlineNotice" role="status" hidden>📴 Hors connexion : consultation uniquement. Les modifications sont désactivées.</div>
 <nav class="appNav">
@@ -1418,6 +1468,18 @@ nav.appNav button{color:#687568;font-weight:700}nav.appNav button.active{backgro
     <p id="weekdayStatsNote" class="statNote"></p>
   </div>
 
+  <section class="card advancedAnalytics" id="advancedAnalytics">
+    <div class="advancedHead"><div><span class="advancedEyebrow">VAP’ & MOI · PILOTAGE</span><h2>📈 Votre activité en un coup d’œil</h2><p class="muted small">Graphiques calculés à partir des ventes actives enregistrées.</p></div><span class="advancedMark">V46</span></div>
+    <label for="advancedPeriod">Période des graphiques</label>
+    <select id="advancedPeriod" onchange="renderAdvancedAnalytics()"><option value="14">14 derniers jours</option><option value="30" selected>30 derniers jours</option><option value="90">90 derniers jours</option><option value="all">Tout l’historique</option></select>
+    <div class="advancedKpis" id="advancedKpis"></div>
+    <div class="advancedCharts">
+      <div class="advancedChartCard"><h3>Évolution du chiffre d’affaires</h3><p class="muted small">CA encaissé par jour</p><div id="advancedRevenueChart" class="advancedSvgWrap"></div></div>
+      <div class="advancedChartCard"><h3>Top 5 des clients</h3><p class="muted small">Classement par CA enregistré</p><div id="advancedTopClients"></div></div>
+    </div>
+    <p class="small muted" id="advancedAnalyticsNote">Les journées sans vente enregistrée ne permettent pas de distinguer une fermeture d’une absence de saisie.</p>
+  </section>
+
   <details id="statsPurchases" class="statsTheme"><summary class="statsThemeHead"><span>🛍️</span><div><strong>2. Ventes et panier moyen</strong><small>Nombre d’achats, panier moyen et comparaison semaine par semaine</small></div></summary>
     <div class="card"><h3 style="margin-top:0">🛍️ Achats par jour et par semaine</h3><div id="purchasePeriodStats"></div><div class="chartWrap" id="purchaseDailyChart" aria-label="Graphique du nombre d’achats par jour"></div><div class="chartWrap" id="purchaseWeeklyChart" aria-label="Graphique du nombre d’achats par semaine"></div><div class="chartWrap" id="purchaseMonthlyChart" aria-label="Graphique du nombre d’achats par mois"></div><div id="dailyPurchaseStats"></div></div>
     <div class="card" id="weeklyClientPurchaseCompare">
@@ -1475,7 +1537,7 @@ nav.appNav button{color:#687568;font-weight:700}nav.appNav button.active{backgro
   <div class="card"><h3>💡 Plan d’action conseillé</h3><div id="analysisActions"></div><p class="small muted">Les recommandations sont calculées à partir des données enregistrées. Une projection n’est pas une garantie. La marge réelle nécessite les coûts d’achat.</p><div class="actions" style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px"><button class="btn" onclick="exportAnalysisCSV()">Exporter l’analyse CSV</button><button class="btn secondary" onclick="window.print()">Imprimer le bilan</button></div></div>
 </section>
 </main>
-<footer class="versionFooter" aria-label="Version installée"><span class="versionChip"><span class="versionDot" aria-hidden="true"></span> Vap’ & Moi Pro · Version installée : V45 — Refonte Premium</span><p class="small muted">Données enregistrées sur cet appareil · Pense à effectuer régulièrement une sauvegarde JSON.</p></footer>
+<footer class="versionFooter" aria-label="Version installée"><span class="versionChip"><span class="versionDot" aria-hidden="true"></span> Vap’ & Moi Pro · Version installée : V45.2 — Graphiques & tendances</span><p class="small muted">Données enregistrées sur cet appareil · Pense à effectuer régulièrement une sauvegarde JSON.</p></footer>
 
 <script>
 const KEY='vapetmoi_fidelite_v1';
@@ -1672,7 +1734,7 @@ function renderCategoryAnalytics(){
  const delta=Math.round((totalCA-allocatedTotal)*100)/100;
  const summary='<div class="grid grid2"><div class="stat"><strong>'+fmt(totalCA)+'</strong><span class="kpiTitle">CA total des ventes actives</span></div><div class="stat"><strong>'+fmt(allocatedTotal)+'</strong><span class="kpiTitle">CA réparti par catégorie</span></div></div>';
  if(!used.length){root.innerHTML=summary+'<p class="small muted">Aucune vente active ne contient de répartition par catégorie. Les ventes au montant seul restent dans le CA total mais ne peuvent pas être attribuées automatiquement à une catégorie.</p>';return}
- root.innerHTML=summary+'<p class="small muted">Ventes réparties : '+allocatedSales+' · Ventes sans catégorie : '+unallocatedSales+' · CA non attribué : '+fmt(unallocatedCA)+'. Les ventes annulées sont exclues.</p>'+used.map(([key])=>{const x=totals[key],pct=allocatedTotal?x.amount/allocatedTotal*100:0;return '<div style="margin:12px 0"><div class="row" style="justify-content:space-between;gap:8px"><strong>'+esc(x.label)+'</strong><strong>'+fmt(x.amount)+' · '+pct.toLocaleString('fr-FR',{maximumFractionDigits:1})+' %</strong></div><div style="height:6px;background:#e8ece3;border-radius:99px;overflow:hidden"><div style="height:100%;width:'+Math.min(100,pct)+'%;background:#326747"></div></div><p class="small muted">Présente dans '+x.transactions+' vente(s) · '+x.clients.size+' client(s)</p></div>'}).join('')+'<p class="small muted">Les remises sont réparties au prorata entre les catégories de chaque vente pour que le total par catégorie corresponde au montant payé. Les ventes sans détail restent dans le CA global et ne sont pas attribuées arbitrairement.</p>';
+ const chartColors=['#174b35','#c4a15a','#73977b','#9b7653','#4e7f8a','#a7b98a','#806a9b','#d18a68'];let angle=0;const stops=used.map(([key],i)=>{const pct=allocatedTotal?totals[key].amount/allocatedTotal*100:0;const start=angle;angle+=pct;return {key,pct,start,end:angle,color:chartColors[i%chartColors.length]}});const gradient=stops.map(s=>s.color+' '+s.start.toFixed(2)+'% '+s.end.toFixed(2)+'%').join(',');const donut='<div class="categoryViz"><div class="categoryDonut" role="img" aria-label="Camembert de la répartition du chiffre d’affaires par catégorie" style="background:conic-gradient('+gradient+')"></div><div class="categoryLegend">'+stops.map(s=>{const x=totals[s.key];return '<div class="categoryLegendItem"><span class="categoryLegendDot" style="background:'+s.color+'"></span><span>'+esc(x.label)+'<small>'+fmt(x.amount)+' · '+x.transactions+' vente(s)</small></span><strong>'+s.pct.toLocaleString('fr-FR',{maximumFractionDigits:1})+' %</strong></div>'}).join('')+'</div></div>';root.innerHTML=summary+donut+'<p class="small muted">Ventes réparties : '+allocatedSales+' · Ventes sans catégorie : '+unallocatedSales+' · CA non attribué : '+fmt(unallocatedCA)+'. Les ventes annulées sont exclues.</p>'+used.map(([key])=>{const x=totals[key],pct=allocatedTotal?x.amount/allocatedTotal*100:0;const color=stops.find(s=>s.key===key)?.color||'#326747';return '<div style="margin:12px 0"><div class="row" style="justify-content:space-between;gap:8px"><strong>'+esc(x.label)+'</strong><strong>'+fmt(x.amount)+' · '+pct.toLocaleString('fr-FR',{maximumFractionDigits:1})+' %</strong></div><div style="height:8px;background:#e8ece3;border-radius:99px;overflow:hidden"><div style="height:100%;width:'+Math.min(100,pct)+'%;background:'+color+';border-radius:99px"></div></div><p class="small muted">Présente dans '+x.transactions+' vente(s) · '+x.clients.size+' client(s)</p></div>'}).join('')+'<p class="small muted">Les remises sont réparties au prorata entre les catégories de chaque vente pour que le total par catégorie corresponde au montant payé. Les ventes sans détail restent dans le CA global et ne sont pas attribuées arbitrairement.</p>';
 }
 function toggleNewClient(show){
   const b=document.getElementById('newClientBox');const v=typeof show==='boolean'?show:b.style.display==='none';b.style.display=v?'block':'none';
@@ -2561,7 +2623,40 @@ function openStatsDetail(id){
   target.scrollIntoView({behavior:'smooth',block:'start'});
 }
 
-function updateAll(){clients=clients.map(normalizeClient);updateClientOptions();renderClients();updatePurchaseBox();renderCategoryAnalytics();setDashboard();setStats();renderWeekdayStats();renderV15Insights(allPurchases(),new Date());renderDailyOps(new Date());renderActivityLog();renderBackupStatus();renderAnalysis();renderCommercialCopilot();renderDataIntegrity();renderFollowupAgenda();const threshold=document.getElementById("inactiveThreshold");if(threshold)threshold.value=String(settings.inactiveThreshold||30);updateGreeting()}
+
+function renderAdvancedAnalytics(){
+ const k=document.getElementById('advancedKpis'), chart=document.getElementById('advancedRevenueChart'), top=document.getElementById('advancedTopClients');
+ if(!k||!chart||!top)return;
+ const all=allPurchases().filter(p=>{const d=dateOf(p);return Number.isFinite(d.getTime())&&safelyPaid(p)>=0});
+ const period=document.getElementById('advancedPeriod')?.value||'30';
+ const now=new Date();now.setHours(23,59,59,999);
+ let start=null;
+ if(period!=='all'){start=new Date(now);start.setDate(start.getDate()-Number(period)+1);start.setHours(0,0,0,0)}
+ const ps=all.filter(p=>!start||dateOf(p)>=start).sort((a,b)=>dateOf(a)-dateOf(b));
+ const ca=ps.reduce((s,p)=>s+safelyPaid(p),0), tickets=ps.length, avg=tickets?ca/tickets:0;
+ k.innerHTML='<div class="advancedKpi"><span>Chiffre d’affaires</span><strong>'+fmt(ca)+'</strong></div><div class="advancedKpi"><span>Ventes actives</span><strong>'+tickets+'</strong></div><div class="advancedKpi"><span>Panier moyen</span><strong>'+fmt(avg)+'</strong></div>';
+ // Aggregate daily CA. Limit the plotted range to 30 points for readability.
+ const days={};
+ ps.forEach(p=>{const d=dateOf(p);const key=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');days[key]=(days[key]||0)+safelyPaid(p)});
+ let entries=Object.entries(days).sort((a,b)=>a[0].localeCompare(b[0]));
+ if(entries.length>30)entries=entries.slice(-30);
+ if(!entries.length){chart.innerHTML='<p class="muted small">Aucune vente active sur cette période.</p>'}
+ else{
+   const W=520,H=230,L=42,R=12,T=14,B=38,iw=W-L-R,ih=H-T-B,max=Math.max(1,...entries.map(x=>x[1]));
+   const pts=entries.map((e,i)=>({x:L+(entries.length===1?iw/2:i*iw/(entries.length-1)),y:T+ih-(e[1]/max)*ih,v:e[1],label:e[0]}));
+   const path=pts.map((p,i)=>(i?'L':'M')+p.x.toFixed(1)+' '+p.y.toFixed(1)).join(' ');
+   const area=path+' L '+pts[pts.length-1].x.toFixed(1)+' '+(T+ih)+' L '+pts[0].x.toFixed(1)+' '+(T+ih)+' Z';
+   const grid=[0,.5,1].map(f=>{const y=T+ih-f*ih;return '<line x1="'+L+'" y1="'+y+'" x2="'+(W-R)+'" y2="'+y+'" stroke="#e8ede5" stroke-dasharray="3 4"/><text x="'+(L-7)+'" y="'+(y+4)+'" text-anchor="end" font-size="10" fill="#748075">'+Math.round(max*f)+'</text>'}).join('');
+   const labels=pts.filter((p,i)=>i===0||i===pts.length-1||i===Math.floor(pts.length/2)).map(p=>'<text x="'+p.x+'" y="'+(H-12)+'" text-anchor="middle" font-size="10" fill="#748075">'+p.label.slice(8,10)+'/'+p.label.slice(5,7)+'</text>').join('');
+   const dots=pts.map(p=>'<circle cx="'+p.x+'" cy="'+p.y+'" r="3.5" fill="#c6a45c" stroke="#174b35" stroke-width="1.5"><title>'+p.label+': '+fmt(p.v)+'</title></circle>').join('');
+   chart.innerHTML='<svg viewBox="0 0 '+W+' '+H+'" role="img" aria-label="Courbe du chiffre d’affaires par jour"><defs><linearGradient id="v46area" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#28734a" stop-opacity=".24"/><stop offset="100%" stop-color="#28734a" stop-opacity=".02"/></linearGradient></defs>'+grid+'<path d="'+area+'" fill="url(#v46area)"/><path d="'+path+'" fill="none" stroke="#174b35" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>'+dots+labels+'</svg><p class="muted small">Montants en euros. Les points correspondent aux jours ayant au moins une vente active.</p>';
+ }
+ const byClient={};ps.forEach(p=>{const n=String(p.client||'Client non renseigné').trim()||'Client non renseigné';byClient[n]=(byClient[n]||0)+safelyPaid(p)});
+ const ranking=Object.entries(byClient).sort((a,b)=>b[1]-a[1]).slice(0,5), maxClient=Math.max(1,...ranking.map(x=>x[1]));
+ top.innerHTML=ranking.length?ranking.map((x,i)=>'<div class="advancedTopRow"><div class="advancedRank">'+(i+1)+'</div><div class="advancedTopName">'+esc(x[0])+'<div class="advancedBar"><span style="width:'+Math.max(2,x[1]/maxClient*100)+'%"></span></div></div><div class="advancedTopValue">'+fmt(x[1])+'</div></div>').join(''):'<p class="muted small">Aucune donnée client disponible sur cette période.</p>';
+}
+
+function updateAll(){clients=clients.map(normalizeClient);updateClientOptions();renderClients();updatePurchaseBox();renderCategoryAnalytics();setDashboard();setStats();renderWeekdayStats();renderAdvancedAnalytics();renderV15Insights(allPurchases(),new Date());renderDailyOps(new Date());renderActivityLog();renderBackupStatus();renderAnalysis();renderCommercialCopilot();renderDataIntegrity();renderFollowupAgenda();const threshold=document.getElementById("inactiveThreshold");if(threshold)threshold.value=String(settings.inactiveThreshold||30);updateGreeting()}
 updateAll();
 updateOfflineMode();
 if("serviceWorker" in navigator && location.protocol.startsWith("http")){navigator.serviceWorker.register("./sw.js").catch(()=>{});}
