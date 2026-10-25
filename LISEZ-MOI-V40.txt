@@ -4,3 +4,5 @@ Cette version applique une refonte visuelle CSS orientée mobile : palette vert 
 Aucune migration de données n’est prévue. Les fonctions JavaScript, l’historique, les règles de fidélité, la gestion du stock et la clé de stockage existante sont conservés tels quels.
 Contrôles effectués : intégrité ZIP, contrôle syntaxique JavaScript intégré et comparaison des scripts avec la base.
 À faire avant remplacement en production : exporter une sauvegarde JSON, tester sur le téléphone les écrans Accueil, Vente, Clients, Stock, Stats, Analyse, annulation de vente, fidélité et restauration.
+
+Correctif V40.1 : pied de page mis à jour et nom du cache du service worker incrémenté pour éviter de réutiliser l'ancien cache. À publier en remplaçant les fichiers du site à la racine du dépôt. Après publication, vérifier que le pied de page indique V40.1. Ne pas effacer les données du site.
