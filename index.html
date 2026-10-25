@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#163f2d">
 <meta name="description" content="Vap’ & Moi Pro Signature Premium : gestion des clients, ventes, fidélité, analyses, suivi commercial et sauvegardes.">
-<title>Vap’ &amp; Moi Pro — V39.2 Suggestions recherche client</title>
+<title>Vap’ &amp; Moi Pro — V39.3 CA par catégorie corrigé</title>
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="./icon-192.png">
 <meta name="mobile-web-app-capable" content="yes">
@@ -1086,34 +1086,30 @@ function renderCategoryAnalytics(){
  const root=document.getElementById('categoryAnalytics');if(!root)return;
  const ps=allPurchases(),totals={};
  SALE_CATEGORIES.forEach(([key,label])=>totals[key]={label,amount:0,transactions:0,clients:new Set()});
- let allocatedSales=0,allocatedTotal=0,unallocatedSales=0;
+ let allocatedSales=0,unallocatedSales=0,unallocatedCA=0;
  const totalCA=ps.reduce((s,p)=>s+Math.max(0,Number(p.paid??p.amount)||0),0);
  ps.forEach(p=>{
-   const a=p.categoryAmounts;
-   const grossCategoryTotal=a?categoryAmountTotal(a):0;
-   if(!a||grossCategoryTotal<=0){unallocatedSales++;return}
-   allocatedSales++;
-   // categoryAmounts are recorded at product/gross values. Apply this sale's
-   // effective paid/gross ratio so category totals include discounts and match
-   // the amount actually paid, without changing stored purchase data.
+   const a=p.categoryAmounts, rawTotal=a?categoryAmountTotal(a):0;
    const paid=Math.max(0,Number(p.paid??p.amount)||0);
-   const factor=paid/grossCategoryTotal;
-   let saleAllocated=0;
+   if(!a||rawTotal<=0){unallocatedSales++;unallocatedCA+=paid;return;}
+   allocatedSales++;
+   // Répartit le montant réellement payé au prorata des montants enregistrés par catégorie.
+   // Les valeurs d'origine ne sont pas modifiées dans l'historique.
+   let remaining=paid;
    const positive=SALE_CATEGORIES.map(([key])=>[key,Math.max(0,Number(a[key])||0)]).filter(([,v])=>v>0);
    positive.forEach(([key,v],i)=>{
-     const value=i===positive.length-1?Math.max(0,paid-saleAllocated):Math.round(v*factor*100)/100;
-     saleAllocated+=value;
-     if(value>0){totals[key].amount+=value;totals[key].transactions++;totals[key].clients.add(p.client)}
+     const amount=i===positive.length-1?Math.round(remaining*100)/100:Math.round((paid*v/rawTotal)*100)/100;
+     remaining=Math.round((remaining-amount)*100)/100;
+     if(amount>0){totals[key].amount+=amount;totals[key].transactions++;totals[key].clients.add(p.client)}
    });
-   allocatedTotal+=saleAllocated;
  });
  const used=SALE_CATEGORIES.filter(([key])=>totals[key].amount>0);
  if(!ps.length){root.innerHTML='<p class="small muted">Aucune vente active enregistrée.</p>';return}
- allocatedTotal=Math.round(allocatedTotal*100)/100;
+ const allocatedTotal=Math.round(SALE_CATEGORIES.reduce((s,[key])=>s+totals[key].amount,0)*100)/100;
  const delta=Math.round((totalCA-allocatedTotal)*100)/100;
  const summary='<div class="grid grid2"><div class="stat"><strong>'+fmt(totalCA)+'</strong><span class="kpiTitle">CA total des ventes actives</span></div><div class="stat"><strong>'+fmt(allocatedTotal)+'</strong><span class="kpiTitle">CA réparti par catégorie</span></div></div>';
  if(!used.length){root.innerHTML=summary+'<p class="small muted">Aucune vente active ne contient de répartition par catégorie. Les ventes au montant seul restent dans le CA total mais ne peuvent pas être attribuées automatiquement à une catégorie.</p>';return}
- root.innerHTML=summary+'<p class="small muted">Ventes avec répartition : '+allocatedSales+' · Ventes sans détail par catégorie : '+unallocatedSales+' · Écart non réparti : '+fmt(delta)+'. Les remises sont réparties au prorata des catégories ; les ventes annulées sont exclues.</p>'+used.map(([key])=>{const x=totals[key],pct=allocatedTotal?x.amount/allocatedTotal*100:0;return '<div style="margin:12px 0"><div class="row" style="justify-content:space-between;align-items:center"><strong>'+esc(x.label)+'</strong><strong>'+fmt(x.amount)+'</strong></div><div class="bar"><span style="width:'+Math.min(100,pct)+'%"></span></div><div class="small muted">'+x.transactions+' vente(s) · '+x.clients.size+' client(s) · '+pct.toFixed(1).replace('.',',')+' % du CA réparti</div></div>'}).join('');
+ root.innerHTML=summary+'<p class="small muted">Ventes réparties : '+allocatedSales+' · Ventes sans catégorie : '+unallocatedSales+' · CA non attribué : '+fmt(unallocatedCA)+'. Les ventes annulées sont exclues.</p>'+used.map(([key])=>{const x=totals[key],pct=allocatedTotal?x.amount/allocatedTotal*100:0;return '<div style="margin:12px 0"><div class="row" style="justify-content:space-between;gap:8px"><strong>'+esc(x.label)+'</strong><strong>'+fmt(x.amount)+' · '+pct.toLocaleString('fr-FR',{maximumFractionDigits:1})+' %</strong></div><div style="height:6px;background:#e8ece3;border-radius:99px;overflow:hidden"><div style="height:100%;width:'+Math.min(100,pct)+'%;background:#326747"></div></div><p class="small muted">Présente dans '+x.transactions+' vente(s) · '+x.clients.size+' client(s)</p></div>'}).join('')+'<p class="small muted">Les remises sont réparties au prorata entre les catégories de chaque vente pour que le total par catégorie corresponde au montant payé. Les ventes sans détail restent dans le CA global et ne sont pas attribuées arbitrairement.</p>';
 }
 function toggleNewClient(show){
   const b=document.getElementById('newClientBox');const v=typeof show==='boolean'?show:b.style.display==='none';b.style.display=v?'block':'none';

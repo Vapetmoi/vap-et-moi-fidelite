@@ -1,10 +1,6 @@
-VAP’ & MOI PRO — V39.3
+Vap’ & Moi Pro V39.3 — Correctif CA par catégorie
 
-Correctif des statistiques par catégorie basé sur la V39.2.
-- Les remises sont réparties au prorata des montants de catégories enregistrés pour chaque vente.
-- Le total des catégories correspond au montant payé des ventes disposant d'une répartition par catégorie (à l'arrondi au centime).
-- Les ventes annulées sont exclues via le filtre existant.
-- Les ventes sans détail de catégories restent visibles dans le CA global mais ne sont pas attribuées arbitrairement.
-- Aucune donnée de vente n'est réécrite par ce correctif.
+Base : V39.2 Suggestions clients.
+Correction : les montants par catégorie sont calculés au prorata du montant payé après remises. Les ventes annulées restent exclues via allPurchases(). Les ventes sans détail catégorie restent uniquement dans le CA global. Les données de vente stockées ne sont pas modifiées.
 
-IMPORTANT : faire une sauvegarde JSON avant remplacement et tester sur une copie avant publication.
+À tester sur une copie et après export JSON de sauvegarde.
