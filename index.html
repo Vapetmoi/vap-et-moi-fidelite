@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#163f2d">
 <meta name="description" content="Vap’ & Moi Pro Signature Premium : gestion des clients, ventes, fidélité, analyses, suivi commercial et sauvegardes.">
-<title>Vap’ &amp; Moi Pro — V39.3 CA par catégorie corrigé</title>
+<title>Vap’ &amp; Moi Pro — V40.0 Signature Mobile</title>
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="./icon-192.png">
 <meta name="mobile-web-app-capable" content="yes">
@@ -613,6 +613,52 @@ input,select,textarea{scroll-margin-top:90px;scroll-margin-bottom:220px}
 .clientSearchSuggestion:last-child{border-bottom:0}
 .clientSearchSuggestion:active,.clientSearchSuggestion:focus{background:#e8f2e9;outline:2px solid var(--green2);outline-offset:-2px}
 .clientSearchSuggestion small{display:block;color:var(--muted);font-size:.85em;margin-top:3px}
+
+/* V40.0 — Refonte visuelle mobile premium, sans changement de logique métier */
+:root{
+ --green:#123b2a;--green2:#246342;--light:#f4f7f3;--card:#fff;--text:#183328;
+ --muted:#68776f;--border:#dce5dd;--gold:#b99a55;--red:#b42318;
+ --shadow-soft:0 8px 24px rgba(18,59,42,.07);
+}
+body{background:linear-gradient(180deg,#edf3ee 0,#f7f8f5 300px);padding-bottom:env(safe-area-inset-bottom)}
+header{background:linear-gradient(135deg,#0b291d 0%,#174b33 72%,#27583d 100%);padding:20px 18px 19px;box-shadow:0 8px 24px rgba(8,36,24,.14);border-bottom:1px solid rgba(185,154,85,.45)}
+.brandMark{border:1px solid rgba(214,190,127,.8)!important;box-shadow:0 0 0 4px rgba(185,154,85,.10)}
+.proLabel{color:#dfc98f!important}
+.appNav{background:rgba(255,255,255,.96);backdrop-filter:blur(16px);box-shadow:0 0 0 1px rgba(18,59,42,.04)}
+.appNav button{transition:color .15s,background .15s,border-color .15s}
+.appNav button.active{color:#1f5b3b;border-bottom-color:var(--gold);background:linear-gradient(180deg,#fff,#f5f8f4)}
+.card,.quickTile,.client{box-shadow:var(--shadow-soft);border-color:#e0e8e1}
+.card{border-radius:20px}
+button.primary{background:linear-gradient(135deg,#1d5839,#2b7049);box-shadow:0 4px 12px rgba(25,82,52,.16)}
+button.primary:active{transform:translateY(1px)}
+.badge{background:#e9f1e8;color:#20563a}
+.stat{background:linear-gradient(145deg,#f1f7f1,#e8f1e9);border:1px solid #dce9dd}
+.stat strong,.reward{color:#245f3e}
+input:focus,select:focus,textarea:focus{border-color:#4d805f;box-shadow:0 0 0 3px rgba(77,128,95,.12);outline:none}
+@media(max-width:680px){
+ body{padding-bottom:calc(76px + env(safe-area-inset-bottom))}
+ header{padding:17px 16px 16px}
+ header h1{font-size:23px}
+ header p{font-size:12px}
+ main{padding:12px 12px 24px}
+ .appNav{position:fixed!important;top:auto!important;bottom:0;left:0;right:0;z-index:1000;display:grid;grid-template-columns:repeat(6,minmax(0,1fr));padding:6px 4px calc(6px + env(safe-area-inset-bottom));border-top:1px solid #dce5dd;border-bottom:0;box-shadow:0 -8px 24px rgba(15,45,29,.10);gap:2px}
+ .appNav button{min-width:0;min-height:54px;padding:7px 1px 5px;font-size:10px;line-height:1.15;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;border:0;border-radius:12px;background:transparent;white-space:nowrap}
+ .appNav button span{font-size:19px;line-height:1.05}
+ .appNav button.active{border:0;background:#edf4ed;color:#1b5b38;font-weight:750}
+ .appNav button.saleNav{background:#1f603d;color:#fff;border-radius:14px}
+ .appNav button.saleNav.active{background:#174b30;color:#fff}
+ .card{padding:15px;border-radius:18px;margin-bottom:12px}
+ h2{font-size:21px}
+ .grid4{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .actions{gap:7px}
+ .actions button{flex:1 1 auto}
+ .tableWrap{max-width:100%}
+}
+@media(min-width:681px){
+ .appNav{position:sticky;top:0;z-index:20}
+ main{padding-top:22px}
+}
+
 </style>
 </head>
 <body>
