@@ -1,0 +1,6 @@
+VAP’ & MOI PRO V44.1 — ACTIONS ACCUEIL CALIBRÉES
+Base : V44 Registre à pages.
+Correctifs ciblés : boutons « Nouvelle vente » et « Nouveau client » alignés avec icône en colonne fixe, titre et sous-titre séparés, tailles fluides, interdiction de césure au milieu des mots, couleurs différenciées. Barre de navigation : dimensions des zones d'icônes uniformisées.
+Le JavaScript métier et la clé de stockage sont conservés.
+Contrôles effectués : intégrité ZIP, texte de version, cache service worker versionné, syntaxe JS inline. Rendu sur Samsung et parcours complets non testés.
+Avant publication : sauvegarde JSON et conserver la V44 pour retour arrière.
