@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#163f2d">
 <meta name="description" content="Vap’ & Moi Pro Signature Premium : gestion des clients, ventes, fidélité, analyses, suivi commercial et sauvegardes.">
-<title>Vap’ &amp; Moi Pro — V42 Boutique de caractère</title>
+<title>Vap’ &amp; Moi Pro — V43 Livre de comptes</title>
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="./icon-192.png">
 <meta name="mobile-web-app-capable" content="yes">
@@ -810,6 +810,111 @@ nav.appNav button.saleNav span{color:#f1dfaa!important}
  nav.appNav button{font-size:9px!important}
 }
 
+
+/* V43 — Livre de comptes de boutique : forêt, bois et laiton */
+:root{
+ --ledger-forest:#173b2b;--ledger-deep:#102d20;--ledger-olive:#59694a;
+ --ledger-brass:#b89a5b;--ledger-brass-light:#e0d0a0;--ledger-paper:#faf7ed;
+ --ledger-paper-2:#f0ead9;--ledger-ink:#26372b;--ledger-muted:#72766a;
+ --ledger-rule:#d9d0b9;
+}
+body{
+ color:var(--ledger-ink)!important;
+ background:
+  radial-gradient(ellipse at 8% 0%,rgba(185,154,91,.10),transparent 32%),
+  linear-gradient(180deg,#e8ece0 0%,#f5f2e7 42%,#e9ecdf 100%)!important;
+}
+header{
+ background:linear-gradient(135deg,#102d20 0%,#173b2b 58%,#34543a 100%)!important;
+ border-bottom:3px solid var(--ledger-brass)!important;
+ box-shadow:0 7px 0 rgba(184,154,91,.13),0 12px 28px rgba(16,45,32,.18)!important;
+}
+header h1{font-family:Georgia,"Times New Roman",serif!important;font-weight:700!important;letter-spacing:-.035em!important}
+header p{font-family:Georgia,"Times New Roman",serif!important;letter-spacing:.015em}
+.card,.quickTile,.client,.stat,.homeGoal,.goalCard,.dataHealth{
+ background:linear-gradient(145deg,rgba(255,253,246,.98),rgba(246,241,226,.98))!important;
+ border:1px solid var(--ledger-rule)!important;
+ box-shadow:0 4px 0 rgba(184,154,91,.08),0 8px 20px rgba(35,50,34,.055)!important;
+}
+.card{position:relative;border-radius:17px!important}
+.card h2{font-family:Georgia,"Times New Roman",serif!important;color:#213d2c!important;letter-spacing:-.02em}
+button.primary,.primary{
+ background:linear-gradient(135deg,#244f35,#173b2b)!important;
+ border:1px solid var(--ledger-brass)!important;box-shadow:0 3px 0 #d7c28c,0 5px 12px #173b2b18!important;
+}
+button.secondary{border-color:#c7b783!important;background:#fbf8ef!important;color:#244b34!important}
+input,select,textarea{border-color:#d5ccb4!important;background:#fffdf7!important}
+input:focus,select:focus,textarea:focus{border-color:#8b9a70!important;box-shadow:0 0 0 3px #8b9a7026!important}
+.appGreeting.appGreetingCompact.appGreetingMascot{
+ background:linear-gradient(115deg,#123524 0%,#1c4931 58%,#314e35 100%)!important;
+ border:2px solid var(--ledger-brass)!important;box-shadow:0 5px 0 #d7c18a,0 12px 24px #193a281e!important;
+}
+.appGreeting .eyebrow{font-family:Georgia,"Times New Roman",serif!important;letter-spacing:.12em!important}
+.homeStats .stat{border-radius:17px!important}
+.homeStats .stat strong{font-family:Georgia,"Times New Roman",serif!important;font-weight:800!important;letter-spacing:-.035em!important}
+.homeStats .stat:before{
+ content:"";position:absolute;left:0;top:16px;bottom:16px;width:3px;border-radius:0 3px 3px 0;background:linear-gradient(#cdb879,#9c8549);
+}
+.homeStats .stat{position:relative!important;overflow:hidden}
+.homeGoalStrip .homeGoal,.homeGoalStrip .goalCard{border-radius:14px!important}
+nav.appNav{
+ background:rgba(250,247,237,.97)!important;border:1px solid #d4c9ab!important;
+ border-bottom:0!important;backdrop-filter:blur(18px);
+ box-shadow:0 -8px 26px rgba(26,48,31,.14)!important;
+}
+nav.appNav button{
+ color:#687265!important;border:1px solid transparent!important;
+ font-family:Georgia,"Times New Roman",serif!important;font-weight:700!important;
+ letter-spacing:-.015em!important;transition:background .16s ease,border-color .16s ease;
+}
+nav.appNav button span{
+ display:flex!important;align-items:center!important;justify-content:center!important;
+ width:29px!important;height:29px!important;border-radius:9px!important;
+ font-size:18px!important;line-height:1!important;
+}
+nav.appNav button.active{
+ color:#173b2b!important;background:#e7e9d9!important;
+ border:1px solid #d5c99f!important;box-shadow:inset 0 1px 0 #fff8!important;
+}
+nav.appNav button.saleNav{
+ color:#fffaf0!important;background:linear-gradient(145deg,#285b3b,#102f21)!important;
+ border:2px solid var(--ledger-brass)!important;box-shadow:0 3px 0 #d8c28a,0 6px 14px #173b2b2e!important;
+}
+nav.appNav button.saleNav span{background:#c6ac6a!important;color:#173b2b!important}
+nav.appNav button.saleNav.active{background:linear-gradient(145deg,#285b3b,#102f21)!important;color:#fffaf0!important}
+#clients h2:before,#achat h2:before,#stock h2:before,#stats h2:before,#analyse h2:before{color:#9d8248!important}
+.homeQuick .quickTile{border-radius:17px!important}
+@media(max-width:680px){
+ body{padding-bottom:calc(91px + env(safe-area-inset-bottom))!important}
+ header{padding:15px 15px 16px!important}
+ header h1{font-size:25px!important}
+ main{padding:12px 11px calc(98px + env(safe-area-inset-bottom))!important}
+ .appGreeting.appGreetingCompact.appGreetingMascot{min-height:200px!important}
+ .homeStats{gap:9px!important}
+ .homeStats .stat{padding:14px 11px 14px 14px!important;border-radius:17px!important;min-width:0!important}
+ .homeStats .stat strong{font-size:clamp(19px,5.2vw,26px)!important}
+ .homeStats .stat .kpiTitle{font-size:12px!important;line-height:1.25!important}
+ nav.appNav{
+  grid-template-columns:repeat(6,minmax(0,1fr))!important;gap:3px!important;
+  padding:7px 5px calc(8px + env(safe-area-inset-bottom))!important;
+  border-radius:20px 20px 0 0!important;
+ }
+ nav.appNav button{
+  min-width:0!important;min-height:59px!important;padding:5px 0 4px!important;
+  display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;
+  gap:3px!important;font-size:clamp(9px,2.6vw,11px)!important;line-height:1.05!important;
+  white-space:nowrap!important;overflow:hidden!important;
+ }
+ nav.appNav button span{width:27px!important;height:27px!important;font-size:17px!important;border-radius:8px!important}
+ nav.appNav button.saleNav{transform:translateY(-5px)!important;min-height:62px!important;border-radius:13px!important}
+ .card{padding:14px!important;margin-bottom:11px!important}
+}
+@media(max-width:360px){
+ nav.appNav{gap:1px!important;padding-left:3px!important;padding-right:3px!important}
+ nav.appNav button{font-size:8.5px!important}
+ nav.appNav button span{width:24px!important;height:24px!important;font-size:16px!important}
+}
+
 </style>
 </head>
 <body>
@@ -1109,7 +1214,7 @@ nav.appNav button.saleNav span{color:#f1dfaa!important}
   <div class="card"><h3>💡 Plan d’action conseillé</h3><div id="analysisActions"></div><p class="small muted">Les recommandations sont calculées à partir des données enregistrées. Une projection n’est pas une garantie. La marge réelle nécessite les coûts d’achat.</p><div class="actions" style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px"><button class="btn" onclick="exportAnalysisCSV()">Exporter l’analyse CSV</button><button class="btn secondary" onclick="window.print()">Imprimer le bilan</button></div></div>
 </section>
 </main>
-<footer class="versionFooter" aria-label="Version installée"><span class="versionChip"><span class="versionDot" aria-hidden="true"></span> Vap’ & Moi Pro · Version installée : V42 — Boutique de caractère</span><p class="small muted">Données enregistrées sur cet appareil · Pense à effectuer régulièrement une sauvegarde JSON.</p></footer>
+<footer class="versionFooter" aria-label="Version installée"><span class="versionChip"><span class="versionDot" aria-hidden="true"></span> Vap’ & Moi Pro · Version installée : V43 — Livre de comptes</span><p class="small muted">Données enregistrées sur cet appareil · Pense à effectuer régulièrement une sauvegarde JSON.</p></footer>
 
 <script>
 const KEY='vapetmoi_fidelite_v1';
