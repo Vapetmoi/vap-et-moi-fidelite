@@ -1,6 +1,0 @@
-VAP’ & MOI PRO V44 — REGISTRE À PAGES
-Base : V43 Livre de comptes.
-Direction visuelle : sensation de tourner les pages d'un ancien registre de boutique française, papier crème légèrement ligné, tranche et marge façon registre, vert forêt, olive et laiton, typographie serif pour les titres et navigation, animation de transition de page très légère, réduite si le téléphone demande moins d'animations. Icônes de navigation harmonisées et ajustées au mobile, bandeau supérieur plus compact.
-Le JavaScript métier, les données et la clé de stockage vapetmoi_fidelite_v1 sont conservés sans modification volontaire. Cache du service worker versionné.
-Vérifié : ZIP intègre, version dans titre/pied de page, clé de stockage présente, scripts inline syntaxiquement valides.
-Non vérifié sur appareil réel : rendu complet et parcours métier. Avant publication, sauvegarder JSON et garder V43 disponible pour retour arrière.
