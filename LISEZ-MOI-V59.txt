@@ -1,12 +1,9 @@
-Vap’ & Moi — Signature V59
+VAP’ & MOI PRO — V59 corrigée (cache)
 
-Changements :
-- En-tête simplifié : logo V&M et « Vap’ & Moi » uniquement.
-- Suppression de la pastille PRO et du sous-titre dans l’en-tête.
-- Bannière d’accueil recadrée avec la boutique et la mascotte mieux visibles.
-- Conservation des onglets, fonctions métier et clés de stockage de la base V58.
-- Cache de service worker versionné V59.
+Cette archive contient l’index V59 et un service worker corrigé pour privilégier la version en ligne de index.html, tout en gardant une copie hors connexion. Le cache passe à vap-et-moi-ultima-cache-v59-2.
 
-Avant publication : exporter une sauvegarde JSON complète, garder une copie de la version en ligne et vérifier le rendu sur le téléphone. Le contrôle de syntaxe ne remplace pas un test réel de toutes les opérations.
+Publication : remplace les fichiers du site par le contenu de cette archive, en particulier index.html et sw.js. Attends la fin du déploiement GitHub Pages puis rouvre le site.
 
-Correctif : le pied de page indique maintenant V59 — En-tête et bannière ajustés. Le cache du service worker a été incrémenté pour forcer le rechargement des ressources.
+IMPORTANT : ne supprime pas les données du navigateur et ne désinstalle pas l’application. Le code de stockage local de l’application n’a pas été modifié par cette correction de cache. Fais une sauvegarde JSON avant publication par précaution.
+
+Contrôles effectués : intégrité ZIP et syntaxe JavaScript de index.html et sw.js. Pas de test réel sur téléphone.
