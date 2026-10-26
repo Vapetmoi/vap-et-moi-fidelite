@@ -1116,7 +1116,7 @@ nav.appNav button{min-width:0!important}
 
 
 
-/* V47 — Graphiques & tendances : identité forêt, laiton et interface mobile raffinée.
+/* V47 — Prévision quotidienne : identité forêt, laiton et interface mobile raffinée.
    Couche visuelle uniquement : aucune modification du modèle de données ni des fonctions métier. */
 :root{
  --green:#173b2d;--green2:#286348;--light:#f4f3eb;--card:#fffdf7;--text:#202d25;--muted:#68736b;
@@ -1538,7 +1538,7 @@ nav.appNav button{color:#687568;font-weight:700}nav.appNav button.active{backgro
   <div class="card"><h3>💡 Plan d’action conseillé</h3><div id="analysisActions"></div><p class="small muted">Les recommandations sont calculées à partir des données enregistrées. Une projection n’est pas une garantie. La marge réelle nécessite les coûts d’achat.</p><div class="actions" style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px"><button class="btn" onclick="exportAnalysisCSV()">Exporter l’analyse CSV</button><button class="btn secondary" onclick="window.print()">Imprimer le bilan</button></div></div>
 </section>
 </main>
-<footer class="versionFooter" aria-label="Version installée"><span class="versionChip"><span class="versionDot" aria-hidden="true"></span> Vap’ & Moi Pro · Version installée : V47 — Graphiques & tendances</span><p class="small muted">Données enregistrées sur cet appareil · Pense à effectuer régulièrement une sauvegarde JSON.</p></footer>
+<footer class="versionFooter" aria-label="Version installée"><span class="versionChip"><span class="versionDot" aria-hidden="true"></span> Vap’ & Moi Pro · Version installée : V47 — Prévision quotidienne</span><p class="small muted">Données enregistrées sur cet appareil · Pense à effectuer régulièrement une sauvegarde JSON.</p></footer>
 
 <script>
 const KEY='vapetmoi_fidelite_v1';
@@ -1588,7 +1588,43 @@ function normalizeClient(c){
   return c;
 }
 clients=clients.map(normalizeClient);
-function save(){if(storageReadIssues.includes(KEY)){alert('Écriture bloquée pour protéger les données : la base clients existante est illisible. Restaure une sauvegarde valide avant de modifier les ventes.');return false;}const previous=localStorage.getItem(KEY);clients=clients.map(normalizeClient);try{const payload=JSON.stringify(clients);localStorage.setItem(KEY,payload);const check=JSON.parse(localStorage.getItem(KEY)||'null');if(!Array.isArray(check)||check.length!==clients.length)throw new Error('Vérification après écriture impossible');updateAll();return true}catch(e){try{clients=JSON.parse(previous||'[]').map(normalizeClient)}catch(rollbackError){}alert('La sauvegarde locale a échoué. Les données précédemment enregistrées ont été rechargées lorsque possible. Exporte une sauvegarde dès que le stockage fonctionne.');try{updateAll()}catch(renderError){}return false}}
+function save(){
+  if(storageReadIssues.includes(KEY)){
+    alert('Écriture bloquée pour protéger les données : la base clients existante est illisible. N’effectue pas d’autre vente avant restauration d’une sauvegarde valide.');
+    return false;
+  }
+  let previous=null;
+  try { previous=localStorage.getItem(KEY); }
+  catch(readError){
+    alert('Le stockage local du navigateur est inaccessible. La vente ne peut pas être confirmée comme enregistrée. Exporte les données si possible et ne ferme pas cette page.');
+    return false;
+  }
+  clients=clients.map(normalizeClient);
+  let payload='';
+  try {
+    payload=JSON.stringify(clients);
+    localStorage.setItem(KEY,payload);
+    const check=JSON.parse(localStorage.getItem(KEY)||'null');
+    if(!Array.isArray(check)||check.length!==clients.length) throw new Error('Vérification après écriture impossible');
+    updateAll();
+    return true;
+  } catch(e) {
+    // Preserve the in-memory data in a downloadable emergency snapshot before rolling back.
+    try {
+      const emergency={app:'Vap’ & Moi Pro',type:'sauvegarde-secours-apres-echec',createdAt:new Date().toISOString(),clients:clients,settings:settings||{},historicalCA:historicalCA||{}};
+      const blob=new Blob([JSON.stringify(emergency,null,2)],{type:'application/json;charset=utf-8'});
+      const url=URL.createObjectURL(blob);
+      const a=document.createElement('a');a.href=url;a.download='VapMoiPro_sauvegarde-secours_'+new Date().toISOString().replace(/[:.]/g,'-')+'.json';
+      document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1500);
+    } catch(exportError) {}
+    try { if(previous!==null){clients=JSON.parse(previous).map(normalizeClient);} }
+    catch(rollbackError) {}
+    const reason=(e&&e.name==='QuotaExceededError')?'Le stockage du navigateur semble plein (quota dépassé).':'Le navigateur a refusé l’écriture dans le stockage local.';
+    alert('ÉCHEC D’ENREGISTREMENT : '+reason+' Une sauvegarde de secours des données présentes en mémoire a été proposée au téléchargement si le navigateur l’autorise. Vérifie les fichiers téléchargés et ne considère pas la vente comme enregistrée tant qu’elle n’apparaît pas dans l’historique. Libère de l’espace de stockage ou restaure une sauvegarde avant de reprendre les ventes.');
+    try{updateAll()}catch(renderError){}
+    return false;
+  }
+}
 function persistSettings(){
   if(storageReadIssues.includes(KEY+'_settings')){alert('Les réglages existants sont illisibles. Restaure une sauvegarde valide avant de les modifier.');return false;}
   const previous=localStorage.getItem(KEY+'_settings');
