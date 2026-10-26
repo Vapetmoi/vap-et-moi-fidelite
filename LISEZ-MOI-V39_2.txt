@@ -1,6 +1,0 @@
-Vap’ & Moi Pro V39.2 — ajout des suggestions de recherche client.
-- En saisissant quelques lettres dans la barre de recherche Clients, une liste déroulante propose les noms correspondants.
-- Tri par correspondance au début du nom, début d’un mot, puis correspondance partielle ; téléphone/e-mail peuvent également correspondre.
-- Toucher un nom ouvre la fiche client. Clavier : flèches haut/bas, Entrée pour choisir, Échap pour fermer.
-- Les corrections V39.1 de la vente directe, du défilement mobile et de l’affichage CA/répartition sont conservées.
-Vérification : intégrité ZIP et syntaxe JavaScript. Tests navigateur et données réelles non effectués. Sauvegarder le JSON avant essai.
