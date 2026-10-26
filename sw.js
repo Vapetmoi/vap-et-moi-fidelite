@@ -1,4 +1,4 @@
-const CACHE_NAME = 'vap-et-moi-v46-refonte-complete';
+const CACHE_NAME = 'vap-et-moi-v47-previsions-journee';
 const APP_FILES = ['./', './index.html', './manifest.webmanifest', './icon-192.png', './icon-512.png', './mascotte-vap-moi.jpg'];
 self.addEventListener('install', event => { event.waitUntil(caches.open(CACHE_NAME).then(cache => cache.addAll(APP_FILES)).then(() => self.skipWaiting())); });
 self.addEventListener('activate', event => { event.waitUntil(caches.keys().then(keys => Promise.all(keys.filter(key => key.startsWith('vap-et-moi-') && key !== CACHE_NAME).map(key => caches.delete(key)))).then(() => self.clients.claim())); });

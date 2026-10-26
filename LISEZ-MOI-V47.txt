@@ -1,0 +1,15 @@
+VAP’ & MOI PRO V47 — PRÉVISION QUOTIDIENNE
+==========================================
+
+Ajout dans Analyse > Prévisions et objectifs :
+- prévision indicative du CA à la fermeture ;
+- comparaison avec l'objectif quotidien ;
+- reste estimé à encaisser ;
+- rythme horaire nécessaire pour atteindre l'objectif pendant les heures d'ouverture ;
+- estimation basée sur le rythme de la journée et, lorsqu'il existe suffisamment de données, les journées comparables du même jour de semaine.
+
+La prévision est indicative, pas une garantie. Quand les ventes du jour sont à zéro, l'application utilise la moyenne des journées comparables disponibles ; si aucune donnée comparable n'existe, elle affiche —.
+
+La clé de stockage vapetmoi_fidelite_v1 et le code métier existant sont conservés. La nouvelle carte lit les ventes actives et ne modifie pas les historiques.
+
+Avant publication : exporter une sauvegarde JSON, conserver la version précédente et tester les parcours réels sur téléphone. Le contrôle syntaxique JavaScript et l'intégrité de l'archive ont été vérifiés ; les tests sur données réelles ne sont pas certifiés.
