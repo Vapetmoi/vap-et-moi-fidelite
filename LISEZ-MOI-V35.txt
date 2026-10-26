@@ -1,9 +1,0 @@
-Vap’ & Moi Pro — V35 Accueil épuré et statistiques détaillées
-
-Changements :
-- Accueil allégé en masquant les indicateurs hebdomadaires/mensuels et les doublons déjà accessibles dans Statistiques.
-- Vue d’ensemble Statistiques organisée en cartes cliquables.
-- Les rubriques détaillées sont repliées au départ ; un clic ouvre la rubrique choisie et amène directement à son contenu.
-- Conservation des fonctions et de la clé de stockage existante vapetmoi_fidelite_v1.
-
-Installation : sauvegarder d’abord les données JSON, puis remplacer les fichiers du dépôt par ceux de cette archive.
