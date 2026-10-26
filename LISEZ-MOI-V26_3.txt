@@ -1,7 +1,0 @@
-VAP’ & MOI PRO — V26.3 SIGNATURE MASCOTTE
-
-Contenu : index.html, sw.js, manifest.webmanifest, icônes, mascotte-vap-moi.jpg.
-
-Installation : sauvegardez d’abord vos données depuis l’application. Extrayez tous les fichiers à la racine du dépôt GitHub Pages, en remplaçant les fichiers portant le même nom. Conservez l’adresse du site et ne videz pas les données du navigateur.
-
-La mascotte est ajoutée à la carte de bienvenue de l’accueil. Les autres écrans et la clé de stockage existante sont conservés. Après publication, fermez puis rouvrez l’application. Si l’ancienne apparence reste en cache, rechargez la page ou attendez le renouvellement du cache.
