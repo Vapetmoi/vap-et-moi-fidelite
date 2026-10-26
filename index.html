@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#163f2d">
 <meta name="description" content="Vap’ & Moi Pro Signature Premium : gestion des clients, ventes, fidélité, analyses, suivi commercial et sauvegardes.">
-<title>Vap’ &amp; Moi Pro — V49 Prévisions cohérentes</title>
+<title>Vap’ &amp; Moi Pro — V50 Enregistrement robuste</title>
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="./icon-192.png">
 <meta name="mobile-web-app-capable" content="yes">
@@ -1116,7 +1116,7 @@ nav.appNav button{min-width:0!important}
 
 
 
-/* V49 — Prévisions cohérentes : identité forêt, laiton et interface mobile raffinée.
+/* V50 — Enregistrement robuste : identité forêt, laiton et interface mobile raffinée.
    Couche visuelle uniquement : aucune modification du modèle de données ni des fonctions métier. */
 :root{
  --green:#173b2d;--green2:#286348;--light:#f4f3eb;--card:#fffdf7;--text:#202d25;--muted:#68736b;
@@ -1177,7 +1177,7 @@ nav.appNav button{color:#687568;font-weight:700}nav.appNav button.active{backgro
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}button,.quickTile{transition:none!important}}
 
 
-/* V49 — Graphiques, tendances et comparaisons */
+/* V50 — Graphiques, tendances et comparaisons */
 :root{--chart-forest:#174b35;--chart-sage:#73977b;--chart-gold:#c4a15a;--chart-cream:#f7f2e7;--chart-ink:#203b2e}
 #stats .card{background:linear-gradient(155deg,#fff 0%,#fcfdfb 100%);border-color:#e0e8df;box-shadow:0 8px 24px rgba(19,57,39,.055)}
 #stats .statsThemeHead{background:linear-gradient(110deg,#163f2d,#24583e);color:#fff;border:1px solid #c3a15d;box-shadow:0 5px 16px rgba(16,54,36,.12)}
@@ -1198,7 +1198,7 @@ nav.appNav button{color:#687568;font-weight:700}nav.appNav button.active{backgro
 @media(max-width:430px){.categoryViz{grid-template-columns:1fr;gap:14px}.categoryDonut{width:158px}.categoryLegend{gap:8px}}
 
 
-/* V49 — finition des graphiques et des indicateurs */
+/* V50 — finition des graphiques et des indicateurs */
 #stats .categoryDonut{transition:transform .25s ease,filter .25s ease}
 #stats .categoryDonut:hover{transform:scale(1.025);filter:saturate(1.08)}
 #stats .purchaseCountGroup{border:1px solid #e0e8dd;border-radius:18px;padding:15px;background:linear-gradient(145deg,#fffef9,#f4f7f0);box-shadow:0 5px 16px rgba(19,57,39,.045);margin:12px 0}
@@ -1217,7 +1217,7 @@ nav.appNav button{color:#687568;font-weight:700}nav.appNav button.active{backgro
 
 
 
-/* V49 — tableau de bord analytique premium */
+/* V50 — tableau de bord analytique premium */
 :root{--gold:#c6a45c}
 .advancedAnalytics{background:linear-gradient(145deg,#fffdf8,#f5f8f2);border:1px solid #d8c89f;box-shadow:0 10px 28px rgba(18,61,43,.09)}
 .advancedHead{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}.advancedEyebrow{font-size:10px;letter-spacing:.15em;font-weight:800;color:#9b7837}.advancedHead h2{margin:5px 0}.advancedMark{background:#163c2c;color:#e4c981;border-radius:12px;padding:8px 10px;font-weight:800;font-size:12px}
@@ -1228,7 +1228,7 @@ nav.appNav button{color:#687568;font-weight:700}nav.appNav button.active{backgro
 
 .dailyForecastCard{border:1px solid #c6a45c;background:linear-gradient(145deg,#fffdf7,#eef5ed);box-shadow:0 5px 16px rgba(23,75,53,.08)}.dailyForecastCard>strong{color:#174b35;font-size:25px;display:block;margin:8px 0}.dailyForecastCard>small{display:block;margin-top:7px;line-height:1.45}
 
-/* V49 — Prévisions quotidiennes et hebdomadaires visibles sur l’accueil */
+/* V50 — Prévisions quotidiennes et hebdomadaires visibles sur l’accueil */
 .homeForecastPanel{margin:0 0 14px;padding:15px;border:1px solid #c8b477;border-radius:20px;background:linear-gradient(145deg,#fffdf7,#f0f5ed);box-shadow:0 6px 18px rgba(23,63,46,.08)}
 .homeForecastTitle{display:flex;flex-direction:column;gap:4px;margin-bottom:11px;color:#174b35;font-weight:800;font-size:16px}
 .homeForecastTitle small{font-size:11px;font-weight:500;line-height:1.4;color:#68756a}
@@ -1489,7 +1489,7 @@ nav.appNav button{color:#687568;font-weight:700}nav.appNav button.active{backgro
   </div>
 
   <section class="card advancedAnalytics" id="advancedAnalytics">
-    <div class="advancedHead"><div><span class="advancedEyebrow">VAP’ & MOI · PILOTAGE</span><h2>📈 Votre activité en un coup d’œil</h2><p class="muted small">Graphiques calculés à partir des ventes actives enregistrées.</p></div><span class="advancedMark">V49</span></div>
+    <div class="advancedHead"><div><span class="advancedEyebrow">VAP’ & MOI · PILOTAGE</span><h2>📈 Votre activité en un coup d’œil</h2><p class="muted small">Graphiques calculés à partir des ventes actives enregistrées.</p></div><span class="advancedMark">V50</span></div>
     <label for="advancedPeriod">Période des graphiques</label>
     <select id="advancedPeriod" onchange="renderAdvancedAnalytics()"><option value="14">14 derniers jours</option><option value="30" selected>30 derniers jours</option><option value="90">90 derniers jours</option><option value="all">Tout l’historique</option></select>
     <div class="advancedKpis" id="advancedKpis"></div>
@@ -1557,7 +1557,7 @@ nav.appNav button{color:#687568;font-weight:700}nav.appNav button.active{backgro
   <div class="card"><h3>💡 Plan d’action conseillé</h3><div id="analysisActions"></div><p class="small muted">Les recommandations sont calculées à partir des données enregistrées. Une projection n’est pas une garantie. La marge réelle nécessite les coûts d’achat.</p><div class="actions" style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px"><button class="btn" onclick="exportAnalysisCSV()">Exporter l’analyse CSV</button><button class="btn secondary" onclick="window.print()">Imprimer le bilan</button></div></div>
 </section>
 </main>
-<footer class="versionFooter" aria-label="Version installée"><span class="versionChip"><span class="versionDot" aria-hidden="true"></span> Vap’ & Moi Pro · Version installée : V49 — Prévisions cohérentes</span><p class="small muted">Données enregistrées sur cet appareil · Pense à effectuer régulièrement une sauvegarde JSON.</p></footer>
+<footer class="versionFooter" aria-label="Version installée"><span class="versionChip"><span class="versionDot" aria-hidden="true"></span> Vap’ & Moi Pro · Version installée : V50 — Enregistrement robuste</span><p class="small muted">Données enregistrées sur cet appareil · Pense à effectuer régulièrement une sauvegarde JSON.</p></footer>
 
 <script>
 const KEY='vapetmoi_fidelite_v1';
@@ -1609,13 +1609,13 @@ function normalizeClient(c){
 clients=clients.map(normalizeClient);
 function save(){
   if(storageReadIssues.includes(KEY)){
-    alert('Écriture bloquée pour protéger les données : la base clients existante est illisible. N’effectue pas d’autre vente avant restauration d’une sauvegarde valide.');
+    alert('Écriture bloquée pour protéger les données : la base clients existante est illisible. Restaure une sauvegarde valide avant de modifier les ventes.');
     return false;
   }
   let previous=null;
   try { previous=localStorage.getItem(KEY); }
   catch(readError){
-    alert('Le stockage local du navigateur est inaccessible. La vente ne peut pas être confirmée comme enregistrée. Exporte les données si possible et ne ferme pas cette page.');
+    alert('Le navigateur ne permet pas de lire le stockage local ('+(readError&&readError.name||'erreur')+'). La vente n’est pas confirmée. Ne ferme pas cette page et exporte une sauvegarde si possible.');
     return false;
   }
   clients=clients.map(normalizeClient);
@@ -1623,12 +1623,15 @@ function save(){
   try {
     payload=JSON.stringify(clients);
     localStorage.setItem(KEY,payload);
-    const check=JSON.parse(localStorage.getItem(KEY)||'null');
-    if(!Array.isArray(check)||check.length!==clients.length) throw new Error('Vérification après écriture impossible');
-    updateAll();
-    return true;
+    const raw=localStorage.getItem(KEY);
+    const check=JSON.parse(raw||'null');
+    if(!Array.isArray(check)||check.length!==clients.length) throw new Error('La vérification après écriture a échoué');
   } catch(e) {
-    // Preserve the in-memory data in a downloadable emergency snapshot before rolling back.
+    // Try to restore the previous persisted value without hiding the original error.
+    try {
+      if(previous===null) localStorage.removeItem(KEY);
+      else localStorage.setItem(KEY,previous);
+    } catch(rollbackError) {}
     try {
       const emergency={app:'Vap’ & Moi Pro',type:'sauvegarde-secours-apres-echec',createdAt:new Date().toISOString(),clients:clients,settings:settings||{},historicalCA:historicalCA||{}};
       const blob=new Blob([JSON.stringify(emergency,null,2)],{type:'application/json;charset=utf-8'});
@@ -1636,13 +1639,16 @@ function save(){
       const a=document.createElement('a');a.href=url;a.download='VapMoiPro_sauvegarde-secours_'+new Date().toISOString().replace(/[:.]/g,'-')+'.json';
       document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1500);
     } catch(exportError) {}
-    try { if(previous!==null){clients=JSON.parse(previous).map(normalizeClient);} }
-    catch(rollbackError) {}
-    const reason=(e&&e.name==='QuotaExceededError')?'Le stockage du navigateur semble plein (quota dépassé).':'Le navigateur a refusé l’écriture dans le stockage local.';
-    alert('ÉCHEC D’ENREGISTREMENT : '+reason+' Une sauvegarde de secours des données présentes en mémoire a été proposée au téléchargement si le navigateur l’autorise. Vérifie les fichiers téléchargés et ne considère pas la vente comme enregistrée tant qu’elle n’apparaît pas dans l’historique. Libère de l’espace de stockage ou restaure une sauvegarde avant de reprendre les ventes.');
-    try{updateAll()}catch(renderError){}
+    let reason='Erreur '+(e&&e.name||'inconnue')+(e&&e.message?': '+e.message:'');
+    if(e&&e.name==='QuotaExceededError') reason='Le stockage local est plein (quota dépassé).';
+    else if(e&&e.name==='SecurityError') reason='Le navigateur bloque l’accès au stockage local (SecurityError).';
+    alert('ÉCHEC DE SAUVEGARDE : '+reason+'. La vente ne doit pas être considérée comme enregistrée. Une sauvegarde de secours a été proposée si le navigateur autorise le téléchargement. Ne valide pas plusieurs fois la même vente. Exporte tes données et conserve-les avant de reprendre.');
     return false;
   }
+  // The write succeeded. A rendering error must not be misreported as a storage failure.
+  try { updateAll(); }
+  catch(renderError) { console.error('VapMoi Pro: données sauvegardées, erreur de rafraîchissement interface',renderError); }
+  return true;
 }
 function persistSettings(){
   if(storageReadIssues.includes(KEY+'_settings')){alert('Les réglages existants sont illisibles. Restaure une sauvegarde valide avant de les modifier.');return false;}
