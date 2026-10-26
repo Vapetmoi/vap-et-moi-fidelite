@@ -1,6 +1,0 @@
-VAP’ & MOI PRO — V42 BOUTIQUE DE CARACTÈRE
-Base : V41 complète fournie par l’utilisateur.
-Refonte globale de présentation : palette forêt/olive/crème/laiton, panneaux plus chaleureux, boutons et champs harmonisés, navigation mobile affinée, accents graphiques sur Clients/Vente/Stock/Stats/Analyse, mascotte conservée sur l’accueil.
-Le JavaScript applicatif et les données structurées n’ont pas été volontairement modifiés. La clé de stockage et les fonctions existantes restent celles de la base V41.
-Vérifications effectuées : archive ZIP intègre, index HTML présent, titre et pied de page versionnés, cache service worker incrémenté, syntaxe JavaScript inline vérifiée.
-Limites : pas de test complet dans un vrai navigateur ni de test sur appareil. Avant publication, exporter une sauvegarde JSON et vérifier les parcours vente, annulation, fidélité, stock, clients, stats, analyse et restauration.
