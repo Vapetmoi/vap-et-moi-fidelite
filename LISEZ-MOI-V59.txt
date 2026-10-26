@@ -1,0 +1,10 @@
+Vap’ & Moi — Signature V59
+
+Changements :
+- En-tête simplifié : logo V&M et « Vap’ & Moi » uniquement.
+- Suppression de la pastille PRO et du sous-titre dans l’en-tête.
+- Bannière d’accueil recadrée avec la boutique et la mascotte mieux visibles.
+- Conservation des onglets, fonctions métier et clés de stockage de la base V58.
+- Cache de service worker versionné V59.
+
+Avant publication : exporter une sauvegarde JSON complète, garder une copie de la version en ligne et vérifier le rendu sur le téléphone. Le contrôle de syntaxe ne remplace pas un test réel de toutes les opérations.
