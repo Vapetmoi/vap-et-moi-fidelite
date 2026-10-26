@@ -1,6 +1,6 @@
 {
-  "name": "Vap’ & Moi Pro V47",
-  "short_name": "V&M Pro",
+  "name": "Vap’ & Moi Pro V47 — Prévision quotidienne",
+  "short_name": "V&M Pro V47",
   "description": "Vap’ & Moi Pro : gestion de boutique, clients, ventes, fidélité, stock et analyses.",
   "start_url": "./index.html",
   "scope": "./",

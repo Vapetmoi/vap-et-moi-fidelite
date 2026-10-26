@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#163f2d">
 <meta name="description" content="Vap’ & Moi Pro Signature Premium : gestion des clients, ventes, fidélité, analyses, suivi commercial et sauvegardes.">
-<title>Vap’ &amp; Moi Pro — V45.2 Graphiques & tendances</title>
+<title>Vap’ &amp; Moi Pro — V47 Prévision quotidienne</title>
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="./icon-192.png">
 <meta name="mobile-web-app-capable" content="yes">
@@ -1116,7 +1116,7 @@ nav.appNav button{min-width:0!important}
 
 
 
-/* V45.2 — Graphiques & tendances : identité forêt, laiton et interface mobile raffinée.
+/* V47 — Graphiques & tendances : identité forêt, laiton et interface mobile raffinée.
    Couche visuelle uniquement : aucune modification du modèle de données ni des fonctions métier. */
 :root{
  --green:#173b2d;--green2:#286348;--light:#f4f3eb;--card:#fffdf7;--text:#202d25;--muted:#68736b;
@@ -1177,7 +1177,7 @@ nav.appNav button{color:#687568;font-weight:700}nav.appNav button.active{backgro
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}button,.quickTile{transition:none!important}}
 
 
-/* V45.2 — Graphiques, tendances et comparaisons */
+/* V47 — Graphiques, tendances et comparaisons */
 :root{--chart-forest:#174b35;--chart-sage:#73977b;--chart-gold:#c4a15a;--chart-cream:#f7f2e7;--chart-ink:#203b2e}
 #stats .card{background:linear-gradient(155deg,#fff 0%,#fcfdfb 100%);border-color:#e0e8df;box-shadow:0 8px 24px rgba(19,57,39,.055)}
 #stats .statsThemeHead{background:linear-gradient(110deg,#163f2d,#24583e);color:#fff;border:1px solid #c3a15d;box-shadow:0 5px 16px rgba(16,54,36,.12)}
@@ -1198,7 +1198,7 @@ nav.appNav button{color:#687568;font-weight:700}nav.appNav button.active{backgro
 @media(max-width:430px){.categoryViz{grid-template-columns:1fr;gap:14px}.categoryDonut{width:158px}.categoryLegend{gap:8px}}
 
 
-/* V45.2 — finition des graphiques et des indicateurs */
+/* V47 — finition des graphiques et des indicateurs */
 #stats .categoryDonut{transition:transform .25s ease,filter .25s ease}
 #stats .categoryDonut:hover{transform:scale(1.025);filter:saturate(1.08)}
 #stats .purchaseCountGroup{border:1px solid #e0e8dd;border-radius:18px;padding:15px;background:linear-gradient(145deg,#fffef9,#f4f7f0);box-shadow:0 5px 16px rgba(19,57,39,.045);margin:12px 0}
@@ -1538,7 +1538,7 @@ nav.appNav button{color:#687568;font-weight:700}nav.appNav button.active{backgro
   <div class="card"><h3>💡 Plan d’action conseillé</h3><div id="analysisActions"></div><p class="small muted">Les recommandations sont calculées à partir des données enregistrées. Une projection n’est pas une garantie. La marge réelle nécessite les coûts d’achat.</p><div class="actions" style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px"><button class="btn" onclick="exportAnalysisCSV()">Exporter l’analyse CSV</button><button class="btn secondary" onclick="window.print()">Imprimer le bilan</button></div></div>
 </section>
 </main>
-<footer class="versionFooter" aria-label="Version installée"><span class="versionChip"><span class="versionDot" aria-hidden="true"></span> Vap’ & Moi Pro · Version installée : V45.2 — Graphiques & tendances</span><p class="small muted">Données enregistrées sur cet appareil · Pense à effectuer régulièrement une sauvegarde JSON.</p></footer>
+<footer class="versionFooter" aria-label="Version installée"><span class="versionChip"><span class="versionDot" aria-hidden="true"></span> Vap’ & Moi Pro · Version installée : V47 — Graphiques & tendances</span><p class="small muted">Données enregistrées sur cet appareil · Pense à effectuer régulièrement une sauvegarde JSON.</p></footer>
 
 <script>
 const KEY='vapetmoi_fidelite_v1';
