@@ -1255,16 +1255,7 @@ nav.appNav button{color:#687568;font-weight:700}nav.appNav button.active{backgro
   <button data-page="stats" onclick="showPage('stats',this)"><span>▥</span>Stats</button>
   <button data-page="analyse" onclick="showPage('analyse',this)"><span>↗</span>Analyse</button>
 </nav>
-<section class="globalFinder" aria-label="Recherche rapide dans l’application" style="max-width:1120px;margin:10px auto 0;padding:0 14px">
-  <div class="card" style="padding:10px 12px;margin-bottom:0">
-    <label for="globalSearch" style="margin-top:0">🔎 Recherche rapide — client ou produit</label>
-    <div class="actions" style="display:flex;gap:8px;align-items:stretch">
-      <input id="globalSearch" type="search" placeholder="Nom du client, téléphone, e-mail ou produit…" autocomplete="off" onkeydown="if(event.key==='Enter'){event.preventDefault();runGlobalSearch()}" style="flex:1;min-width:0;margin:0">
-      <button type="button" class="primary" onclick="runGlobalSearch()">Rechercher</button>
-    </div>
-    <div id="globalSearchResults" class="small muted" aria-live="polite" style="margin-top:7px">Accès direct aux fiches clients et références du stock.</div>
-  </div>
-</section>
+
 <main>
 
 <section id="accueil" class="page active">
@@ -1585,7 +1576,7 @@ nav.appNav button{color:#687568;font-weight:700}nav.appNav button.active{backgro
   <div class="card"><h3>💡 Plan d’action conseillé</h3><div id="analysisActions"></div><p class="small muted">Les recommandations sont calculées à partir des données enregistrées. Une projection n’est pas une garantie. La marge réelle nécessite les coûts d’achat.</p><div class="actions" style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px"><button class="btn" onclick="exportAnalysisCSV()">Exporter l’analyse CSV</button><button class="btn secondary" onclick="window.print()">Imprimer le bilan</button></div></div>
 </section>
 </main>
-<footer class="versionFooter" aria-label="Version installée"><span class="versionChip"><span class="versionDot" aria-hidden="true"></span> Vap’ & Moi Pro · Version installée : V54 — Optimisation globale des onglets</span><p class="small muted">Données enregistrées sur cet appareil · Pense à effectuer régulièrement une sauvegarde JSON.</p></footer>
+<footer class="versionFooter" aria-label="Version installée"><span class="versionChip"><span class="versionDot" aria-hidden="true"></span> Vap’ & Moi Pro · Version installée : V55 — Sans recherche rapide sur l’accueil</span><p class="small muted">Données enregistrées sur cet appareil · Pense à effectuer régulièrement une sauvegarde JSON.</p></footer>
 
 <script>
 const KEY='vapetmoi_fidelite_v1';
