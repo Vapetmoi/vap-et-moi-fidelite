@@ -1,0 +1,12 @@
+VAP’ & MOI PRO V49 — PRÉVISIONS COHÉRENTES
+
+Correction de la projection hebdomadaire sur l'accueil :
+- la prévision de fin de semaine comprend le CA réalisé avant aujourd'hui ;
+- elle ajoute la prévision du jour (sans remplacer les ventes déjà réalisées par un montant inférieur) ;
+- elle estime les jours d'ouverture à venir à partir des ventes historiques des mêmes jours de semaine, lorsqu'elles existent ;
+- si aucune donnée historique n'existe pour les jours à venir, ceux-ci ne sont pas inventés et contribuent pour 0 à l'estimation.
+
+La prévision quotidienne reste une estimation indicative. Le chiffre hebdomadaire peut donc être égal à la prévision du jour si aucune vente n'a été réalisée avant aujourd'hui et qu'il n'y a pas d'historique pour les jours futurs. Il ne doit plus être inférieur à la prévision du jour.
+
+Clé de stockage conservée : vapetmoi_fidelite_v1. Sauvegarder les données JSON et garder une copie de la version précédente avant publication.
+Contrôles effectués : syntaxe JavaScript, intégrité du ZIP. Tests complets sur le téléphone et données réelles non effectués.
