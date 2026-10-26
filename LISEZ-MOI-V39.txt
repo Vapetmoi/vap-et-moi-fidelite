@@ -1,4 +1,0 @@
-Vap’ & Moi Pro V39.0 — archive de travail.
-Les éléments non-HTML proviennent de l’archive V38.2 fournie. L’index contient la couche d’interface modale préparée précédemment et conserve les fonctions métier clés présentes dans V38.2.
-Contrôles : intégrité ZIP et syntaxe JavaScript contrôlées.
-Limite importante : aucune validation fonctionnelle complète dans un navigateur ni avec les données réelles. Sauvegarder le JSON et tester sur une copie avant publication.
