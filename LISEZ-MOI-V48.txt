@@ -1,0 +1,14 @@
+VAP’ & MOI PRO V48 — PRÉVISIONS SUR L’ACCUEIL
+
+Ajout d'un bloc visible sur l'Accueil avec :
+- prévision indicative du chiffre d'affaires de la journée ;
+- prévision indicative de fin de semaine ;
+- CA réalisé et explication de la méthode ;
+- projection quotidienne basée sur le rythme actuel et, si disponibles, les journées précédentes du même jour de semaine ;
+- projection hebdomadaire basée sur le CA réalisé et les jours d'ouverture écoulés.
+
+Les projections sont des estimations, pas des garanties. Si les données sont insuffisantes, l'application affiche un tiret au lieu d'inventer un chiffre.
+
+La clé de stockage vapetmoi_fidelite_v1 et le code métier existant sont conservés. Sauvegarder un JSON et garder une copie de la version précédente avant publication.
+
+Contrôles effectués : syntaxe JavaScript, cohérence du titre et du manifeste, intégrité du ZIP. Tests complets sur le téléphone et données réelles non effectués.
