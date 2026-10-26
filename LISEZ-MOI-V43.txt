@@ -1,6 +1,0 @@
-VAP’ & MOI PRO V43 — LIVRE DE COMPTES
-Direction : boutique de caractère, registre de commerce ancien, vert forêt, papier crème, bois/olive et laiton.
-Refonte CSS globale : typographie plus éditoriale, surfaces façon papier de registre, accents laiton, cartes commerciales et navigation mobile recalibrée pour que les icônes restent centrées et proportionnées aux six rubriques.
-Le JavaScript métier et les clés de stockage sont conservés de la V42. Le nom du cache service worker a été incrémenté.
-Contrôles effectués : ZIP intégrité, mention de version, cache versionné, syntaxe JS inline.
-Non effectué : test complet dans navigateur réel, tests vente/annulation/fidélité/stock/restauration. Faire une sauvegarde JSON avant publication et conserver la V42.
