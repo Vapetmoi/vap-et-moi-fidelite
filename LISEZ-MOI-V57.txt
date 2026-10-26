@@ -1,0 +1,25 @@
+VAP’ & MOI PRO — V57 SIGNATURE VISUELLE
+
+Cette version reprend l’archive V56 et applique une refonte visuelle globale :
+- palette vert forêt, crème naturel, laiton et vert sauge ;
+- hiérarchie visuelle cohérente sur les pages ;
+- cartes, champs, boutons, badges, tableaux et alertes harmonisés ;
+- accueil premium avec mascotte et décor discret ;
+- navigation mobile adaptée aux six onglets ;
+- focus clavier, contrastes et prise en compte de la réduction des animations ;
+- cache de l’application mis à jour pour V57.
+
+CONSERVATION
+- Clés de stockage métier non modifiées par cette refonte : vapetmoi_fidelite_v1 et ses clés associées.
+- La recherche rapide globale n’est pas affichée sur l’accueil.
+- Les fonctions métier existantes sont conservées : cette version ne prétend pas implémenter automatiquement toutes les améliorations fonctionnelles proposées dans le plan.
+
+CONTRÔLES EFFECTUÉS
+- Vérification de la syntaxe JavaScript embarquée avec Node.js.
+- Vérification des identifiants HTML dupliqués.
+- Vérification de l’intégrité du ZIP et de la présence des ressources PWA.
+
+À TESTER AVANT UTILISATION RÉELLE
+- Affichage sur le téléphone réel et navigation entre tous les onglets.
+- Vente, correction/annulation, fidélité, mouvement de stock et restauration sur une copie de sauvegarde.
+- Exporter une sauvegarde JSON complète et conserver l’ancienne archive avant de publier.
