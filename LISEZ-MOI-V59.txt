@@ -8,3 +8,5 @@ Changements :
 - Cache de service worker versionné V59.
 
 Avant publication : exporter une sauvegarde JSON complète, garder une copie de la version en ligne et vérifier le rendu sur le téléphone. Le contrôle de syntaxe ne remplace pas un test réel de toutes les opérations.
+
+Correctif : le pied de page indique maintenant V59 — En-tête et bannière ajustés. Le cache du service worker a été incrémenté pour forcer le rechargement des ressources.
