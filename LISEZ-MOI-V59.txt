@@ -1,9 +1,8 @@
-VAP’ & MOI PRO — V59 corrigée (cache)
+Vap’ & Moi Pro — V59.1 (corrections visuelles)
 
-Cette archive contient l’index V59 et un service worker corrigé pour privilégier la version en ligne de index.html, tout en gardant une copie hors connexion. Le cache passe à vap-et-moi-ultima-cache-v59-2.
+- Suppression de la décoration circulaire du header et du médaillon autour de V&M.
+- Bannière d’accueil réduite légèrement dans son cadre pour préserver une marge autour du texte intégré à l’image.
+- Cache du service worker renouvelé : vap-et-moi-ultima-cache-v59-3.
+- Les clés de stockage de l’application ne sont pas modifiées.
 
-Publication : remplace les fichiers du site par le contenu de cette archive, en particulier index.html et sw.js. Attends la fin du déploiement GitHub Pages puis rouvre le site.
-
-IMPORTANT : ne supprime pas les données du navigateur et ne désinstalle pas l’application. Le code de stockage local de l’application n’a pas été modifié par cette correction de cache. Fais une sauvegarde JSON avant publication par précaution.
-
-Contrôles effectués : intégrité ZIP et syntaxe JavaScript de index.html et sw.js. Pas de test réel sur téléphone.
+Installation : sauvegarder les données en JSON, puis remplacer les fichiers du site par ceux de cette archive. Ne pas supprimer les données du navigateur.
