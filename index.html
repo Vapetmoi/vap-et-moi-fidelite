@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#173D30">
 <meta name="description" content="Vap’ & Moi Pro Signature Premium : gestion des clients, ventes, fidélité, analyses, suivi commercial et sauvegardes.">
-<title>Vap’ &amp; Moi — Signature V59</title>
+<title>Vap’ &amp; Moi Pro — Signature V60</title>
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="./icon-192.png">
 <meta name="mobile-web-app-capable" content="yes">
@@ -1396,6 +1396,58 @@ header{background:linear-gradient(118deg,#102D23 0%,#173D30 58%,#28533D 100%)!im
  .appGreetingBanner .homeBannerImage{display:block!important;width:100%!important;height:100%!important;object-fit:contain!important;object-position:center!important}
 }
 
+
+/* V60 — signature premium, navigation et thème adaptable */
+:root{--green:#173e32;--green2:#2d674d;--light:#f4f0e4;--card:#fffdf6;--text:#24382e;--muted:#73796f;--border:#ded7c2;--gold:#c6ae70;--red:#a83d32;--surface-soft:#f4f0e4;--shadow:0 8px 24px rgba(31,52,39,.075)}
+body{background-color:var(--light);background-image:linear-gradient(180deg,#f7f3e8 0,#f4f0e4 280px);color:var(--text);transition:background-color .22s,color .22s}
+.card,.homeStats .stat,.quickTile,.client,.statsThemeHead,.stat{transition:background-color .22s,border-color .22s,box-shadow .22s,transform .18s}
+.card{background:var(--card);border-color:var(--border);box-shadow:var(--shadow)}
+.homeStats .stat{background:linear-gradient(145deg,#fffdf6,#f4efdf);border-color:var(--border);box-shadow:0 5px 14px #473d2110}
+.stat strong,.homeStats .stat strong{color:var(--green)}
+button.primary{background:linear-gradient(135deg,#1d503b,#2d674d);box-shadow:0 4px 10px #173e3218}
+button.primary:active,.quickTile:active{transform:translateY(1px) scale(.99)}
+button.secondary{border-color:#c9c09f;color:var(--green);background:var(--card)}
+input,select,textarea{background:var(--card);border-color:var(--border);color:var(--text)}
+.statsThemeHead{background:linear-gradient(120deg,#e9e4d2,#f7f3e7);border-color:var(--border);color:var(--green)}
+.appHeaderV60{display:flex;align-items:center;justify-content:center;position:relative;min-height:88px;padding:17px 68px 17px 18px!important;border-radius:0 0 20px 20px;box-shadow:0 7px 20px #173e321a}
+.appHeaderV60 .brandLockup{justify-content:center;max-width:100%;gap:12px}
+.themeToggle{position:absolute;right:12px;top:50%;transform:translateY(-50%);display:flex;align-items:center;justify-content:center;gap:5px;min-height:36px;padding:7px 9px;border-radius:12px;border:1px solid #ffffff45;background:#ffffff12;color:#fff8e8;font-size:12px;font-weight:700;white-space:nowrap}
+.themeToggle span{display:inline}
+nav.appNav{grid-template-columns:repeat(6,minmax(0,1fr));background:rgba(250,247,236,.96);border-color:var(--border);backdrop-filter:blur(16px)}
+nav.appNav button{background:transparent;color:#596357;font-weight:650;transition:background .18s,color .18s,transform .18s}
+nav.appNav button.active{background:#e5e8d7;color:var(--green);box-shadow:inset 0 0 0 1px #c7c29f;border:0}
+nav.appNav button.saleNav{color:#f8f0d8;background:#174431;border:1px solid #c6ae70;box-shadow:0 4px 0 #c6ae70,0 7px 18px #173e3220}
+nav.appNav button.saleNav.active{background:#174431;color:#fff8e8}
+.appGreetingBanner{background:#173e32;border:1px solid #c6ae70;box-shadow:0 8px 20px #173e321c}
+#achat> .card:first-child{border-top:3px solid var(--gold)}
+#achat label{font-weight:650;color:var(--green);font-size:14px}
+#achat .purchaseSearchWrap input,#achat #amount{font-size:18px;font-weight:650}
+#achat #amount{border:1px solid #c6ae70;box-shadow:0 0 0 3px #c6ae701c}
+#saleStockProduct{font-size:15px}
+#stock .alert,#alertsBox .alert{border-radius:13px}
+.versionChip{border-color:#d9cba5!important;background:#f5edda!important;color:#6c5b31!important}
+button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible,summary:focus-visible{outline-color:#c6ae70}
+@media(max-width:650px){.appHeaderV60{min-height:76px;padding:13px 78px 13px 10px!important}.appHeaderV60 .brandLockup{gap:9px}.appHeaderV60 .brandLockup h1{font-size:clamp(20px,5.7vw,25px)!important}.appHeaderV60 .brandMark{font-size:18px!important}.themeToggle{right:8px;padding:7px 8px}.themeToggle span{display:none}nav.appNav{grid-template-columns:repeat(6,minmax(0,1fr));padding:7px 4px calc(7px + env(safe-area-inset-bottom));gap:2px}nav.appNav button{font-size:10px;padding:8px 1px 7px;min-width:0}nav.appNav button span{font-size:18px}.card{box-shadow:0 5px 16px #2a35250c}}
+/* Thème sombre optionnel ; préférence enregistrée dans une clé UI indépendante. */
+body.dark-mode{--light:#101c17;--card:#1a2a22;--text:#f0ecdf;--muted:#b0b9ac;--border:#34473a;--surface-soft:#22352a;--green:#e5e4d1;--green2:#b7d5b5;--gold:#c6ae70;--shadow:0 8px 24px rgba(0,0,0,.18);background:#101c17;background-image:linear-gradient(180deg,#14271e 0,#101c17 280px);color:var(--text)}
+body.dark-mode .card,body.dark-mode .homeStats .stat,body.dark-mode .quickTile,body.dark-mode .client,body.dark-mode .stat{background:var(--card);border-color:var(--border);color:var(--text)}
+body.dark-mode .homeStats .stat{background:linear-gradient(145deg,#1d3026,#19271f)}
+body.dark-mode .stat strong,body.dark-mode .homeStats .stat strong,body.dark-mode .rankInfo strong,body.dark-mode #achat label{color:#d8e6d3}
+body.dark-mode .muted,body.dark-mode .small,body.dark-mode .kpiTitle{color:var(--muted)}
+body.dark-mode input,body.dark-mode select,body.dark-mode textarea{background:#15231b;border-color:#405343;color:#f0ecdf}
+body.dark-mode button.secondary{background:#1a2a22;color:#d8e6d3;border-color:#61765f}
+body.dark-mode nav.appNav{background:rgba(20,35,27,.97);border-color:#34473a}
+body.dark-mode nav.appNav button{color:#d0d8c9}
+body.dark-mode nav.appNav button.active{background:#2b4031;color:#fff5d9}
+body.dark-mode .statsThemeHead{background:linear-gradient(120deg,#20352a,#1a2a22);border-color:#405343;color:#e9eddf}
+body.dark-mode .alert{background:#342f20;color:#f3e5bd}
+body.dark-mode .alert.red{background:#3b2422;color:#ffd6d0}
+body.dark-mode .progress{background:#334338}
+body.dark-mode .versionChip{background:#263529!important;color:#e5d5a5!important;border-color:#665b3c!important}
+body.dark-mode .appGreetingBanner{background:#13271e}
+body.dark-mode #achat .card{background:var(--card)}
+body.dark-mode .rankNum{background:#2a4030;color:#d8e6d3}
+
 </style>
 </head>
 <body>
@@ -1404,8 +1456,9 @@ header{background:linear-gradient(118deg,#102D23 0%,#173D30 58%,#28533D 100%)!im
   <span class="successSeal" aria-hidden="true">✓</span><div class="successCopy"><div class="successTitle" id="successToastTitle">C’est enregistré</div><div class="successDetail" id="successToastDetail">Les informations ont bien été sauvegardées.</div></div><span class="successSpark" aria-hidden="true">✦</span>
 </div>
 
-<header>
+<header class="appHeaderV60">
   <div class="brandLockup"><div class="brandMark" aria-hidden="true">V<span>&</span>M</div><h1>Vap’ &amp; Moi</h1></div>
+  <button type="button" class="themeToggle" id="themeToggle" onclick="toggleAppTheme()" aria-label="Activer le mode sombre" title="Changer le thème">☾ <span>Mode sombre</span></button>
 </header>
 <div id="offlineNotice" role="status" hidden>📴 Hors connexion : consultation uniquement. Les modifications sont désactivées.</div>
 <nav class="appNav">
@@ -1737,7 +1790,7 @@ header{background:linear-gradient(118deg,#102D23 0%,#173D30 58%,#28533D 100%)!im
   <div class="card"><h3>💡 Plan d’action conseillé</h3><div id="analysisActions"></div><p class="small muted">Les recommandations sont calculées à partir des données enregistrées. Une projection n’est pas une garantie. La marge réelle nécessite les coûts d’achat.</p><div class="actions" style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px"><button class="btn" onclick="exportAnalysisCSV()">Exporter l’analyse CSV</button><button class="btn secondary" onclick="window.print()">Imprimer le bilan</button></div></div>
 </section>
 </main>
-<footer class="versionFooter" aria-label="Version installée"><span class="versionChip"><span class="versionDot" aria-hidden="true"></span> Vap’ & Moi Pro · Version installée : V59 — En-tête et bannière ajustés</span><p class="small muted">Données enregistrées sur cet appareil · Pense à effectuer régulièrement une sauvegarde JSON.</p></footer>
+<footer class="versionFooter" aria-label="Version installée"><span class="versionChip"><span class="versionDot" aria-hidden="true"></span> Vap’ & Moi Pro · Version installée : V60 — Signature moderne</span><p class="small muted">Données enregistrées sur cet appareil · Pense à effectuer régulièrement une sauvegarde JSON.</p></footer>
 
 <script>
 
@@ -3004,6 +3057,11 @@ function renderAdvancedAnalytics(){
  const ranking=Object.entries(byClient).sort((a,b)=>b[1]-a[1]).slice(0,5), maxClient=Math.max(1,...ranking.map(x=>x[1]));
  top.innerHTML=ranking.length?ranking.map((x,i)=>'<div class="advancedTopRow"><div class="advancedRank">'+(i+1)+'</div><div class="advancedTopName">'+esc(x[0])+'<div class="advancedBar"><span style="width:'+Math.max(2,x[1]/maxClient*100)+'%"></span></div></div><div class="advancedTopValue">'+fmt(x[1])+'</div></div>').join(''):'<p class="muted small">Aucune donnée client disponible sur cette période.</p>';
 }
+
+const UI_THEME_KEY='vapetmoi_ui_theme_v60';
+function applyAppTheme(theme){const dark=theme==='dark';document.body.classList.toggle('dark-mode',dark);const btn=document.getElementById('themeToggle');if(btn){btn.innerHTML=dark?'☀ <span>Mode clair</span>':'☾ <span>Mode sombre</span>';btn.setAttribute('aria-label',dark?'Activer le mode clair':'Activer le mode sombre');btn.title=dark?'Passer au mode clair':'Passer au mode sombre'}document.querySelector('meta[name=theme-color]')?.setAttribute('content',dark?'#14271e':'#173D30');}
+function toggleAppTheme(){const next=document.body.classList.contains('dark-mode')?'light':'dark';applyAppTheme(next);try{localStorage.setItem(UI_THEME_KEY,next)}catch(e){}}
+try{applyAppTheme(localStorage.getItem(UI_THEME_KEY)||'light')}catch(e){applyAppTheme('light')}
 
 function updateAll(){clients=clients.map(normalizeClient);updateClientOptions();renderClientOverview();renderClients();updatePurchaseBox();renderCategoryAnalytics();setDashboard();setStats();renderWeekdayStats();renderAdvancedAnalytics();renderV15Insights(allPurchases(),new Date());renderDailyOps(new Date());renderActivityLog();renderBackupStatus();renderAnalysis();renderCommercialCopilot();renderDataIntegrity();renderFollowupAgenda();const threshold=document.getElementById("inactiveThreshold");if(threshold)threshold.value=String(settings.inactiveThreshold||30);updateGreeting()}
 updateAll();

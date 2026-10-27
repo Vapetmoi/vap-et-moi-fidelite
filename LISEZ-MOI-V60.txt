@@ -1,0 +1,17 @@
+Vap’ & Moi Pro — V60 Signature moderne
+
+Inclus :
+- Refonte visuelle premium vert forêt / ivoire / laiton, avec navigation mobile modernisée.
+- En-tête simplifié et bannière mascotte conservés depuis la V59.1 corrigée.
+- Écran de vente visuellement hiérarchisé pour accélérer la saisie au comptoir.
+- Liaison vente-stock existante conservée : le stock ne diminue que si une référence précise est choisie ; les ventes non détaillées ne modifient pas le stock. Les annulations associées conservent le mécanisme de contre-mouvement existant.
+- Alertes, seuils, historique des mouvements et suggestions de réapprovisionnement conservés.
+- Graphiques, statistiques et analyses existants harmonisés visuellement par le thème global.
+- Mode sombre activable depuis le bouton en haut ; préférence enregistrée dans une clé UI séparée.
+- Cache du service worker renouvelé (v60-1) ; la page tente d'abord le réseau et garde un repli hors ligne.
+
+Préservation : les clés existantes des données métier ne sont pas renommées. Le mode sombre utilise uniquement vapetmoi_ui_theme_v60.
+
+Installation : exporter une sauvegarde JSON avant déploiement. Remplacer les fichiers du site par tous les fichiers de cette archive. Ne pas effacer les données du navigateur.
+
+Vérifications effectuées : intégrité ZIP, syntaxe JavaScript. Le fonctionnement réel sur téléphone et le déploiement GitHub Pages doivent encore être vérifiés après installation.
