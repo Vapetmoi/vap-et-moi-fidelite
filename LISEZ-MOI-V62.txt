@@ -1,0 +1,24 @@
+Vap’ & Moi Pro — V62.2 — Sélection multi-produits plus claire
+
+Nouveautés :
+- Dans « Modifier l’achat », une ligne distincte est affichée pour chaque référence produit.
+- Le bouton « Ajouter une autre référence produit » permet d’ajouter plusieurs références différentes au même achat.
+- Chaque ligne a sa propre liste déroulante et sa propre quantité informative.
+- Le nombre de lignes et leur libellé se mettent à jour lorsqu’une ligne est ajoutée ou retirée.
+- Les produits détaillés restent consultables depuis « Voir le détail » dans l’historique du client.
+- Le détail rétroactif reste informatif : il ne modifie pas le stock actuel et ne crée aucun mouvement de stock.
+
+Utilisation :
+1. Ouvrir la fiche client puis « Modifier » sur l’achat concerné.
+2. Dans « Produits vendus », choisir le premier produit dans la première liste.
+3. Appuyer sur « + Ajouter une autre référence produit ».
+4. Choisir le deuxième produit dans la nouvelle liste, puis répéter pour les autres produits.
+5. Enregistrer les modifications.
+
+Installation :
+1. Exportez une sauvegarde JSON depuis l’application actuelle.
+2. Remplacez les fichiers du dépôt GitHub Pages par tous les fichiers de cette archive.
+3. Attendez la fin du déploiement puis rouvrez l’application.
+
+Les clés de stockage métier existantes sont conservées. Ne supprimez pas les données du navigateur.
+Vérifications réalisées : intégrité de l’archive et syntaxe JavaScript. Le test réel sur téléphone reste à effectuer après déploiement.

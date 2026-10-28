@@ -1,4 +1,4 @@
-const CACHE='vap-et-moi-ultima-cache-v61-1';
+const CACHE='vap-et-moi-ultima-cache-v62-2';
 const CORE=['./','./index.html','./manifest.webmanifest','./icon-192.png','./icon-512.png','./mascotte-vap-moi.jpg','./accueil-banniere.jpg'];
 self.addEventListener('install',event=>event.waitUntil((async()=>{const cache=await caches.open(CACHE);for(const url of CORE){try{const response=await fetch(url,{cache:'no-store'});if(response.ok)await cache.put(url,response)}catch(e){}}await self.skipWaiting()})()));
 self.addEventListener('activate',event=>event.waitUntil((async()=>{const keys=await caches.keys();await Promise.all(keys.filter(key=>key.startsWith('vap-et-moi-ultima-cache-')&&key!==CACHE).map(key=>caches.delete(key)));await self.clients.claim()})()));
