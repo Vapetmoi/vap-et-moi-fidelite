@@ -1,5 +1,18 @@
-const CACHE='vap-et-moi-ultima-cache-v63-stock-1';
-const CORE=['./','./index.html','./manifest.webmanifest','./icon-192.png','./icon-512.png','./mascotte-vap-moi.jpg','./accueil-banniere.jpg'];
-self.addEventListener('install',event=>event.waitUntil((async()=>{const cache=await caches.open(CACHE);for(const url of CORE){try{const response=await fetch(url,{cache:'no-store'});if(response.ok)await cache.put(url,response)}catch(e){}}await self.skipWaiting()})()));
-self.addEventListener('activate',event=>event.waitUntil((async()=>{const keys=await caches.keys();await Promise.all(keys.filter(key=>key.startsWith('vap-et-moi-ultima-cache-')&&key!==CACHE).map(key=>caches.delete(key)));await self.clients.claim()})()));
-self.addEventListener('fetch',event=>{if(event.request.method!=='GET')return;const url=new URL(event.request.url);const isAppPage=event.request.mode==='navigate'||url.pathname.endsWith('/index.html')||url.pathname.endsWith('/vap-et-moi-fidelite/');if(isAppPage){event.respondWith((async()=>{const cache=await caches.open(CACHE);try{const response=await fetch(event.request,{cache:'no-store'});if(response&&response.ok)await cache.put('./index.html',response.clone());return response}catch(e){return(await cache.match(event.request))||(await cache.match('./index.html'))||Response.error()}})());return}event.respondWith((async()=>{const cache=await caches.open(CACHE);try{const response=await fetch(event.request);if(response&&response.ok)cache.put(event.request,response.clone());return response}catch(e){return(await cache.match(event.request))||Response.error()}})())});
+const CACHE_NAME = 'vap-et-moi-v64-prix-ht-ttc-1';
+const CORE = ['./', './index.html', './manifest.webmanifest', './icon-192.png', './icon-512.png', './mascotte-vap-moi.jpg', './accueil-banniere.jpg'];
+self.addEventListener('install', event => {
+  event.waitUntil(caches.open(CACHE_NAME).then(cache => cache.addAll(CORE)).catch(() => {}).then(() => self.skipWaiting()));
+});
+self.addEventListener('activate', event => {
+  event.waitUntil(caches.keys().then(keys => Promise.all(keys.filter(key => key.startsWith('vap-et-moi-') && key !== CACHE_NAME).map(key => caches.delete(key)))).then(() => self.clients.claim()));
+});
+self.addEventListener('fetch', event => {
+  const req = event.request;
+  if (req.method !== 'GET' || new URL(req.url).origin !== self.location.origin) return;
+  const url = new URL(req.url);
+  if (url.pathname.endsWith('/index.html') || url.pathname === new URL(self.registration.scope).pathname) {
+    event.respondWith(fetch(req).then(response => { if (response && response.ok) caches.open(CACHE_NAME).then(cache => cache.put(req, response.clone())); return response; }).catch(() => caches.match(req).then(cached => cached || caches.match('./index.html'))));
+    return;
+  }
+  event.respondWith(caches.match(req).then(cached => cached || fetch(req).then(response => { if (response && response.ok) caches.open(CACHE_NAME).then(cache => cache.put(req, response.clone())); return response; })));
+});
