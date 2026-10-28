@@ -1,0 +1,20 @@
+Vap’ & Moi Pro — V63 — Stock simplifié et réapprovisionnement
+
+Cette version part de l’archive V62.2 fournie par l’utilisateur.
+
+Améliorations de la section Stock :
+- Catalogue compact en lignes, cinq références affichées au départ puis bouton pour voir tout le catalogue.
+- Recherche immédiate dans le catalogue, filtrage par nom, catégorie, référence et fournisseur.
+- Bouton « + Réappro » sur chaque produit du catalogue pour préparer une commande fournisseur.
+- Quantités de commande modifiables directement dans le panier et retrait de produits.
+- Copie de la liste fournisseur pour la coller dans un message.
+- Historique des mouvements limité aux cinq derniers par défaut, avec affichage complet et recherche par produit.
+- Recherche par nom ou référence dans les sélecteurs de mouvement manuel et de commande.
+- Ajout produit, alertes, statistiques, suggestions, import/export et réception de commande conservés.
+- Identifiant du cache du service worker renouvelé.
+
+Important :
+- Les clés de stockage existantes sont conservées, notamment la clé stock KEY+'_stock_v1'.
+- Ajouter un produit au réappro ne modifie pas le stock. Seule la réception explicite ajoute les quantités au stock.
+- Les quantités, noms et références réels dépendent des données locales de l’utilisateur.
+- Vérifications effectuées : intégrité ZIP, syntaxe JavaScript. Pas de test réel sur téléphone ni de test de régression complet des fonctions métier.
