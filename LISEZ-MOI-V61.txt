@@ -1,0 +1,11 @@
+Vap’ & Moi Pro — V61 Historique des achats détaillé
+
+Nouveautés :
+- Dans la fiche client, chaque achat possède un bouton « Voir le détail » pour consulter le montant payé, les réductions, les catégories et le produit détaillé s’il est renseigné.
+- Dans « Modifier l’achat », ajout d’une section « Produit vendu » pour détailler un achat historique.
+- Le détail produit ajouté rétroactivement est informatif : il ne crée pas de mouvement de stock et ne change pas les quantités actuelles.
+- Conservation des clés de stockage existantes et des fichiers métier de la V60.
+
+Installation : sauvegarder les données en JSON, remplacer les fichiers du site par ceux de cette archive et attendre le déploiement GitHub Pages. Ne pas effacer les données du navigateur.
+
+Contrôles effectués : intégrité ZIP et vérification de syntaxe JavaScript. Pas de test direct sur le téléphone.

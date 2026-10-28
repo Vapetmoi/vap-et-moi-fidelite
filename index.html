@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#173D30">
 <meta name="description" content="Vap’ & Moi Pro Signature Premium : gestion des clients, ventes, fidélité, analyses, suivi commercial et sauvegardes.">
-<title>Vap’ &amp; Moi Pro — Signature V60</title>
+<title>Vap’ &amp; Moi Pro — Historique détaillé V61</title>
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="./icon-192.png">
 <meta name="mobile-web-app-capable" content="yes">
@@ -1397,7 +1397,7 @@ header{background:linear-gradient(118deg,#102D23 0%,#173D30 58%,#28533D 100%)!im
 }
 
 
-/* V60 — signature premium, navigation et thème adaptable */
+/* V61 — historique des achats détaillé, navigation et thème adaptable */
 :root{--green:#173e32;--green2:#2d674d;--light:#f4f0e4;--card:#fffdf6;--text:#24382e;--muted:#73796f;--border:#ded7c2;--gold:#c6ae70;--red:#a83d32;--surface-soft:#f4f0e4;--shadow:0 8px 24px rgba(31,52,39,.075)}
 body{background-color:var(--light);background-image:linear-gradient(180deg,#f7f3e8 0,#f4f0e4 280px);color:var(--text);transition:background-color .22s,color .22s}
 .card,.homeStats .stat,.quickTile,.client,.statsThemeHead,.stat{transition:background-color .22s,border-color .22s,box-shadow .22s,transform .18s}
@@ -1790,7 +1790,7 @@ body.dark-mode .rankNum{background:#2a4030;color:#d8e6d3}
   <div class="card"><h3>💡 Plan d’action conseillé</h3><div id="analysisActions"></div><p class="small muted">Les recommandations sont calculées à partir des données enregistrées. Une projection n’est pas une garantie. La marge réelle nécessite les coûts d’achat.</p><div class="actions" style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px"><button class="btn" onclick="exportAnalysisCSV()">Exporter l’analyse CSV</button><button class="btn secondary" onclick="window.print()">Imprimer le bilan</button></div></div>
 </section>
 </main>
-<footer class="versionFooter" aria-label="Version installée"><span class="versionChip"><span class="versionDot" aria-hidden="true"></span> Vap’ & Moi Pro · Version installée : V60 — Signature moderne</span><p class="small muted">Données enregistrées sur cet appareil · Pense à effectuer régulièrement une sauvegarde JSON.</p></footer>
+<footer class="versionFooter" aria-label="Version installée"><span class="versionChip"><span class="versionDot" aria-hidden="true"></span> Vap’ & Moi Pro · Version installée : V61 — Historique des achats détaillé</span><p class="small muted">Données enregistrées sur cet appareil · Pense à effectuer régulièrement une sauvegarde JSON.</p></footer>
 
 <script>
 
@@ -2211,7 +2211,7 @@ function showClient(name){
   <h3>💶 Résumé du client</h3>
   <div class="grid"><div><strong>CA client</strong><br>${fmt(c.total)}</div><div><strong>Panier moyen</strong><br>${fmt(avg)}</div><div><strong>Nombre d’achats</strong><br>${c.purchases}</div></div>
   <h3>🧺 Achats par catégorie</h3>${(()=>{const sums={};SALE_CATEGORIES.forEach(([key,label])=>sums[key]={label,amount:0});(c.history||[]).filter(isActivePurchase).forEach(p=>SALE_CATEGORIES.forEach(([key])=>sums[key].amount+=Math.max(0,Number(p.categoryAmounts?.[key])||0)));const rows=SALE_CATEGORIES.filter(([key])=>sums[key].amount>0);return rows.length?rows.map(([key])=>`<div class="row small"><span>${esc(sums[key].label)}</span><strong>${fmt(sums[key].amount)}</strong></div>`).join(''):'<p class="small muted">Aucune répartition renseignée pour ce client.</p>'})()}
-  <h3>🧾 Historique des achats</h3>${hist.length?hist.map(p=>`<div class="row small" style="border-bottom:1px solid var(--border);padding:8px 0;${p.cancelled?'opacity:.7;background:#fff5f4;':''}"><span>📅 ${dateFmt(p.date)} · ${fmt(p.amount)}${p.discount?' · 🎁 -'+fmt(p.discount):''}${p.exceptionalDiscount?' (dont remise exceptionnelle '+fmt(p.exceptionalDiscount)+')':''} · payé ${fmt(p.paid)}${p.stockProductId?' · Stock : '+stockEsc(stockProduct(p.stockProductId)?.name||'référence supprimée')+' × '+Number(p.stockQty||1):''}${p.categoryAmounts&&categoryAmountTotal(p.categoryAmounts)>0?' · Catégories : '+SALE_CATEGORIES.filter(([key])=>Number(p.categoryAmounts[key])>0).map(([key,label])=>label+' '+fmt(p.categoryAmounts[key])).join(', '):''}${p.cancelled?` · <strong style="color:var(--red)">ANNULÉ le ${dateFmt(p.cancelledAt)}</strong>`:''}</span>${isActivePurchase(p)?`<button class="secondary" onclick="editPurchase('${escJs(c.name)}','${escJs(p.id)}')">Modifier</button><button class="secondary" onclick="cancelPurchase('${escJs(c.name)}','${escJs(p.id)}')">Annuler</button>`:''}</div>`).join(''):'<p class="muted">Aucun achat.</p>'}
+  <h3>🧾 Historique des achats</h3>${hist.length?hist.map(p=>`<div class="purchase-history-item" style="border-bottom:1px solid var(--border);padding:10px 0;${p.cancelled?'opacity:.7;background:#fff5f4;':''}"><button type="button" class="secondary" style="display:block;width:100%;text-align:left;white-space:normal;line-height:1.45;margin-bottom:7px" onclick="showPurchaseDetails('${escJs(c.name)}','${escJs(p.id)}')">📅 ${dateFmt(p.date)} · ${fmt(p.amount)}${p.discount?' · 🎁 -'+fmt(p.discount):''}${p.exceptionalDiscount?' (dont remise exceptionnelle '+fmt(p.exceptionalDiscount)+')':''} · payé ${fmt(p.paid)} · <strong>Voir le détail ▾</strong>${p.cancelled?` · <strong style="color:var(--red)">ANNULÉ le ${dateFmt(p.cancelledAt)}</strong>`:''}</button><div class="actions" style="gap:7px">${isActivePurchase(p)?`<button class="secondary" onclick="editPurchase('${escJs(c.name)}','${escJs(p.id)}')">✏️ Modifier</button><button class="secondary" onclick="cancelPurchase('${escJs(c.name)}','${escJs(p.id)}')">Annuler</button>`:''}</div></div>`).join(''):'<p class="muted">Aucun achat.</p>'}
   <h3>🎁 Fidélité</h3>
   <div class="grid grid4">
     <div class="stat"><strong>${reward.earnedCount}</strong><span class="kpiTitle">Bons gagnés</span><div class="small muted">${fmt(reward.earned)}</div></div>
@@ -2250,6 +2250,15 @@ function showClient(name){
   document.getElementById('clientList').prepend(box);
   box.scrollIntoView({behavior:'smooth',block:'start'});
 }
+function showPurchaseDetails(name,id){
+  const c=clients.find(x=>x.name===name);if(!c)return;const p=(c.history||[]).find(x=>String(x.id)===String(id));if(!p)return;
+  const prior=document.getElementById('purchaseDetailsModal');if(prior)prior.remove();
+  const productId=p.productDetailId||p.stockProductId||'',product=productId?stockProduct(productId):null,qty=Math.max(1,Number(p.productDetailQty||p.stockQty||1));
+  const cats=SALE_CATEGORIES.filter(([key])=>Number(p.categoryAmounts?.[key]||0)>0).map(([key,label])=>`<div class="row"><span>${esc(label)}</span><strong>${fmt(p.categoryAmounts[key])}</strong></div>`).join('');
+  const modal=document.createElement('div');modal.id='purchaseDetailsModal';modal.style.cssText='position:fixed;inset:0;z-index:10030;background:rgba(10,25,18,.62);display:flex;align-items:center;justify-content:center;padding:14px';
+  modal.innerHTML=`<div role="dialog" aria-modal="true" style="background:var(--card,#fff);color:var(--text,#24352b);width:min(560px,100%);max-height:88dvh;overflow:auto;border-radius:22px;padding:20px;box-shadow:0 20px 60px rgba(0,0,0,.25)"><div class="row" style="justify-content:space-between;align-items:center"><h2 style="margin:0">🧾 Détail de l’achat</h2><button class="secondary" onclick="document.getElementById('purchaseDetailsModal')?.remove()">Fermer</button></div><p class="muted">${esc(c.name)} · ${dateFmt(p.date)}</p><div class="card" style="padding:12px"><div class="row"><span>Montant avant réduction</span><strong>${fmt(p.amount)}</strong></div><div class="row"><span>Réductions</span><strong>${fmt(p.discount||0)}</strong></div><div class="row"><span>Montant payé</span><strong>${fmt(p.paid??p.amount)}</strong></div></div><h3>📦 Produit vendu</h3><p>${product?`${stockEsc(product.name)} × ${qty}`:productId?'Référence supprimée du stock':p.productDetailName?`${stockEsc(p.productDetailName)} × ${qty}`:'Produit non détaillé pour cet achat.'}</p>${p.stockMovementId?'<p class="small muted">Le stock a été mouvementé lors de la vente.</p>':p.productDetailId?'<p class="small muted">Détail produit informatif : aucun mouvement de stock n’a été créé rétroactivement.</p>':''}<h3>📊 Répartition par catégorie</h3>${cats||'<p class="muted">Aucune catégorie renseignée.</p>'}${p.cancelled?`<p style="color:var(--red)"><strong>Achat annulé le ${dateFmt(p.cancelledAt)}</strong></p>`:''}</div>`;
+  document.body.appendChild(modal);
+}
 function addManualReward(name){
   const c=clients.find(x=>x.name===name);if(!c)return;
   if(!confirm(`Ajouter un bon exceptionnel de 5 € à la cagnotte de ${c.name} ?`))return;
@@ -2282,7 +2291,7 @@ function updatePurchaseEditPreview(){
 function editPurchase(name,id){
   const c=clients.find(x=>x.name===name);if(!c)return;
   const p=c.history.find(x=>String(x.id)===String(id));if(!p||!isActivePurchase(p))return;
-  if(p.stockProductId||p.stockMovementId){alert("Cette vente est liée à un mouvement de stock. Pour éviter une incohérence d'inventaire, annule-la puis recrée-la plutôt que de la modifier directement.");return;}
+  if(p.stockMovementId){alert("Cette vente a déjà créé un mouvement de stock. Pour éviter une incohérence d'inventaire, son lien stock ne peut pas être modifié ici.");return;}
   closePurchaseEdit();
   const exceptional=Math.max(0,Number(p.exceptionalDiscount)||0),reward=Math.max(0,Number(p.rewardDiscount)||0);
   const categories=SALE_CATEGORIES.map(([key,label])=>{
@@ -2295,6 +2304,9 @@ function editPurchase(name,id){
     <div class="row" style="justify-content:space-between;align-items:center;gap:12px"><h2 id="editPurchaseTitle" style="margin:0;font-size:1.35rem">✏️ Modifier l’achat</h2><button type="button" class="secondary" onclick="closePurchaseEdit()">Fermer</button></div>
     <p class="small muted">${esc(c.name)} · Achat du ${dateFmt(p.date)}</p>
     <label for="editPurchaseAmount">Montant avant réduction (€)</label><input id="editPurchaseAmount" type="number" min="0.01" step="0.01" inputmode="decimal" value="${Math.max(0,Number(p.amount)||0)}" oninput="updatePurchaseEditPreview()">
+    <h3>📦 Produit vendu (facultatif)</h3><p class="small muted">Permet de détailler rétroactivement l’achat pour le consulter dans l’historique. Cette correction n’ajuste pas le stock : aucun mouvement passé n’est créé.</p>
+    <label for="editProductDetail">Référence produit</label><select id="editProductDetail"><option value="">Produit non détaillé</option>${stockData.products.map(pr=>`<option value="${stockEsc(pr.id)}" ${(String(p.productDetailId||p.stockProductId||'')===String(pr.id))?'selected':''}>${stockEsc(pr.name)} — ${Number(pr.qty)||0} en stock</option>`).join('')}</select>
+    <div class="grid grid2"><div><label for="editProductDetailQty">Quantité (information)</label><input id="editProductDetailQty" type="number" min="1" step="1" value="${Math.max(1,Number(p.productDetailQty||p.stockQty||1))}"></div><div><label>Effet sur le stock</label><p class="small muted">Aucun — détail historique uniquement</p></div></div>
     <h3>📊 Répartition par catégorie (facultative)</h3>
     <p class="small muted">Laisse toutes les catégories à 0 € si tu ne souhaites pas détailler. Sinon, leur total doit correspondre exactement au montant avant réduction. Cette répartition sert aux statistiques et ne modifie pas le stock.</p>
     <div class="grid grid2">${categories}</div>
@@ -2324,13 +2336,16 @@ function savePurchaseEdit(){
   const oldPaid=Math.max(0,Number(p.paid??p.amount)||0),newPaid=Math.round((amount-discount)*100)/100;
   const oldEntry={...p,categoryAmounts:p.categoryAmounts?{...p.categoryAmounts}:undefined},oldTotal=c.total;
   p.amount=amount;p.paid=newPaid;p.discount=discount;
+  const detailId=modal.querySelector('#editProductDetail')?.value||'';
+  const detailQty=Math.max(1,Math.floor(Number(modal.querySelector('#editProductDetailQty')?.value)||1));
+  if(detailId){const detailProduct=stockProduct(detailId);if(!detailProduct){alert('La référence produit sélectionnée n’existe plus.');Object.assign(p,oldEntry);c.total=oldTotal;return;}p.productDetailId=detailId;p.productDetailName=detailProduct.name;p.productDetailQty=detailQty;}else{delete p.productDetailId;delete p.productDetailName;delete p.productDetailQty;}
   if(hasCategories)p.categoryAmounts=categoryAmounts;else delete p.categoryAmounts;
   c.total=Math.round((Number(c.total||0)-oldPaid+newPaid)*100)/100;
   if(!save()){
     Object.assign(p,oldEntry);c.total=oldTotal;
     alert("Modification non enregistrée. Les anciennes valeurs ont été restaurées.");return;
   }
-  logOperation("Achat modifié",`${c.name} · ${fmt(oldPaid)} → ${fmt(newPaid)}`);showSuccessToast('Achat modifié',`${c.name} · ${fmt(oldPaid)} → ${fmt(newPaid)}`);
+  logOperation("Achat modifié",`${c.name} · ${fmt(oldPaid)} → ${fmt(newPaid)}${p.productDetailName?" · produit : "+p.productDetailName:""}`);showSuccessToast('Achat modifié',`${c.name} · ${fmt(oldPaid)} → ${fmt(newPaid)}`);
   closePurchaseEdit();updateAll();showClient(name);
 }
 function cancelPurchase(name,id){
