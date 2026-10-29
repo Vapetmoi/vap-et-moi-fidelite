@@ -304,7 +304,6 @@ input:focus,select:focus,textarea:focus{border-color:#9eaa7b;box-shadow:0 0 0 3p
 /* V35 — accueil épuré : conserve les données dans le DOM mais retire les KPI déjà détaillés dans Stats */
 #accueil .homeStats:first-of-type .stat:has(#dWeek),
 #accueil .homeStats:first-of-type .stat:has(#dMonth),
-#accueil .homeStats:first-of-type .stat:has(#dClients),
 #accueil .homeStats[aria-label="Achats de la semaine en cours"] {display:none!important}
 #stats .statsOverview{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:14px 0 18px}
 #stats .statsOverview button{appearance:none;text-align:left;background:var(--card, #fff);color:var(--text, #20372a);border:1px solid var(--border,#dce5dc);border-radius:15px;padding:14px;min-height:100px;box-shadow:0 3px 12px rgba(25,55,35,.045);display:flex;flex-direction:column;gap:6px;cursor:pointer}
@@ -1195,7 +1194,7 @@ nav.appNav button{color:#687568;font-weight:700}nav.appNav button.active{backgro
 #stats .statsOverview button{border-radius:17px;border:1px solid #dce6db;box-shadow:0 5px 16px rgba(19,57,39,.055);transition:transform .16s,box-shadow .16s}
 #stats .statsOverview button:active{transform:scale(.99)}
 #stats .chartWrap{border-radius:16px;background:linear-gradient(180deg,#fbfcf9,#f3f7f1);padding:10px;margin:10px 0;border:1px solid #e4ebe1}
-#stats .historyChart{min-height:180px}
+#stats .historyChart{min-height:180px;min-width:0;width:100%;max-width:100%}#historicalChart{overflow:hidden}#historicalChart svg{width:100%;min-width:0;height:auto}
 #stats svg text{fill:#5b6f61}
 #stats table{border-radius:12px;overflow:hidden}#stats th{background:#edf3eb;color:#294a37}#stats td,#stats th{padding:10px 9px}
 .categoryViz{display:grid;grid-template-columns:minmax(145px, .8fr) minmax(0,1.2fr);align-items:center;gap:18px;margin:16px 0;padding:16px;border:1px solid #e1e9dd;border-radius:18px;background:linear-gradient(145deg,#fbfcf8,#f0f5ed)}
@@ -1519,6 +1518,7 @@ body.dark-mode .rankNum{background:#2a4030;color:#d8e6d3}
     <div class="stat"><strong id="dMonth">0 €</strong><span class="kpiTitle">📅 CA ce mois</span></div>
     <div class="stat"><strong id="dBasket">0 €</strong><span class="kpiTitle">🛍️ Panier moyen</span></div>
     <div class="stat"><strong id="dClients">0</strong><span class="kpiTitle">👥 Clients enregistrés</span></div>
+    <div class="stat"><strong id="dTodayProfit">—</strong><span class="kpiTitle">📈 Bénéfice estimé aujourd’hui</span><small id="dTodayProfitNote" class="small muted">Produits identifiés uniquement</small></div>
   </div>
   <div class="homeStats" style="margin:0 0 14px" aria-label="Achats de la semaine en cours">
     <div class="stat"><strong id="homeWeekPurchases">0</strong><span class="kpiTitle">🛍️ Achats cette semaine</span></div>
@@ -1723,6 +1723,8 @@ body.dark-mode .rankNum{background:#2a4030;color:#d8e6d3}
     </div>
   </div>
 
+  <div class="card" id="profitStatsCard"><h3>💰 Bénéfice brut estimé</h3><p class="small muted">Calcul sur les produits identifiés dans les ventes et présents dans le catalogue stock, avec prix d’achat HT et prix de vente TTC actuels. Les ventes sans détail produit sont exclues ; les réductions sont réparties proportionnellement. Ce n’est pas le bénéfice net après charges.</p><label for="profitPeriod">Période du bénéfice</label><select id="profitPeriod" onchange="renderProfitStats()"><option value="day">Aujourd’hui</option><option value="week">Cette semaine</option><option value="month" selected>Ce mois</option><option value="30">30 derniers jours</option><option value="prevMonth">Mois précédent</option><option value="year">Cette année</option><option value="all">Tout l’historique</option></select><div id="profitStats"></div></div>
+
   <div class="card"><h3>🧺 Répartition des ventes par catégorie</h3><p class="small muted">Calculée uniquement sur les ventes dont la répartition a été renseignée. Les ventes sans détail restent dans le CA global mais ne sont pas attribuées à une catégorie.</p><div id="categoryAnalytics"><p class="small muted">Aucune répartition de catégorie enregistrée.</p></div></div>
 
   <div class="statsOverview" aria-label="Accès aux statistiques détaillées">
@@ -1742,6 +1744,7 @@ body.dark-mode .rankNum{background:#2a4030;color:#d8e6d3}
       <h3 style="margin-top:0">🗓️ Historique mensuel du chiffre d’affaires</h3>
       <p class="muted small">Chiffres historiques séparés des achats enregistrés dans l’application. Vérifie leur exactitude si ces montants proviennent d’une ancienne version : l’application ne peut pas certifier leur origine.</p>
       <div class="grid4" id="historicalSummary"></div>
+      <label for="historicalChartPeriod">Période affichée sur le graphique</label><select id="historicalChartPeriod" onchange="renderHistoricalCA()"><option value="6">6 derniers mois</option><option value="12" selected>12 derniers mois</option><option value="24">24 derniers mois</option><option value="all">Tout l’historique</option></select>
       <div class="chartWrap" id="historicalChart" aria-label="Graphique d’évolution du chiffre d’affaires historique"></div>
       <div class="tableWrap" id="historicalTable"></div>
     </div>
@@ -1826,7 +1829,7 @@ body.dark-mode .rankNum{background:#2a4030;color:#d8e6d3}
   <div class="card"><h3>💡 Plan d’action conseillé</h3><div id="analysisActions"></div><p class="small muted">Les recommandations sont calculées à partir des données enregistrées. Une projection n’est pas une garantie. La marge réelle nécessite les coûts d’achat.</p><div class="actions" style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px"><button class="btn" onclick="exportAnalysisCSV()">Exporter l’analyse CSV</button><button class="btn secondary" onclick="window.print()">Imprimer le bilan</button></div></div>
 </section>
 </main>
-<footer class="versionFooter" aria-label="Version installée"><span class="versionChip"><span class="versionDot" aria-hidden="true"></span> Vap’ & Moi Pro · Version installée : V65 — Stock mobile simplifié</span><p class="small muted">Données enregistrées sur cet appareil · Pense à effectuer régulièrement une sauvegarde JSON.</p></footer>
+<footer class="versionFooter" aria-label="Version installée"><span class="versionChip"><span class="versionDot" aria-hidden="true"></span> Vap’ & Moi Pro · Version installée : V66 — Bénéfices & graphiques compacts</span><p class="small muted">Données enregistrées sur cet appareil · Pense à effectuer régulièrement une sauvegarde JSON.</p></footer>
 
 <script>
 
@@ -2443,12 +2446,25 @@ function deleteClient(name){
   clients=clients.filter(x=>x!==c);if(!save()){updateAll();alert('Suppression non enregistrée : la fiche a été conservée lorsque le stockage précédent était récupérable.');return;}logOperation('Fiche client supprimée',`${c.name} · historique supprimé`);const d=document.getElementById('clientDetail');if(d)d.remove();
 }
 function selectClientForPurchase(name){document.getElementById('clientName').value=name;updatePurchaseBox();showPage('achat')}
+function profitDetailsForPurchase(p){
+  let items=[];
+  if(Array.isArray(p.productDetailItems)&&p.productDetailItems.length){items=p.productDetailItems.map(it=>({id:String(it.productId||it.id||''),qty:Math.max(1,Number(it.qty||it.quantity||1))}));}
+  else {const id=p.productDetailId||p.stockProductId||'';if(id)items=[{id:String(id),qty:Math.max(1,Number(p.productDetailQty||p.stockQty||1))}];}
+  const known=items.map(it=>{const pr=stockProduct(it.id);if(!pr)return null;const cost=Number(pr.cost),price=Number(pr.price),vat=Number.isFinite(Number(pr.vatRate))?Number(pr.vatRate):20;if(!Number.isFinite(cost)||cost<0||!Number.isFinite(price)||price<0)return null;const qty=it.qty;return {qty,costHT:cost*qty,retailTTC:price*qty,retailHT:price/(1+vat/100)*qty};}).filter(Boolean);
+  const retailTTC=known.reduce((a,x)=>a+x.retailTTC,0),retailHT=known.reduce((a,x)=>a+x.retailHT,0),costHT=known.reduce((a,x)=>a+x.costHT,0);
+  if(!known.length||retailTTC<=0)return {profit:0,known:false,items:0};
+  const paid=Math.max(0,Number(p.paid??p.amount)||0),factor=Math.min(1,paid/retailTTC);
+  return {profit:retailHT*factor-costHT,known:true,items:known.reduce((a,x)=>a+x.qty,0)};
+}
+function purchasesProfit(ps){let total=0,knownSales=0,knownItems=0;ps.forEach(p=>{const r=profitDetailsForPurchase(p);if(r.known){total+=r.profit;knownSales++;knownItems+=r.items;}});return {total,knownSales,knownItems,totalSales:ps.length};}
+function profitPeriodPurchases(kind){const now=new Date(),ps=allPurchases();const start=new Date(now);start.setHours(0,0,0,0);if(kind==='day')return ps.filter(p=>sameDay(dateOf(p),now));if(kind==='week'){start.setDate(start.getDate()-((start.getDay()+6)%7));return ps.filter(p=>dateOf(p)>=start&&dateOf(p)<=now);}if(kind==='month')return ps.filter(p=>monthKey(dateOf(p))===monthKey(now));if(kind==='prevMonth'){const d=new Date(now.getFullYear(),now.getMonth()-1,1),end=new Date(now.getFullYear(),now.getMonth(),1);return ps.filter(p=>dateOf(p)>=d&&dateOf(p)<end);}if(kind==='30'){start.setDate(start.getDate()-29);return ps.filter(p=>dateOf(p)>=start&&dateOf(p)<=now);}if(kind==='year')return ps.filter(p=>dateOf(p).getFullYear()===now.getFullYear());return ps;}
+function renderProfitStats(){const kind=document.getElementById('profitPeriod')?.value||'month',ps=profitPeriodPurchases(kind),r=purchasesProfit(ps),host=document.getElementById('profitStats');if(!host)return;host.innerHTML=`<div class="grid grid2" style="margin-top:12px"><div class="stat"><strong>${fmt(r.total)}</strong><span class="kpiTitle">Bénéfice brut estimé</span></div><div class="stat"><strong>${r.knownSales} / ${r.totalSales}</strong><span class="kpiTitle">Ventes avec produits chiffrables</span></div></div><p class="small muted">${r.knownItems} unité(s) détaillée(s). Les coûts utilisés sont ceux actuellement enregistrés dans le stock : si un prix d’achat a changé depuis une vente ancienne, l’estimation historique peut différer.</p>`;}
 function setDashboard(){
   const now=new Date(),ps=allPurchases(),today=ps.filter(p=>sameDay(dateOf(p),now)),mk=monthKey(now),month=ps.filter(p=>monthKey(dateOf(p))===mk);
   const weekStart=new Date(now);weekStart.setHours(0,0,0,0);weekStart.setDate(weekStart.getDate()-((weekStart.getDay()+6)%7));
   const week=ps.filter(p=>dateOf(p)>=weekStart&&dateOf(p)<=now);
   const todayCA=today.reduce((s,p)=>s+safelyPaid(p),0),weekCA=week.reduce((s,p)=>s+safelyPaid(p),0),monthCA=month.reduce((s,p)=>s+safelyPaid(p),0),allCA=ps.reduce((s,p)=>s+safelyPaid(p),0);
-  document.getElementById('dToday').textContent=fmt(todayCA);document.getElementById('dWeek').textContent=fmt(weekCA);document.getElementById('dMonth').textContent=fmt(monthCA);document.getElementById('dBasket').textContent=fmt(ps.length?allCA/ps.length:0);document.getElementById('dClients').textContent=clients.length;
+  document.getElementById('dToday').textContent=fmt(todayCA);document.getElementById('dWeek').textContent=fmt(weekCA);document.getElementById('dMonth').textContent=fmt(monthCA);document.getElementById('dBasket').textContent=fmt(ps.length?allCA/ps.length:0);document.getElementById('dClients').textContent=clients.length;const profitToday=purchasesProfit(today);const profitEl=document.getElementById('dTodayProfit');if(profitEl)profitEl.textContent=profitToday.knownSales?fmt(profitToday.total):'—';const profitNote=document.getElementById('dTodayProfitNote');if(profitNote)profitNote.textContent=profitToday.knownSales?`${profitToday.knownSales}/${today.length} vente(s) détaillée(s)`:'Aucune vente détaillée aujourd’hui';
   const elapsedOpenDays=Math.max(1,Math.min(6,((now.getDay()+6)%7)+1));const hp=document.getElementById('homeWeekPurchases');if(hp)hp.textContent=String(week.length);const ha=document.getElementById('homeAvgPurchases');if(ha)ha.textContent=(week.length/elapsedOpenDays).toLocaleString('fr-FR',{maximumFractionDigits:1});
   const goal=Number(settings.goal??4000);document.getElementById('monthlyGoal').value=goal;document.getElementById('goalText').textContent=fmt(goal);
   const pct=goal?Math.min(100,monthCA/goal*100):0;document.getElementById('goalBar').style.width=pct+'%';document.getElementById('goalMessage').textContent=`${pct.toFixed(0)} % atteint · ${fmt(Math.max(0,goal-monthCA))} restant pour l'objectif mensuel.`;
@@ -2511,9 +2527,10 @@ function renderHistoricalCA(){
   document.getElementById('historicalSummary').innerHTML=`<div class="stat"><strong>${fmt(total)}</strong><span class="kpiTitle">Total sur ${entries.length} mois</span></div><div class="stat"><strong>${fmt(avg)}</strong><span class="kpiTitle">Moyenne mensuelle</span></div><div class="stat"><strong>${best?fmt(best[1]):'—'}</strong><span class="kpiTitle">Meilleur mois${best?' · '+esc(monthLabel(best[0])):''}</span></div><div class="stat"><strong>${latest?fmt(latest[1]):'—'}</strong><span class="kpiTitle">Dernier mois renseigné${latest?' · '+esc(monthLabel(latest[0])):''}</span></div>`;
   const chart=document.getElementById('historicalChart');
   if(!entries.length){chart.innerHTML='<p class="muted">Aucun chiffre historique renseigné.</p>';document.getElementById('historicalTable').innerHTML='';return;}
-  const W=Math.max(600,entries.length*62),H=260,L=46,R=12,T=18,B=62,plotW=W-L-R,plotH=H-T-B;
-  const max=Math.max(...vals)*1.12||1,step=plotW/Math.max(1,entries.length-1);
-  const points=entries.map(([k,v],i)=>({x:entries.length===1?L+plotW/2:L+i*step,y:T+plotH-(Number(v)/max)*plotH,k,v:Number(v)}));
+  const period=document.getElementById('historicalChartPeriod')?.value||'12';const chartEntries=period==='all'?entries:entries.slice(-Math.max(1,Number(period)||12));const chartVals=chartEntries.map(([,v])=>Number(v));
+  const W=900,H=250,L=48,R=14,T=18,B=52,plotW=W-L-R,plotH=H-T-B;
+  const max=Math.max(...chartVals)*1.12||1,step=plotW/Math.max(1,chartEntries.length-1);
+  const points=chartEntries.map(([k,v],i)=>({x:chartEntries.length===1?L+plotW/2:L+i*step,y:T+plotH-(Number(v)/max)*plotH,k,v:Number(v)}));
   const grid=[0,.25,.5,.75,1].map(t=>{const y=T+plotH-t*plotH;return `<line x1="${L}" y1="${y}" x2="${W-R}" y2="${y}" stroke="#dce6df" stroke-dasharray="3 4"/><text x="${L-7}" y="${y+4}" text-anchor="end" font-size="10" fill="#66756e">${Math.round(max*t).toLocaleString('fr-FR')}</text>`}).join('');
   const poly=points.map(p=>`${p.x},${p.y}`).join(' ');
   const circles=points.map(p=>`<circle cx="${p.x}" cy="${p.y}" r="4" fill="#1f7a46"><title>${esc(monthLabel(p.k))} : ${fmt(p.v)}</title></circle><text x="${p.x}" y="${p.y-9}" text-anchor="middle" font-size="10" font-weight="bold" fill="#173126">${(p.v/1000).toLocaleString('fr-FR',{maximumFractionDigits:1})}k</text><text transform="translate(${p.x},${H-B+12}) rotate(-35)" text-anchor="end" font-size="10" fill="#66756e">${esc(monthLabel(p.k))}</text>`).join('');
@@ -3153,7 +3170,7 @@ function applyAppTheme(theme){const dark=theme==='dark';document.body.classList.
 function toggleAppTheme(){const next=document.body.classList.contains('dark-mode')?'light':'dark';applyAppTheme(next);try{localStorage.setItem(UI_THEME_KEY,next)}catch(e){}}
 try{applyAppTheme(localStorage.getItem(UI_THEME_KEY)||'light')}catch(e){applyAppTheme('light')}
 
-function updateAll(){clients=clients.map(normalizeClient);updateClientOptions();renderClientOverview();renderClients();updatePurchaseBox();renderCategoryAnalytics();setDashboard();setStats();renderWeekdayStats();renderAdvancedAnalytics();renderV15Insights(allPurchases(),new Date());renderDailyOps(new Date());renderActivityLog();renderBackupStatus();renderAnalysis();renderCommercialCopilot();renderDataIntegrity();renderFollowupAgenda();const threshold=document.getElementById("inactiveThreshold");if(threshold)threshold.value=String(settings.inactiveThreshold||30);updateGreeting()}
+function updateAll(){clients=clients.map(normalizeClient);updateClientOptions();renderClientOverview();renderClients();updatePurchaseBox();renderCategoryAnalytics();setDashboard();setStats();renderProfitStats();renderWeekdayStats();renderAdvancedAnalytics();renderV15Insights(allPurchases(),new Date());renderDailyOps(new Date());renderActivityLog();renderBackupStatus();renderAnalysis();renderCommercialCopilot();renderDataIntegrity();renderFollowupAgenda();const threshold=document.getElementById("inactiveThreshold");if(threshold)threshold.value=String(settings.inactiveThreshold||30);updateGreeting()}
 updateAll();
 updateOfflineMode();
 if("serviceWorker" in navigator && location.protocol.startsWith("http")){navigator.serviceWorker.register("./sw.js").catch(()=>{});}
