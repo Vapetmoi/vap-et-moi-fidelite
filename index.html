@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#173D30">
 <meta name="description" content="Vap’ & Moi Pro Signature Premium : gestion des clients, ventes, fidélité, analyses, suivi commercial et sauvegardes.">
-<title>Vap’ &amp; Moi Pro — Historique détaillé V61</title>
+<title>Vap’ &amp; Moi Pro — Refonte Signature Premium V71</title>
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="./icon-192.png">
 <meta name="mobile-web-app-capable" content="yes">
@@ -18,7 +18,7 @@
 body{margin:0;font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;background:linear-gradient(180deg,#f2f7f3 0,#f7f8f5 260px);color:var(--text);line-height:1.45} button,input,select,textarea{font:inherit}button,input,select{min-height:42px}input[type="checkbox"]{min-height:21px}button{touch-action:manipulation}input,select,textarea{max-width:100%} button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible,summary:focus-visible{outline:3px solid #8fc7a2;outline-offset:2px}
 header{background:linear-gradient(135deg,#09271b 0%,#174d32 62%,#2a6b45 100%);color:white;padding:22px 18px 18px;box-shadow:0 5px 18px #0b2f2015}
 header h1{margin:0;font-size:27px} header p{margin:6px 0 0;opacity:.88}
-nav{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));background:rgba(255,255,255,.96);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:5}
+nav{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));background:rgba(255,255,255,.96);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:5}
 nav button{border:0;background:white;padding:12px 3px;font-size:12px;color:#355046}
 nav button.active{color:var(--green2);font-weight:bold;border-bottom:3px solid var(--green2)}
 main{max-width:850px;margin:auto;padding:16px}
@@ -63,7 +63,7 @@ footer{text-align:center;color:var(--muted);padding:20px}
 .backupStatus{font-size:12px;color:var(--muted);margin-top:8px;line-height:1.45}.auditItem{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;padding:10px 0;border-bottom:1px solid var(--border)}.auditItem:last-child{border-bottom:0}.auditItem strong{display:block}.auditItem small{display:block;color:var(--muted);margin-top:3px}.actionRow{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}.actionRow button{flex:1;min-width:145px}
 @media(max-width:650px){
  body{padding-bottom:82px}header{padding:17px 17px 14px}header h1{font-size:24px}header p{font-size:13px}
- nav{position:fixed;top:auto;bottom:0;left:0;right:0;z-index:20;grid-template-columns:repeat(5,minmax(0,1fr));padding:7px 5px calc(7px + env(safe-area-inset-bottom));border-top:1px solid var(--border);border-bottom:0;box-shadow:0 -5px 20px #17312612}
+ nav{position:fixed;top:auto;bottom:0;left:0;right:0;z-index:20;grid-template-columns:repeat(6,minmax(0,1fr));padding:7px 5px calc(7px + env(safe-area-inset-bottom));border-top:1px solid var(--border);border-bottom:0;box-shadow:0 -5px 20px #17312612}
  nav button{border-radius:12px;padding:8px 2px 7px;font-size:11px;display:flex;flex-direction:column;align-items:center;gap:3px}
  nav button.active{border-bottom:0;background:#eaf4ed;color:var(--green2)}
  main{padding:12px}.card{padding:15px;border-radius:18px;margin-bottom:12px}h2{font-size:21px}
@@ -103,14 +103,14 @@ input,select,textarea{min-height:45px}
 /* V21 mobile application shell */
 :root{--green:#123d2b;--green2:#28734a;--light:#f0f5f0;--border:#d7e3d9}
 header{padding:19px 18px 16px;border-radius:0 0 24px 24px}header h1{font-size:25px;letter-spacing:-.4px}
-nav.appNav{position:fixed;top:auto;bottom:0;left:0;right:0;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));padding:7px 8px calc(7px + env(safe-area-inset-bottom));gap:4px;border:1px solid #dbe7dd;border-radius:20px 20px 0 0;box-shadow:0 -8px 28px #17312614;background:rgba(255,255,255,.97);z-index:30}
+nav.appNav{position:fixed;top:auto;bottom:0;left:0;right:0;display:grid;grid-template-columns:repeat(6,minmax(0,1fr));padding:7px 8px calc(7px + env(safe-area-inset-bottom));gap:4px;border:1px solid #dbe7dd;border-radius:20px 20px 0 0;box-shadow:0 -8px 28px #17312614;background:rgba(255,255,255,.97);z-index:30}
 nav.appNav button{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;border:0;border-radius:13px;background:transparent;padding:6px 2px 5px;font-size:11px;font-weight:650;min-height:51px;color:#65776c}
 nav.appNav button span{font-size:20px;line-height:1.1}nav.appNav button.active{background:#e8f3eb;color:#155b36;border:0}
 nav.appNav button.saleNav{background:#246b43;color:white;border-radius:15px;transform:translateY(-8px);box-shadow:0 5px 13px #246b4340;font-weight:750}nav.appNav button.saleNav span{font-size:25px}
 main{padding:14px 13px calc(90px + env(safe-area-inset-bottom));max-width:780px}.page h2{letter-spacing:-.35px}.card{border-radius:19px;padding:16px;margin-bottom:12px;box-shadow:0 4px 18px #123d2b0a}
 button,input,select,textarea{touch-action:manipulation}button{min-height:42px}button.primary{min-height:48px;border-radius:14px}
 #achat.page.active{min-height:calc(100dvh - 160px)}#achat .card{border-radius:20px}#offlineNotice{position:sticky;top:0;z-index:20;padding:10px 14px;background:#fff1cc;color:#724b00;font-size:13px;font-weight:650;text-align:center}
-@media(min-width:700px){nav.appNav{position:sticky;top:0;bottom:auto;border-radius:0;grid-template-columns:repeat(5,minmax(0,1fr));justify-content:center;padding:6px}nav.appNav button{flex-direction:column;gap:3px;min-height:43px;font-size:12px;padding:7px 2px}nav.appNav button.saleNav{transform:none}main{padding-bottom:30px}}
+@media(min-width:700px){nav.appNav{position:sticky;top:0;bottom:auto;border-radius:0;grid-template-columns:repeat(6,minmax(0,1fr));justify-content:center;padding:6px}nav.appNav button{flex-direction:column;gap:3px;min-height:43px;font-size:12px;padding:7px 2px}nav.appNav button.saleNav{transform:none}main{padding-bottom:30px}}
 @media(max-width:420px){.homeStats{grid-template-columns:repeat(2,minmax(0,1fr))}.grid4{grid-template-columns:repeat(2,minmax(0,1fr))}header h1{font-size:23px}}
 
 
@@ -1487,6 +1487,59 @@ body.dark-mode .rankNum{background:#2a4030;color:#d8e6d3}
 .productSuggestions{display:none;border:1px solid var(--line,#d9d9cc);border-radius:12px;background:var(--card,#fffdf6);margin:-2px 0 12px;overflow:hidden;box-shadow:0 8px 18px #00000012;max-height:260px;overflow-y:auto}
 .productSuggestion{display:flex;width:100%;justify-content:space-between;align-items:center;gap:12px;padding:13px 14px;border:0;border-bottom:1px solid var(--line,#e5e0d2);background:transparent;color:var(--text,#263b30);text-align:left;font:inherit;cursor:pointer}
 .productSuggestion:last-child{border-bottom:0}.productSuggestion:active{background:#e8efdf}.productSuggestion span{font-size:.88em;color:var(--muted,#777);white-space:nowrap}
+
+
+/* V70 — Refonte visuelle Signature Premium. Les identifiants HTML, fonctions métier et clés de stockage sont conservés. */
+:root{
+ --green:#123b2c;--green2:#246247;--light:#f5f1e6;--card:#fffdf7;--text:#1d3027;--muted:#6d786f;
+ --border:#e2dccb;--gold:#b99a54;--red:#a94339;--surface:#fffdf7;--line:#e2dccb;
+ --premium-shadow:0 10px 28px rgba(23,49,38,.07);--premium-radius:22px;
+}
+html{scroll-behavior:smooth;background:#f5f1e6}
+body{font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:radial-gradient(ellipse at top right,rgba(185,154,84,.10),transparent 32%),linear-gradient(180deg,#f5f1e6 0,#f8f6ef 320px,#f4f1e7 100%);color:var(--text);line-height:1.5;letter-spacing:-.012em}
+.appHeaderV60{position:relative;z-index:15;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:16px clamp(16px,4vw,28px);background:linear-gradient(125deg,#102f24 0%,#174a35 72%,#235b41 100%);border-bottom:1px solid rgba(201,176,112,.55);box-shadow:0 8px 24px rgba(15,46,33,.16)}
+.brandLockup{display:flex;align-items:center;gap:12px;min-width:0}.brandLockup h1{font-size:clamp(20px,4.5vw,27px);font-weight:800;letter-spacing:-.04em;color:#fff;margin:0}.brandMark{width:44px;height:44px;display:grid;place-items:center;flex-shrink:0;border:1px solid #c5a968;border-radius:15px;background:linear-gradient(145deg,#f0dfaa,#c6a65e);color:#14392b;font-size:15px;font-weight:900;box-shadow:inset 0 0 0 3px rgba(255,255,255,.25)}.brandMark span{color:#876c2e}
+.themeToggle{min-height:38px;border:1px solid rgba(231,213,163,.4);border-radius:99px;background:rgba(255,255,255,.08);color:#f9f5e9;padding:8px 12px;font-size:12px;font-weight:700;white-space:nowrap}
+#offlineNotice{margin:10px auto;max-width:900px;padding:10px 14px;border-radius:12px;background:#fff0d0;color:#684e1b;border:1px solid #e6cf93}
+.appNav{position:sticky;top:0;z-index:12;display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:5px;padding:9px max(8px,calc((100vw - 900px)/2));background:rgba(250,248,240,.94);backdrop-filter:blur(18px);border-bottom:1px solid rgba(185,154,84,.35);box-shadow:0 5px 18px rgba(29,48,39,.055)}
+.appNav button{min-width:0;min-height:52px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;padding:7px 3px;border:1px solid transparent;border-radius:15px;background:transparent;color:#657166;font-size:11px;font-weight:700;line-height:1.2}
+.appNav button span{font-size:20px;line-height:1.1}.appNav button.active{background:#173f2e;color:#f8f3e5;border-color:#c4a45c;box-shadow:0 4px 12px rgba(18,59,44,.18)}.appNav button.saleNav{background:#eee3c3;color:#234a36;border-color:#d4bd7b}.appNav button.saleNav.active{background:#173f2e;color:#fff7e4}
+main{width:min(100%,940px);margin:0 auto;padding:clamp(12px,3vw,24px)}.page{animation:v70PageIn .18s ease-out}.page:not(.active){display:none}@keyframes v70PageIn{from{opacity:.72;transform:translateY(3px)}to{opacity:1;transform:translateY(0)}}
+.card{background:rgba(255,253,247,.96);border:1px solid #e5deca;border-radius:var(--premium-radius);padding:clamp(15px,3.5vw,24px);margin-bottom:15px;box-shadow:var(--premium-shadow)}
+h2,h3,h4{color:#183d2d;letter-spacing:-.035em;line-height:1.25}h2{font-size:clamp(21px,4.7vw,27px);font-weight:800;margin:0 0 12px}h3{font-size:clamp(17px,4vw,21px);font-weight:800;margin:0 0 10px}h4{font-weight:750}
+.muted,.small,.kpiTitle{color:var(--muted)}
+button,input,select,textarea{font-family:inherit}button{transition:transform .13s ease,box-shadow .13s ease,background .13s ease}button:active{transform:scale(.985)}button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px solid rgba(185,154,84,.65);outline-offset:2px}
+button.primary,.btn:not(.secondary){background:linear-gradient(135deg,#173f2e,#246247);color:#fff9e9;border:1px solid #c3a45f;border-radius:14px;padding:12px 16px;font-weight:750;box-shadow:0 5px 12px rgba(18,59,44,.13)}button.secondary{background:#fffdf7;color:#234a36;border:1px solid #d9cfb4;border-radius:13px;padding:11px 14px;font-weight:700}button.danger{border-radius:13px}
+input,select,textarea{border:1px solid #dedacb;border-radius:14px;background:#fffefa;color:#23362b;padding:13px 14px;box-shadow:inset 0 1px 2px rgba(26,48,36,.025);margin:6px 0 13px}input::placeholder,textarea::placeholder{color:#92958a}label{display:block;color:#46594b;font-size:14px;font-weight:750;margin:9px 0 3px}
+.stat{border:1px solid #e7e0cf;border-radius:17px;background:linear-gradient(145deg,#fffef9,#f6f1e3);padding:15px;text-align:left;box-shadow:0 3px 12px rgba(31,48,34,.035)}.stat strong{color:#1d573b;font-size:clamp(20px,5vw,27px);font-weight:850;letter-spacing:-.04em}.homeStats .stat{border-radius:18px}.homeStats .stat .kpiTitle{display:block;line-height:1.35;margin-top:4px}
+.appGreeting{border-radius:24px;overflow:hidden;box-shadow:0 12px 28px rgba(18,59,44,.14)}.appGreetingBanner{border:1px solid rgba(185,154,84,.45)}.homeQuick .quickTile{border:1px solid #e3dcc9;border-radius:18px;background:linear-gradient(150deg,#fffdf7,#f4efdf);box-shadow:0 5px 14px rgba(24,53,38,.055)}
+.badge{background:#e6ecdc;color:#28533a;border:1px solid #d4dec7}.alert{border-left-color:var(--gold);background:#fbf3dc;border-radius:13px}.client{background:#fffdf7;border-color:#e4dece;border-radius:16px}.progress{background:#e9e4d5}.progress>div{background:linear-gradient(90deg,#286447,#c1a35c)}
+.statsThemeHead{background:linear-gradient(100deg,#e9eddf,#f8f1df);border:1px solid #e0d6b8;border-radius:16px;color:#1d4732}.statsThemeHead strong{color:#1d4732}.chartWrap,.tableWrap{border-radius:14px}
+.productSuggestions{z-index:4;border-color:#d8c99f;border-radius:15px;background:#fffdf7;box-shadow:0 12px 28px rgba(23,49,38,.12)}.productSuggestion{padding:14px 15px;border-bottom-color:#eee7d6}.productSuggestion:active,.productSuggestion:focus{background:#f2ecd9}
+#stock .stockCatalogRow{background:#fffdf7;border:1px solid #e4ddc9!important;border-radius:17px;box-shadow:0 4px 13px rgba(23,49,38,.045)}#stock #stockCategoryNav button{border-radius:13px}#stock .stat{background:linear-gradient(145deg,#fffdf7,#f5efdf)}
+.versionFooter{max-width:900px;margin:0 auto 24px;padding:16px 20px;text-align:center}.versionChip{display:inline-flex;align-items:center;gap:8px;border:1px solid #d9c796;background:#f7f0dc;color:#31513c;border-radius:99px;padding:8px 12px;font-size:12px;font-weight:750}.versionDot{width:7px;height:7px;border-radius:50%;background:#b89a53;box-shadow:0 0 0 3px rgba(184,154,83,.15)}
+#successToast{border:1px solid #c6aa65;border-radius:18px;box-shadow:0 15px 35px rgba(13,39,27,.2)}
+@media(min-width:700px){.appNav{grid-template-columns:repeat(6,minmax(0,1fr));max-width:940px;margin:0 auto;border:1px solid rgba(185,154,84,.25);border-radius:0 0 18px 18px}.appNav button{flex-direction:row;font-size:13px;gap:7px}main{padding-top:22px}.homeStats{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:650px){body{padding-bottom:calc(78px + env(safe-area-inset-bottom))}.appHeaderV60{padding:13px 14px}.brandMark{width:39px;height:39px;border-radius:13px}.brandLockup{gap:9px}.themeToggle{padding:7px 9px;font-size:11px}.themeToggle span{display:none}.appNav{position:fixed;top:auto;bottom:0;left:0;right:0;grid-template-columns:repeat(6,minmax(0,1fr));gap:3px;padding:7px 5px calc(7px + env(safe-area-inset-bottom));border-top:1px solid #d9c796;border-bottom:0;border-radius:19px 19px 0 0;box-shadow:0 -8px 25px rgba(23,49,38,.13)}.appNav button{min-height:52px;border-radius:13px;font-size:10px}.appNav button span{font-size:19px}main{padding:12px}.card{padding:15px;border-radius:19px}.homeStats{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.homeStats .stat{padding:13px}.homeStats .stat strong{font-size:21px}.grid4{grid-template-columns:repeat(2,minmax(0,1fr))}.actionRow button,.actions button{max-width:100%}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;transition-duration:.01ms!important}}
+
+
+/* V71 — Refonte signature Vap’ & Moi : identité, mascotte et navigation */
+:root{--green:#123b2a;--green2:#246443;--light:#f5f7f2;--gold:#b99a50;--gold-soft:#eee5ca;--text:#1b3026;--muted:#69766d;--border:#e2e7dc}
+body{background:radial-gradient(ellipse at 95% 0%,rgba(185,154,80,.09),transparent 32%),linear-gradient(180deg,#f1f5ef 0,#f8f8f4 300px)}
+.appHeaderV60{position:relative;overflow:hidden;background:linear-gradient(120deg,#0b2c20,#174b33 68%,#285c3c);border-bottom:2px solid var(--gold)}
+.appHeaderV60:after{content:"";position:absolute;right:8px;top:-17px;width:82px;height:82px;background:url('./mascotte-vap-moi.jpg') center 18%/cover no-repeat;border:2px solid rgba(214,190,122,.65);border-radius:50%;opacity:.9;box-shadow:0 4px 18px #0003;pointer-events:none}
+.brandMark{border:1px solid rgba(219,194,126,.9)!important;color:#f6efd9!important;box-shadow:0 0 0 3px rgba(185,154,80,.12)}
+.brandMark span{color:#d6bd79!important}
+.appNav{border-color:#d8d0b8;box-shadow:0 5px 18px rgba(18,59,42,.06)}
+.appNav button.active{color:#174b33;border-bottom-color:var(--gold);background:linear-gradient(180deg,#fff,#f7f4e9)}
+.appGreeting{border:1px solid rgba(185,154,80,.45);box-shadow:0 12px 28px rgba(11,44,32,.16)}
+.card{border-color:#e3e5d9;box-shadow:0 7px 22px rgba(18,59,42,.045)}
+.stat strong,.reward{color:#246443}
+button.primary{background:linear-gradient(135deg,#174b33,#2c7048);box-shadow:0 3px 8px rgba(18,59,42,.12)}
+.badge{background:#f2ecd9;color:#5f4c1d}
+@media(max-width:650px){nav.appNav{grid-template-columns:repeat(6,minmax(0,1fr));gap:1px;padding-left:2px;padding-right:2px}.appNav button{font-size:10px;letter-spacing:-.15px;padding-left:0;padding-right:0}.appHeaderV60:after{width:64px;height:64px;right:8px;top:-8px}.brandLockup{max-width:calc(100% - 65px)}}
+
 </style>
 </head>
 <body>
@@ -1833,7 +1886,7 @@ body.dark-mode .rankNum{background:#2a4030;color:#d8e6d3}
   <div class="card"><h3>💡 Plan d’action conseillé</h3><div id="analysisActions"></div><p class="small muted">Les recommandations sont calculées à partir des données enregistrées. Une projection n’est pas une garantie. La marge réelle nécessite les coûts d’achat.</p><div class="actions" style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px"><button class="btn" onclick="exportAnalysisCSV()">Exporter l’analyse CSV</button><button class="btn secondary" onclick="window.print()">Imprimer le bilan</button></div></div>
 </section>
 </main>
-<footer class="versionFooter" aria-label="Version installée"><span class="versionChip"><span class="versionDot" aria-hidden="true"></span> Vap’ & Moi Pro · Version installée : V69 — Recherche produit dans les achats et le stock</span><p class="small muted">Données enregistrées sur cet appareil · Pense à effectuer régulièrement une sauvegarde JSON.</p></footer>
+<footer class="versionFooter" aria-label="Version installée"><span class="versionChip"><span class="versionDot" aria-hidden="true"></span> Vap’ & Moi Pro · V70 — Refonte Signature Premium</span><p class="small muted">Données enregistrées sur cet appareil · Pense à effectuer régulièrement une sauvegarde JSON.</p></footer>
 
 <script>
 
