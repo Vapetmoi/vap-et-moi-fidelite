@@ -1720,16 +1720,15 @@ button.primary{background:linear-gradient(135deg,#174b33,#2c7048);box-shadow:0 3
     </div>
     <p id="purchaseClientHelp" class="small muted" style="margin-top:-7px">Tapez un nom, un prénom, un téléphone ou un e-mail, puis sélectionnez le client dans les suggestions.</p>
     <div id="linkedClientInfo" class="small muted"></div>
-    <div class="card" style="padding:13px;margin:12px 0;background:#f8f7ef;border:1px solid var(--border)">
-      <strong>📦 Produits vendus (facultatif)</strong>
-      <p class="small muted">Recherche un produit par son nom puis ajoute chaque référence vendue. Seuls les produits ajoutés ici seront déduits du stock. Si tu ne connais pas les références exactes, laisse la liste vide.</p>
-      <label for="saleStockSearch">Rechercher un produit par nom</label>
-      <div class="purchaseSearchWrap"><input id="saleStockSearch" type="text" placeholder="🔎 Tape les premières lettres du produit…" autocomplete="off" oninput="renderSaleStockSuggestions()" onkeydown="saleProductSuggestionKeydown(event)" aria-controls="saleStockSuggestions" aria-autocomplete="list"><div id="saleStockSuggestions" class="purchaseSuggestions" role="listbox" aria-label="Produits correspondants"></div></div>
-      <div class="grid grid2"><div><label for="saleStockQty">Quantité à ajouter</label><input id="saleStockQty" type="number" min="1" step="1" value="1" inputmode="numeric"></div><div style="display:flex;align-items:end"><button type="button" class="secondary" onclick="addSaleProductToBasket()">＋ Ajouter le produit</button></div></div>
-      <div id="saleStockInfo" class="small muted" aria-live="polite">Aucun produit détaillé : le stock ne sera pas modifié.</div><div id="saleStockBasket" style="margin-top:8px"></div>
-    </div>
     <label>Montant avant réduction (€)</label>
     <input id="amount" type="number" inputmode="decimal" min="0" step="0.01" placeholder="17,00" oninput="updatePurchaseBox()" aria-label="Montant avant réduction en euros">
+    <div id="rewardBox" class="card" style="display:none;background:#eef6f0;padding:13px">
+      <div class="row"><strong>🎁 Bon disponible</strong><strong id="availableReward">0 €</strong></div>
+      <label style="display:flex;align-items:center;gap:9px"><input id="useReward" type="checkbox" onchange="updatePurchaseBox()" style="width:21px;margin:0"><span>Utiliser 5 € de la cagnotte</span></label>
+    </div>
+    <label for="exceptionalDiscount">🎟️ Réduction exceptionnelle (€) — facultatif</label>
+    <input id="exceptionalDiscount" type="number" inputmode="decimal" min="0" step="0.01" value="0" placeholder="0,00" oninput="updatePurchaseBox()" aria-label="Réduction exceptionnelle en euros">
+    <p class="small muted" style="margin-top:-7px">À utiliser pour une remise ponctuelle, en plus ou à la place du bon de fidélité.</p>
     <details id="categoryAllocation" class="card" style="padding:13px;margin:12px 0;background:#f8f7ef">
       <summary style="font-weight:700;cursor:pointer">📊 Répartir l’achat par catégorie (facultatif)</summary>
       <p class="small muted">Renseigne uniquement les catégories connues. Les montants doivent totaliser le montant avant réduction. Si tu ne détailles pas l’achat, laisse tout à 0 €. Cette répartition sert aux analyses et ne modifie jamais le stock.</p>
@@ -1745,13 +1744,14 @@ button.primary{background:linear-gradient(135deg,#174b33,#2c7048);box-shadow:0 3
       </div>
       <p id="categoryAllocationStatus" class="small muted" aria-live="polite">Répartition non renseignée — facultatif.</p>
     </details>
-    <div id="rewardBox" class="card" style="display:none;background:#eef6f0;padding:13px">
-      <div class="row"><strong>🎁 Bon disponible</strong><strong id="availableReward">0 €</strong></div>
-      <label style="display:flex;align-items:center;gap:9px"><input id="useReward" type="checkbox" onchange="updatePurchaseBox()" style="width:21px;margin:0"><span>Utiliser 5 € de la cagnotte</span></label>
+    <div class="card" style="padding:13px;margin:12px 0;background:#f8f7ef;border:1px solid var(--border)">
+      <strong>📦 Produits vendus (facultatif)</strong>
+      <p class="small muted">Recherche un produit par son nom puis ajoute chaque référence vendue. Seuls les produits ajoutés ici seront déduits du stock. Si tu ne connais pas les références exactes, laisse la liste vide.</p>
+      <label for="saleStockSearch">Rechercher un produit par nom</label>
+      <div class="purchaseSearchWrap"><input id="saleStockSearch" type="text" placeholder="🔎 Tape les premières lettres du produit…" autocomplete="off" oninput="renderSaleStockSuggestions()" onkeydown="saleProductSuggestionKeydown(event)" aria-controls="saleStockSuggestions" aria-autocomplete="list"><div id="saleStockSuggestions" class="purchaseSuggestions" role="listbox" aria-label="Produits correspondants"></div></div>
+      <div class="grid grid2"><div><label for="saleStockQty">Quantité à ajouter</label><input id="saleStockQty" type="number" min="1" step="1" value="1" inputmode="numeric"></div><div style="display:flex;align-items:end"><button type="button" class="secondary" onclick="addSaleProductToBasket()">＋ Ajouter le produit</button></div></div>
+      <div id="saleStockInfo" class="small muted" aria-live="polite">Aucun produit détaillé : le stock ne sera pas modifié.</div><div id="saleStockBasket" style="margin-top:8px"></div>
     </div>
-    <label for="exceptionalDiscount">🎟️ Réduction exceptionnelle (€) — facultatif</label>
-    <input id="exceptionalDiscount" type="number" inputmode="decimal" min="0" step="0.01" value="0" placeholder="0,00" oninput="updatePurchaseBox()" aria-label="Réduction exceptionnelle en euros">
-    <p class="small muted" style="margin-top:-7px">À utiliser pour une remise ponctuelle, en plus ou à la place du bon de fidélité.</p>
     <div id="payableBox" class="small muted" style="margin:8px 0 12px"></div>
     <button class="primary" onclick="addPurchase()">Enregistrer l'achat</button>
     <p id="message" class="muted"></p>
@@ -2245,12 +2245,12 @@ function addPurchase(){
   const previousClient=JSON.stringify(c);
   const rewardDiscount=use?5:0,discount=rewardDiscount+exceptional,paid=Math.max(0,Math.round((amount-discount)*100)/100);
   c.total=Math.round((c.total+paid)*100)/100;c.purchases++;if(use)c.usedRewards+=5;
-  const purchase={id:crypto.randomUUID?crypto.randomUUID():String(Date.now()),date:new Date().toISOString(),amount,discount,exceptionalDiscount:exceptional,rewardDiscount,paid,...(categoryTotal>0?{categoryAmounts}: {})};
+  const purchase={id:crypto.randomUUID?crypto.randomUUID():String(Date.now()),date:new Date().toISOString(),amount,discount,exceptionalDiscount:exceptional,rewardDiscount,paid,...(categoryTotal>0?{categoryAmounts}: {}),...(saleItems.length?{productDetailItems:saleItems.map(item=>{const product=stockProduct(item.productId);return {productId:String(item.productId),productName:product?.name||'',qty:item.qty}})}:{})};
   if(linkedStockProducts.length){const originalStock=JSON.stringify(stockData);let stockOk=true;const savedMovements=[];for(const item of linkedStockProducts){if(!stockMove(item.product.id,'out',item.qty,'Vente liée à un achat client',String(purchase.id))){stockOk=false;break}const movement=stockData.movements.find(m=>m.ref===String(purchase.id)&&String(m.productId)===String(item.product.id)&&m.type==='out');if(movement)savedMovements.push({movementId:movement.id,productId:String(item.product.id),qty:item.qty})}if(!stockOk){stockData=JSON.parse(originalStock);stockSave();const restored=JSON.parse(previousClient);Object.keys(c).forEach(k=>delete c[k]);Object.assign(c,restored);updateAll();msg.textContent='⚠️ Vente non confirmée : tous les mouvements de stock ont été annulés.';return;}purchase.stockMovements=savedMovements;if(savedMovements.length===1){purchase.stockMovementId=savedMovements[0].movementId;purchase.stockProductId=savedMovements[0].productId;purchase.stockQty=savedMovements[0].qty;}}
   c.history.push(purchase);
   if(!save()){if(purchase.stockMovements?.length){purchase.stockMovementId=null;for(const sm of purchase.stockMovements){const m=stockData.movements.find(x=>x.id===sm.movementId);if(m){const prod=stockProduct(m.productId);if(prod)prod.qty+=m.qty;stockData.movements.unshift({id:'m'+Date.now()+Math.random().toString(36).slice(2,6),date:new Date().toISOString(),productId:prod?.id||sm.productId,type:'in',qty:sm.qty,reason:'Restauration après échec enregistrement vente',ref:String(purchase.id)})}}stockSave();}else if(purchase.stockMovementId)stockReverseSale(purchase);const restored=JSON.parse(previousClient);Object.keys(c).forEach(k=>delete c[k]);Object.assign(c,restored);updateAll();msg.textContent='⚠️ Vente non enregistrée : vérifie le stockage et réessaie. Le stock lié a été restauré si le navigateur l’a permis.';return;}
-  logOperation('Achat enregistré',`${c.name} · payé ${fmt(paid)}`);showSuccessToast('Achat enregistré',`${c.name} · ${fmt(paid)} payé${linkedStockProduct?' · stock actualisé':''}`);msg.innerHTML=`✅ Achat enregistré pour ${esc(c.name)} · payé ${fmt(paid)} · réduction totale ${fmt(discount)} · cagnotte ${availableReward(c).toFixed(0)} €`;
-  document.getElementById('amount').value='';document.getElementById('exceptionalDiscount').value='0';document.getElementById('useReward').checked=false;saleProductBasket=[];const saleSearch=document.getElementById('saleStockSearch');if(saleSearch){saleSearch.value='';delete saleSearch.dataset.selectedId;}document.getElementById('saleStockQty').value='1';renderSaleProductBasket();SALE_CATEGORIES.forEach(([key])=>{const el=document.getElementById('cat'+key.charAt(0).toUpperCase()+key.slice(1));if(el)el.value='0'});renderStock();updatePurchaseBox();
+  logOperation('Achat enregistré',`${c.name} · payé ${fmt(paid)}`);showSuccessToast('Achat enregistré',`${c.name} · ${fmt(paid)} payé${linkedStockProducts.length?' · stock actualisé':''}`);msg.innerHTML=`✅ Achat enregistré pour ${esc(c.name)} · payé ${fmt(paid)} · réduction totale ${fmt(discount)} · cagnotte ${availableReward(c).toFixed(0)} €`;
+  document.getElementById('amount').value='';document.getElementById('exceptionalDiscount').value='0';document.getElementById('useReward').checked=false;const linkedInfo=document.getElementById('linkedClientInfo');if(linkedInfo)linkedInfo.textContent='';const suggestions=document.getElementById('purchaseSuggestions');if(suggestions){suggestions.innerHTML='';suggestions.style.display='none';}saleProductBasket=[];const saleSearch=document.getElementById('saleStockSearch');if(saleSearch){saleSearch.value='';delete saleSearch.dataset.selectedId;}document.getElementById('saleStockQty').value='1';renderSaleProductBasket();SALE_CATEGORIES.forEach(([key])=>{const el=document.getElementById('cat'+key.charAt(0).toUpperCase()+key.slice(1));if(el)el.value='0'});updateCategoryAllocation();const allocation=document.getElementById('categoryAllocation');if(allocation)allocation.open=false;renderStock();updatePurchaseBox();
   }finally{window.__vapPurchaseBusy=false;if(purchaseButton)purchaseButton.disabled=false}
 }
 
