@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#173D30">
 <meta name="description" content="Vap’ & Moi Pro Signature Premium : gestion des clients, ventes, fidélité, analyses, suivi commercial et sauvegardes.">
-<title>Vap’ &amp; Moi Pro — V81 Protection des données</title>
+<title>Vap’ &amp; Moi Pro — V82 Organisation et ergonomie</title>
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="./icon-192.png">
 <meta name="mobile-web-app-capable" content="yes">
@@ -1560,6 +1560,21 @@ input,select,textarea{accent-color:#2f7048}
 @media(hover:hover){.card:hover{border-color:#cbd8c7;box-shadow:0 7px 22px rgba(26,47,30,.075)}button.primary:hover{filter:brightness(1.045)}button.secondary:hover{background:#f7f8f1}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.card{transition:none}}
 
+
+.settingsGear{border:1px solid var(--border);background:var(--surface,white);color:var(--text);border-radius:12px;width:42px;height:42px;font-size:20px;cursor:pointer;display:inline-flex;align-items:center;justify-content:center}
+.settingsGear:active{transform:scale(.96)}
+.settingsGear.active{outline:2px solid var(--gold,#b99a56)}
+.stockSubnav{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:0 0 12px}
+.stockSubnav button{min-height:44px;border:1px solid var(--border);background:var(--surface,white);color:var(--text);border-radius:12px;padding:9px;font-weight:700}
+.stockSubnav button.active{background:var(--green);color:white;border-color:var(--green)}
+.stockPanel[hidden]{display:none!important}
+.stockAddAction{width:100%;margin:0 0 12px}.homeKpiHidden{display:none!important}.clientOverviewSecondary{display:none!important}#clientDetail{max-height:78vh;overflow-y:auto;overscroll-behavior:contain}
+@media(min-width:700px){.stockSubnav{grid-template-columns:repeat(4,minmax(0,1fr))}}
+</style>
+<style>
+#profitStatsCard label[for="profitPeriod"],#profitPeriod,
+#weekdayAverageCard label[for="weekdayPeriod"],#weekdayPeriod,
+#advancedAnalytics label[for="advancedPeriod"],#advancedPeriod{display:none!important}
 </style>
 </head>
 <body>
@@ -1570,6 +1585,7 @@ input,select,textarea{accent-color:#2f7048}
 
 <header class="appHeaderV60">
   <div class="brandLockup"><div class="brandMark" aria-hidden="true">V<span>&</span>M</div><h1>Vap’ &amp; Moi</h1></div>
+  <button type="button" class="settingsGear" id="settingsGear" onclick="showPage('parametres',this)" aria-label="Ouvrir les paramètres" title="Paramètres">⚙️</button>
   <button type="button" class="themeToggle" id="themeToggle" onclick="toggleAppTheme()" aria-label="Activer le mode sombre" title="Changer le thème">☾ <span>Mode sombre</span></button>
 </header>
 <div id="offlineNotice" role="status" hidden>📴 Hors connexion : consultation uniquement. Les modifications sont désactivées.</div>
@@ -1594,7 +1610,7 @@ input,select,textarea{accent-color:#2f7048}
     <div class="stat"><strong id="dWeek">0 €</strong><span class="kpiTitle">📆 CA cette semaine</span></div>
     <div class="stat"><strong id="dMonth">0 €</strong><span class="kpiTitle">📅 CA ce mois</span></div>
     <div class="stat"><strong id="dBasket">0 €</strong><span class="kpiTitle">🛍️ Panier moyen</span></div>
-    <div class="stat"><strong id="dClients">0</strong><span class="kpiTitle">👥 Clients enregistrés</span></div>
+    <div class="stat"><strong id="dClientsMonth">0</strong><span class="kpiTitle">👥 Clients ce mois</span></div><span id="dClients" hidden>0</span>
     <div class="stat"><strong id="dTodayProfit">—</strong><span class="kpiTitle">📈 Bénéfice estimé aujourd’hui</span><small id="dTodayProfitNote" class="small muted">Produits identifiés uniquement</small></div>
   </div>
   <div class="homeStats" style="margin:0 0 14px" aria-label="Achats de la semaine en cours">
@@ -1712,9 +1728,9 @@ input,select,textarea{accent-color:#2f7048}
     <h2>👥 Clients</h2>
     <div class="grid grid2" id="clientOverviewMetrics" style="margin:10px 0 14px">
       <div class="stat"><strong id="clientOverviewTotal">0</strong><span class="kpiTitle">Fiches clients</span></div>
-      <div class="stat"><strong id="clientOverviewActive">0</strong><span class="kpiTitle">Avec au moins un achat</span></div>
+      <div class="stat clientOverviewSecondary"><strong id="clientOverviewActive">0</strong><span class="kpiTitle">Avec au moins un achat</span></div>
       <div class="stat"><strong id="clientOverviewInactive">0</strong><span class="kpiTitle">À revoir (30 j et +)</span></div>
-      <div class="stat"><strong id="clientOverviewRewards">0 €</strong><span class="kpiTitle">Bons disponibles estimés</span></div>
+      <div class="stat clientOverviewSecondary"><strong id="clientOverviewRewards">0 €</strong><span class="kpiTitle">Bons disponibles estimés</span></div>
     </div>
     <p class="small muted">Les compteurs sont calculés à partir des fiches et achats enregistrés. Les fiches anciennes sans date d’achat exploitable ne sont pas datées artificiellement.</p>
     <button class="primary" onclick="toggleNewClient()">➕ Nouveau client</button>
@@ -1726,7 +1742,7 @@ input,select,textarea{accent-color:#2f7048}
       <div class="actions"><button class="primary" onclick="addClient()">Créer le client</button><button class="secondary" onclick="toggleNewClient(false)">Annuler</button></div>
       <p id="clientMessage" class="muted"></p>
     </div>
-    <div class="clientSearchSuggestWrap"><input id="search" placeholder="🔎 Rechercher un nom..." oninput="renderClients()" onkeydown="clientSearchKeydown(event)" autocomplete="off" aria-label="Rechercher un client" aria-controls="clientSearchSuggestions" aria-expanded="false"><div id="clientSearchSuggestions" class="clientSearchSuggestions" role="listbox" hidden></div></div><label for="clientFilter">Afficher les clients</label><select id="clientFilter" onchange="renderClients()"><option value="all">Tous les clients</option><option value="regular">Clients réguliers (2 achats ou plus)</option><option value="inactive">Clients inactifs (30 jours ou plus)</option><option value="new">Nouveaux clients (30 derniers jours)</option><option value="noPurchase">Sans achat enregistré</option></select><label for="clientSort">Trier les clients par</label><select id="clientSort" onchange="renderClients()"><option value="name">Nom (A à Z)</option><option value="nameDesc">Nom (Z à A)</option><option value="totalDesc">Chiffre d’affaires cumulé</option><option value="avgDesc">Panier moyen</option><option value="purchasesDesc">Nombre d’achats</option><option value="recent">Dernier achat récent</option><option value="rewardsDesc">Bons disponibles</option></select>
+    <div class="clientSearchSuggestWrap"><input id="search" placeholder="🔎 Rechercher un nom..." oninput="renderClients()" onkeydown="clientSearchKeydown(event)" autocomplete="off" aria-label="Rechercher un client" aria-controls="clientSearchSuggestions" aria-expanded="false"><div id="clientSearchSuggestions" class="clientSearchSuggestions" role="listbox" hidden></div></div><label for="clientUnifiedSelect">Trier ou filtrer les clients</label><select id="clientUnifiedSelect" onchange="handleClientUnifiedSelect()"><optgroup label="Tri"><option value="name">Nom (A à Z)</option><option value="nameDesc">Nom (Z à A)</option><option value="totalDesc">CA cumulé (décroissant)</option><option value="totalAsc">CA cumulé (croissant)</option><option value="avgDesc">Panier moyen (décroissant)</option><option value="avgAsc">Panier moyen (croissant)</option><option value="purchasesDesc">Nombre d’achats (décroissant)</option><option value="purchasesAsc">Nombre d’achats (croissant)</option><option value="recent">Dernier achat récent</option><option value="oldest">Dernier achat le plus ancien</option><option value="rewardsDesc">Bons disponibles (décroissant)</option><option value="rewardsAsc">Bons disponibles (croissant)</option></optgroup><optgroup label="Filtres"><option value="filter:all">Tous les clients</option><option value="filter:regular">Clients réguliers (2 achats ou plus)</option><option value="filter:inactive">Clients inactifs (30 jours ou plus)</option><option value="filter:new">Nouveaux clients (30 derniers jours)</option><option value="filter:noPurchase">Sans achat enregistré</option></optgroup></select><select id="clientFilter" onchange="renderClients()" hidden aria-hidden="true"><option value="all">Tous</option><option value="regular">Réguliers</option><option value="inactive">Inactifs</option><option value="new">Nouveaux</option><option value="noPurchase">Sans achat</option></select><select id="clientSort" onchange="renderClients()" hidden aria-hidden="true"><option value="name">Nom</option><option value="nameDesc">Nom inverse</option><option value="totalDesc">CA descendant</option><option value="totalAsc">CA ascendant</option><option value="avgDesc">Panier descendant</option><option value="avgAsc">Panier ascendant</option><option value="purchasesDesc">Achats descendants</option><option value="purchasesAsc">Achats ascendants</option><option value="recent">Récent</option><option value="oldest">Ancien</option><option value="rewardsDesc">Bons descendants</option><option value="rewardsAsc">Bons ascendants</option></select>
     <div id="clientList"></div>
   </div>
   <div class="card">
@@ -1798,6 +1814,8 @@ input,select,textarea{accent-color:#2f7048}
   <div class="card">
     <h2>📊 Statistiques</h2>
     <p class="muted small">Vue synthétique en premier. Appuie sur une rubrique pour ouvrir ses indicateurs, graphiques et comparaisons détaillés.</p>
+    <label for="statsGlobalPeriod">Période commune de toutes les statistiques</label>
+    <select id="statsGlobalPeriod" onchange="refreshStatsForPeriod()"><option value="today">Aujourd’hui</option><option value="week">Cette semaine</option><option value="month" selected>Ce mois</option><option value="30">30 derniers jours</option><option value="prevMonth">Mois précédent</option><option value="year">Cette année</option><option value="all">Tout l’historique</option></select>
     <div class="actionRow"><button class="secondary" onclick="exportSalesCSV()">📄 Exporter les ventes (CSV)</button><button class="secondary" onclick="exportData()">💾 Sauvegarder les données (JSON)</button></div>
     <div class="grid4">
       <div class="stat"><strong id="sCA">0 €</strong>CA cumulé</div>
@@ -1807,7 +1825,7 @@ input,select,textarea{accent-color:#2f7048}
     </div>
   </div>
 
-  <div class="card" id="profitStatsCard"><h3>💰 Bénéfice brut estimé</h3><p class="small muted">Calcul sur les produits identifiés dans les ventes et présents dans le catalogue stock, avec prix d’achat HT et prix de vente TTC actuels. Les ventes sans détail produit sont exclues ; les réductions sont réparties proportionnellement. Ce n’est pas le bénéfice net après charges.</p><label for="profitPeriod">Période du bénéfice</label><select id="profitPeriod" onchange="renderProfitStats()"><option value="day">Aujourd’hui</option><option value="week">Cette semaine</option><option value="month" selected>Ce mois</option><option value="30">30 derniers jours</option><option value="prevMonth">Mois précédent</option><option value="year">Cette année</option><option value="all">Tout l’historique</option></select><div id="profitStats"></div></div>
+  <div class="card" id="profitStatsCard"><h3>💰 Bénéfice brut estimé</h3><p class="small muted">Calcul estimatif sur les produits identifiés dans les ventes. Les nouvelles ventes conservent le coût, le prix de vente et la TVA au moment de l’achat ; les anciennes ventes utilisent les données encore disponibles. Les ventes sans détail produit exploitable ne sont pas chiffrées. Ce n’est pas le bénéfice net après charges.</p><label for="profitPeriod">Période du bénéfice</label><select id="profitPeriod" onchange="renderProfitStats()"><option value="day">Aujourd’hui</option><option value="week">Cette semaine</option><option value="month" selected>Ce mois</option><option value="30">30 derniers jours</option><option value="prevMonth">Mois précédent</option><option value="year">Cette année</option><option value="all">Tout l’historique</option></select><div id="profitStats"></div></div>
 
   <div class="card"><h3>🧺 Répartition des ventes par catégorie</h3><p class="small muted">Calculée uniquement sur les ventes dont la répartition a été renseignée. Les ventes sans détail restent dans le CA global mais ne sont pas attribuées à une catégorie.</p><div id="categoryAnalytics"><p class="small muted">Aucune répartition de catégorie enregistrée.</p></div></div>
 
@@ -1873,7 +1891,7 @@ input,select,textarea{accent-color:#2f7048}
       <p class="muted small">Calculée à partir des jours distincts où chaque client a effectué un achat. Plusieurs achats le même jour comptent comme une seule visite.</p>
       <div id="visitFrequencySummary" class="clientMetricGrid"></div><div id="visitFrequencyTable"></div><button id="visitFrequencyToggle" class="secondary statsToggle" onclick="toggleVisitFrequencyStats()" style="display:none">Afficher tous les clients</button>
     </div>
-    <div class="card"><h3 style="margin-top:0">👤 Nombre d’achats par client</h3><p class="muted small">Top 5 affiché par défaut, classé du plus grand nombre d’achats au plus petit.</p><div id="purchaseClientStats"></div><button id="purchaseStatsToggle" class="secondary statsToggle" onclick="togglePurchaseStats()" style="display:none">Afficher tous les clients</button></div>
+    <div class="card"><h3 style="margin-top:0">🏆 Top 5 clients par chiffre d’affaires</h3><p class="muted small">Classement calculé sur le chiffre d’affaires encaissé pendant la période sélectionnée.</p><div id="purchaseClientStats"></div><button id="purchaseStatsToggle" class="secondary statsToggle" onclick="togglePurchaseStats()" style="display:none">Afficher tous les clients</button></div>
     <div class="card"><h3 style="margin-top:0">👥 Vue d’ensemble des clients</h3><div id="clientStats"></div></div>
     <div class="card"><h3 style="margin-top:0">🏆 Meilleurs clients</h3><div id="topClient"></div></div>
     <div class="card" id="clientInsights"><h3 style="margin-top:0">💡 Analyse de la clientèle</h3><div id="clientInsightsContent"></div></div>
@@ -1912,8 +1930,15 @@ input,select,textarea{accent-color:#2f7048}
   <div class="card"><h3>🛡️ Contrôle de cohérence</h3><p class="small muted">Vérification locale des données, sans modification automatique de l’historique.</p><div id="dataHealthReport"></div></div>
   <div class="card"><h3>💡 Plan d’action conseillé</h3><div id="analysisActions"></div><p class="small muted">Les recommandations sont calculées à partir des données enregistrées. Une projection n’est pas une garantie. La marge réelle nécessite les coûts d’achat.</p><div class="actions" style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px"><button class="btn" onclick="exportAnalysisCSV()">Exporter l’analyse CSV</button><button class="btn secondary" onclick="window.print()">Imprimer le bilan</button></div></div>
 </section>
+
+<section id="parametres" class="page">
+  <div class="card"><h2>⚙️ Paramètres</h2><p class="small muted">Réglages et sécurité de Vap’ & Moi Pro.</p></div>
+  <div id="settingsObjectivesHost"></div><div id="settingsLoyaltyHost"></div><div id="settingsBackupHost"></div>
+  <div class="card" id="settingsDataHost"><h3>🛡️ Protection et données</h3><p class="small muted">Les données restent stockées sur cet appareil. Effectue régulièrement une sauvegarde JSON et conserve-la dans un emplacement sûr.</p><div class="actions"><button class="secondary" onclick="exportData()">💾 Exporter toutes les données</button></div></div>
+  <div class="card"><h3>ℹ️ Application</h3><p class="small muted">Vap’ & Moi Pro · Version V82</p><p class="small muted">Application conçue pour fonctionner hors connexion après son installation.</p></div>
+</section>
 </main>
-<footer class="versionFooter" aria-label="Version installée"><span class="versionChip"><span class="versionDot" aria-hidden="true"></span> Vap’ & Moi Pro · V81 — Protection des données</span><p class="small muted">Données enregistrées sur cet appareil · Pense à effectuer régulièrement une sauvegarde JSON.</p></footer>
+<footer class="versionFooter" aria-label="Version installée"><span class="versionChip"><span class="versionDot" aria-hidden="true"></span> Vap’ & Moi Pro · V82 — Organisation et ergonomie</span><p class="small muted">Données enregistrées sur cet appareil · Pense à effectuer régulièrement une sauvegarde JSON.</p></footer>
 
 <script>
 
@@ -2020,9 +2045,11 @@ function setGoal(){settings.goal=Math.max(0,Number(document.getElementById('mont
 function setWeeklyGoal(){settings.weeklyGoal=Math.max(0,Number(document.getElementById('weeklyGoal').value||0));persistSettings()}
 function setDailyGoal(){settings.dailyGoal=Math.max(0,Number(document.getElementById('dailyGoal').value||0));persistSettings()}
 function showPage(id,btn){
+  const target=document.getElementById(id);if(!target)return;
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
+  target.classList.add('active');
   document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('active',b.dataset.page===id));
+  const gear=document.getElementById('settingsGear');if(gear)gear.classList.toggle('active',id==='parametres');
   updateAll();
 }
 function runGlobalSearch(){
@@ -2153,9 +2180,49 @@ const SALE_CATEGORIES=[['eliquides','E-liquides'],['resistances','Résistances']
 function readCategoryAmounts(){const out={};SALE_CATEGORIES.forEach(([key])=>{const el=document.getElementById('cat'+key.charAt(0).toUpperCase()+key.slice(1));out[key]=Math.round(Math.max(0,Number(el?.value)||0)*100)/100});return out}
 function categoryAmountTotal(obj){return Math.round(SALE_CATEGORIES.reduce((sum,[key])=>sum+Math.round(Math.max(0,Number(obj?.[key])||0)*100),0))/100}
 function updateCategoryAllocation(){const amount=Math.round(Math.max(0,Number(document.getElementById('amount')?.value)||0)*100)/100,vals=readCategoryAmounts(),sum=categoryAmountTotal(vals),status=document.getElementById('categoryAllocationStatus');if(!status)return;const allocated=sum>0;if(!allocated){status.textContent='Répartition non renseignée — facultatif.';status.style.color='';return}const diff=Math.round((amount-sum)*100)/100;if(Math.abs(diff)<0.005){status.textContent='✓ Répartition complète : '+fmt(sum)+'.';status.style.color='#28744a'}else{status.textContent='⚠ Répartition : '+fmt(sum)+' sur '+fmt(amount)+' (écart '+fmt(Math.abs(diff))+').';status.style.color='#b42318'}}
-function renderCategoryAnalytics(){
+
+function statsPeriodPurchases(kind){
+ const now=new Date();now.setHours(23,59,59,999);
+ const ps=allPurchases().filter(p=>Number.isFinite(dateOf(p).getTime()));
+ const start=new Date(now);start.setHours(0,0,0,0);
+ if(kind==='today')return ps.filter(p=>sameDay(dateOf(p),now));
+ if(kind==='week'){start.setDate(start.getDate()-((start.getDay()+6)%7));return ps.filter(p=>dateOf(p)>=start&&dateOf(p)<=now);}
+ if(kind==='month')return ps.filter(p=>monthKey(dateOf(p))===monthKey(now));
+ if(kind==='prevMonth'){const a=new Date(now.getFullYear(),now.getMonth()-1,1),b=new Date(now.getFullYear(),now.getMonth(),1);return ps.filter(p=>dateOf(p)>=a&&dateOf(p)<b);}
+ if(kind==='30'){start.setDate(start.getDate()-29);return ps.filter(p=>dateOf(p)>=start&&dateOf(p)<=now);}
+ if(kind==='year')return ps.filter(p=>dateOf(p).getFullYear()===now.getFullYear());
+ return ps;
+}
+function currentStatsPeriod(){return document.getElementById('statsGlobalPeriod')?.value||'month';}
+function refreshStatsForPeriod(){
+ const kind=currentStatsPeriod();
+ const profit=document.getElementById('profitPeriod');
+ if(profit)profit.value=({today:'day',week:'week',month:'month','30':'30',prevMonth:'prevMonth',year:'year',all:'all'})[kind]||'month';
+ const weekday=document.getElementById('weekdayPeriod');
+ if(weekday)weekday.value=({today:'today',week:'week',month:'currentMonth','30':'30',prevMonth:'previousMonth',year:'year',all:'all'})[kind]||'all';
+ const advanced=document.getElementById('advancedPeriod');
+ if(advanced)advanced.value=({today:'1',week:'7',month:'30','30':'30',prevMonth:'30',year:'90',all:'all'})[kind]||'30';
+ const ps=statsPeriodPurchases(kind),now=new Date();
+ const ca=ps.reduce((s,p)=>s+safelyPaid(p),0),count=ps.length;
+ const caEl=document.getElementById('sCA'),pEl=document.getElementById('sPurchases'),basketEl=document.getElementById('sBasket');
+ if(caEl)caEl.textContent=fmt(ca);
+ if(pEl)pEl.textContent=String(count);
+ if(basketEl)basketEl.textContent=count?fmt(ca/count):'—';
+ const clientsEl=document.getElementById('sClients');
+ if(clientsEl){const ids=new Set(ps.map(p=>p.client).filter(Boolean));clientsEl.textContent=String(ids.size);}
+ const periodSummary=document.getElementById('periodStats');
+ if(periodSummary){const label=({today:'Aujourd’hui',week:'Cette semaine',month:'Ce mois','30':'30 derniers jours',prevMonth:'Mois précédent',year:'Cette année',all:'Tout l’historique'})[kind]||'Période sélectionnée';periodSummary.innerHTML=`<div class="periodMetric"><span>CA encaissé · ${label}</span><strong>${fmt(ca)}</strong></div><div class="periodMetric"><span>Nombre de ventes</span><strong>${count}</strong></div><div class="periodMetric"><span>Panier moyen</span><strong>${count?fmt(ca/count):'—'}</strong></div>`;}
+ renderCategoryAnalytics(ps);
+ renderProfitStats();
+ renderWeekdayStats();
+ renderAdvancedAnalytics();
+ renderV15Insights(ps,now);
+ // Les graphiques d’achats utilisent la même sélection que les indicateurs.
+ renderPurchaseStats(ps,now);
+}
+function renderCategoryAnalytics(filteredPurchases){
  const root=document.getElementById('categoryAnalytics');if(!root)return;
- const ps=allPurchases(),totals={};
+ const ps=filteredPurchases||statsPeriodPurchases(currentStatsPeriod()),totals={};
  SALE_CATEGORIES.forEach(([key,label])=>totals[key]={label,amount:0,transactions:0,clients:new Set()});
  let allocatedSales=0,unallocatedSales=0,unallocatedCA=0;
  const totalCA=ps.reduce((s,p)=>s+Math.max(0,Number(p.paid??p.amount)||0),0);
@@ -2221,8 +2288,59 @@ function stockImportBackup(e){const f=e.target.files&&e.target.files[0];if(!f)re
 function stockDeleteProduct(id){const p=stockProduct(id);if(!p)return;if(p.qty!==0){alert('Pour protéger ton inventaire, mets d’abord la quantité à zéro via un mouvement manuel justifié.');return}if(stockData.orderBasket.some(x=>x.productId===id)){alert('Retire d’abord ce produit du panier fournisseur.');return}if(!confirm(`Supprimer la référence « ${p.name} » ? L’historique des mouvements sera conservé.`))return;const old=JSON.stringify(stockData);stockData.products=stockData.products.filter(x=>x.id!==id);if(!stockSave()){stockData=JSON.parse(old);return}renderStock()}
 function stockManualMove(){const id=document.getElementById('stockMoveProduct').value,type=document.getElementById('stockMoveType').value,qty=Number(document.getElementById('stockMoveQty').value),reason=document.getElementById('stockMoveReason').value.trim();if(!reason){alert('Indique un motif pour garder un historique exploitable.');return}if(stockMove(id,type,qty,reason,null)){document.getElementById('stockMoveReason').value='';const product=stockProduct(id);showSuccessToast('Stock actualisé',`${product?.name||'Référence'} · mouvement enregistré`);renderStock()}}
 function stockAddOrderItem(){const id=document.getElementById('orderProduct').value,qty=Number(document.getElementById('orderQty').value);if(!stockProduct(id)||!Number.isInteger(qty)||qty<1){alert('Choisis un produit et une quantité valide.');return}const found=stockData.orderBasket.find(x=>x.productId===id);if(found)found.qty+=qty;else stockData.orderBasket.push({productId:id,qty});if(stockSave()){showSuccessToast('Commande mise à jour','Le panier fournisseur a été enregistré.');renderStock()}}
-function stockValidateOrder(){if(!stockData.orderBasket.length){alert('Le panier fournisseur est vide.');return}if(!confirm('Valider cette commande et ajouter les quantités au stock comme réceptionnées ? À utiliser uniquement à la réception réelle des produits.'))return;const old=JSON.stringify(stockData),order={id:'o'+Date.now(),date:new Date().toISOString(),items:stockData.orderBasket.map(x=>({...x})),status:'Réceptionnée'};for(const item of order.items){const p=stockProduct(item.productId);if(!p){stockData=JSON.parse(old);alert('Produit introuvable : opération annulée.');return}p.qty+=item.qty;stockData.movements.unshift({id:'m'+Date.now()+Math.random().toString(36).slice(2,6),date:new Date().toISOString(),productId:p.id,type:'in',qty:item.qty,reason:'Commande fournisseur '+order.id,ref:order.id})}stockData.orders.unshift(order);stockData.orderBasket=[];if(!stockSave()){stockData=JSON.parse(old);return}renderStock()}
-function stockReverseSale(p){if(!p||p.stockReversed)return true;const ids=Array.isArray(p.stockMovements)?p.stockMovements.map(x=>x.movementId):[p.stockMovementId].filter(Boolean);if(!ids.length)return true;const old=JSON.stringify(stockData);for(const id of ids){const m=stockData.movements.find(x=>x.id===id);if(!m)continue;const product=stockProduct(m.productId);if(!product)continue;product.qty+=m.qty;stockData.movements.unshift({id:'m'+Date.now()+Math.random().toString(36).slice(2,6),date:new Date().toISOString(),productId:product.id,type:'in',qty:m.qty,reason:'Annulation vente — contre-mouvement',ref:String(p.id)})}p.stockReversed=true;if(!stockSave()){stockData=JSON.parse(old);p.stockReversed=false;return false}return true}
+function stockValidateOrder(){
+ if(!stockData.orderBasket.length){alert('Le panier fournisseur est vide.');return}
+ if(!confirm('Enregistrer cette commande fournisseur ? Le stock ne sera augmenté qu’au moment de la réception réelle, totale ou partielle.'))return;
+ const old=JSON.stringify(stockData),order={id:'o'+Date.now(),date:new Date().toISOString(),items:stockData.orderBasket.map(x=>({productId:String(x.productId),qty:Number(x.qty),receivedQty:0})),status:'En attente'};
+ if(order.items.some(x=>!stockProduct(x.productId)||!Number.isInteger(x.qty)||x.qty<1)){alert('Commande invalide : vérifie les références et quantités.');return}
+ stockData.orders.unshift(order);stockData.orderBasket=[];
+ if(!stockSave()){stockData=JSON.parse(old);return}
+ renderStock();showSuccessToast('Commande enregistrée','Réceptionne les quantités réellement livrées depuis l’historique.');
+}
+function stockReceiveOrder(orderId){
+ const order=stockData.orders.find(o=>String(o.id)===String(orderId));if(!order)return;
+ const old=JSON.stringify(stockData),now=new Date().toISOString();let received=0;
+ for(const item of order.items||[]){
+  const ordered=Math.max(0,Number(item.qty)||0),already=Number.isFinite(Number(item.receivedQty))?Math.max(0,Number(item.receivedQty)):(order.status==='Réceptionnée'?ordered:0),remaining=Math.max(0,ordered-already);
+  if(!remaining)continue;
+  const product=stockProduct(item.productId);if(!product){alert('Réception interrompue : une référence de la commande est introuvable. Aucune quantité ne sera ajoutée.');return}
+  const raw=prompt('Quantité réellement reçue pour « '+product.name+' » (reste à recevoir : '+remaining+'). Saisis 0 si non livré :',String(remaining));
+  if(raw===null){stockData=JSON.parse(old);return}
+  const qty=Number(raw);if(!Number.isInteger(qty)||qty<0||qty>remaining){alert('Quantité invalide. Saisis un nombre entier entre 0 et '+remaining+'.');stockData=JSON.parse(old);return}
+  if(qty){item.receivedQty=already+qty;product.qty+=qty;stockData.movements.unshift({id:'m'+Date.now()+Math.random().toString(36).slice(2,7),date:now,productId:product.id,type:'in',qty,reason:'Réception commande fournisseur '+order.id,ref:order.id});received+=qty;}
+ }
+ const complete=(order.items||[]).every(x=>{const ordered=Math.max(0,Number(x.qty)||0),done=Number.isFinite(Number(x.receivedQty))?Number(x.receivedQty):(order.status==='Réceptionnée'?ordered:0);return done>=ordered});
+ order.status=complete?'Réceptionnée':(order.items.some(x=>Number(x.receivedQty)>0)?'Partiellement réceptionnée':'En attente');
+ if(!received){stockData=JSON.parse(old);alert('Aucune quantité réceptionnée. La commande reste inchangée.');return}
+ if(!stockSave()){stockData=JSON.parse(old);return}
+ renderStock();showSuccessToast('Réception enregistrée',received+' unité(s) ajoutée(s) au stock.');
+}
+function stockReverseSale(p){
+ if(!p||p.stockReversed)return true;
+ const ids=Array.isArray(p.stockMovements)?p.stockMovements.map(x=>x.movementId):[p.stockMovementId].filter(Boolean);
+ if(!ids.length)return true;
+ const original=JSON.stringify(stockData),resolved=[];
+ for(const id of ids){
+  const movement=stockData.movements.find(x=>String(x.id)===String(id));
+  if(!movement||movement.type!=='out'||String(movement.ref)!==String(p.id)){
+   alert('Annulation bloquée : un mouvement de sortie lié à cette vente est introuvable ou incohérent. Vérifie le stock avant de continuer.');
+   return false;
+  }
+  const product=stockProduct(movement.productId);
+  if(!product||!Number.isInteger(Number(movement.qty))||Number(movement.qty)<1){
+   alert('Annulation bloquée : la référence ou la quantité du mouvement de stock est invalide.');
+   return false;
+  }
+  resolved.push({movement,product});
+ }
+ for(const {movement,product} of resolved){
+  product.qty+=Number(movement.qty);
+  stockData.movements.unshift({id:'m'+Date.now()+Math.random().toString(36).slice(2,6),date:new Date().toISOString(),productId:product.id,type:'in',qty:Number(movement.qty),reason:'Annulation vente — contre-mouvement',ref:String(p.id)});
+ }
+ p.stockReversed=true;
+ if(!stockSave()){stockData=JSON.parse(original);p.stockReversed=false;return false;}
+ return true;
+}
 let stockSelectedCategory='Toutes';
 let stockLowOnly=false;
 function toggleStockLowOnly(){stockLowOnly=!stockLowOnly;renderStock()}
@@ -2251,8 +2369,20 @@ function stockChooseProduct(searchId,selectId,listId,id){const p=stockProduct(id
 function stockAddToOrderFromCatalog(id){const p=stockProduct(id);if(!p)return;const old=JSON.stringify(stockData),found=stockData.orderBasket.find(x=>String(x.productId)===String(id));if(found){found.qty=Math.max(1,Math.floor(Number(found.qty)||1));}else stockData.orderBasket.push({productId:p.id,qty:Math.max(1,Number(p.threshold||0)-Number(p.qty||0)+1)});if(!stockSave()){stockData=JSON.parse(old);return;}showSuccessToast('Ajouté au réappro',p.name+' · quantité modifiable');renderStock();}
 function stockUpdateOrderQty(id,value){const item=stockData.orderBasket.find(x=>String(x.productId)===String(id));if(!item)return;const n=Number(value);if(!Number.isInteger(n)||n<1){alert('La quantité à commander doit être un entier supérieur ou égal à 1.');renderStock();return;}const old=JSON.stringify(stockData);item.qty=n;if(!stockSave()){stockData=JSON.parse(old);return;}renderStock();}
 function stockCopyOrder(){if(!stockData.orderBasket.length){alert('Le panier fournisseur est vide.');return;}const text='Commande fournisseur Vap’ & Moi\n'+stockData.orderBasket.map(x=>`${stockProduct(x.productId)?.name||'Produit inconnu'} — ${x.qty} unité(s)${stockProduct(x.productId)?.supplier?' — '+stockProduct(x.productId).supplier:''}`).join('\n');if(navigator.clipboard?.writeText){navigator.clipboard.writeText(text).then(()=>showSuccessToast('Liste copiée','Tu peux la coller dans ton message fournisseur.')).catch(()=>prompt('Copie cette liste de commande :',text));}else prompt('Copie cette liste de commande :',text);}
-function renderStockMovementHistory(){const host=document.getElementById('stockMovementHistory');if(!host)return;const q=(document.getElementById('stockMovementSearch')?.value||'').trim().toLocaleLowerCase('fr');const rows=stockData.movements.filter(m=>(stockProduct(m.productId)?.name||'Produit inconnu').toLocaleLowerCase('fr').includes(q)).slice().sort((a,b)=>new Date(b.date)-new Date(a.date));const shown=stockMovementExpanded||q?rows:rows.slice(0,5);host.innerHTML=shown.map(m=>`<div class="stockMoveLine" style="display:flex;justify-content:space-between;gap:10px;align-items:flex-start;padding:10px 0;border-bottom:1px solid var(--line,#e5e0d2)"><div style="min-width:0;flex:1"><strong>${stockEsc(stockProduct(m.productId)?.name||'Produit inconnu')}</strong><div class="small muted">${new Date(m.date).toLocaleString('fr-FR')} · ${stockEsc(m.reason||'Mouvement')}</div></div><strong style="white-space:nowrap;color:${m.type==='in'?'var(--green,#24523b)':'var(--text,#333)'}">${m.type==='in'?'+':'−'}${Number(m.qty)||0}</strong></div>`).join('')||(q?'<p class="small muted">Aucun mouvement pour ce produit.</p>':'<p class="small muted">Aucun mouvement enregistré.</p>');const b=document.getElementById('stockMovementToggle');if(b){b.hidden=!!q||rows.length<=5;b.textContent=stockMovementExpanded?'Afficher les 5 derniers':'Voir tout l’historique';}}
-function renderStock(){stockRefreshSelects();refreshSaleStockSelect();const el=document.getElementById('stockInventory');if(!el)return;const q=(document.getElementById('stockSearch')?.value||'').trim().toLocaleLowerCase('fr');const cats=['Toutes','E-liquides','Résistances','Cartouches','Clearomiseurs','Accessoires','Puffs','E-cigarettes','Boosters'];const nav=document.getElementById('stockCategoryNav');if(nav)nav.innerHTML=cats.map(c=>{const count=c==='Toutes'?stockData.products.length:stockData.products.filter(p=>p.category===c).length;const active=stockSelectedCategory===c;const emoji=c==='Toutes'?'📦':c==='E-liquides'?'💧':c==='Résistances'?'⚙️':c==='Cartouches'?'🧩':c==='Clearomiseurs'?'🔧':c==='Puffs'?'💨':c==='E-cigarettes'?'🔋':c==='Boosters'?'🧪':'🧰';return `<button type="button" class="${active?'primary':'secondary'}" style="text-align:left;min-height:48px" onclick="stockSelectCategory('${c}')">${emoji} ${stockEsc(c)}<br><small>${count} référence(s)</small></button>`}).join('');const products=stockData.products.filter(p=>(stockSelectedCategory==='Toutes'||p.category===stockSelectedCategory)&&(!stockLowOnly||p.qty<=p.threshold)&&(p.name+' '+p.category).toLocaleLowerCase('fr').includes(q));const visibleProducts=stockCatalogExpanded||q?products:products.slice(0,5);const lowProducts=stockData.products.filter(p=>Number(p.qty)<=Number(p.threshold));const lowBtn=document.getElementById('stockLowOnlyBtn');if(lowBtn){lowBtn.textContent=stockLowOnly?'✓ Affichage des stocks bas activé':'⚠️ Afficher uniquement les stocks bas';lowBtn.classList.toggle('primary',stockLowOnly)}const homeStockText=document.getElementById('homeStockSummaryText');if(homeStockText)homeStockText.textContent=stockData.products.length?`${lowProducts.length} référence(s) au seuil ou en dessous sur ${stockData.products.length}. Les quantités non saisies ne sont pas estimées.`:'Aucune référence enregistrée : ajoute uniquement le stock réellement compté.';const homeStockList=document.getElementById('homeStockAlertList');if(homeStockList)homeStockList.innerHTML=lowProducts.length?lowProducts.slice().sort((a,b)=>a.qty-b.qty).slice(0,5).map(p=>`<div style="padding:5px 0;border-top:1px solid var(--line,#e5e8df)">⚠️ <strong>${stockEsc(p.name)}</strong> — ${p.qty} restant(s) / seuil ${p.threshold}</div>`).join('')+(lowProducts.length>5?`<p class="small muted">Et ${lowProducts.length-5} autre(s) référence(s) à vérifier.</p>`:''):'<p class="small muted">'+(stockData.products.length?'Aucune alerte selon les seuils configurés.':'Le tableau de bord s’actualisera quand tu auras saisi tes références.')+'</p>';document.getElementById('stockSkuCount').textContent=stockData.products.length;document.getElementById('stockUnits').textContent=stockData.products.reduce((n,p)=>n+(Number(p.qty)||0),0);document.getElementById('stockAlerts').textContent=lowProducts.length;document.getElementById('stockMoves').textContent=stockData.movements.length;const costValue=stockData.products.reduce((n,p)=>n+Number(p.qty||0)*Number(p.cost||0),0),retailValue=stockData.products.reduce((n,p)=>n+Number(p.qty||0)*Number(p.price||0),0);const cv=document.getElementById('stockCostValue'),rv=document.getElementById('stockRetailValue');if(cv)cv.textContent=fmt(costValue);if(rv)rv.textContent=fmt(retailValue);el.innerHTML=visibleProducts.length?visibleProducts.map(p=>`<div class="stockCatalogRow" style="display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px;align-items:center;padding:12px 0;border-bottom:1px solid var(--line,#e5e0d2)"><div style="min-width:0"><strong style="display:block;overflow-wrap:anywhere">${stockEsc(p.name)}</strong><small class="muted">${stockEsc(p.category)}</small><div class="small" style="margin-top:4px">Stock <strong>${Number(p.qty)||0}</strong> · Seuil ${Number(p.threshold)||0} · ${p.qty<=p.threshold?'⚠️ À réapprovisionner':'OK'}</div><div class="small muted">Achat ${fmt(Number(p.cost)||0)} HT · Vente ${fmt(Number(p.price)||0)} TTC · TVA ${Number.isFinite(Number(p.vatRate))?Number(p.vatRate):20}%</div><div class="small">Vente HT ${fmt((Number(p.price)||0)/(1+(Number.isFinite(Number(p.vatRate))?Number(p.vatRate):20)/100))} · Marge brute estimée ${fmt((Number(p.price)||0)/(1+(Number.isFinite(Number(p.vatRate))?Number(p.vatRate):20)/100)-(Number(p.cost)||0))}</div><div class="actions" style="display:flex;gap:5px;flex-wrap:wrap;margin-top:7px"><button type="button" class="secondary" onclick="stockEditProduct('${stockEsc(p.id)}')">Modifier</button><button type="button" class="secondary" onclick="stockDeleteProduct('${stockEsc(p.id)}')">Supprimer</button></div></div><button type="button" class="${stockData.orderBasket.some(x=>String(x.productId)===String(p.id))?'primary':'secondary'}" style="min-width:94px;max-width:110px" onclick="stockAddToOrderFromCatalog('${stockEsc(p.id)}')">${stockData.orderBasket.some(x=>String(x.productId)===String(p.id))?'✓ Au réappro':'+ Réappro'}</button></div>`).join(''):'<p class="small muted">Aucun produit correspondant. Ajoute les références réellement présentes en boutique.</p>';const catToggle=document.getElementById('stockCatalogToggle');if(catToggle){catToggle.hidden=!!q||products.length<=5;catToggle.textContent=stockCatalogExpanded?'Afficher les 5 premiers':'Voir tout le catalogue ('+products.length+')';}stockFilterSelectOptions('stockMoveSearch','stockMoveProduct');stockFilterSelectOptions('orderSearch','orderProduct');const basket=document.getElementById('stockOrderBasket');if(basket)basket.innerHTML=stockData.orderBasket.length?'<div class="small muted">Liste modifiable avant commande. Rien n’est ajouté au stock avant la réception réelle.</div>'+stockData.orderBasket.map(x=>{const p=stockProduct(x.productId);return `<div style="display:grid;grid-template-columns:minmax(0,1fr) 88px auto;gap:8px;align-items:center;padding:10px 0;border-bottom:1px solid var(--line,#e5e0d2)"><div><strong>${stockEsc(p?.name||'Produit supprimé')}</strong><div class="small muted">Réapprovisionnement</div></div><input aria-label="Quantité à commander pour ${stockEsc(p?.name||'produit')}" type="number" min="1" step="1" value="${Math.max(1,Number(x.qty)||1)}" onchange="stockUpdateOrderQty('${stockEsc(x.productId)}',this.value)" style="min-width:0;padding:8px"><button type="button" class="secondary" onclick="stockRemoveOrderItem('${stockEsc(x.productId)}')">Retirer</button></div>`}).join(''):'<p class="small muted">Panier vide. Appuie sur « + Réappro » dans une ligne du catalogue pour commencer.</p>';let copyBtn=document.getElementById('stockCopyOrderBtn');if(!copyBtn&&basket){copyBtn=document.createElement('button');copyBtn.id='stockCopyOrderBtn';copyBtn.type='button';copyBtn.className='secondary';copyBtn.textContent='Copier la liste fournisseur';copyBtn.onclick=stockCopyOrder;basket.insertAdjacentElement('afterend',copyBtn)}if(copyBtn)copyBtn.hidden=!stockData.orderBasket.length;const ordersHost=document.getElementById('stockOrdersHistory');if(ordersHost)ordersHost.innerHTML='<h4>Commandes réceptionnées</h4>'+(stockData.orders.slice(0,20).map(o=>`<p>${new Date(o.date).toLocaleDateString('fr-FR')} — ${stockEsc(o.id)} — ${o.items.reduce((n,x)=>n+(Number(x.qty)||0),0)} unité(s) réceptionnée(s)</p>`).join('')||'<p class="small muted">Aucune commande.</p>');renderStockMovementHistory();const counts={};stockData.products.forEach(p=>counts[p.category]=(counts[p.category]||0)+1);const stats=document.getElementById('stockStatistics');if(stats)stats.innerHTML='<p><strong>Valeur d’achat connue du stock :</strong> '+fmt(costValue)+'</p><p><strong>Valeur de vente potentielle :</strong> '+fmt(retailValue)+'</p><p><strong>Marge brute théorique potentielle :</strong> '+fmt(retailValue-costValue)+' <span class="small muted">(indicative, uniquement sur les références dont les prix sont renseignés ; hors charges, taxes et remises)</span></p>'+Object.keys(counts).map(c=>`<p>${stockEsc(c)} : ${counts[c]} référence(s)</p>`).join('')+'<h4>Alertes de réapprovisionnement</h4>'+(lowProducts.slice().sort((a,b)=>a.qty-b.qty).map(p=>`<p>⚠️ ${stockEsc(p.name)} — ${p.qty} restant(s), seuil ${p.threshold}</p>`).join('')||'<p class="small muted">Aucune alerte de stock.</p>');buildStockReorderPlan();}
+function renderStockMovementHistory(){
+ const host=document.getElementById('stockMovementHistory');if(!host)return;
+ const q=(document.getElementById('stockMovementSearch')?.value||'').trim().toLocaleLowerCase('fr');
+ const rows=stockData.movements.filter(m=>(stockProduct(m.productId)?.name||'Produit inconnu').toLocaleLowerCase('fr').includes(q)).slice().sort((a,b)=>new Date(b.date)-new Date(a.date));
+ const shown=stockMovementExpanded||q?rows:rows.slice(0,5);
+ host.innerHTML=shown.map(m=>{
+  const related=m.ref?clients.map(c=>({c,p:(c.history||[]).find(p=>String(p.id)===String(m.ref))})).find(x=>x.p):null;
+  const saleLabel=related?` · Vente ${stockEsc(related.c.name)}${related.p.cancelled?' (annulée)':''}`:'';
+  const kind=m.type==='in'?'Entrée':m.type==='out'?'Sortie':'Correction';
+  return `<div class="stockMoveLine" style="display:flex;justify-content:space-between;gap:10px;align-items:flex-start;padding:10px 0;border-bottom:1px solid var(--line,#e5e0d2)"><div style="min-width:0;flex:1"><strong>${stockEsc(stockProduct(m.productId)?.name||'Produit inconnu')}</strong><div class="small muted">${new Date(m.date).toLocaleString('fr-FR')} · ${kind} · ${stockEsc(m.reason||'Mouvement')}${saleLabel}</div></div><strong style="white-space:nowrap;color:${m.type==='in'?'var(--green,#24523b)':'var(--text,#333)'}">${m.type==='in'?'+':'−'}${Number(m.qty)||0}</strong></div>`;
+ }).join('')||(q?'<p class="small muted">Aucun mouvement pour ce produit.</p>':'<p class="small muted">Aucun mouvement enregistré.</p>');
+ const b=document.getElementById('stockMovementToggle');if(b){b.hidden=!!q||rows.length<=5;b.textContent=stockMovementExpanded?'Afficher les 5 derniers':'Voir tout l’historique';}
+}
+function renderStock(){stockRefreshSelects();refreshSaleStockSelect();const el=document.getElementById('stockInventory');if(!el)return;const q=(document.getElementById('stockSearch')?.value||'').trim().toLocaleLowerCase('fr');const cats=['Toutes','E-liquides','Résistances','Cartouches','Clearomiseurs','Accessoires','Puffs','E-cigarettes','Boosters'];const nav=document.getElementById('stockCategoryNav');if(nav)nav.innerHTML=cats.map(c=>{const count=c==='Toutes'?stockData.products.length:stockData.products.filter(p=>p.category===c).length;const active=stockSelectedCategory===c;const emoji=c==='Toutes'?'📦':c==='E-liquides'?'💧':c==='Résistances'?'⚙️':c==='Cartouches'?'🧩':c==='Clearomiseurs'?'🔧':c==='Puffs'?'💨':c==='E-cigarettes'?'🔋':c==='Boosters'?'🧪':'🧰';return `<button type="button" class="${active?'primary':'secondary'}" style="text-align:left;min-height:48px" onclick="stockSelectCategory('${c}')">${emoji} ${stockEsc(c)}<br><small>${count} référence(s)</small></button>`}).join('');const products=stockData.products.filter(p=>(stockSelectedCategory==='Toutes'||p.category===stockSelectedCategory)&&(!stockLowOnly||p.qty<=p.threshold)&&(p.name+' '+p.category).toLocaleLowerCase('fr').includes(q));const visibleProducts=stockCatalogExpanded||q?products:products.slice(0,5);const lowProducts=stockData.products.filter(p=>Number(p.qty)<=Number(p.threshold));const lowBtn=document.getElementById('stockLowOnlyBtn');if(lowBtn){lowBtn.textContent=stockLowOnly?'✓ Affichage des stocks bas activé':'⚠️ Afficher uniquement les stocks bas';lowBtn.classList.toggle('primary',stockLowOnly)}const homeStockText=document.getElementById('homeStockSummaryText');if(homeStockText)homeStockText.textContent=stockData.products.length?`${lowProducts.length} référence(s) au seuil ou en dessous sur ${stockData.products.length}. Les quantités non saisies ne sont pas estimées.`:'Aucune référence enregistrée : ajoute uniquement le stock réellement compté.';const homeStockList=document.getElementById('homeStockAlertList');if(homeStockList)homeStockList.innerHTML=lowProducts.length?lowProducts.slice().sort((a,b)=>a.qty-b.qty).slice(0,3).map(p=>`<div style="padding:5px 0;border-top:1px solid var(--line,#e5e8df)">⚠️ <strong>${stockEsc(p.name)}</strong> — ${p.qty} restant(s) / seuil ${p.threshold}</div>`).join('')+(lowProducts.length>3?`<p class="small muted">Et ${lowProducts.length-3} autre(s) référence(s) à vérifier dans le stock.</p>`:''):'<p class="small muted">'+(stockData.products.length?'Aucune alerte selon les seuils configurés.':'Le tableau de bord s’actualisera quand tu auras saisi tes références.')+'</p>';document.getElementById('stockSkuCount').textContent=stockData.products.length;document.getElementById('stockUnits').textContent=stockData.products.reduce((n,p)=>n+(Number(p.qty)||0),0);document.getElementById('stockAlerts').textContent=lowProducts.length;document.getElementById('stockMoves').textContent=stockData.movements.length;const costValue=stockData.products.reduce((n,p)=>n+Number(p.qty||0)*Number(p.cost||0),0),retailValue=stockData.products.reduce((n,p)=>n+Number(p.qty||0)*Number(p.price||0),0);const cv=document.getElementById('stockCostValue'),rv=document.getElementById('stockRetailValue');if(cv)cv.textContent=fmt(costValue);if(rv)rv.textContent=fmt(retailValue);el.innerHTML=visibleProducts.length?visibleProducts.map(p=>`<div class="stockCatalogRow" style="display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px;align-items:center;padding:12px 0;border-bottom:1px solid var(--line,#e5e0d2)"><div style="min-width:0"><strong style="display:block;overflow-wrap:anywhere">${stockEsc(p.name)}</strong><small class="muted">${stockEsc(p.category)}</small><div class="small" style="margin-top:4px">Stock <strong>${Number(p.qty)||0}</strong> · Seuil ${Number(p.threshold)||0} · ${p.qty<=p.threshold?'⚠️ À réapprovisionner':'OK'}</div><div class="small muted">Achat ${fmt(Number(p.cost)||0)} HT · Vente ${fmt(Number(p.price)||0)} TTC · TVA ${Number.isFinite(Number(p.vatRate))?Number(p.vatRate):20}%</div><div class="small">Vente HT ${fmt((Number(p.price)||0)/(1+(Number.isFinite(Number(p.vatRate))?Number(p.vatRate):20)/100))} · Marge brute estimée ${fmt((Number(p.price)||0)/(1+(Number.isFinite(Number(p.vatRate))?Number(p.vatRate):20)/100)-(Number(p.cost)||0))}</div><div class="actions" style="display:flex;gap:5px;flex-wrap:wrap;margin-top:7px"><button type="button" class="secondary" onclick="stockEditProduct('${stockEsc(p.id)}')">Modifier</button><button type="button" class="secondary" onclick="stockDeleteProduct('${stockEsc(p.id)}')">Supprimer</button></div></div><button type="button" class="${stockData.orderBasket.some(x=>String(x.productId)===String(p.id))?'primary':'secondary'}" style="min-width:94px;max-width:110px" onclick="stockAddToOrderFromCatalog('${stockEsc(p.id)}')">${stockData.orderBasket.some(x=>String(x.productId)===String(p.id))?'✓ Au réappro':'+ Réappro'}</button></div>`).join(''):'<p class="small muted">Aucun produit correspondant. Ajoute les références réellement présentes en boutique.</p>';const catToggle=document.getElementById('stockCatalogToggle');if(catToggle){catToggle.hidden=!!q||products.length<=5;catToggle.textContent=stockCatalogExpanded?'Afficher les 5 premiers':'Voir tout le catalogue ('+products.length+')';}stockFilterSelectOptions('stockMoveSearch','stockMoveProduct');stockFilterSelectOptions('orderSearch','orderProduct');const basket=document.getElementById('stockOrderBasket');if(basket)basket.innerHTML=stockData.orderBasket.length?'<div class="small muted">Liste modifiable avant commande. Rien n’est ajouté au stock avant la réception réelle.</div>'+stockData.orderBasket.map(x=>{const p=stockProduct(x.productId);return `<div style="display:grid;grid-template-columns:minmax(0,1fr) 88px auto;gap:8px;align-items:center;padding:10px 0;border-bottom:1px solid var(--line,#e5e0d2)"><div><strong>${stockEsc(p?.name||'Produit supprimé')}</strong><div class="small muted">Réapprovisionnement</div></div><input aria-label="Quantité à commander pour ${stockEsc(p?.name||'produit')}" type="number" min="1" step="1" value="${Math.max(1,Number(x.qty)||1)}" onchange="stockUpdateOrderQty('${stockEsc(x.productId)}',this.value)" style="min-width:0;padding:8px"><button type="button" class="secondary" onclick="stockRemoveOrderItem('${stockEsc(x.productId)}')">Retirer</button></div>`}).join(''):'<p class="small muted">Panier vide. Appuie sur « + Réappro » dans une ligne du catalogue pour commencer.</p>';let copyBtn=document.getElementById('stockCopyOrderBtn');if(!copyBtn&&basket){copyBtn=document.createElement('button');copyBtn.id='stockCopyOrderBtn';copyBtn.type='button';copyBtn.className='secondary';copyBtn.textContent='Copier la liste fournisseur';copyBtn.onclick=stockCopyOrder;basket.insertAdjacentElement('afterend',copyBtn)}if(copyBtn)copyBtn.hidden=!stockData.orderBasket.length;const ordersHost=document.getElementById('stockOrdersHistory');if(ordersHost)ordersHost.innerHTML='<h4>Commandes fournisseurs</h4>'+(stockData.orders.slice(0,20).map(o=>{const total=(o.items||[]).reduce((n,x)=>n+(Number(x.qty)||0),0),received=(o.items||[]).reduce((n,x)=>n+(Number.isFinite(Number(x.receivedQty))?Number(x.receivedQty):(o.status==='Réceptionnée'?Number(x.qty)||0:0)),0),pending=Math.max(0,total-received);return `<div class="stockOrderHistoryRow"><p>${new Date(o.date).toLocaleDateString('fr-FR')} — <strong>${stockEsc(o.id)}</strong> — ${received}/${total} unité(s) reçue(s) · ${stockEsc(o.status||'En attente')}</p>${pending?`<button type="button" class="secondary" onclick="stockReceiveOrder('${stockEsc(o.id)}')">Réceptionner (${pending} restante(s))</button>`:''}</div>`}).join('')||'<p class="small muted">Aucune commande.</p>');renderStockMovementHistory();const counts={};stockData.products.forEach(p=>counts[p.category]=(counts[p.category]||0)+1);const stats=document.getElementById('stockStatistics');if(stats)stats.innerHTML='<p><strong>Valeur d’achat connue du stock :</strong> '+fmt(costValue)+'</p><p><strong>Valeur de vente potentielle :</strong> '+fmt(retailValue)+'</p><p><strong>Marge brute théorique potentielle :</strong> '+fmt(retailValue-costValue)+' <span class="small muted">(indicative, uniquement sur les références dont les prix sont renseignés ; hors charges, taxes et remises)</span></p>'+Object.keys(counts).map(c=>`<p>${stockEsc(c)} : ${counts[c]} référence(s)</p>`).join('')+'<h4>Alertes de réapprovisionnement</h4>'+(lowProducts.slice().sort((a,b)=>a.qty-b.qty).map(p=>`<p>⚠️ ${stockEsc(p.name)} — ${p.qty} restant(s), seuil ${p.threshold}</p>`).join('')||'<p class="small muted">Aucune alerte de stock.</p>');buildStockReorderPlan();}
 function stockRemoveOrderItem(id){stockData.orderBasket=stockData.orderBasket.filter(x=>x.productId!==id);if(stockSave()){showSuccessToast('Panier mis à jour','La référence a été retirée de la commande.');renderStock()}}
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',()=>{renderStock();refreshSaleStockSelect()});else{renderStock();refreshSaleStockSelect()}
 function addPurchase(){
@@ -2262,7 +2392,7 @@ function addPurchase(){
   const saleItems=saleProductBasket.map(x=>({productId:String(x.productId),qty:Number(x.qty)}));const linkedStockProducts=saleItems.map(x=>({...x,product:stockProduct(x.productId)}));
   if(linkedStockProducts.some(x=>!x.product||!Number.isInteger(x.qty)||x.qty<1||Number(x.product.qty)<x.qty)){msg.textContent='⚠️ Une référence de stock est invalide ou sa quantité disponible est insuffisante.';return}
   if(!name||!Number.isFinite(amount)||amount<=0){msg.textContent='⚠️ Indique un client et un montant valide.';return}
-  const c=clients.find(x=>x.name.toLowerCase()===name.toLowerCase());if(!c)return;
+  const c=clients.find(x=>x.name.toLowerCase()===name.toLowerCase());if(!c){msg.textContent='⚠️ Sélectionne un client déjà enregistré dans les suggestions.';return;}
   if(use&&availableReward(c)<5){msg.textContent='⚠️ Aucun bon de 5 € disponible.';return}
   if(exceptional>amount){msg.textContent='⚠️ La réduction exceptionnelle ne peut pas dépasser le montant de l’achat.';return}
   const categoryAmounts=readCategoryAmounts(),categoryTotal=categoryAmountTotal(categoryAmounts);
@@ -2270,7 +2400,7 @@ function addPurchase(){
   const previousClient=JSON.stringify(c);
   const rewardDiscount=use?5:0,discount=rewardDiscount+exceptional,paid=Math.max(0,Math.round((amount-discount)*100)/100);
   c.total=Math.round((c.total+paid)*100)/100;c.purchases++;if(use)c.usedRewards+=5;
-  const purchase={id:crypto.randomUUID?crypto.randomUUID():String(Date.now()),date:new Date().toISOString(),amount,discount,exceptionalDiscount:exceptional,rewardDiscount,paid,categoryAmounts:categoryTotal>0?categoryAmounts:null,...(saleItems.length?{productDetailItems:saleItems.map(item=>{const product=stockProduct(item.productId);return {productId:String(item.productId),productName:product?.name||'',qty:item.qty}})}:{})};
+  const purchase={id:crypto.randomUUID?crypto.randomUUID():String(Date.now()),date:new Date().toISOString(),amount,discount,exceptionalDiscount:exceptional,rewardDiscount,paid,categoryAmounts:categoryTotal>0?categoryAmounts:null,...(saleItems.length?{productDetailItems:saleItems.map(item=>{const product=stockProduct(item.productId);return {productId:String(item.productId),productName:product?.name||'',qty:item.qty,unitCost:Number(product?.cost)||0,unitPrice:Number(product?.price)||0,vatRate:Number.isFinite(Number(product?.vatRate))?Number(product.vatRate):20}})}:{})};
   if(linkedStockProducts.length){const originalStock=JSON.stringify(stockData);let stockOk=true;const savedMovements=[];for(const item of linkedStockProducts){if(!stockMove(item.product.id,'out',item.qty,'Vente liée à un achat client',String(purchase.id))){stockOk=false;break}const movement=stockData.movements.find(m=>m.ref===String(purchase.id)&&String(m.productId)===String(item.product.id)&&m.type==='out');if(movement)savedMovements.push({movementId:movement.id,productId:String(item.product.id),qty:item.qty})}if(!stockOk){stockData=JSON.parse(originalStock);stockSave();const restored=JSON.parse(previousClient);Object.keys(c).forEach(k=>delete c[k]);Object.assign(c,restored);updateAll();msg.textContent='⚠️ Vente non confirmée : tous les mouvements de stock ont été annulés.';return;}purchase.stockMovements=savedMovements;if(savedMovements.length===1){purchase.stockMovementId=savedMovements[0].movementId;purchase.stockProductId=savedMovements[0].productId;purchase.stockQty=savedMovements[0].qty;}}
   c.history.push(purchase);
   if(!save()){if(purchase.stockMovements?.length){purchase.stockMovementId=null;for(const sm of purchase.stockMovements){const m=stockData.movements.find(x=>x.id===sm.movementId);if(m){const prod=stockProduct(m.productId);if(prod)prod.qty+=m.qty;stockData.movements.unshift({id:'m'+Date.now()+Math.random().toString(36).slice(2,6),date:new Date().toISOString(),productId:prod?.id||sm.productId,type:'in',qty:sm.qty,reason:'Restauration après échec enregistrement vente',ref:String(purchase.id)})}}stockSave();}else if(purchase.stockMovementId)stockReverseSale(purchase);const restored=JSON.parse(previousClient);Object.keys(c).forEach(k=>delete c[k]);Object.assign(c,restored);updateAll();msg.textContent='⚠️ Vente non enregistrée : vérifie le stockage et réessaie. Le stock lié a été restauré si le navigateur l’a permis.';return;}
@@ -2310,6 +2440,13 @@ function clientSearchKeydown(e){
 }
 document.addEventListener('click',e=>{const wrap=document.querySelector('.clientSearchSuggestWrap');if(wrap&&!wrap.contains(e.target)){const panel=document.getElementById('clientSearchSuggestions');if(panel)panel.hidden=true;document.getElementById('search')?.setAttribute('aria-expanded','false')}});
 
+function handleClientUnifiedSelect(){
+  const value=document.getElementById('clientUnifiedSelect')?.value||'name';
+  const filter=document.getElementById('clientFilter'),sort=document.getElementById('clientSort');
+  if(value.startsWith('filter:')){if(filter)filter.value=value.slice(7);if(sort)sort.value='name';}
+  else{if(filter)filter.value='all';if(sort)sort.value=value;}
+  renderClients();
+}
 function renderClients(){
   renderClientSearchSuggestions();
   const q=(document.getElementById('search')?.value||'').trim().toLocaleLowerCase('fr'),list=document.getElementById('clientList');
@@ -2328,6 +2465,11 @@ function renderClients(){
   });
   arr.sort((a,b)=>{
     if(sort==='nameDesc') return b.name.localeCompare(a.name,'fr');
+    if(sort==='totalAsc') return a.total-b.total || a.name.localeCompare(b.name,'fr');
+    if(sort==='avgAsc') return (a.purchases?a.total/a.purchases:0)-(b.purchases?b.total/b.purchases:0) || a.name.localeCompare(b.name,'fr');
+    if(sort==='purchasesAsc') return a.purchases-b.purchases || a.name.localeCompare(b.name,'fr');
+    if(sort==='oldest') return lastPurchase(a)-lastPurchase(b) || a.name.localeCompare(b.name,'fr');
+    if(sort==='rewardsAsc') return availableReward(a)-availableReward(b) || a.name.localeCompare(b.name,'fr');
     if(sort==='totalDesc') return b.total-a.total || a.name.localeCompare(b.name,'fr');
     if(sort==='avgDesc') return (b.purchases?b.total/b.purchases:0)-(a.purchases?a.total/a.purchases:0) || a.name.localeCompare(b.name,'fr');
     if(sort==='purchasesDesc') return b.purchases-a.purchases || a.name.localeCompare(b.name,'fr');
@@ -2522,7 +2664,8 @@ function savePurchaseEdit(){
     const detailQty=Math.max(1,Math.floor(Number(row.querySelector('.editProductDetailQty')?.value)||1));
     if(!detailId)return;
     const detailProduct=stockProduct(detailId);if(!detailProduct){invalidProduct=true;return;}
-    detailItems.push({productId:String(detailId),productName:detailProduct.name,qty:detailQty});
+    const previousDetail=(Array.isArray(oldEntry.productDetailItems)?oldEntry.productDetailItems:[]).find(x=>String(x.productId||x.id||'')===String(detailId));
+    detailItems.push({productId:String(detailId),productName:detailProduct.name,qty:detailQty,unitCost:previousDetail?.unitCost!==undefined?Number(previousDetail.unitCost):Number(detailProduct.cost)||0,unitPrice:previousDetail?.unitPrice!==undefined?Number(previousDetail.unitPrice):Number(detailProduct.price)||0,vatRate:previousDetail?.vatRate!==undefined?Number(previousDetail.vatRate):Number.isFinite(Number(detailProduct.vatRate))?Number(detailProduct.vatRate):20});
   });
   if(invalidProduct){alert('Une référence produit sélectionnée n’existe plus. Vérifie les produits avant d’enregistrer.');Object.assign(p,oldEntry);c.total=oldTotal;return;}
   // Une vente liée au stock ne peut pas changer de références ou de quantités depuis cette fenêtre :
@@ -2573,25 +2716,51 @@ function deleteClient(name){
 }
 function selectClientForPurchase(name){document.getElementById('clientName').value=name;updatePurchaseBox();showPage('achat')}
 function profitDetailsForPurchase(p){
-  let items=[];
-  if(Array.isArray(p.productDetailItems)&&p.productDetailItems.length){items=p.productDetailItems.map(it=>({id:String(it.productId||it.id||''),qty:Math.max(1,Number(it.qty||it.quantity||1))}));}
-  else {const id=p.productDetailId||p.stockProductId||'';if(id)items=[{id:String(id),qty:Math.max(1,Number(p.productDetailQty||p.stockQty||1))}];}
-  const known=items.map(it=>{const pr=stockProduct(it.id);if(!pr)return null;const cost=Number(pr.cost),price=Number(pr.price),vat=Number.isFinite(Number(pr.vatRate))?Number(pr.vatRate):20;if(!Number.isFinite(cost)||cost<0||!Number.isFinite(price)||price<0)return null;const qty=it.qty;return {qty,costHT:cost*qty,retailTTC:price*qty,retailHT:price/(1+vat/100)*qty};}).filter(Boolean);
-  const retailTTC=known.reduce((a,x)=>a+x.retailTTC,0),retailHT=known.reduce((a,x)=>a+x.retailHT,0),costHT=known.reduce((a,x)=>a+x.costHT,0);
-  if(!known.length||retailTTC<=0)return {profit:0,known:false,items:0};
-  const paid=Math.max(0,Number(p.paid??p.amount)||0),factor=Math.min(1,paid/retailTTC);
-  return {profit:retailHT*factor-costHT,known:true,items:known.reduce((a,x)=>a+x.qty,0)};
+ let items=[];
+ if(Array.isArray(p.productDetailItems)&&p.productDetailItems.length){items=p.productDetailItems.map(it=>({id:String(it.productId||it.id||''),name:it.productName||'',qty:Math.max(1,Number(it.qty||it.quantity||1)),unitCost:it.unitCost,unitPrice:it.unitPrice,vatRate:it.vatRate}));}
+ else {const id=p.productDetailId||p.stockProductId||'';if(id)items=[{id:String(id),qty:Math.max(1,Number(p.productDetailQty||p.stockQty||1))}];}
+ const known=items.map(it=>{
+  const pr=stockProduct(it.id),costValue=it.unitCost!==undefined?Number(it.unitCost):Number(pr?.cost),priceValue=it.unitPrice!==undefined?Number(it.unitPrice):Number(pr?.price),vat=Number.isFinite(Number(it.vatRate))?Number(it.vatRate):Number.isFinite(Number(pr?.vatRate))?Number(pr.vatRate):20;
+  if(!Number.isFinite(costValue)||costValue<0||!Number.isFinite(priceValue)||priceValue<=0)return null;
+  const qty=it.qty;return {qty,costHT:costValue*qty,retailTTC:priceValue*qty,retailHT:priceValue/(1+vat/100)*qty};
+ }).filter(Boolean);
+ const retailTTC=known.reduce((a,x)=>a+x.retailTTC,0),retailHT=known.reduce((a,x)=>a+x.retailHT,0),costHT=known.reduce((a,x)=>a+x.costHT,0);
+ if(!known.length||retailTTC<=0)return {profit:0,known:false,items:0};
+ const paid=Math.max(0,Number(p.paid??p.amount)||0),factor=Math.min(1,paid/retailTTC);
+ return {profit:retailHT*factor-costHT,known:true,items:known.reduce((a,x)=>a+x.qty,0)};
 }
 function purchasesProfit(ps){let total=0,knownSales=0,knownItems=0;ps.forEach(p=>{const r=profitDetailsForPurchase(p);if(r.known){total+=r.profit;knownSales++;knownItems+=r.items;}});return {total,knownSales,knownItems,totalSales:ps.length};}
 function profitPeriodPurchases(kind){const now=new Date(),ps=allPurchases();const start=new Date(now);start.setHours(0,0,0,0);if(kind==='day')return ps.filter(p=>sameDay(dateOf(p),now));if(kind==='week'){start.setDate(start.getDate()-((start.getDay()+6)%7));return ps.filter(p=>dateOf(p)>=start&&dateOf(p)<=now);}if(kind==='month')return ps.filter(p=>monthKey(dateOf(p))===monthKey(now));if(kind==='prevMonth'){const d=new Date(now.getFullYear(),now.getMonth()-1,1),end=new Date(now.getFullYear(),now.getMonth(),1);return ps.filter(p=>dateOf(p)>=d&&dateOf(p)<end);}if(kind==='30'){start.setDate(start.getDate()-29);return ps.filter(p=>dateOf(p)>=start&&dateOf(p)<=now);}if(kind==='year')return ps.filter(p=>dateOf(p).getFullYear()===now.getFullYear());return ps;}
-function profitBreakdown(ps){const products=new Map(),categories=new Map();let missing=0;ps.forEach(p=>{let items=[];if(Array.isArray(p.productDetailItems)&&p.productDetailItems.length)items=p.productDetailItems.map(it=>({id:String(it.productId||it.id||''),qty:Math.max(1,Number(it.qty||it.quantity||1))}));else{const id=p.productDetailId||p.stockProductId||'';if(id)items=[{id:String(id),qty:Math.max(1,Number(p.productDetailQty||p.stockQty||1))}];}const rows=items.map(it=>{const pr=stockProduct(it.id);if(!pr)return null;const cost=Number(pr.cost),price=Number(pr.price),vat=Number.isFinite(Number(pr.vatRate))?Number(pr.vatRate):20;if(!Number.isFinite(cost)||cost<0||!Number.isFinite(price)||price<=0)return null;return {it,pr,cost:cost*it.qty,retail:price*it.qty,retailHT:price/(1+vat/100)*it.qty};}).filter(Boolean);if(!rows.length){if(items.length||Number(p.paid??p.amount)>0)missing++;return;}const retail=rows.reduce((a,x)=>a+x.retail,0),paid=Math.max(0,Number(p.paid??p.amount)||0),factor=Math.min(1,paid/retail);rows.forEach(x=>{const profit=x.retailHT*factor-x.cost;const key=String(x.pr.id);const cur=products.get(key)||{name:x.pr.name||'Produit',qty:0,profit:0,cost:0,revenue:0};cur.qty+=x.it.qty;cur.profit+=profit;cur.cost+=x.cost;cur.revenue+=x.retailHT*factor;products.set(key,cur);const cat=x.pr.category||'Non classé',cc=categories.get(cat)||{name:cat,qty:0,profit:0,cost:0,revenue:0};cc.qty+=x.it.qty;cc.profit+=profit;cc.cost+=x.cost;cc.revenue+=x.retailHT*factor;categories.set(cat,cc);});});return {products:[...products.values()].sort((a,b)=>b.profit-a.profit),categories:[...categories.values()].sort((a,b)=>b.profit-a.profit),missing};}
+function profitBreakdown(ps){
+ const products=new Map(),categories=new Map();let missing=0;
+ ps.forEach(p=>{
+  let items=[];
+  if(Array.isArray(p.productDetailItems)&&p.productDetailItems.length)items=p.productDetailItems.map(it=>({id:String(it.productId||it.id||''),name:it.productName||'',qty:Math.max(1,Number(it.qty||it.quantity||1)),unitCost:it.unitCost,unitPrice:it.unitPrice,vatRate:it.vatRate}));
+  else{const id=p.productDetailId||p.stockProductId||'';if(id)items=[{id:String(id),qty:Math.max(1,Number(p.productDetailQty||p.stockQty||1))}];}
+  const rows=items.map(it=>{
+   const pr=stockProduct(it.id),costValue=it.unitCost!==undefined?Number(it.unitCost):Number(pr?.cost),priceValue=it.unitPrice!==undefined?Number(it.unitPrice):Number(pr?.price),vat=Number.isFinite(Number(it.vatRate))?Number(it.vatRate):Number.isFinite(Number(pr?.vatRate))?Number(pr.vatRate):20;
+   if(!Number.isFinite(costValue)||costValue<0||!Number.isFinite(priceValue)||priceValue<=0)return null;
+   return {it,pr,cost:costValue*it.qty,retail:priceValue*it.qty,retailHT:priceValue/(1+vat/100)*it.qty,name:it.name||pr?.name||'Produit',category:pr?.category||'Non classé'};
+  }).filter(Boolean);
+  if(!rows.length){if(items.length||Number(p.paid??p.amount)>0)missing++;return;}
+  const retail=rows.reduce((a,x)=>a+x.retail,0),paid=Math.max(0,Number(p.paid??p.amount)||0),factor=Math.min(1,paid/retail);
+  rows.forEach(x=>{
+   const profit=x.retailHT*factor-x.cost,key=String(x.it.id||x.name),cur=products.get(key)||{name:x.name,qty:0,profit:0,cost:0,revenue:0};
+   cur.qty+=x.it.qty;cur.profit+=profit;cur.cost+=x.cost;cur.revenue+=x.retailHT*factor;products.set(key,cur);
+   const cat=x.category,cc=categories.get(cat)||{name:cat,qty:0,profit:0,cost:0,revenue:0};
+   cc.qty+=x.it.qty;cc.profit+=profit;cc.cost+=x.cost;cc.revenue+=x.retailHT*factor;categories.set(cat,cc);
+  });
+ });
+ return {products:[...products.values()].sort((a,b)=>b.profit-a.profit),categories:[...categories.values()].sort((a,b)=>b.profit-a.profit),missing};
+}
+
 function renderProfitStats(){const kind=document.getElementById('profitPeriod')?.value||'month',ps=profitPeriodPurchases(kind),r=purchasesProfit(ps),b=profitBreakdown(ps),host=document.getElementById('profitStats');if(!host)return;const row=x=>`<div style="display:flex;justify-content:space-between;gap:10px;padding:9px 0;border-bottom:1px solid var(--line,#e5e8df)"><span style="min-width:0">${stockEsc(x.name)} <small class="muted">· ${x.qty} unité(s)</small></span><strong style="white-space:nowrap">${fmt(x.profit)}</strong></div>`;host.innerHTML=`<div class="grid grid2" style="margin-top:12px"><div class="stat"><strong>${fmt(r.total)}</strong><span class="kpiTitle">Bénéfice brut estimé</span></div><div class="stat"><strong>${r.knownSales} / ${r.totalSales}</strong><span class="kpiTitle">Ventes chiffrables</span></div></div><p class="small muted">${r.knownItems} unité(s) détaillée(s) · ${b.missing} vente(s) non chiffrable(s) ou sans référence exploitable.</p><h4>🏆 Top 5 des produits par bénéfice</h4>${b.products.slice(0,5).map(row).join('')||'<p class="small muted">Pas encore assez de ventes détaillées.</p>'}<h4 style="margin-top:16px">Bénéfice par catégorie</h4>${b.categories.map(row).join('')||'<p class="small muted">Aucune donnée disponible.</p>'}<p class="small muted" style="margin-top:12px">Estimation brute, hors charges fixes, frais bancaires et fiscalité. Les coûts utilisés sont les prix d’achat actuellement enregistrés dans le stock : si un coût a changé depuis une ancienne vente, son bénéfice historique peut différer. Les remises sont réparties proportionnellement entre les produits identifiés.</p>`;}
 function setDashboard(){
   const now=new Date(),ps=allPurchases(),today=ps.filter(p=>sameDay(dateOf(p),now)),mk=monthKey(now),month=ps.filter(p=>monthKey(dateOf(p))===mk);
   const weekStart=new Date(now);weekStart.setHours(0,0,0,0);weekStart.setDate(weekStart.getDate()-((weekStart.getDay()+6)%7));
   const week=ps.filter(p=>dateOf(p)>=weekStart&&dateOf(p)<=now);
   const todayCA=today.reduce((s,p)=>s+safelyPaid(p),0),weekCA=week.reduce((s,p)=>s+safelyPaid(p),0),monthCA=month.reduce((s,p)=>s+safelyPaid(p),0),allCA=ps.reduce((s,p)=>s+safelyPaid(p),0);
-  document.getElementById('dToday').textContent=fmt(todayCA);document.getElementById('dWeek').textContent=fmt(weekCA);document.getElementById('dMonth').textContent=fmt(monthCA);document.getElementById('dBasket').textContent=fmt(ps.length?allCA/ps.length:0);document.getElementById('dClients').textContent=clients.length;const profitToday=purchasesProfit(today);const profitEl=document.getElementById('dTodayProfit');if(profitEl)profitEl.textContent=profitToday.knownSales?fmt(profitToday.total):'—';const profitNote=document.getElementById('dTodayProfitNote');if(profitNote)profitNote.textContent=profitToday.knownSales?`${profitToday.knownSales}/${today.length} vente(s) détaillée(s)`:'Aucune vente détaillée aujourd’hui';
+  document.getElementById('dToday').textContent=fmt(todayCA);document.getElementById('dWeek').textContent=fmt(weekCA);document.getElementById('dMonth').textContent=fmt(monthCA);document.getElementById('dBasket').textContent=fmt(ps.length?allCA/ps.length:0);document.getElementById('dClients').textContent=clients.length;const clientsMonthEl=document.getElementById('dClientsMonth');if(clientsMonthEl)clientsMonthEl.textContent=clients.filter(c=>c.createdAt&&monthKey(new Date(c.createdAt))===mk).length;const profitToday=purchasesProfit(today);const profitEl=document.getElementById('dTodayProfit');if(profitEl)profitEl.textContent=profitToday.knownSales?fmt(profitToday.total):'—';const profitNote=document.getElementById('dTodayProfitNote');if(profitNote)profitNote.textContent=profitToday.knownSales?`${profitToday.knownSales}/${today.length} vente(s) détaillée(s)`:'Aucune vente détaillée aujourd’hui';
   const elapsedOpenDays=Math.max(1,Math.min(6,((now.getDay()+6)%7)+1));const hp=document.getElementById('homeWeekPurchases');if(hp)hp.textContent=String(week.length);const ha=document.getElementById('homeAvgPurchases');if(ha)ha.textContent=(week.length/elapsedOpenDays).toLocaleString('fr-FR',{maximumFractionDigits:1});
   const goal=Number(settings.goal??4000);document.getElementById('monthlyGoal').value=goal;document.getElementById('goalText').textContent=fmt(goal);
   const pct=goal?Math.min(100,monthCA/goal*100):0;document.getElementById('goalBar').style.width=pct+'%';document.getElementById('goalMessage').textContent=`${pct.toFixed(0)} % atteint · ${fmt(Math.max(0,goal-monthCA))} restant pour l'objectif mensuel.`;
@@ -2895,12 +3064,9 @@ function renderV15Insights(ps, now){
   const box=document.getElementById('discountStats');
   if(box) box.innerHTML=`<div class="periodMetric"><span>CA avant réductions (achats enregistrés)</span><strong>${money(gross)}</strong></div><div class="periodMetric"><span>Réductions fidélité identifiées</span><strong>${money(loyalty)}</strong></div><div class="periodMetric"><span>Réductions exceptionnelles identifiées</span><strong>${money(exceptional)}</strong></div><div class="periodMetric"><span>Anciennes réductions non détaillées</span><strong>${money(legacyUnclassified)}</strong></div><div class="periodMetric"><span>Total des réductions constatées</span><strong>${money(recordedDiscounts)}</strong></div><div class="periodMetric"><span>CA encaissé après réductions</span><strong>${money(paid)}</strong></div><p class="statNote">Les anciens achats peuvent ne pas préciser si une remise était un bon de fidélité ou une réduction exceptionnelle. Ces remises sont affichées séparément comme « non détaillées » et ne sont pas attribuées arbitrairement à la fidélité. Les données historiques saisies manuellement restent séparées.</p>`;
   const netDiscounts=recordedDiscounts;
-  const todayPurchases=ps.filter(p=>sameDay(new Date(p.date),now));
-  const monthPurchases=ps.filter(p=>monthKey(new Date(p.date))===monthKey(now));
-  const sumField=(arr,key)=>arr.reduce((sum,p)=>sum+Number(p[key]||0),0);
-  const todayPaid=sumField(todayPurchases,'paid'), monthPaid=sumField(monthPurchases,'paid');
   const profit=document.getElementById('profitabilityStats');
-  if(profit) profit.innerHTML=`<div class="stat"><strong>${money(gross)}</strong><span class="kpiTitle">Total avant réductions</span></div><div class="stat"><strong>${money(netDiscounts)}</strong><span class="kpiTitle">Total des réductions</span></div><div class="stat"><strong>${money(paid)}</strong><span class="kpiTitle">Total encaissé</span></div><div class="stat"><strong>${money(todayPaid)}</strong><span class="kpiTitle">Encaissé aujourd’hui</span></div><div class="stat"><strong>${money(monthPaid)}</strong><span class="kpiTitle">Encaissé ce mois</span></div><div class="stat"><strong>${ps.length?money(paid/ps.length):money(0)}</strong><span class="kpiTitle">Panier moyen encaissé</span></div><p class="statNote">Les montants sont calculés à partir des achats enregistrés. Les achats annulés et supprimés ne sont plus comptabilisés. La marge réelle nécessite aussi les coûts d’achat des produits.</p>`;
+  const periodLabel=({today:'aujourd’hui',week:'cette semaine',month:'ce mois','30':'sur les 30 derniers jours',prevMonth:'le mois précédent',year:'cette année',all:'sur tout l’historique'})[currentStatsPeriod()]||'sur la période sélectionnée';
+  if(profit) profit.innerHTML=`<div class="stat"><strong>${money(gross)}</strong><span class="kpiTitle">Total avant réductions</span></div><div class="stat"><strong>${money(loyalty)}</strong><span class="kpiTitle">Bons fidélité utilisés</span></div><div class="stat"><strong>${money(exceptional)}</strong><span class="kpiTitle">Réductions exceptionnelles</span></div><div class="stat"><strong>${money(netDiscounts)}</strong><span class="kpiTitle">Total des réductions</span></div><div class="stat"><strong>${money(paid)}</strong><span class="kpiTitle">Total encaissé</span></div><div class="stat"><strong>${ps.length?money(paid/ps.length):'—'}</strong><span class="kpiTitle">Panier moyen encaissé</span></div><p class="statNote">Montants ${periodLabel}, calculés à partir des achats enregistrés. Les anciennes remises non détaillées ne sont pas attribuées arbitrairement à la fidélité. Les achats annulés et supprimés ne sont pas comptabilisés.</p>`;
   const cutoff=new Date(now);cutoff.setHours(0,0,0,0);cutoff.setDate(cutoff.getDate()-30);
   const stale=clients.map(c=>{const dates=(c.history||[]).filter(isActivePurchase).map(p=>new Date(p.date)).filter(d=>Number.isFinite(d.getTime()));const last=dates.length?new Date(Math.max(...dates.map(d=>d.getTime()))):null;return {c,last};}).filter(x=>x.last&&x.last<cutoff).sort((a,b)=>a.last-b.last);
   const list=document.getElementById('relanceList');
@@ -2912,7 +3078,10 @@ function renderWeekdayStats(){
   const kind=document.getElementById('weekdayPeriod')?.value||'all';
   const now=new Date();now.setHours(23,59,59,999);
   let start=null;
-  if(kind==='30'){start=new Date(now);start.setHours(0,0,0,0);start.setDate(start.getDate()-29);}
+  if(kind==='today'){start=new Date(now);start.setHours(0,0,0,0);}
+  else if(kind==='week'){start=new Date(now);start.setHours(0,0,0,0);start.setDate(start.getDate()-((start.getDay()+6)%7));}
+  else if(kind==='year'){start=new Date(now.getFullYear(),0,1);}
+  else if(kind==='30'){start=new Date(now);start.setHours(0,0,0,0);start.setDate(start.getDate()-29);}
   else if(kind==='currentMonth')start=new Date(now.getFullYear(),now.getMonth(),1);
   else if(kind==='previousMonth')start=new Date(now.getFullYear(),now.getMonth()-1,1);
   else if(kind==='3months')start=new Date(now.getFullYear(),now.getMonth()-2,1);
@@ -2931,30 +3100,42 @@ function renderWeekdayStats(){
 }
 
 function renderPurchaseCountCharts(ps,now){
-  const money= n=>fmt(n);
-  const stats=entries=>({count:entries.length,ca:entries.reduce((sum,p)=>sum+safelyPaid(p),0),basket:entries.length?entries.reduce((sum,p)=>sum+safelyPaid(p),0)/entries.length:0});
-  const draw=(id,title,items,periodType)=>{
-    const el=document.getElementById(id);if(!el)return;
-    if(!items.length){el.innerHTML='<p class="muted">Pas encore assez de ventes datées pour afficher cette période.</p>';return;}
-    const max=Math.max(1,...items.map(x=>x.value));
-    const rows=items.map(x=>{
-      const pct=Math.max(0,Math.min(100,x.value/max*100));
-      const sub=`${money(x.ca)} de CA${x.value?` · panier moyen ${money(x.basket)}`:''}`;
-      const zero=x.closed?'purchaseCountClosed':(x.value===0?'purchaseCountZero':'');
-      return `<div class="purchaseCountRow ${zero}"><div class="purchaseCountRowHead"><span>${esc(x.label)}${x.note?` <em class="purchaseCountNote">${esc(x.note)}</em>`:''}</span><strong>${x.closed?'Fermé':`${x.value} ${x.value===1?'achat':'achats'}`}</strong></div><div class="purchaseCountTrack" role="img" aria-label="${x.value} achats sur un maximum de ${max}"><span style="width:${pct}%"></span></div><div class="purchaseCountSub">${sub}</div></div>`;
-    }).join('');
-    const total=items.reduce((a,x)=>a+x.value,0),ca=items.reduce((a,x)=>a+x.ca,0);
-    const avg=total?ca/total:0;
-    const peak=items.filter(x=>!x.closed).reduce((best,x)=>!best||x.value>best.value?x:best,null);
-    el.innerHTML=`<section class="purchaseCountGroup"><h4>${title}</h4><div class="purchaseCountKpis"><div><span>Total achats</span><strong>${total}</strong></div><div><span>Chiffre d’affaires</span><strong>${money(ca)}</strong></div><div><span>Panier moyen</span><strong>${money(avg)}</strong></div></div><div class="purchaseCountRows">${rows}</div>${peak&&total?`<p class="purchaseCountInsight">📈 Période la plus active : <strong>${esc(peak.label)}</strong> avec ${peak.value} achat(s).</p>`:''}</section>`;
-  };
-  const dayItems=[];
-  for(let i=6;i>=0;i--){const d=new Date(now);d.setHours(0,0,0,0);d.setDate(d.getDate()-i);const entries=d.getDay()===0?[]:ps.filter(p=>dateOf(p).toDateString()===d.toDateString());const st=stats(entries);dayItems.push({label:d.toLocaleDateString('fr-FR',{weekday:'long',day:'numeric',month:'short'}),value:st.count,ca:st.ca,basket:st.basket,closed:d.getDay()===0,note:d.toDateString()===new Date(now).toDateString()?'aujourd’hui':''});}
-  const weekItems=[];
-  for(let i=7;i>=0;i--){const start=new Date(now);start.setHours(0,0,0,0);start.setDate(start.getDate()-((start.getDay()+6)%7)-i*7);const end=new Date(start);end.setDate(end.getDate()+7);const entries=ps.filter(p=>dateOf(p)>=start&&dateOf(p)<end);const st=stats(entries);const incomplete=end>new Date(now.getFullYear(),now.getMonth(),now.getDate()+1);weekItems.push({label:`Sem. du ${start.toLocaleDateString('fr-FR',{day:'2-digit',month:'2-digit'})}`,value:st.count,ca:st.ca,basket:st.basket,note:incomplete?'en cours':''});}
-  const monthItems=[];
-  for(let i=5;i>=0;i--){const d=new Date(now.getFullYear(),now.getMonth()-i,1),end=new Date(d.getFullYear(),d.getMonth()+1,1);const entries=ps.filter(p=>dateOf(p)>=d&&dateOf(p)<end);const st=stats(entries);monthItems.push({label:d.toLocaleDateString('fr-FR',{month:'long',year:'numeric'}),value:st.count,ca:st.ca,basket:st.basket,note:d.getFullYear()===now.getFullYear()&&d.getMonth()===now.getMonth()?'en cours':''});}
-  draw('purchaseDailyChart','📅 Achats par jour — 7 derniers jours',dayItems,'day');draw('purchaseWeeklyChart','📆 Achats par semaine — 8 dernières semaines',weekItems,'week');draw('purchaseMonthlyChart','🗓️ Achats par mois — 6 derniers mois',monthItems,'month');
+ const kind=currentStatsPeriod(),money=n=>fmt(n);
+ const stats=entries=>({count:entries.length,ca:entries.reduce((s,p)=>s+safelyPaid(p),0),basket:entries.length?entries.reduce((s,p)=>s+safelyPaid(p),0)/entries.length:0});
+ const buckets=[];
+ const addBucket=(label,from,to,note='')=>{
+   const entries=ps.filter(p=>dateOf(p)>=from&&dateOf(p)<to),s=stats(entries);
+   buckets.push({label,value:s.count,ca:s.ca,basket:s.basket,note});
+ };
+ const dayStart=d=>{const x=new Date(d);x.setHours(0,0,0,0);return x;};
+ const today=dayStart(now);
+ if(kind==='today'){
+   const end=new Date(today);end.setDate(end.getDate()+1);addBucket('Aujourd’hui',today,end);
+ }else if(kind==='week'){
+   const monday=dayStart(now);monday.setDate(monday.getDate()-((monday.getDay()+6)%7));
+   for(let i=0;i<7;i++){const a=new Date(monday);a.setDate(a.getDate()+i);const b=new Date(a);b.setDate(b.getDate()+1);addBucket(a.toLocaleDateString('fr-FR',{weekday:'short',day:'numeric'}),a,b,a.getDay()===0?'Fermé':'');}
+ }else if(kind==='month'||kind==='30'||kind==='prevMonth'){
+   let first,last;
+   if(kind==='prevMonth'){first=new Date(now.getFullYear(),now.getMonth()-1,1);last=new Date(now.getFullYear(),now.getMonth(),1);}
+   else if(kind==='month'){first=new Date(now.getFullYear(),now.getMonth(),1);last=new Date(now.getFullYear(),now.getMonth()+1,1);}
+   else {first=new Date(today);first.setDate(first.getDate()-29);last=new Date(today);last.setDate(last.getDate()+1);}
+   for(let d=new Date(first);d<last;d.setDate(d.getDate()+1)){const a=new Date(d),b=new Date(d);b.setDate(b.getDate()+1);addBucket(a.toLocaleDateString('fr-FR',{weekday:'short',day:'numeric'}),a,b,a.getDay()===0?'Fermé':'');}
+ }else{
+   let firstMonth=kind==='year'?new Date(now.getFullYear(),0,1):null;
+   if(!firstMonth){const dates=ps.map(p=>dateOf(p)).filter(d=>Number.isFinite(d.getTime()));firstMonth=dates.length?new Date(Math.min(...dates.map(d=>d.getTime()))):new Date(now.getFullYear(),now.getMonth(),1);firstMonth=new Date(firstMonth.getFullYear(),firstMonth.getMonth(),1);}
+   const lastMonth=new Date(now.getFullYear(),now.getMonth()+1,1);
+   for(let d=new Date(firstMonth);d<lastMonth;d.setMonth(d.getMonth()+1)){const a=new Date(d),b=new Date(d.getFullYear(),d.getMonth()+1,1);addBucket(a.toLocaleDateString('fr-FR',{month:'short',year:'2-digit'}),a,b);}
+ }
+ const chartIds=['purchaseDailyChart','purchaseWeeklyChart','purchaseMonthlyChart'];
+ chartIds.forEach(id=>{const el=document.getElementById(id);if(el)el.innerHTML='';});
+ const targetId=(kind==='year'||kind==='all')?'purchaseMonthlyChart':'purchaseDailyChart';
+ const target=document.getElementById(targetId);if(!target)return;
+ if(!buckets.length||!ps.length){target.innerHTML='<p class="muted">Aucune vente active sur cette période.</p>';return;}
+ const max=Math.max(1,...buckets.map(x=>x.value));
+ const rows=buckets.map(x=>{const pct=Math.max(0,Math.min(100,x.value/max*100));return `<div class="purchaseCountRow ${x.note==='Fermé'?'purchaseCountClosed':''}"><div class="purchaseCountRowHead"><span>${esc(x.label)}${x.note?` <em class="purchaseCountNote">${esc(x.note)}</em>`:''}</span><strong>${x.value} achat(s)</strong></div><div class="purchaseCountTrack"><span style="width:${pct}%"></span></div><div class="purchaseCountSub">${money(x.ca)} de CA · panier moyen ${money(x.basket)}</div></div>`;}).join('');
+ const total=buckets.reduce((s,x)=>s+x.value,0),ca=buckets.reduce((s,x)=>s+x.ca,0),avg=total?ca/total:0;
+ const label=kind==='today'?'Aujourd’hui':kind==='week'?'Cette semaine':kind==='month'?'Ce mois':kind==='30'?'30 derniers jours':kind==='prevMonth'?'Mois précédent':kind==='year'?'Cette année':'Tout l’historique';
+ target.innerHTML=`<section class="purchaseCountGroup"><h4>Évolution des ventes — ${label}</h4><div class="purchaseCountKpis"><div><span>Total achats</span><strong>${total}</strong></div><div><span>Chiffre d’affaires</span><strong>${money(ca)}</strong></div><div><span>Panier moyen</span><strong>${money(avg)}</strong></div></div><div class="purchaseCountRows">${rows}</div></section>`;
 }
 function renderPurchaseStats(ps,now){
   renderPurchaseCountCharts(ps,now);
@@ -2963,46 +3144,48 @@ function renderPurchaseStats(ps,now){
   const nextMonday=new Date(monday);nextMonday.setDate(nextMonday.getDate()+7);
   const week=ps.filter(p=>{const d=dateOf(p);return d>=monday&&d<nextMonday;});
   const today=ps.filter(p=>sameDay(dateOf(p),now));
+  const selected=currentStatsPeriod(),periodLabel=({today:'Aujourd’hui',week:'Cette semaine',month:'Ce mois','30':'30 derniers jours',prevMonth:'Mois précédent',year:'Cette année',all:'Tout l’historique'})[selected]||'Période sélectionnée';
+  const periodCA=ca(ps),periodBasket=ps.length?periodCA/ps.length:0;
   document.getElementById('purchasePeriodStats').innerHTML=
-    `<div class="periodMetric"><span>Aujourd’hui</span><strong>${today.length} achat(s) · ${fmt(ca(today))}</strong></div>`+
-    `<div class="periodMetric"><span>Cette semaine (lundi à aujourd’hui)</span><strong>${ps.filter(p=>dateOf(p)>=monday&&dateOf(p)<=now).length} achat(s) · ${fmt(ca(ps.filter(p=>dateOf(p)>=monday&&dateOf(p)<=now)))}</strong></div>`+
-    `<div class="periodMetric"><span>Semaine complète (lundi à dimanche)</span><strong>${week.length} achat(s) · ${fmt(ca(week))}</strong></div>`;
-  const daily=[];
-  for(let i=6;i>=0;i--){
-    const d=new Date(now);d.setHours(0,0,0,0);d.setDate(d.getDate()-i);
-    const end=new Date(d);end.setDate(end.getDate()+1);
-    const entries=ps.filter(p=>dateOf(p)>=d&&dateOf(p)<end);
-    daily.push({d,entries});
-  }
-  document.getElementById('dailyPurchaseStats').innerHTML=
-    `<h4>Les 7 derniers jours</h4><div class="tableWrap"><table><thead><tr><th>Jour</th><th>Nombre d’achats</th><th>CA enregistré</th></tr></thead><tbody>`+
-    daily.map(x=>`<tr><td>${dateFmt(x.d)}</td><td>${x.entries.length}</td><td>${fmt(ca(x.entries))}</td></tr>`).join('')+
-    `</tbody></table></div>`;
-  const ranked=[...clients].sort((a,b)=>b.purchases-a.purchases||(b.purchases?b.total/b.purchases:0)-(a.purchases?a.total/a.purchases:0)||a.name.localeCompare(b.name,'fr'));
+    `<div class="periodMetric"><span>${periodLabel}</span><strong>${ps.length} achat(s) · ${fmt(periodCA)}</strong></div>`+
+    `<div class="periodMetric"><span>Panier moyen sur la période</span><strong>${ps.length?fmt(periodBasket):'—'}</strong></div>`;
+  const weekly=new Map();
+  ps.forEach(p=>{const d=dateOf(p);if(!Number.isFinite(d.getTime()))return;const monday=new Date(d);monday.setHours(0,0,0,0);monday.setDate(monday.getDate()-((monday.getDay()+6)%7));const key=monday.toISOString().slice(0,10);const row=weekly.get(key)||{start:monday,count:0,ca:0};row.count++;row.ca+=safelyPaid(p);weekly.set(key,row);});
+  let weeklyRows=[...weekly.values()].sort((a,b)=>a.start-b.start);
+  if(selected==='all'&&weeklyRows.length>16)weeklyRows=weeklyRows.slice(-16);
+  document.getElementById('dailyPurchaseStats').innerHTML=weeklyRows.length?
+    `<h4>Ventes par semaine sur la période</h4><div class="tableWrap"><table><thead><tr><th>Semaine du</th><th>Nombre de ventes</th><th>CA encaissé</th><th>Panier moyen</th></tr></thead><tbody>`+
+    weeklyRows.map(x=>`<tr><td>${dateFmt(x.start)}</td><td>${x.count}</td><td>${fmt(x.ca)}</td><td>${fmt(x.count?x.ca/x.count:0)}</td></tr>`).join('')+
+    `</tbody></table></div>`:'<p class="muted small">Aucune vente sur cette période.</p>';
+  const byClient=new Map();
+  ps.forEach(p=>{const name=String(p.client||'').trim();if(!name)return;const row=byClient.get(name)||{name,ca:0,count:0};row.ca+=safelyPaid(p);row.count++;byClient.set(name,row);});
+  const ranked=[...byClient.values()].sort((a,b)=>b.ca-a.ca||b.count-a.count||a.name.localeCompare(b.name,'fr'));
   const visible=showAllPurchaseStats?ranked:ranked.slice(0,5);
   document.getElementById('purchaseClientStats').innerHTML=visible.length?
-    visible.map((c,i)=>`<div class="purchaseRank"><span class="rankNum">${i+1}</span><div class="rankInfo"><strong>${esc(c.name)}</strong><small>${fmt(c.total)} cumulés</small></div><div class="rankValues"><strong>${c.purchases} achat${c.purchases>1?'s':''}</strong><small>Moy. ${fmt(c.purchases?c.total/c.purchases:0)}</small></div></div>`).join(''):
-    '<p class="muted">Aucun client enregistré.</p>';
+    visible.map((c,i)=>`<div class="purchaseRank"><span class="rankNum">${i+1}</span><div class="rankInfo"><strong>${esc(c.name)}</strong><small>${c.count} achat${c.count>1?'s':''} sur la période</small></div><div class="rankValues"><strong>${fmt(c.ca)}</strong><small>CA encaissé</small></div></div>`).join(''):
+    '<p class="muted">Aucune vente client sur cette période.</p>';
   const toggle=document.getElementById('purchaseStatsToggle');
   toggle.style.display=ranked.length>5?'block':'none';
   toggle.textContent=showAllPurchaseStats?'Réduire la liste':'Afficher les '+ranked.length+' clients';
 }
 
-function togglePurchaseStats(){showAllPurchaseStats=!showAllPurchaseStats;renderPurchaseStats(allPurchases(),new Date())}
+function togglePurchaseStats(){showAllPurchaseStats=!showAllPurchaseStats;renderPurchaseStats(statsPeriodPurchases(currentStatsPeriod()),new Date())}
 function toggleVisitFrequencyStats(){showAllVisitFrequencyStats=!showAllVisitFrequencyStats;renderPurchaseStats(allPurchases(),new Date())}
 
 function exportData(){
   if(storageReadIssues.length){alert('Export bloqué : une ou plusieurs données locales sont illisibles ('+storageReadIssues.join(', ')+'). Restaure une sauvegarde valide avant de créer un nouvel export incomplet.');return;}
   const exportedAt=new Date().toISOString();
-  const payload={version:'Vap’ & Moi Pro V81 — Protection des données',schemaVersion:1,exportedAt,storageKey:KEY,settings,clients,historicalCA,activityLog,stockData};
+  const payload={version:'Vap’ & Moi Pro V82 — Organisation et ergonomie',schemaVersion:1,exportedAt,storageKey:KEY,settings,clients,historicalCA,activityLog,stockData};
   let serialized;try{serialized=JSON.stringify(payload);const check=JSON.parse(serialized);validateBackupPayload(check);if(!Array.isArray(check.stockData?.products)||!Array.isArray(check.stockData?.movements)||!Array.isArray(check.stockData?.orders))throw new Error('Structure du stock incomplète');}catch(err){alert('Sauvegarde interrompue : les données ne passent pas le contrôle de cohérence ('+(err.message||'erreur')+'). Aucun fichier incomplet n’a été exporté.');return;}
-  const blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='Vap_et_Moi_sauvegarde_V81.json';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);
+  const blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='Vap_et_Moi_sauvegarde_V82.json';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);
   localStorage.setItem(KEY+'_last_backup',exportedAt);renderBackupStatus();
 }
 function csvCell(value){const s=String(value??'');return '"'+s.replace(/"/g,'""')+'"';}
 function exportSalesCSV(){
   const rows=[['Date','Client','Montant avant remise (€)','Remise totale (€)','Bon fidélité (€)','Remise exceptionnelle (€)','Montant payé (€)','E-liquides (€)','Résistances (€)','Cartouches (€)','Clearomiseurs (€)','Accessoires (€)']];
-  allPurchases().sort((a,b)=>new Date(a.date)-new Date(b.date)).forEach(p=>{const a=p.categoryAmounts||{};rows.push([p.date||'',p.client||'',Number(p.amount??p.paid??0).toFixed(2),Number(p.discount||0).toFixed(2),Number(p.rewardDiscount||0).toFixed(2),Number(p.exceptionalDiscount||0).toFixed(2),Number(p.paid??p.amount??0).toFixed(2),...SALE_CATEGORIES.map(([key])=>Number(a[key]||0).toFixed(2))])});
+  const ownerByPurchaseId=new Map();
+  clients.forEach(c=>(c.history||[]).forEach(p=>ownerByPurchaseId.set(String(p.id),c.name)));
+  allPurchases().slice().sort((a,b)=>new Date(a.date)-new Date(b.date)).forEach(p=>{const a=p.categoryAmounts||{};rows.push([p.date||'',ownerByPurchaseId.get(String(p.id))||p.client||'',Number(p.amount??p.paid??0).toFixed(2),Number(p.discount||0).toFixed(2),Number(p.rewardDiscount||0).toFixed(2),Number(p.exceptionalDiscount||0).toFixed(2),Number(p.paid??p.amount??0).toFixed(2),...SALE_CATEGORIES.map(([key])=>Number(a[key]||0).toFixed(2))])});
   const csv='\ufeff'+rows.map(r=>r.map(csvCell).join(';')).join('\r\n');const blob=new Blob([csv],{type:'text/csv;charset=utf-8;'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='Vap_et_Moi_ventes.csv';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);
 }
 function validateBackupPayload(data){
@@ -3122,11 +3305,13 @@ function renderAnalysis(){
  const todaySales=purchases.filter(p=>sameDay(p._date,now));const todayCA=todaySales.reduce((s,p)=>s+safelyPaid(p),0);
  const weekSales=purchases.filter(p=>p._date>=startOfWeek&&p._date<=now);const weekCA=weekSales.reduce((s,p)=>s+safelyPaid(p),0);
  const monthSales=purchases.filter(p=>p._date.getFullYear()===now.getFullYear()&&p._date.getMonth()===now.getMonth());const monthCA=monthSales.reduce((s,p)=>s+safelyPaid(p),0);
+ const yearSales=purchases.filter(p=>p._date.getFullYear()===now.getFullYear()),yearCA=yearSales.reduce((s,p)=>s+safelyPaid(p),0);
  const elapsedWeek=Math.max(1,openDaysBetween(startOfWeek,now));const totalWeek=Math.max(1,openDaysBetween(startOfWeek,endOfWeek));const weekLeft=Math.max(0,totalWeek-openDaysBetween(startOfWeek,now));
  const elapsedMonth=Math.max(1,openDaysBetween(monthStart,now));const totalMonth=Math.max(1,openDaysBetween(monthStart,monthEnd));const monthLeft=Math.max(0,totalMonth-openDaysBetween(monthStart,now));
  const dailyGoal=Math.max(0,Number(settings.dailyGoal??Math.round(Number(settings.weeklyGoal??1000)/6)));const weeklyGoal=Math.max(0,Number(settings.weeklyGoal??1000));const goal=Math.max(0,Number(settings.goal??4000));
  const dayPct=dailyGoal?Math.min(100,todayCA/dailyGoal*100):0,weekPct=weeklyGoal?Math.min(100,weekCA/weeklyGoal*100):0,monthPct=goal?Math.min(100,monthCA/goal*100):0;
  const weekForecast=weekCA/elapsedWeek*totalWeek,monthForecast=monthCA/elapsedMonth*totalMonth;
+ const yearStart=new Date(now.getFullYear(),0,1),yearEnd=new Date(now.getFullYear(),11,31);const elapsedYear=Math.max(1,openDaysBetween(yearStart,now)),totalYear=Math.max(1,openDaysBetween(yearStart,yearEnd));const yearForecast=yearCA/elapsedYear*totalYear,yearRemaining=Math.max(0,yearEnd-now);
  const openNow=now.getDay()>=1&&now.getDay()<=6&&now.getHours()*60+now.getMinutes()>=SHOP_OPEN_MINUTES&&now.getHours()*60+now.getMinutes()<SHOP_CLOSE_MINUTES;
  const elapsedMinutes=Math.max(0,Math.min(SHOP_CLOSE_MINUTES-SHOP_OPEN_MINUTES,now.getHours()*60+now.getMinutes()-SHOP_OPEN_MINUTES));
  const dayFraction=Math.max(0.08,elapsedMinutes/Math.max(1,SHOP_CLOSE_MINUTES-SHOP_OPEN_MINUTES));
@@ -3140,8 +3325,9 @@ function renderAnalysis(){
  const dailyInput=`<div class="metricCard"><label for="dailyGoal">Objectif quotidien (€)</label><input id="dailyGoal" type="number" min="0" step="10" value="${dailyGoal}" onchange="setDailyGoal()" aria-label="Objectif quotidien en euros"><span>CA du jour : <strong>${fmt(todayCA)}</strong> · ${dayPct.toFixed(0)} % atteint</span><div class="progress"><div style="width:${dayPct}%"></div></div><small>${fmt(Math.max(0,dailyGoal-todayCA))} restant aujourd’hui</small></div>`;
  const weekCard=`<div class="metricCard"><span>Objectif hebdomadaire (€)</span><strong>${fmt(weeklyGoal)}</strong><span>Réalisé : ${fmt(weekCA)} · ${weekPct.toFixed(0)} %</span><div class="progress"><div style="width:${weekPct}%"></div></div><small>${fmt(Math.max(0,weeklyGoal-weekCA))} restant · ${fmt(weekForecast)} projetés en fin de semaine</small><small>${weekLeft?`${fmt(Math.max(0,weeklyGoal-weekCA)/weekLeft)} à réaliser par jour ouvert restant (hors aujourd’hui)`:'Dernier jour ouvert de la semaine atteint ou passé.'}</small></div>`;
  const monthCard=`<div class="metricCard"><span>Objectif mensuel (€)</span><strong>${fmt(goal)}</strong><span>Réalisé : ${fmt(monthCA)} · ${monthPct.toFixed(0)} %</span><div class="progress"><div style="width:${monthPct}%"></div></div><small>${fmt(Math.max(0,goal-monthCA))} restant · ${fmt(monthForecast)} projetés en fin de mois</small><small>${monthLeft?`${fmt(Math.max(0,goal-monthCA)/monthLeft)} à réaliser par jour ouvert restant (hors aujourd’hui)`:'Dernier jour ouvert du mois atteint ou passé.'}</small></div>`;
+ const yearForecastCard=`<div class="metricCard"><span>Prévision de CA au 31 décembre ${now.getFullYear()}</span><strong>${yearCA>0?fmt(yearForecast):'—'}</strong><small>CA déjà encaissé cette année : ${fmt(yearCA)}</small><small>Projection restante : ${yearCA>0?fmt(Math.max(0,yearForecast-yearCA)):'—'}</small><small>Base : ${elapsedYear} jour(s) d’ouverture écoulé(s) sur ${totalYear} prévus (lundi–samedi). Le CA déjà réalisé est inclus une seule fois.</small><small class="muted">Projection indicative au rythme moyen observé, non garantie.</small></div>`;
  const forecastScenarios=`<div class="metricCard scenarioCard"><span>Scénarios de fin de mois</span><div class="scenarioLine"><span>Prudent (−15 %)</span><strong>${fmt(monthForecast*.85)}</strong></div><div class="scenarioLine"><span>Central (rythme actuel)</span><strong>${fmt(monthForecast)}</strong></div><div class="scenarioLine"><span>Favorable (+15 %)</span><strong>${fmt(monthForecast*1.15)}</strong></div><small>Simulations mécaniques autour du rythme observé, pas des probabilités ni des garanties. Elles ne remplacent pas les données des jours à venir.</small></div>`;
- document.getElementById('analysisForecast').innerHTML=`<div class="clientMetricGrid">${dailyInput}${weekCard}${monthCard}<div class="metricCard"><span>Rythme de la journée</span><strong>${fmt(todayCA)}</strong><small>${todaySales.length} vente(s) aujourd’hui. La boutique est ${now.getDay()===0?'fermée le dimanche':(now.getHours()*60+now.getMinutes()<SHOP_OPEN_MINUTES?'ouverte à 09 h 30':(now.getHours()*60+now.getMinutes()>=SHOP_CLOSE_MINUTES?'fermée depuis 19 h 30':'ouverte jusqu’à 19 h 30'))}.</small></div>${dailyForecastCard}${forecastScenarios}</div><p class="small muted">Les projections de semaine et de mois extrapolent le CA encaissé par jour d’ouverture écoulé (lundi–samedi, 09 h 30–19 h 30). Les objectifs quotidien et hebdomadaire sont modifiables ici et sur l’accueil. Le réglage quotidien est initialisé à partir de l’objectif hebdomadaire divisé par 6. Les scénarios prudent et favorable sont des variations illustratives de ±15 % autour de la projection centrale, pas des probabilités. Toutes les projections sont indicatives et ne constituent pas une garantie.</p>`;
+ document.getElementById('analysisForecast').innerHTML=`<div class="clientMetricGrid">${dailyInput}${weekCard}${monthCard}${yearForecastCard}<div class="metricCard"><span>Rythme de la journée</span><strong>${fmt(todayCA)}</strong><small>${todaySales.length} vente(s) aujourd’hui. La boutique est ${now.getDay()===0?'fermée le dimanche':(now.getHours()*60+now.getMinutes()<SHOP_OPEN_MINUTES?'ouverte à 09 h 30':(now.getHours()*60+now.getMinutes()>=SHOP_CLOSE_MINUTES?'fermée depuis 19 h 30':'ouverte jusqu’à 19 h 30'))}.</small></div>${dailyForecastCard}${forecastScenarios}</div><p class="small muted">Les projections de semaine, de mois et jusqu’au 31 décembre extrapolent le CA encaissé par jour d’ouverture écoulé (lundi–samedi, 09 h 30–19 h 30). Les objectifs quotidien et hebdomadaire sont modifiables ici et sur l’accueil. Le réglage quotidien est initialisé à partir de l’objectif hebdomadaire divisé par 6. Les scénarios prudent et favorable sont des variations illustratives de ±15 % autour de la projection centrale, pas des probabilités. Toutes les projections sont indicatives et ne constituent pas une garantie.</p>`;
  const actions=[];
  if(d.ca<d.prevCA)actions.push('Le chiffre d’affaires recule : regarde les journées moins actives et compare les achats des clients réguliers.');
  if(d.tx<d.prevTx)actions.push('Le nombre de ventes baisse : vérifie si la fréquentation diminue, même si le panier moyen monte.');
@@ -3279,12 +3465,7 @@ function openStatsDetail(id){
 function renderAdvancedAnalytics(){
  const k=document.getElementById('advancedKpis'), chart=document.getElementById('advancedRevenueChart'), top=document.getElementById('advancedTopClients');
  if(!k||!chart||!top)return;
- const all=allPurchases().filter(p=>{const d=dateOf(p);return Number.isFinite(d.getTime())&&safelyPaid(p)>=0});
- const period=document.getElementById('advancedPeriod')?.value||'30';
- const now=new Date();now.setHours(23,59,59,999);
- let start=null;
- if(period!=='all'){start=new Date(now);start.setDate(start.getDate()-Number(period)+1);start.setHours(0,0,0,0)}
- const ps=all.filter(p=>!start||dateOf(p)>=start).sort((a,b)=>dateOf(a)-dateOf(b));
+ const ps=statsPeriodPurchases(currentStatsPeriod()).filter(p=>{const d=dateOf(p);return Number.isFinite(d.getTime())&&safelyPaid(p)>=0}).sort((a,b)=>dateOf(a)-dateOf(b));
  const ca=ps.reduce((s,p)=>s+safelyPaid(p),0), tickets=ps.length, avg=tickets?ca/tickets:0;
  k.innerHTML='<div class="advancedKpi"><span>Chiffre d’affaires</span><strong>'+fmt(ca)+'</strong></div><div class="advancedKpi"><span>Ventes actives</span><strong>'+tickets+'</strong></div><div class="advancedKpi"><span>Panier moyen</span><strong>'+fmt(avg)+'</strong></div>';
  // Aggregate daily CA. Limit the plotted range to 30 points for readability.
@@ -3330,8 +3511,89 @@ function renderExecutiveDecisionPanel(){
   const stamp=document.getElementById('executiveUpdatedAt');if(stamp)stamp.textContent='Mis à jour à '+now.toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'});
 }
 
-function updateAll(){clients=clients.map(normalizeClient);updateClientOptions();renderClientOverview();renderClients();updatePurchaseBox();renderCategoryAnalytics();setDashboard();setStats();renderProfitStats();renderWeekdayStats();renderAdvancedAnalytics();renderV15Insights(allPurchases(),new Date());renderDailyOps(new Date());renderActivityLog();renderBackupStatus();renderAnalysis();renderCommercialCopilot();renderDataIntegrity();renderFollowupAgenda();renderExecutiveDecisionPanel();const threshold=document.getElementById("inactiveThreshold");if(threshold)threshold.value=String(settings.inactiveThreshold||30);updateGreeting()}
+function updateAll(){clients=clients.map(normalizeClient);updateClientOptions();renderClientOverview();renderClients();updatePurchaseBox();renderCategoryAnalytics();setDashboard();setStats();renderProfitStats();renderWeekdayStats();renderAdvancedAnalytics();renderV15Insights(allPurchases(),new Date());renderDailyOps(new Date());renderActivityLog();renderBackupStatus();renderAnalysis();renderCommercialCopilot();renderDataIntegrity();renderFollowupAgenda();renderExecutiveDecisionPanel();const threshold=document.getElementById("inactiveThreshold");if(threshold)threshold.value=String(settings.inactiveThreshold||30);updateGreeting();refreshStatsForPeriod()}
+
+function arrangeV82Layout(){
+  const settingsMoves=[
+    {selector:'details.homeDetails',match:el=>!!el.querySelector('#monthlyGoal'),host:'settingsObjectivesHost'},
+    {selector:'#accueil > .card',match:el=>!!el.querySelector('#restoreFile'),host:'settingsBackupHost'},
+    {selector:'#accueil > .card',match:el=>el.textContent.includes('Chaque 50 € réellement payés'),host:'settingsLoyaltyHost'}
+  ];
+  settingsMoves.forEach(item=>{
+    const host=document.getElementById(item.host);if(!host)return;
+    const el=[...document.querySelectorAll(item.selector)].find(item.match);
+    if(el&&!host.contains(el))host.appendChild(el);
+  });
+  ['dWeek','dMonth'].forEach(id=>{const el=document.getElementById(id);if(el&&el.closest('.stat'))el.closest('.stat').classList.add('homeKpiHidden');});
+  const weekPurchase=document.getElementById('homeWeekPurchases');if(weekPurchase){const block=weekPurchase.closest('.homeStats');if(block)block.classList.add('homeKpiHidden');}
+  const analysisPageForMoves=document.getElementById('analyse');
+  const forecastDetail=document.getElementById('statsForecast');
+  if(forecastDetail&&analysisPageForMoves&&!document.getElementById('analysisForecastHost')){
+    const host=document.createElement('div');host.id='analysisForecastHost';analysisPageForMoves.appendChild(host);host.appendChild(forecastDetail);
+    const forecastLink=[...document.querySelectorAll('#stats .statsOverview button')].find(b=>b.textContent.includes('Prévisions'));
+    if(forecastLink)forecastLink.remove();
+  }
+  const clientRanking=document.getElementById('clientRanking'),statsClients=document.getElementById('statsClients');
+  if(clientRanking&&statsClients&&!document.getElementById('statsTopClientsHost')){
+    const host=document.createElement('div');host.id='statsTopClientsHost';statsClients.appendChild(host);host.appendChild(clientRanking);
+  }
+  const analysisPageForComparison=document.getElementById('analyse');
+  const comparisonStats=document.getElementById('comparisonStats');
+  if(analysisPageForComparison&&comparisonStats&&!document.getElementById('analysisComparisonHost')){
+    const card=comparisonStats.closest('.card');
+    if(card){card.id='analysisComparisonHost';const heading=card.querySelector('h3');if(heading)heading.textContent='↔️ Comparaison des périodes commerciales';analysisPageForComparison.insertBefore(card,analysisPageForComparison.children[1]||null);}
+  }
+  const copilot=document.getElementById('commercialCopilotCard'),analysisPage=document.getElementById('analyse');
+  if(copilot&&analysisPage&&!document.getElementById('commercialCopilotAnalysisHost')){
+    const host=document.createElement('div');host.id='commercialCopilotAnalysisHost';analysisPage.appendChild(host);host.appendChild(copilot);
+  }
+  // Les relances détaillées relèvent du suivi commercial, pas des statistiques de fréquentation.
+  const relanceCard=document.getElementById('relanceCard');
+  const retentionDetails=[...document.querySelectorAll('#analyse details')].find(el=>el.textContent.includes('Clients à suivre'));
+  if(relanceCard&&retentionDetails&&!document.getElementById('analysisRelanceHost')){
+    const host=document.createElement('div');host.id='analysisRelanceHost';host.className='card';
+    const heading=document.createElement('h3');heading.textContent='🔔 Clients à revoir (30 jours et plus)';
+    host.append(heading,relanceCard.querySelector('#relanceList'));
+    retentionDetails.appendChild(host);
+    relanceCard.remove();
+  }
+  // Le Top 5 principal est conservé dans la rubrique Clients ; on masque l'ancien doublon
+  // du tableau de bord analytique qui ne suivait pas correctement le filtre commun.
+  const legacyAdvanced=document.getElementById('advancedAnalytics');
+  if(legacyAdvanced)legacyAdvanced.hidden=true;
+  const stock=document.getElementById('stock');
+  if(stock&&!stock.dataset.v82Organized){
+    const cards=[...stock.children].filter(el=>el.classList.contains('card'));
+    if(cards.length>=7){
+      const [summary,add,catalog,manual,order,smart,history]=cards;
+      const toolbar=document.createElement('div');toolbar.className='stockSubnav';toolbar.setAttribute('aria-label','Rubriques du stock');
+      const addBtn=document.createElement('button');addBtn.type='button';addBtn.className='primary stockAddAction';addBtn.textContent='＋ Nouveau produit';addBtn.onclick=()=>showStockPanel('add');
+      const panels={catalog:document.createElement('div'),reorder:document.createElement('div'),moves:document.createElement('div'),history:document.createElement('div'),add:document.createElement('div')};
+      Object.entries(panels).forEach(([key,p])=>{p.className='stockPanel';p.dataset.stockPanel=key;});
+      panels.catalog.append(summary,catalog);panels.add.append(add);panels.moves.append(manual);panels.reorder.append(order,smart);panels.history.append(history);
+      [['catalog','Catalogue'],['reorder','Réappro'],['moves','Mouvements'],['history','Historique']].forEach(([key,label])=>{
+        const b=document.createElement('button');b.type='button';b.textContent=label;b.dataset.stockTab=key;b.onclick=()=>showStockPanel(key);toolbar.appendChild(b);
+      });
+      stock.append(addBtn,toolbar,panels.catalog,panels.add,panels.reorder,panels.moves,panels.history);
+      stock.dataset.v82Organized='1';showStockPanel('catalog');
+      const statTitle=[...history.querySelectorAll('h3')].find(h=>h.textContent.includes('Statistiques'));
+      const statContent=document.getElementById('stockStatistics'),analysis=document.getElementById('analyse');
+      if(statTitle&&statContent&&analysis&&!document.getElementById('stockAnalysisPanel')){
+        const box=document.createElement('div');box.className='card';box.id='stockAnalysisPanel';
+        const h=document.createElement('h3');h.textContent='📦 Statistiques détaillées du stock';box.append(h,statContent);analysis.appendChild(box);statTitle.remove();
+      }
+    }
+  }
+}
+function showStockPanel(key){
+  document.querySelectorAll('#stock .stockPanel').forEach(p=>p.hidden=p.dataset.stockPanel!==key);
+  document.querySelectorAll('#stock [data-stockTab]').forEach(b=>b.classList.toggle('active',b.dataset.stockTab===key));
+  const addBtn=document.querySelector('#stock .stockAddAction');if(addBtn)addBtn.hidden=key==='add';
+}
+
+arrangeV82Layout();
 updateAll();
+refreshStatsForPeriod();
 updateOfflineMode();
 if("serviceWorker" in navigator && location.protocol.startsWith("http")){navigator.serviceWorker.register("./sw.js").catch(()=>{});}
 document.addEventListener('DOMContentLoaded',()=>{try{renderStock();}catch(e){console.error('Stock V37',e)}});
