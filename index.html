@@ -1688,6 +1688,15 @@ input,select,textarea{accent-color:#2f7048}
     <input id="weeklyGoal" type="number" min="0" step="50" value="1000" onchange="setWeeklyGoal()" aria-label="Objectif hebdomadaire en euros">
     <div class="progress"><div id="weeklyGoalBar" style="width:0%"></div></div>
     <p id="weeklyGoalMessage" class="small muted"></p>
+    <div style="height:1px;background:var(--border);margin:16px 0"></div>
+    <h3>📅 Calendrier d'ouverture</h3>
+    <p class="small muted">Les dimanches sont automatiquement exclus. Ajoute ici les fermetures exceptionnelles : l'objectif journalier sera recalculé sans modifier les ventes déjà enregistrées.</p>
+    <div class="row" style="gap:8px;align-items:center;flex-wrap:wrap">
+      <input id="exceptionClosureDate" type="date" aria-label="Date de fermeture exceptionnelle" style="flex:1;min-width:150px">
+      <button type="button" class="secondary" onclick="addExceptionalClosure()">Ajouter la fermeture</button>
+    </div>
+    <div id="exceptionClosuresList" class="small muted" style="margin-top:10px"></div>
+    <div id="dynamicMonthlyTarget" class="metricCard" style="margin-top:12px"></div>
   </div></details>
 
   <div id="alertsBox" class="card">
@@ -2044,6 +2053,47 @@ function persistSettings(){
 function setGoal(){settings.goal=Math.max(0,Number(document.getElementById('monthlyGoal').value||0));persistSettings()}
 function setWeeklyGoal(){settings.weeklyGoal=Math.max(0,Number(document.getElementById('weeklyGoal').value||0));persistSettings()}
 function setDailyGoal(){settings.dailyGoal=Math.max(0,Number(document.getElementById('dailyGoal').value||0));persistSettings()}
+
+function localDateKey(d){const x=new Date(d);return `${x.getFullYear()}-${String(x.getMonth()+1).padStart(2,'0')}-${String(x.getDate()).padStart(2,'0')}`;}
+function isExceptionalClosure(d){const key=localDateKey(d);return Array.isArray(settings.exceptionalClosures)&&settings.exceptionalClosures.includes(key);}
+function isShopOpenDate(d){return d.getDay()!==0&&!isExceptionalClosure(d);}
+function monthOpenDays(year,month){const days=[];const count=new Date(year,month+1,0).getDate();for(let day=1;day<=count;day++){const d=new Date(year,month,day);if(isShopOpenDate(d))days.push(d);}return days;}
+function renderExceptionalClosures(){
+  const host=document.getElementById('exceptionClosuresList');if(!host)return;
+  const dates=(Array.isArray(settings.exceptionalClosures)?settings.exceptionalClosures:[]).slice().sort();
+  host.innerHTML=dates.length?dates.map(key=>`<div class="row" style="justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--line,#e5e8df)"><span>🔒 ${new Date(key+'T12:00:00').toLocaleDateString('fr-FR',{weekday:'long',day:'numeric',month:'long',year:'numeric'})}</span><button type="button" class="secondary" onclick="removeExceptionalClosure('${key}')">Retirer</button></div>`).join(''):'Aucune fermeture exceptionnelle enregistrée.';
+  const input=document.getElementById('exceptionClosureDate');if(input&&!input.value)input.value=localDateKey(new Date());
+}
+function addExceptionalClosure(){
+  const input=document.getElementById('exceptionClosureDate');const key=input?.value;
+  if(!key||!/^\d{4}-\d{2}-\d{2}$/.test(key)){alert('Choisis une date valide.');return;}
+  const d=new Date(key+'T12:00:00');if(Number.isNaN(d.getTime())||localDateKey(d)!==key){alert('La date choisie est invalide.');return;}
+  if(d.getDay()===0){alert('Le dimanche est déjà considéré comme fermé.');return;}
+  settings.exceptionalClosures=Array.isArray(settings.exceptionalClosures)?settings.exceptionalClosures:[];
+  if(!settings.exceptionalClosures.includes(key))settings.exceptionalClosures.push(key);
+  if(persistSettings())renderExceptionalClosures();
+}
+function removeExceptionalClosure(key){
+  settings.exceptionalClosures=(Array.isArray(settings.exceptionalClosures)?settings.exceptionalClosures:[]).filter(x=>x!==key);
+  if(persistSettings())renderExceptionalClosures();
+}
+function getDynamicMonthlyTarget(now=new Date()){
+  const goal=Math.max(0,Number(settings.goal??4000));
+  const key=monthKey(now);const monthSales=allPurchases().filter(p=>isActivePurchase(p)&&monthKey(dateOf(p))===key);
+  const realized=monthSales.reduce((s,p)=>s+safelyPaid(p),0);
+  const openDays=monthOpenDays(now.getFullYear(),now.getMonth());
+  const elapsed=openDays.filter(d=>localDateKey(d)<localDateKey(now)).length;
+  const remainingDays=openDays.filter(d=>localDateKey(d)>=localDateKey(now)).length;
+  const remainingCA=Math.max(0,goal-realized);
+  const daily=remainingDays?remainingCA/remainingDays:0;
+  return {goal,realized,openCount:openDays.length,elapsed,remainingDays,remainingCA,daily};
+}
+function renderDynamicMonthlyTarget(now=new Date()){
+  const host=document.getElementById('dynamicMonthlyTarget');if(!host)return;
+  const x=getDynamicMonthlyTarget(now);
+  host.innerHTML=`<strong>Objectif journalier ajusté</strong><div style="font-size:1.65rem;font-weight:800;margin:5px 0">${fmt(x.daily)}</div><div class="small muted">${x.remainingDays} jour(s) d'ouverture restant(s) · ${fmt(x.remainingCA)} à réaliser sur ${fmt(x.goal)}.</div><div class="small muted">${x.openCount} jour(s) d'ouverture prévus ce mois · ${x.elapsed} jour(s) déjà écoulés.</div>`;
+}
+
 function showPage(id,btn){
   const target=document.getElementById(id);if(!target)return;
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
@@ -2764,7 +2814,7 @@ function setDashboard(){
   const elapsedOpenDays=Math.max(1,Math.min(6,((now.getDay()+6)%7)+1));const hp=document.getElementById('homeWeekPurchases');if(hp)hp.textContent=String(week.length);const ha=document.getElementById('homeAvgPurchases');if(ha)ha.textContent=(week.length/elapsedOpenDays).toLocaleString('fr-FR',{maximumFractionDigits:1});
   const goal=Number(settings.goal??4000);document.getElementById('monthlyGoal').value=goal;document.getElementById('goalText').textContent=fmt(goal);
   const pct=goal?Math.min(100,monthCA/goal*100):0;document.getElementById('goalBar').style.width=pct+'%';document.getElementById('goalMessage').textContent=`${pct.toFixed(0)} % atteint · ${fmt(Math.max(0,goal-monthCA))} restant pour l'objectif mensuel.`;
-  const weeklyGoal=Number(settings.weeklyGoal??1000);document.getElementById('weeklyGoal').value=weeklyGoal;document.getElementById('weeklyGoalText').textContent=fmt(weeklyGoal);
+  const weeklyGoal=Number(settings.weeklyGoal??1000);document.getElementById('weeklyGoal').value=weeklyGoal;renderExceptionalClosures();renderDynamicMonthlyTarget(now);document.getElementById('weeklyGoalText').textContent=fmt(weeklyGoal);
   const weeklyPct=weeklyGoal?Math.min(100,weekCA/weeklyGoal*100):0;document.getElementById('weeklyGoalBar').style.width=weeklyPct+'%';document.getElementById('weeklyGoalMessage').textContent=`Cette semaine : ${fmt(weekCA)} · ${weeklyPct.toFixed(0)} % atteint · ${fmt(Math.max(0,weeklyGoal-weekCA))} restant.`;
   const setText=(id,v)=>{const el=document.getElementById(id);if(el)el.textContent=v};const setWidth=(id,v)=>{const el=document.getElementById(id);if(el)el.style.width=Math.max(0,Math.min(100,v))+'%'};setText('homeWeekPct',`${weeklyPct.toFixed(0)} %`);setWidth('homeWeekBar',weeklyPct);setText('homeWeekText',`${fmt(weekCA)} sur ${fmt(weeklyGoal)} · ${fmt(Math.max(0,weeklyGoal-weekCA))} restant`);setText('homeMonthPct',`${pct.toFixed(0)} %`);setWidth('homeMonthBar',pct);setText('homeMonthText',`${fmt(monthCA)} sur ${fmt(goal)} · ${fmt(Math.max(0,goal-monthCA))} restant`);
   // Prévisions affichées sur l'accueil : CA actuel extrapolé, pondéré avec les journées comparables si disponibles.
@@ -3308,7 +3358,7 @@ function renderAnalysis(){
  const yearSales=purchases.filter(p=>p._date.getFullYear()===now.getFullYear()),yearCA=yearSales.reduce((s,p)=>s+safelyPaid(p),0);
  const elapsedWeek=Math.max(1,openDaysBetween(startOfWeek,now));const totalWeek=Math.max(1,openDaysBetween(startOfWeek,endOfWeek));const weekLeft=Math.max(0,totalWeek-openDaysBetween(startOfWeek,now));
  const elapsedMonth=Math.max(1,openDaysBetween(monthStart,now));const totalMonth=Math.max(1,openDaysBetween(monthStart,monthEnd));const monthLeft=Math.max(0,totalMonth-openDaysBetween(monthStart,now));
- const dailyGoal=Math.max(0,Number(settings.dailyGoal??Math.round(Number(settings.weeklyGoal??1000)/6)));const weeklyGoal=Math.max(0,Number(settings.weeklyGoal??1000));const goal=Math.max(0,Number(settings.goal??4000));
+ const dailyGoal=getDynamicMonthlyTarget(new Date()).daily;const weeklyGoal=Math.max(0,Number(settings.weeklyGoal??1000));const goal=Math.max(0,Number(settings.goal??4000));
  const dayPct=dailyGoal?Math.min(100,todayCA/dailyGoal*100):0,weekPct=weeklyGoal?Math.min(100,weekCA/weeklyGoal*100):0,monthPct=goal?Math.min(100,monthCA/goal*100):0;
  const weekForecast=weekCA/elapsedWeek*totalWeek,monthForecast=monthCA/elapsedMonth*totalMonth;
  const yearStart=new Date(now.getFullYear(),0,1),yearEnd=new Date(now.getFullYear(),11,31);const elapsedYear=Math.max(1,openDaysBetween(yearStart,now)),totalYear=Math.max(1,openDaysBetween(yearStart,yearEnd));const yearForecast=yearCA/elapsedYear*totalYear,yearRemaining=Math.max(0,yearEnd-now);
