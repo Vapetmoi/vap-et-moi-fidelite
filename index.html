@@ -1885,6 +1885,24 @@ nav.appNav button.saleNav{transform:none!important;background:#174a35!important;
 #accueil .homeStats:not([aria-label]) .stat:has(#dTodaySales) .kpiTitle{color:#244b36!important;font-weight:700!important}
 
 </style>
+
+<style>
+/* V96.1 — Renforcement du contraste des textes sur fonds clairs (accessibilité mobile) */
+:root{--muted:#56645b!important}
+.page label,#achat label,#clients label{color:#294b38!important;font-weight:700!important}
+.page .muted,.page .small,.page .kpiTitle,.saleFlowIntro,.saleStepTitle small,#purchaseClientHelp{color:#58675d!important;opacity:1!important}
+.saleStepTitle small{color:#58675d!important}
+input::placeholder,textarea::placeholder{color:#70786f!important;opacity:1!important}
+#clients .client, #clients .client *{opacity:1}
+#clients .client strong,#clients .client b{color:#244b35!important}
+#clients .client{color:#405348!important}
+.homeGoalCard,.homeGoalCard *{opacity:1}
+.homeGoalCard .homeGoalHead span,.homeGoalCard p,.homeGoalCard .small{color:#536457!important}
+.homeGoalCard .homeGoalHead strong{color:#205b3d!important}
+/* Les éléments réellement désactivés restent visuellement identifiables */
+button:disabled,input:disabled,select:disabled{opacity:.68}
+</style>
+
 </head>
 <body>
 
@@ -2169,7 +2187,7 @@ nav.appNav button.saleNav{transform:none!important;background:#174a35!important;
     </div>
     <div class="card" id="historicalCASection">
       <h3 style="margin-top:0">🗓️ Historique mensuel du chiffre d’affaires</h3>
-      <p class="muted small">Chiffres historiques séparés des achats enregistrés dans l’application. Vérifie leur exactitude si ces montants proviennent d’une ancienne version : l’application ne peut pas certifier leur origine.</p>
+      <p class="muted small">Les mois renseignés dans l’historique sont prioritaires. Pour les mois absents, le CA est calculé depuis les achats actifs enregistrés dans l’application, sans modifier les données sauvegardées.</p>
       <div class="grid4" id="historicalSummary"></div>
       <label for="historicalChartPeriod">Période affichée sur le graphique</label><select id="historicalChartPeriod" onchange="renderHistoricalCA()"><option value="6">6 derniers mois</option><option value="12" selected>12 derniers mois</option><option value="24">24 derniers mois</option><option value="all">Tout l’historique</option></select>
       <div class="chartWrap" id="historicalChart" aria-label="Graphique d’évolution du chiffre d’affaires historique"></div>
@@ -3235,7 +3253,30 @@ function setDashboard(){
   if(!a)a='<p class="muted">✅ Rien de particulier à signaler.</p>';document.getElementById('alerts').innerHTML=a;
 }
 function monthLabel(key){const [y,m]=key.split('-').map(Number);return new Date(y,m-1,1).toLocaleDateString('fr-FR',{month:'long',year:'numeric'});}
-function historicalEntries(){return Object.entries(historicalCA).filter(([k,v])=>/^\d{4}-\d{2}$/.test(k)&&v!==null&&v!==''&&Number.isFinite(Number(v))).sort((a,b)=>a[0].localeCompare(b[0]));}
+function historicalEntries(){
+  // Fusion d'affichage sans modifier les données sauvegardées :
+  // priorité aux chiffres historiques lorsqu'un mois est renseigné ;
+  // sinon, calcul depuis les achats actifs enregistrés dans l'application.
+  const values=new Map();
+  Object.entries(historicalCA).forEach(([k,v])=>{
+    if(/^\d{4}-\d{2}$/.test(k)&&v!==null&&v!==''&&Number.isFinite(Number(v))){
+      values.set(k,{value:Number(v),source:'Historique'});
+    }
+  });
+  const purchasesByMonth=new Map();
+  allPurchases().forEach(p=>{
+    const d=dateOf(p);
+    if(!Number.isFinite(d.getTime()))return;
+    const key=monthKey(d);
+    purchasesByMonth.set(key,(purchasesByMonth.get(key)||0)+safelyPaid(p));
+  });
+  purchasesByMonth.forEach((value,key)=>{
+    if(!values.has(key))values.set(key,{value,source:'Achats enregistrés'});
+  });
+  return [...values.entries()]
+    .map(([k,item])=>[k,item.value,item.source])
+    .sort((a,b)=>a[0].localeCompare(b[0]));
+}
 function renderHistoricalCA(){
   const entries=historicalEntries();
   const vals=entries.map(([,v])=>Number(v));
@@ -3253,7 +3294,7 @@ function renderHistoricalCA(){
   const poly=points.map(p=>`${p.x},${p.y}`).join(' ');
   const circles=points.map(p=>`<circle cx="${p.x}" cy="${p.y}" r="4" fill="#1f7a46"><title>${esc(monthLabel(p.k))} : ${fmt(p.v)}</title></circle><text x="${p.x}" y="${p.y-9}" text-anchor="middle" font-size="10" font-weight="bold" fill="#173126">${(p.v/1000).toLocaleString('fr-FR',{maximumFractionDigits:1})}k</text><text transform="translate(${p.x},${H-B+12}) rotate(-35)" text-anchor="end" font-size="10" fill="#66756e">${esc(monthLabel(p.k))}</text>`).join('');
   chart.innerHTML=`<svg class="historyChart" viewBox="0 0 ${W} ${H}" role="img" aria-label="Évolution du chiffre d’affaires mensuel historique">${grid}<polyline points="${poly}" fill="none" stroke="#1f7a46" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>${circles}</svg>`;
-  document.getElementById('historicalTable').innerHTML=`<table><thead><tr><th>Mois</th><th>CA historique</th><th>Évolution vs mois précédent</th></tr></thead><tbody>${entries.map(([k,v],i)=>{const prev=i?Number(entries[i-1][1]):null;const change=prev!==null&&prev!==0?(Number(v)-prev)/prev*100:null;return `<tr><td>${esc(monthLabel(k))}</td><td><strong>${fmt(v)}</strong></td><td>${change===null?'—':`<span style="color:${change>=0?'#17613a':'#b42318'}">${change>=0?'+':''}${change.toFixed(1).replace('.',',')} %</span>`}</td></tr>`}).join('')}</tbody></table>`;
+  document.getElementById('historicalTable').innerHTML=`<table><thead><tr><th>Mois</th><th>CA historique</th><th>Évolution vs mois précédent</th></tr></thead><tbody>${entries.map(([k,v],i)=>{const prev=i?Number(entries[i-1][1]):null;const change=prev!==null&&prev!==0?(Number(v)-prev)/prev*100:null;return `<tr><td>${esc(monthLabel(k))}</td><td><strong>${fmt(v)}</strong><small class="muted"> · ${esc(entries[i][2]||'Historique')}</small></td><td>${change===null?'—':`<span style="color:${change>=0?'#17613a':'#b42318'}">${change>=0?'+':''}${change.toFixed(1).replace('.',',')} %</span>`}</td></tr>`}).join('')}</tbody></table>`;
 }
 
 function setStats(){
