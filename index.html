@@ -1819,6 +1819,37 @@ nav.appNav button.saleNav{transform:none!important;background:#174a35!important;
 .page:not(#accueil) button.primary{background:#1d6041!important;border:0!important;box-shadow:none!important}
 @media(max-width:650px){.appHeaderV60{padding:9px 13px!important}.brandLockup h1{font-size:20px!important}main{padding:11px 11px calc(84px + env(safe-area-inset-bottom))!important}#accueil .homeStats:not([aria-label]) .stat{min-height:78px!important;padding:11px!important}#accueil .homeStats:not([aria-label]) .stat:first-child{min-height:96px!important}#accueil .homeStats:not([aria-label]) .stat:not(:first-child) strong{font-size:20px!important}nav.appNav button.saleNav{transform:none!important}}
 
+
+/* V92 — Accueil inspiré de la maquette validée : tableau de bord premium */
+#accueil{padding-top:0!important}
+#accueil .appGreeting{margin:0 -1px 12px!important;overflow:hidden!important;border-radius:0 0 20px 20px!important}
+#accueil .homeBannerImage{height:clamp(150px,48vw,230px)!important;max-height:230px!important;object-position:center 46%!important;border-radius:0 0 18px 18px!important;box-shadow:none!important}
+#accueil .homeStats:not([aria-label]){grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:10px!important;margin:0 0 13px!important}
+#accueil .homeStats:not([aria-label]) .stat[hidden]{display:none!important}
+#accueil .homeStats:not([aria-label]) .stat{min-height:94px!important;display:flex!important;flex-direction:column!important;justify-content:center!important;align-items:flex-start!important;gap:4px!important;padding:13px 14px!important;border-radius:17px!important;background:#fffdf7!important;border:1px solid #e8e1d2!important;box-shadow:0 5px 14px rgba(31,55,39,.055)!important}
+#accueil .homeStats:not([aria-label]) .homeRevenueCard{grid-column:1/-1!important;min-height:184px!important;display:grid!important;grid-template-columns:minmax(0,1fr) auto!important;grid-template-rows:auto auto auto auto!important;align-items:center!important;column-gap:10px!important;padding:17px!important;background:linear-gradient(135deg,#174a35,#0e3527)!important;border:1px solid #b99a58!important;border-radius:22px!important;color:#fff!important;box-shadow:0 8px 20px rgba(13,53,39,.13)!important}
+#accueil .homeRevenueCard .revenueHeading{grid-column:1/-1;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+#accueil .homeRevenueCard .kpiTitle{font-size:14px!important;font-weight:750!important;color:#f4ead0!important}
+#accueil .homeRevenueCard .revenueTargetLabel{display:flex;align-items:center;gap:6px;color:#e9dfc7;font-size:11px}
+#accueil .homeRevenueCard .revenueTargetLabel strong{font-size:16px;color:#fff!important}
+#accueil .homeRevenueCard>strong{grid-column:1/-1;font-size:clamp(38px,10vw,52px)!important;line-height:1.02!important;letter-spacing:-1.5px!important;color:#fff!important}
+#accueil .homeRevenueCard>small{grid-column:1/-1;color:#e7ecdf!important;font-size:11px!important}
+#accueil .homeRevenueProgress{grid-column:1/-1;height:10px;border-radius:99px;background:rgba(255,255,255,.78);overflow:hidden;margin-top:3px}
+#accueil .homeRevenueProgress>div{height:100%;background:linear-gradient(90deg,#48a52e,#b5d879);border-radius:99px;transition:width .25s ease}
+#accueil .homeRevenueProgressText{grid-column:1/-1;text-align:center;color:#f4e8c8;font-size:12px;font-weight:700}
+#accueil .homeStats:not([aria-label]) .stat:not(.homeRevenueCard) strong{font-size:26px!important;color:#123e2c!important;line-height:1.1!important}
+#accueil .homeStats:not([aria-label]) .stat:not(.homeRevenueCard) .kpiTitle{font-size:12px!important;color:#334c3d!important;line-height:1.35!important}
+#accueil .homeStats:not([aria-label]) .stat:not(.homeRevenueCard) small{font-size:10px!important;color:#748078!important}
+#accueil .homeGoalStrip{grid-template-columns:1fr!important;margin:12px 0!important}
+#accueil .homeGoalCard{padding:14px 15px!important;border-radius:18px!important;background:#e8efe2!important;border:1px solid #d5e0d0!important}
+#accueil .homeGoalHead{font-size:13px!important;align-items:center!important}
+#accueil .homeGoalHead strong{font-size:19px!important;color:#17603b!important}
+#accueil .homeGoalCard p{font-size:11px!important}
+#accueil .homeForecastPanel,#accueil #homeStockSummary,#accueil #executiveDecisionPanel{border-radius:18px!important;padding:15px!important}
+#accueil .homeForecastTitle{font-size:16px!important}
+#accueil .homeQuick.homeQuickCompact{grid-template-columns:1fr 1fr!important}
+@media(max-width:390px){#accueil .homeRevenueCard{padding:14px!important}#accueil .homeRevenueCard .revenueTargetLabel{font-size:10px}#accueil .homeRevenueCard .revenueTargetLabel strong{font-size:14px}}
+
 </style>
 </head>
 <body>
@@ -1850,12 +1881,13 @@ nav.appNav button.saleNav{transform:none!important;background:#174a35!important;
     <button id="installAppBtn" class="installAppBtn bannerInstallBtn" type="button" hidden onclick="installApp()">＋ Installer l’application</button>
   </div>
   <div class="homeStats" style="margin-bottom:14px">
-    <div class="stat"><strong id="dToday">0 €</strong><span class="kpiTitle">💶 CA aujourd’hui</span><small id="dTodayTarget" class="small muted">Objectif du jour : —</small></div>
-    <div class="stat"><strong id="dWeek">0 €</strong><span class="kpiTitle">📆 CA cette semaine</span></div>
-    <div class="stat"><strong id="dMonth">0 €</strong><span class="kpiTitle">📅 CA ce mois</span></div>
+    <div class="stat homeRevenueCard"><div class="revenueHeading"><span class="kpiTitle">▥ Chiffre d’affaires aujourd’hui</span><span class="revenueTargetLabel">◎ Objectif du jour <strong id="homeTodayTarget">—</strong></span></div><strong id="dToday">0 €</strong><small id="dTodayTarget" class="small muted">Objectif du jour : —</small><div class="homeRevenueProgress"><div id="homeTodayProgress" style="width:0%"></div></div><span id="homeTodayProgressText" class="homeRevenueProgressText">0 % de l’objectif</span></div>
     <div class="stat"><strong id="dBasket">0 €</strong><span class="kpiTitle">🛍️ Panier moyen</span></div>
     <div class="stat"><strong id="dClientsMonth">0</strong><span class="kpiTitle">👥 Clients ce mois</span></div><span id="dClients" hidden>0</span>
-    <div class="stat"><strong id="dTodayProfit">—</strong><span class="kpiTitle">📈 Bénéfice estimé aujourd’hui</span><small id="dTodayProfitNote" class="small muted">Produits identifiés uniquement</small></div>
+    <div class="stat"><strong id="dTodayProfit">—</strong><span class="kpiTitle">📈 Bénéfice estimé</span><small id="dTodayProfitNote" class="small muted">Produits identifiés uniquement</small></div>
+    <div class="stat"><strong id="dTodaySales">0</strong><span class="kpiTitle">🛍️ Ventes aujourd’hui</span></div>
+    <div class="stat" hidden><strong id="dWeek">0 €</strong><span class="kpiTitle">📆 CA cette semaine</span></div>
+    <div class="stat" hidden><strong id="dMonth">0 €</strong><span class="kpiTitle">📅 CA ce mois</span></div>
   </div>
   <div class="homeStats" style="margin:0 0 14px" aria-label="Achats de la semaine en cours">
     <div class="stat"><strong id="homeWeekPurchases">0</strong><span class="kpiTitle">🛍️ Achats cette semaine</span></div>
@@ -3110,7 +3142,7 @@ function setDashboard(){
   const weekStart=new Date(now);weekStart.setHours(0,0,0,0);weekStart.setDate(weekStart.getDate()-((weekStart.getDay()+6)%7));
   const week=ps.filter(p=>dateOf(p)>=weekStart&&dateOf(p)<=now);
   const todayCA=today.reduce((s,p)=>s+safelyPaid(p),0),weekCA=week.reduce((s,p)=>s+safelyPaid(p),0),monthCA=month.reduce((s,p)=>s+safelyPaid(p),0),allCA=ps.reduce((s,p)=>s+safelyPaid(p),0);
-  document.getElementById('dToday').textContent=fmt(todayCA);const todayTargetEl=document.getElementById('dTodayTarget');if(todayTargetEl){const dayTarget=getTodayMonthlyTarget(now);todayTargetEl.textContent=dayTarget.closed?'Boutique fermée aujourd’hui':`${fmt(todayCA)} / ${fmt(dayTarget.daily)} à faire aujourd’hui`;}document.getElementById('dWeek').textContent=fmt(weekCA);document.getElementById('dMonth').textContent=fmt(monthCA);document.getElementById('dBasket').textContent=fmt(ps.length?allCA/ps.length:0);document.getElementById('dClients').textContent=clients.length;const clientsMonthEl=document.getElementById('dClientsMonth');if(clientsMonthEl)clientsMonthEl.textContent=clients.filter(c=>c.createdAt&&monthKey(new Date(c.createdAt))===mk).length;const profitToday=purchasesProfit(today);const profitEl=document.getElementById('dTodayProfit');if(profitEl)profitEl.textContent=profitToday.knownSales?fmt(profitToday.total):'—';const profitNote=document.getElementById('dTodayProfitNote');if(profitNote)profitNote.textContent=profitToday.knownSales?`${profitToday.knownSales}/${today.length} vente(s) détaillée(s)`:'Aucune vente détaillée aujourd’hui';
+  document.getElementById('dToday').textContent=fmt(todayCA);const todayTargetEl=document.getElementById('dTodayTarget');if(todayTargetEl){const dayTarget=getTodayMonthlyTarget(now);todayTargetEl.textContent=dayTarget.closed?'Boutique fermée aujourd’hui':`${fmt(todayCA)} / ${fmt(dayTarget.daily)} à faire aujourd’hui`;const targetValue=Math.max(0,Number(dayTarget.daily)||0);const pct=targetValue>0?Math.min(100,Math.round(todayCA/targetValue*100)):0;const targetLabel=document.getElementById('homeTodayTarget');if(targetLabel)targetLabel.textContent=dayTarget.closed?'Fermée':fmt(targetValue);const bar=document.getElementById('homeTodayProgress');if(bar)bar.style.width=pct+'%';const pctText=document.getElementById('homeTodayProgressText');if(pctText)pctText.textContent=dayTarget.closed?'Boutique fermée aujourd’hui':`${pct} % de l’objectif`; }const todaySalesEl=document.getElementById('dTodaySales');if(todaySalesEl)todaySalesEl.textContent=String(today.length);document.getElementById('dWeek').textContent=fmt(weekCA);document.getElementById('dMonth').textContent=fmt(monthCA);document.getElementById('dBasket').textContent=fmt(ps.length?allCA/ps.length:0);document.getElementById('dClients').textContent=clients.length;const clientsMonthEl=document.getElementById('dClientsMonth');if(clientsMonthEl)clientsMonthEl.textContent=clients.filter(c=>c.createdAt&&monthKey(new Date(c.createdAt))===mk).length;const profitToday=purchasesProfit(today);const profitEl=document.getElementById('dTodayProfit');if(profitEl)profitEl.textContent=profitToday.knownSales?fmt(profitToday.total):'—';const profitNote=document.getElementById('dTodayProfitNote');if(profitNote)profitNote.textContent=profitToday.knownSales?`${profitToday.knownSales}/${today.length} vente(s) détaillée(s)`:'Aucune vente détaillée aujourd’hui';
   const elapsedOpenDays=Math.max(1,Math.min(6,((now.getDay()+6)%7)+1));const hp=document.getElementById('homeWeekPurchases');if(hp)hp.textContent=String(week.length);const ha=document.getElementById('homeAvgPurchases');if(ha)ha.textContent=(week.length/elapsedOpenDays).toLocaleString('fr-FR',{maximumFractionDigits:1});
   const goal=Number(settings.goal??4000);document.getElementById('monthlyGoal').value=goal;document.getElementById('goalText').textContent=fmt(goal);
   const pct=goal?Math.min(100,monthCA/goal*100):0;document.getElementById('goalBar').style.width=pct+'%';document.getElementById('goalMessage').textContent=`${pct.toFixed(0)} % atteint · ${fmt(Math.max(0,goal-monthCA))} restant pour l'objectif mensuel.`;
