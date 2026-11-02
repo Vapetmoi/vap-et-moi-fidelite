@@ -2245,10 +2245,10 @@ nav.appNav button.saleNav{transform:none!important;background:#174a35!important;
   <div class="card"><h2>⚙️ Paramètres</h2><p class="small muted">Réglages et sécurité de Vap’ & Moi Pro.</p></div>
   <div id="settingsObjectivesHost"></div><div id="settingsLoyaltyHost"></div><div id="settingsBackupHost"></div>
   <div class="card" id="settingsDataHost"><h3>🛡️ Protection et données</h3><p class="small muted">Les données restent stockées sur cet appareil. Effectue régulièrement une sauvegarde JSON et conserve-la dans un emplacement sûr.</p><div class="actions"><button class="secondary" onclick="exportData()">💾 Exporter toutes les données</button></div></div>
-  <div class="card"><h3>ℹ️ Application</h3><p class="small muted">Vap’ & Moi Pro · Version V90 · Étape 3</p><p class="small muted">Application conçue pour fonctionner hors connexion après son installation.</p></div>
+  <div class="card"><h3>ℹ️ Application</h3><p class="small muted">Vap’ & Moi Pro · Version V94 · Accueil corrigé</p><p class="small muted">Application conçue pour fonctionner hors connexion après son installation.</p></div>
 </section>
 </main>
-<footer class="versionFooter" aria-label="Version installée"><span class="versionChip"><span class="versionDot" aria-hidden="true"></span> Vap’ & Moi Pro · V90 — Vente intuitive</span><p class="small muted">Données enregistrées sur cet appareil · Pense à effectuer régulièrement une sauvegarde JSON.</p></footer>
+<footer class="versionFooter" aria-label="Version installée"><span class="versionChip"><span class="versionDot" aria-hidden="true"></span> Vap’ & Moi Pro · V94 — Accueil corrigé</span><p class="small muted">Données enregistrées sur cet appareil · Pense à effectuer régulièrement une sauvegarde JSON.</p></footer>
 
 <script>
 
@@ -3571,7 +3571,7 @@ function toggleVisitFrequencyStats(){showAllVisitFrequencyStats=!showAllVisitFre
 function exportData(){
   if(storageReadIssues.length){alert('Export bloqué : une ou plusieurs données locales sont illisibles ('+storageReadIssues.join(', ')+'). Restaure une sauvegarde valide avant de créer un nouvel export incomplet.');return;}
   const exportedAt=new Date().toISOString();
-  const payload={version:'Vap’ & Moi Pro V90 — Vente intuitive',schemaVersion:1,exportedAt,storageKey:KEY,settings,clients,historicalCA,activityLog,stockData};
+  const payload={version:'Vap’ & Moi Pro V94 — Accueil corrigé',schemaVersion:1,exportedAt,storageKey:KEY,settings,clients,historicalCA,activityLog,stockData};
   let serialized;try{serialized=JSON.stringify(payload);const check=JSON.parse(serialized);validateBackupPayload(check);if(!Array.isArray(check.stockData?.products)||!Array.isArray(check.stockData?.movements)||!Array.isArray(check.stockData?.orders))throw new Error('Structure du stock incomplète');}catch(err){alert('Sauvegarde interrompue : les données ne passent pas le contrôle de cohérence ('+(err.message||'erreur')+'). Aucun fichier incomplet n’a été exporté.');return;}
   const blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='Vap_et_Moi_sauvegarde_V82.json';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);
   localStorage.setItem(KEY+'_last_backup',exportedAt);renderBackupStatus();
@@ -4030,3 +4030,9 @@ document.addEventListener('DOMContentLoaded',()=>{try{renderStock();}catch(e){co
 </script>
 </body>
 </html>
+<style>
+/* V94 — lisibilité des accents dorés dans le bloc CA */
+#accueil .homeRevenueCard .revenueTargetLabel{color:#214b37!important;background:#f3eedc!important;border:1px solid #c9b77e!important;box-shadow:inset 0 0 0 1px rgba(201,183,126,.12)!important}
+#accueil .homeRevenueCard .revenueTargetLabel strong{color:#173f2e!important}
+#accueil .homeRevenueCard .homeRevenueProgressText{color:#214b37!important;text-shadow:none!important;font-weight:850!important}
+</style>
