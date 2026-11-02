@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#173D30">
 <meta name="description" content="Vap’ & Moi Pro Signature Premium : gestion des clients, ventes, fidélité, analyses, suivi commercial et sauvegardes.">
-<title>Vap’ &amp; Moi Pro — V87 Suivi des achats fournisseurs</title>
+<title>Vap’ &amp; Moi Pro — V90 Signature — Version finale</title>
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="./icon-192.png">
 <meta name="mobile-web-app-capable" content="yes">
@@ -1576,6 +1576,209 @@ input,select,textarea{accent-color:#2f7048}
 #weekdayAverageCard label[for="weekdayPeriod"],#weekdayPeriod,
 #advancedAnalytics label[for="advancedPeriod"],#advancedPeriod{display:none!important}
 </style>
+<style>
+
+/* V90 — Étape 1 : expérience visuelle et ergonomie mobile */
+:root{
+ --green:#123b2c;--green2:#246247;--light:#f4f0e5;--card:#fffdf7;
+ --text:#20372d;--muted:#718078;--border:#e4ddcf;--gold:#b99a54;
+ --red:#a94339;--surface:#fffdf7;--line:#e4ddcf;
+ --premium-shadow:0 8px 24px rgba(23,49,38,.075);
+}
+html{background:#f4f0e5;scroll-behavior:smooth}
+body{background:linear-gradient(180deg,#f4f0e5 0,#f8f6ef 300px,#f4f0e5 100%);color:#20372d;line-height:1.48;-webkit-tap-highlight-color:transparent}
+.appHeaderV60{background:linear-gradient(135deg,#09271b 0%,#123b2c 58%,#24583e 100%);border-bottom:1px solid rgba(185,154,84,.48);box-shadow:0 8px 24px rgba(9,39,27,.16)}
+.appHeaderV60 .brandMark{border:1px solid rgba(205,177,111,.78);box-shadow:0 0 0 4px rgba(185,154,84,.09)}
+.appHeaderV60 .brandMark span{color:#d0b477}
+.appHeaderV60 .brandLockup h1{letter-spacing:.015em}
+.appHeaderV60 .settingsGear,.appHeaderV60 .themeToggle{border:1px solid rgba(215,194,145,.48);background:rgba(255,255,255,.10);color:#fff8e8;border-radius:13px}
+.appNav{position:fixed!important;top:auto!important;bottom:0!important;left:0!important;right:0!important;display:grid!important;grid-template-columns:repeat(6,minmax(0,1fr))!important;gap:4px!important;padding:7px 8px calc(7px + env(safe-area-inset-bottom))!important;background:rgba(255,253,247,.96)!important;backdrop-filter:blur(18px);border:1px solid #e4dccb!important;border-radius:20px 20px 0 0!important;box-shadow:0 -8px 28px rgba(23,49,38,.13)!important;z-index:40!important}
+nav.appNav button{min-width:0;min-height:54px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;padding:6px 1px!important;border:0!important;border-radius:13px!important;background:transparent!important;color:#68776e!important;font-size:10px!important;font-weight:650!important;line-height:1.15}
+nav.appNav button span{font-size:19px;line-height:1.1}
+nav.appNav button.active{background:#e9eee6!important;color:#174a34!important;border:1px solid #d8dfd2!important;box-shadow:inset 0 -2px 0 #b99a54}
+nav.appNav button.saleNav{background:linear-gradient(145deg,#1c563b,#0e3424)!important;color:#fff!important;border:1px solid #b99a54!important;box-shadow:0 4px 12px rgba(18,59,44,.2)!important;transform:translateY(-5px)}
+main{max-width:900px!important;padding:16px 14px calc(92px + env(safe-area-inset-bottom))!important}
+.page{animation:v90PageIn .2s ease-out}
+@keyframes v90PageIn{from{opacity:.82;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+.page:not(#accueil) h2{font-size:23px;letter-spacing:-.025em;color:#173f2d}
+.page:not(#accueil) h3{color:#1d4934;letter-spacing:-.01em}
+.page:not(#accueil) .card,.page:not(#accueil) details,.page:not(#accueil) .statsTheme{border:1px solid #e7dfd0;border-radius:19px;background:#fffdf7;box-shadow:var(--premium-shadow)}
+.page:not(#accueil) .card{padding:17px;margin-bottom:13px}
+.page:not(#accueil) .stat{border-radius:15px;border:1px solid #e9e2d5;background:#f8f5ed;box-shadow:none;padding:13px}
+.page:not(#accueil) .stat strong{color:#174a34;letter-spacing:-.025em}
+.page:not(#accueil) button.primary{background:linear-gradient(135deg,#1b593c,#123b2c);border:1px solid #b99a54;border-radius:13px;box-shadow:0 4px 12px rgba(18,59,44,.13);min-height:46px}
+.page:not(#accueil) button.secondary{background:#f8f5ec;border:1px solid #d9cfba;color:#254635;border-radius:13px;min-height:44px}
+.page:not(#accueil) input:not([type=checkbox]):not([type=radio]),.page:not(#accueil) select,.page:not(#accueil) textarea{border:1px solid #ddd5c5;border-radius:12px;background:#fffefa;min-height:45px;padding:10px 12px}
+.page:not(#accueil) input:focus,.page:not(#accueil) select:focus,.page:not(#accueil) textarea:focus{outline:3px solid rgba(185,154,84,.18);border-color:#ad9257}
+.page:not(#accueil) label{font-weight:650;color:#365444}
+.page:not(#accueil) .muted{color:#718078}
+#accueil{background:linear-gradient(180deg,#0c3022 0,#123b2c 340px,#f4f0e5 340px,#f4f0e5 100%);border-radius:0 0 22px 22px;padding:0 0 18px}
+#accueil .appGreeting{margin:0 0 14px;padding:10px 10px 14px;border-radius:0 0 23px 23px;background:linear-gradient(135deg,#0b2e20,#174a34);box-shadow:0 12px 25px rgba(6,30,20,.2)}
+#accueil .homeBannerImage{display:block;width:100%;max-height:178px;object-fit:cover;border-radius:17px;border:1px solid rgba(195,166,103,.72)}
+#accueil .homeStats:not([aria-label]){display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;padding:0 12px;margin-bottom:12px!important}
+#accueil .homeStats:not([aria-label]) .stat{min-width:0;min-height:87px;display:flex;flex-direction:column;justify-content:center;align-items:flex-start;gap:4px;padding:12px;border-radius:16px;background:#fffdf7;color:#1c3c2b;border:1px solid #e4dccb;box-shadow:0 6px 16px rgba(8,34,23,.09)}
+#accueil .homeStats:not([aria-label]) .stat:first-child{grid-column:1/-1;min-height:110px;background:linear-gradient(125deg,#1a5037,#103524);border:1px solid rgba(190,163,103,.72);color:#fff;padding:16px}
+#accueil .homeStats:not([aria-label]) .stat:first-child strong{font-size:clamp(30px,8vw,38px);color:#fff;line-height:1.08}
+#accueil .homeStats:not([aria-label]) .stat:first-child .kpiTitle{color:#e9dfc7}
+#accueil .homeStats:not([aria-label]) .stat:first-child small{color:#e4e9e1!important}
+#accueil .homeStats:not([aria-label]) .stat:not(:first-child) strong{font-size:22px;color:#174a34}
+#accueil .homeStats:not([aria-label]) .stat:not(:first-child) .kpiTitle{font-size:11px;color:#6c796f;line-height:1.3}
+#accueil .homeStats[aria-label]{padding:0 12px!important;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+#accueil .homeStats[aria-label] .stat{border-radius:15px;background:#eae4d6;border:1px solid #ded3bc;padding:11px 12px;box-shadow:none}
+#accueil .homeStats[aria-label] .stat strong{font-size:20px;color:#174a34}
+#accueil .homeStats[aria-label] .kpiTitle{font-size:11px;color:#68776d}
+#accueil .homeGoalStrip{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin:12px 12px 14px}
+#accueil .homeGoalCard{min-width:0;border-radius:16px;padding:12px;background:#fffdf7;border:1px solid #e4dccb;box-shadow:0 6px 16px rgba(24,49,36,.07)}
+#accueil .homeGoalHead{font-size:11px;gap:5px;align-items:flex-start}
+#accueil .homeGoalHead strong{font-size:17px;color:#9b7838}
+#accueil .homeGoalCard p{font-size:10px;line-height:1.4;margin:7px 0 0}
+#accueil .progress{height:7px;border-radius:99px;background:#e9e3d7;overflow:hidden}
+#accueil .progress>div{background:linear-gradient(90deg,#1c6543,#c1a15c);border-radius:99px}
+#accueil .homeForecastPanel,#accueil #homeStockSummary,#accueil #executiveDecisionPanel{margin:12px!important;border-radius:18px;border:1px solid #e5dece;background:#fffdf7;box-shadow:0 7px 18px rgba(24,49,36,.07)}
+#accueil .homeForecastTitle{font-weight:750;color:#1c4933}
+#accueil .homeForecastGrid{gap:9px}
+#accueil .homeForecastCard{border-radius:14px;background:#f5f1e7;border:1px solid #e5dece;padding:12px}
+#accueil .homeForecastCard strong{color:#174a34}
+#accueil .homeQuick.homeQuickCompact{display:grid;grid-template-columns:1.15fr 1fr;gap:9px;margin:12px}
+#accueil .homeQuickCompact .quickTile{min-height:78px;border-radius:16px;padding:12px;border:1px solid #d9c99f;box-shadow:0 6px 15px rgba(24,49,36,.08)}
+#accueil .homeQuickCompact .quickTile:first-child{background:linear-gradient(135deg,#174b34,#0d3022);color:#fff;border-color:#b99a54}
+#accueil .homeQuickCompact .quickTile:first-child strong,#accueil .homeQuickCompact .quickTile:first-child span:last-child{color:#fff}
+#accueil .homeQuickCompact .quickTile:first-child .tileIcon{background:#c7aa69;color:#173c2a}
+#accueil .homeDetails{margin:9px 12px;border-radius:15px;background:#fffdf7;border:1px solid #e5dece;box-shadow:0 4px 12px rgba(24,49,36,.04);overflow:hidden}
+#accueil .homeDetails>summary{padding:14px;font-weight:700;color:#234b36}
+#accueil .homeDetails[open]{padding-bottom:7px}
+#accueil .homeDetails>.card{box-shadow:none;border:0;margin:0!important}
+#accueil #homeStockSummary h3,#accueil #executiveDecisionPanel h3{font-size:16px}
+#accueil #homeStockSummary button,#accueil #executiveDecisionPanel button{border-radius:12px}
+footer{padding-bottom:calc(70px + env(safe-area-inset-bottom))}
+button,input,select,textarea{transition:border-color .16s ease,box-shadow .16s ease,transform .16s ease}
+button:active{transform:scale(.985)}
+@media(max-width:420px){
+ main{padding-left:10px!important;padding-right:10px!important}
+ nav.appNav button{font-size:9px!important}
+ #accueil .homeStats:not([aria-label]) .stat:not(:first-child){min-height:82px}
+ #accueil .homeGoalCard{padding:10px}
+ #accueil .homeGoalHead{font-size:10px}
+ #accueil .homeForecastGrid{grid-template-columns:1fr 1fr}
+}
+
+</style>
+<style>
+
+/* V90 Étape 2 — Parcours de vente guidé */
+#achat> .card{padding:18px 15px 22px;border-radius:22px;border:1px solid #e4dccb;background:#fffdf7;box-shadow:0 10px 28px rgba(23,49,38,.08)}
+#achat> .card>h2{font-size:25px;letter-spacing:-.035em;color:#173f2d;margin-bottom:5px}
+.saleFlowIntro{font-size:12px;color:#748078;margin-bottom:14px}
+.saleFlowSteps{display:flex;align-items:center;justify-content:space-between;gap:4px;padding:11px 9px;margin:0 0 20px;border-radius:14px;background:#f1eee5;border:1px solid #e5dece}
+.saleFlowSteps span{display:flex;align-items:center;gap:4px;font-size:10px;color:#718078;white-space:nowrap}
+.saleFlowSteps span b{display:inline-flex;align-items:center;justify-content:center;width:21px;height:21px;border-radius:50%;background:#e0e5dc;color:#355643;font-size:11px}
+.saleFlowSteps span.current{color:#174a34;font-weight:750}
+.saleFlowSteps span.current b{background:#174a34;color:#fff;border:1px solid #c2a467}
+.saleFlowSteps i{height:1px;flex:1;background:#d8d1c2;min-width:5px}
+.saleStepTitle{display:flex;align-items:center;gap:10px;margin:19px 0 11px;padding-bottom:10px;border-bottom:1px solid #e9e2d5}
+.saleStepTitle>span{display:flex;align-items:center;justify-content:center;flex:0 0 32px;height:32px;border-radius:10px;background:#e8eee6;color:#174a34;font-weight:800;font-size:12px}
+.saleStepTitle strong{display:block;color:#1b4933;font-size:14px}
+.saleStepTitle small{display:block;color:#7b857e;font-size:11px;margin-top:2px}
+.saleStepTitle.saleStepCompact{margin-top:21px}
+#achat label{display:block;margin:10px 0 6px;color:#355444;font-weight:650;font-size:13px}
+#achat input:not([type=checkbox]):not([type=radio]),#achat select,#achat textarea{width:100%;min-height:48px;border:1px solid #ddd5c5;border-radius:13px;background:#fffefa;padding:11px 13px;font-size:15px;color:#20372d}
+#achat input:focus,#achat select:focus{outline:3px solid rgba(185,154,84,.17);border-color:#ad9257}
+#achat .purchaseSearchWrap{position:relative}
+#achat .purchaseSuggestions{border-radius:13px;box-shadow:0 10px 25px rgba(22,52,37,.12);border:1px solid #ded6c7;overflow:hidden}
+#achat #linkedClientInfo{padding:9px 11px;margin:8px 0;border-radius:11px;background:#edf2e9;color:#31533e}
+#achat #rewardBox,#achat #categoryAllocation,#achat .card[style*="background:#f8f7ef"]{border:1px solid #e6dece!important;border-radius:15px!important;background:#f7f4eb!important;box-shadow:none}
+#achat #rewardBox{background:#eef3e9!important}
+#achat #payableBox{padding:13px 14px;border:1px solid #d8c99f;border-radius:14px;background:#f5f0e2;color:#254735;font-weight:650}
+#achat button.primary{width:100%;min-height:54px;border-radius:15px;background:linear-gradient(135deg,#1b593c,#103524);border:1px solid #b99a54;box-shadow:0 6px 16px rgba(18,59,44,.18);font-size:16px;letter-spacing:.01em;position:sticky;bottom:88px;z-index:4}
+#achat #message{padding:8px 4px}
+@media(max-width:420px){
+ #achat> .card{padding:16px 12px 20px}
+ .saleFlowSteps{gap:2px;padding:9px 6px}
+ .saleFlowSteps span{font-size:9px;gap:3px}
+ .saleFlowSteps span b{width:19px;height:19px;font-size:10px}
+ .saleStepTitle{margin-top:16px}
+}
+
+</style>
+<style>
+
+/* V90 Étape 3 — copilote commercial plus lisible et orienté action */
+#commercialCopilotCard{border:1px solid #d9c99f!important;background:linear-gradient(155deg,#fffdf7,#f7f3e8)!important}
+#commercialCopilotCard>div:first-child h3{font-size:19px;letter-spacing:-.025em;color:#173f2d}
+#commercialCopilotCard .badge{background:#e9eee6;color:#24533a;border:1px solid #d4dfd2;border-radius:99px;padding:6px 10px;font-size:10px}
+.copilotPriority{border:1px solid #c9b47f;border-radius:17px;padding:14px;background:linear-gradient(140deg,#f7f1df,#fffdf7);box-shadow:0 6px 17px rgba(32,55,45,.06);margin:12px 0}
+.copilotPriorityHead{display:flex;align-items:center;justify-content:space-between;color:#8a713e;font-size:9px;font-weight:800;letter-spacing:.1em}
+.copilotSpark{display:grid;place-items:center;width:25px;height:25px;border-radius:50%;background:#e9dfc6;color:#8b713e;font-size:15px}
+.copilotPriorityMain{display:flex;gap:11px;align-items:flex-start;margin-top:10px}
+.copilotPriorityIcon{display:grid;place-items:center;flex:0 0 39px;height:39px;border-radius:12px;background:#174a34;color:#fff;font-size:19px}
+.copilotPriorityMain strong{display:block;color:#183f2d;font-size:15px;line-height:1.3}
+.copilotPriorityMain p{margin:5px 0 0;color:#53675b;font-size:12px;line-height:1.45}
+.copilotPriorityAction{margin:12px 0 0;padding-top:10px;border-top:1px solid #e6dcc4;color:#806b43;font-size:11px;line-height:1.45}
+#commercialCopilot .analysisInsight{padding:10px 0;border-bottom:1px solid #ece6d9}
+#commercialCopilot .analysisInsight:last-of-type{border-bottom:0}
+#commercialCopilot .analysisInsight strong{color:#254a36;font-size:13px}
+#commercialCopilot .analysisInsight p{font-size:11px;line-height:1.45}
+.copilotDataNote{margin-top:12px;padding:12px;border-radius:13px;background:#edf1e9;border:1px solid #dce5d8}
+.copilotDataNote strong{display:block;color:#244b35;font-size:11px}
+.copilotDataNote span{display:block;margin-top:4px;color:#45624f;font-size:11px;font-weight:700}
+.copilotDataNote p{margin:6px 0 0;color:#718078;font-size:10px;line-height:1.45}
+
+</style>
+<style>
+
+/* V90 Étape 4 — lecture financière claire */
+#financialOverviewCard{border:1px solid #d9c99f!important;background:linear-gradient(155deg,#fffdf7,#f7f3e8)!important}
+#financialOverviewCard h3{margin:0;color:#173f2d;font-size:18px}
+#financialOverviewCard label{display:block;margin:12px 0 6px;color:#355444;font-size:12px;font-weight:700}
+#financialPeriod{width:100%;min-height:44px;border:1px solid #ddd5c5;border-radius:12px;background:#fffefa;padding:9px 12px}
+.financeGrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin-top:13px}
+.financeTile{min-width:0;padding:13px 11px;border-radius:15px;background:#fffdf7;border:1px solid #e5dece;display:flex;flex-direction:column;gap:5px}
+.financeTile span{font-size:10px;color:#68776e;line-height:1.3}
+.financeTile strong{font-size:clamp(18px,5vw,23px);color:#1b4a34;letter-spacing:-.03em;overflow-wrap:anywhere}
+.financeTile small{font-size:9px;color:#7b857e;line-height:1.35}
+.financeTile.financePrimary{background:linear-gradient(145deg,#174b34,#0d3022);border-color:#b99a54}
+.financeTile.financePrimary span,.financeTile.financePrimary small{color:#e9dfc7}
+.financeTile.financePrimary strong{color:#fff;font-size:25px}
+.financeTile.financeProfit{background:#edf2e9;border-color:#d6e1d2}
+.financeTile.financeProfit strong{color:#23613e}
+.financeRatios{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
+.financeRatios>div{padding:11px;border-radius:13px;background:#f0ece1;border:1px solid #e2dac9}
+.financeRatios span{display:block;font-size:10px;color:#718078;line-height:1.35}
+.financeRatios strong{display:block;margin-top:5px;font-size:18px;color:#244b35}
+@media(max-width:390px){.financeGrid{gap:7px}.financeTile{padding:11px 9px}.financeRatios{gap:6px}}
+
+</style>
+<style>
+
+/* V90 Étape 5 — tableau de santé du stock */
+#stockHealthCard{border:1px solid #d9c99f!important;background:linear-gradient(155deg,#fffdf7,#f7f3e8)!important}
+.stockHealthHead{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+.stockHealthHead h3{margin:0;color:#173f2d;font-size:18px}
+.stockHealthHead .badge{white-space:nowrap;background:#e9eee6;color:#24533a;border:1px solid #d4dfd2;border-radius:99px;padding:6px 9px;font-size:9px}
+.stockHealthTiles{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:12px}
+.stockHealthTiles>div{min-width:0;padding:12px;border:1px solid #e5dece;border-radius:14px;background:#fffdf7;display:flex;flex-direction:column;gap:4px}
+.stockHealthTiles span{font-size:10px;color:#6d7b72;line-height:1.35}
+.stockHealthTiles strong{font-size:20px;color:#174a34;overflow-wrap:anywhere}
+.stockHealthTiles small{font-size:9px;color:#7c867e;line-height:1.35}
+.stockHealthRow{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:10px 2px;border-bottom:1px solid #eae4d8}
+.stockHealthRow span{min-width:0}
+.stockHealthRow strong,.stockHealthRow small{display:block}
+.stockHealthRow strong{font-size:12px;color:#254a36;overflow-wrap:anywhere}
+.stockHealthRow small{font-size:10px;color:#78837c;margin-top:2px}
+.stockHealthRow em{font-style:normal;font-size:10px;font-weight:750;color:#987638;white-space:nowrap}
+.stockHealthRow .stockOutLabel{color:#a94339}
+.stockHealthGood{padding:11px;border-radius:12px;background:#eaf1e7;color:#315c3e;font-size:12px;font-weight:700}
+#stockHealthSummary h4{font-size:12px;color:#355444;margin:14px 0 4px}
+
+</style>
+<style>
+
+/* V90 finale — finition et lisibilité */
+#offlineNotice{position:sticky;top:0;z-index:50;margin:0;padding:10px 14px;text-align:center;background:#f7edcf;border-bottom:1px solid #ddc98f;color:#674f20;font-size:12px;font-weight:700}
+button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px solid rgba(185,154,84,.65)!important;outline-offset:2px}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
+
+</style>
 </head>
 <body>
 
@@ -1762,7 +1965,10 @@ input,select,textarea{accent-color:#2f7048}
 
 <section id="achat" class="page">
   <div class="card">
-    <h2>💶 Nouvel achat</h2>
+    <h2>💶 Nouvelle vente</h2>
+    <div class="saleFlowIntro">Un parcours simple en quelques étapes. Tes ventes et ta fidélité restent enregistrées comme avant.</div>
+    <div class="saleFlowSteps" aria-label="Étapes de la vente"><span class="current"><b>1</b> Client</span><i></i><span><b>2</b> Montant</span><i></i><span><b>3</b> Avantages</span><i></i><span><b>4</b> Produits</span></div>
+    <div class="saleStepTitle"><span>01</span><div><strong>Choisir le client</strong><small>Chaque vente est associée à une fiche client.</small></div></div>
     <label for="clientName">Rechercher un client par nom</label>
     <div class="purchaseSearchWrap">
       <input id="clientName" type="text" placeholder="🔎 Tape « Na », « M », un nom…" autocomplete="off" oninput="updatePurchaseBox();renderPurchaseSuggestions()" onchange="updatePurchaseBox();renderPurchaseSuggestions()" onkeydown="purchaseSuggestionKeydown(event)" aria-describedby="purchaseClientHelp" aria-controls="purchaseSuggestions" aria-autocomplete="list">
@@ -1770,8 +1976,10 @@ input,select,textarea{accent-color:#2f7048}
     </div>
     <p id="purchaseClientHelp" class="small muted" style="margin-top:-7px">Tapez un nom, un prénom, un téléphone ou un e-mail, puis sélectionnez le client dans les suggestions.</p>
     <div id="linkedClientInfo" class="small muted"></div>
-    <label>Montant avant réduction (€)</label>
+    <div class="saleStepTitle"><span>02</span><div><strong>Montant de la vente</strong><small>Saisis le montant total avant les réductions.</small></div></div>
+    <label for="amount">Montant avant réduction (€)</label>
     <input id="amount" type="number" inputmode="decimal" min="0" step="0.01" placeholder="17,00" oninput="updatePurchaseBox()" aria-label="Montant avant réduction en euros">
+    <div class="saleStepTitle saleStepCompact"><span>03</span><div><strong>Fidélité et réductions</strong><small>Applique les avantages disponibles si nécessaire.</small></div></div>
     <div id="rewardBox" class="card" style="display:none;background:#eef6f0;padding:13px">
       <div class="row"><strong>🎁 Bon disponible</strong><strong id="availableReward">0 €</strong></div>
       <label style="display:flex;align-items:center;gap:9px"><input id="useReward" type="checkbox" onchange="updatePurchaseBox()" style="width:21px;margin:0"><span>Utiliser 5 € de la cagnotte</span></label>
@@ -1779,6 +1987,7 @@ input,select,textarea{accent-color:#2f7048}
     <label for="exceptionalDiscount">🎟️ Réduction exceptionnelle (€) — facultatif</label>
     <input id="exceptionalDiscount" type="number" inputmode="decimal" min="0" step="0.01" value="0" placeholder="0,00" oninput="updatePurchaseBox()" aria-label="Réduction exceptionnelle en euros">
     <p class="small muted" style="margin-top:-7px">À utiliser pour une remise ponctuelle, en plus ou à la place du bon de fidélité.</p>
+    <div class="saleStepTitle saleStepCompact"><span>04</span><div><strong>Détailler les produits vendus</strong><small>Facultatif : seuls les produits identifiés sont déduits du stock.</small></div></div>
     <details id="categoryAllocation" class="card" style="padding:13px;margin:12px 0;background:#f8f7ef">
       <summary style="font-weight:700;cursor:pointer">📊 Répartir l’achat par catégorie (facultatif)</summary>
       <p class="small muted">Renseigne uniquement les catégories connues. Les montants doivent totaliser le montant avant réduction. Si tu ne détailles pas l’achat, laisse tout à 0 €. Cette répartition sert aux analyses et ne modifie jamais le stock.</p>
@@ -1803,7 +2012,7 @@ input,select,textarea{accent-color:#2f7048}
       <div id="saleStockInfo" class="small muted" aria-live="polite">Aucun produit détaillé : le stock ne sera pas modifié.</div><div id="saleStockBasket" style="margin-top:8px"></div>
     </div>
     <div id="payableBox" class="small muted" style="margin:8px 0 12px"></div>
-    <button class="primary" onclick="addPurchase()">Enregistrer l'achat</button>
+    <button class="primary" onclick="addPurchase()">Valider et enregistrer la vente</button>
     <p id="message" class="muted"></p>
   </div>
 </section>
@@ -1811,6 +2020,10 @@ input,select,textarea{accent-color:#2f7048}
 <section id="stock" class="page">
  <div class="card"><h2>📦 Gestion du stock</h2><p class="small muted">Les données de stock sont conservées séparément des clients et ventes. Les ventes au montant seul ne modifient pas le stock.</p>
  <div class="grid grid2"><div class="stat"><strong id="stockSkuCount">0</strong>Références</div><div class="stat"><strong id="stockUnits">0</strong>Unités en stock</div><div class="stat"><strong id="stockAlerts">0</strong>Alertes</div><div class="stat"><strong id="stockMoves">0</strong>Mouvements</div><div class="stat"><strong id="stockCostValue">—</strong>Valeur d’achat connue</div><div class="stat"><strong id="stockRetailValue">—</strong>Valeur de vente potentielle</div></div></div>
+ <div class="card" id="stockHealthCard">
+  <div class="stockHealthHead"><div><h3>🧠 Santé du stock</h3><p class="small muted">Une vue rapide des références à surveiller et de la valeur du stock.</p></div><span class="badge">Analyse locale</span></div>
+  <div id="stockHealthSummary" aria-live="polite"><p class="small muted">Calcul de l’état du stock…</p></div>
+ </div>
  <div class="card"><h3>➕ Ajouter un produit</h3><label for="stName">Nom du produit</label><input id="stName" placeholder="Ex. Ragnarok Fruits rouges frais 50 ml"><label for="stCategory">Catégorie</label><select id="stCategory"><option>E-liquides</option><option>Résistances</option><option>Cartouches</option><option>Clearomiseurs</option><option>Accessoires</option><option>Puffs</option><option>E-cigarettes</option><option>Boosters</option></select><div class="grid grid2"><div><label for="stQty">Quantité initiale</label><input id="stQty" type="number" min="0" step="1" value="0" inputmode="numeric"></div><div><label for="stThreshold">Seuil d’alerte</label><input id="stThreshold" type="number" min="0" step="1" value="2"></div><div><label for="stLeadDays">Délai fournisseur (jours)</label><input id="stLeadDays" type="number" min="0" max="365" step="1" value="7" inputmode="numeric"></div><div><label for="stCost">Prix d’achat unitaire HT (€)</label><input id="stCost" type="number" min="0" step="0.01" value="0" inputmode="decimal"></div><div><label for="stPrice">Prix de vente unitaire TTC (€)</label><input id="stPrice" type="number" min="0" step="0.01" value="0" inputmode="decimal"></div></div><label for="stVatRate">Taux de TVA (%)</label><select id="stVatRate"><option value="20" selected>20 %</option><option value="10">10 %</option><option value="5.5">5,5 %</option><option value="2.1">2,1 %</option><option value="0">0 %</option></select><button class="primary" onclick="stockAddProduct()">Ajouter au catalogue</button><div class="actions" style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px"><button class="secondary" onclick="stockExportBackup()">Exporter sauvegarde du stock</button><button class="secondary" onclick="document.getElementById('stockImportFile').click()">Importer sauvegarde du stock</button><input id="stockImportFile" type="file" accept=".json,application/json" style="display:none" onchange="stockImportBackup(event)"></div><p id="stockBackupMessage" class="small muted"></p><p id="stockMessage" class="small muted"></p></div>
  <div class="card"><h3>📋 Catalogue par catégorie</h3><p class="small muted">Choisis une catégorie pour afficher uniquement les références correspondantes. Chaque nouveau produit est rangé selon la catégorie choisie lors de sa création.</p><div id="stockCategoryNav" class="grid grid2" style="gap:8px;margin:12px 0"></div><label for="stockSearch">Rechercher dans le catalogue</label><input id="stockSearch" placeholder="Rechercher un produit…" oninput="renderStock()"><div class="actions" style="display:flex;gap:8px;flex-wrap:wrap;margin:8px 0"><button type="button" class="secondary" id="stockLowOnlyBtn" onclick="toggleStockLowOnly()">⚠️ Afficher uniquement les stocks bas</button><button type="button" class="secondary" onclick="document.getElementById('stockSearch').value='';stockLowOnly=false;stockSelectedCategory='Toutes';renderStock()">Réinitialiser les filtres</button></div><div id="stockInventory"></div><button type="button" class="secondary" id="stockCatalogToggle" onclick="toggleStockCatalog()">Voir tout le catalogue</button></div>
  <div class="card"><h3>↕️ Mouvement manuel</h3><label for="stockMoveSearch">Rechercher un produit</label><input id="stockMoveSearch" placeholder="Tape les premières lettres…" autocomplete="off" oninput="stockProductSearchChanged('stockMoveSearch','stockMoveProduct','stockMoveSuggestions')" onfocus="stockFilterSelectOptions('stockMoveSearch','stockMoveProduct','stockMoveSuggestions')"><div id="stockMoveSuggestions" class="productSuggestions" role="listbox"></div><label for="stockMoveProduct">Produit sélectionné</label><select id="stockMoveProduct" style="display:none" aria-hidden="true"></select><p id="stockMoveSelected" class="small muted">Aucun produit sélectionné.</p><div class="grid grid2"><div><label for="stockMoveType">Type</label><select id="stockMoveType"><option value="in">Entrée de stock</option><option value="out">Sortie manuelle</option></select></div><div><label for="stockMoveQty">Quantité</label><input id="stockMoveQty" type="number" min="1" step="1" value="1"></div></div><label for="stockMoveReason">Motif</label><input id="stockMoveReason" placeholder="Réception fournisseur, casse…"><button class="primary" onclick="stockManualMove()">Enregistrer le mouvement</button></div>
@@ -1925,7 +2138,12 @@ input,select,textarea{accent-color:#2f7048}
     <select id="analysisPeriod" onchange="renderAnalysis()"><option value="week">Cette semaine</option><option value="month" selected>Ce mois</option><option value="year">Cette année</option></select>
     <div id="analysisSummary" aria-live="polite"></div>
   </div>
-  <div class="card"><h3>📈 Indicateurs comparés</h3><div id="analysisMetrics" class="clientMetricGrid"></div></div>
+  <div class="card"><h3>📈 Indicateurs comparés</h3><div id="analysisMetrics" class="clientMetricGrid"></div></div><div class="card" id="financialOverviewCard">
+    <div class="financeHead"><div><h3>💼 Tableau financier</h3><p class="small muted">CA encaissé, coût des produits vendus, bénéfice brut et achats fournisseurs.</p></div></div>
+    <label for="financialPeriod">Période financière</label>
+    <select id="financialPeriod" onchange="renderFinancialOverview()"><option value="day">Aujourd’hui</option><option value="week">Cette semaine</option><option value="month" selected>Ce mois</option><option value="30">30 derniers jours</option><option value="year">Cette année</option></select>
+    <div id="financialOverview" aria-live="polite"><p class="small muted">Calcul des indicateurs…</p></div>
+  </div>
   <details class="statsTheme" open><summary class="statsThemeHead"><span>👥</span><div><strong>Clients à suivre</strong><small>Inactivité, fréquence et fidélité</small></div></summary><div class="card"><div id="analysisRetention"></div></div></details>
   <details class="statsTheme"><summary class="statsThemeHead"><span>🏆</span><div><strong>Meilleurs clients</strong><small>Classement calculé à partir des achats enregistrés</small></div></summary><div class="card"><div id="analysisTopClients"></div></div></details>
   <details class="statsTheme"><summary class="statsThemeHead"><span>🎯</span><div><strong>Prévision et objectif</strong><small>Objectifs quotidien, hebdomadaire et mensuel, selon les horaires réels</small></div></summary><div class="card"><div id="analysisForecast"></div></div></details>
@@ -1944,10 +2162,10 @@ input,select,textarea{accent-color:#2f7048}
   <div class="card"><h2>⚙️ Paramètres</h2><p class="small muted">Réglages et sécurité de Vap’ & Moi Pro.</p></div>
   <div id="settingsObjectivesHost"></div><div id="settingsLoyaltyHost"></div><div id="settingsBackupHost"></div>
   <div class="card" id="settingsDataHost"><h3>🛡️ Protection et données</h3><p class="small muted">Les données restent stockées sur cet appareil. Effectue régulièrement une sauvegarde JSON et conserve-la dans un emplacement sûr.</p><div class="actions"><button class="secondary" onclick="exportData()">💾 Exporter toutes les données</button></div></div>
-  <div class="card"><h3>ℹ️ Application</h3><p class="small muted">Vap’ & Moi Pro · Version V87</p><p class="small muted">Application conçue pour fonctionner hors connexion après son installation.</p></div>
+  <div class="card"><h3>ℹ️ Application</h3><p class="small muted">Vap’ & Moi Pro · Version V90 · Étape 3</p><p class="small muted">Application conçue pour fonctionner hors connexion après son installation.</p></div>
 </section>
 </main>
-<footer class="versionFooter" aria-label="Version installée"><span class="versionChip"><span class="versionDot" aria-hidden="true"></span> Vap’ & Moi Pro · V87 — Suivi des achats fournisseurs</span><p class="small muted">Données enregistrées sur cet appareil · Pense à effectuer régulièrement une sauvegarde JSON.</p></footer>
+<footer class="versionFooter" aria-label="Version installée"><span class="versionChip"><span class="versionDot" aria-hidden="true"></span> Vap’ & Moi Pro · V90 — Vente intuitive</span><p class="small muted">Données enregistrées sur cet appareil · Pense à effectuer régulièrement une sauvegarde JSON.</p></footer>
 
 <script>
 
@@ -2447,7 +2665,31 @@ function renderStockMovementHistory(){
  }).join('')||(q?'<p class="small muted">Aucun mouvement pour ce produit.</p>':'<p class="small muted">Aucun mouvement enregistré.</p>');
  const b=document.getElementById('stockMovementToggle');if(b){b.hidden=!!q||rows.length<=5;b.textContent=stockMovementExpanded?'Afficher les 5 derniers':'Voir tout l’historique';}
 }
-function renderStock(){stockRefreshSelects();refreshSaleStockSelect();const el=document.getElementById('stockInventory');if(!el)return;const q=(document.getElementById('stockSearch')?.value||'').trim().toLocaleLowerCase('fr');const cats=['Toutes','E-liquides','Résistances','Cartouches','Clearomiseurs','Accessoires','Puffs','E-cigarettes','Boosters'];const nav=document.getElementById('stockCategoryNav');if(nav)nav.innerHTML=cats.map(c=>{const count=c==='Toutes'?stockData.products.length:stockData.products.filter(p=>p.category===c).length;const active=stockSelectedCategory===c;const emoji=c==='Toutes'?'📦':c==='E-liquides'?'💧':c==='Résistances'?'⚙️':c==='Cartouches'?'🧩':c==='Clearomiseurs'?'🔧':c==='Puffs'?'💨':c==='E-cigarettes'?'🔋':c==='Boosters'?'🧪':'🧰';return `<button type="button" class="${active?'primary':'secondary'}" style="text-align:left;min-height:48px" onclick="stockSelectCategory('${c}')">${emoji} ${stockEsc(c)}<br><small>${count} référence(s)</small></button>`}).join('');const products=stockData.products.filter(p=>(stockSelectedCategory==='Toutes'||p.category===stockSelectedCategory)&&(!stockLowOnly||p.qty<=p.threshold)&&(p.name+' '+p.category).toLocaleLowerCase('fr').includes(q));const visibleProducts=stockCatalogExpanded||q?products:products.slice(0,5);const lowProducts=stockData.products.filter(p=>Number(p.qty)<=Number(p.threshold));const lowBtn=document.getElementById('stockLowOnlyBtn');if(lowBtn){lowBtn.textContent=stockLowOnly?'✓ Affichage des stocks bas activé':'⚠️ Afficher uniquement les stocks bas';lowBtn.classList.toggle('primary',stockLowOnly)}const homeStockText=document.getElementById('homeStockSummaryText');if(homeStockText)homeStockText.textContent=stockData.products.length?`${lowProducts.length} référence(s) au seuil ou en dessous sur ${stockData.products.length}. Les quantités non saisies ne sont pas estimées.`:'Aucune référence enregistrée : ajoute uniquement le stock réellement compté.';const homeStockList=document.getElementById('homeStockAlertList');if(homeStockList)homeStockList.innerHTML=lowProducts.length?lowProducts.slice().sort((a,b)=>a.qty-b.qty).slice(0,3).map(p=>`<div style="padding:5px 0;border-top:1px solid var(--line,#e5e8df)">⚠️ <strong>${stockEsc(p.name)}</strong> — ${p.qty} restant(s) / seuil ${p.threshold}</div>`).join('')+(lowProducts.length>3?`<p class="small muted">Et ${lowProducts.length-3} autre(s) référence(s) à vérifier dans le stock.</p>`:''):'<p class="small muted">'+(stockData.products.length?'Aucune alerte selon les seuils configurés.':'Le tableau de bord s’actualisera quand tu auras saisi tes références.')+'</p>';document.getElementById('stockSkuCount').textContent=stockData.products.length;document.getElementById('stockUnits').textContent=stockData.products.reduce((n,p)=>n+(Number(p.qty)||0),0);document.getElementById('stockAlerts').textContent=lowProducts.length;document.getElementById('stockMoves').textContent=stockData.movements.length;const costValue=stockData.products.reduce((n,p)=>n+Number(p.qty||0)*Number(p.cost||0),0),retailValue=stockData.products.reduce((n,p)=>n+Number(p.qty||0)*Number(p.price||0),0);const cv=document.getElementById('stockCostValue'),rv=document.getElementById('stockRetailValue');if(cv)cv.textContent=fmt(costValue);if(rv)rv.textContent=fmt(retailValue);el.innerHTML=visibleProducts.length?visibleProducts.map(p=>`<div class="stockCatalogRow" style="display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px;align-items:center;padding:12px 0;border-bottom:1px solid var(--line,#e5e0d2)"><div style="min-width:0"><strong style="display:block;overflow-wrap:anywhere">${stockEsc(p.name)}</strong><small class="muted">${stockEsc(p.category)}</small><div class="small" style="margin-top:4px">Stock <strong>${Number(p.qty)||0}</strong> · Seuil ${Number(p.threshold)||0} · ${p.qty<=p.threshold?'⚠️ À réapprovisionner':'OK'}</div><div class="small muted">Achat ${fmt(Number(p.cost)||0)} HT · Vente ${fmt(Number(p.price)||0)} TTC · TVA ${Number.isFinite(Number(p.vatRate))?Number(p.vatRate):20}%</div><div class="small">Vente HT ${fmt((Number(p.price)||0)/(1+(Number.isFinite(Number(p.vatRate))?Number(p.vatRate):20)/100))} · Marge brute estimée ${fmt((Number(p.price)||0)/(1+(Number.isFinite(Number(p.vatRate))?Number(p.vatRate):20)/100)-(Number(p.cost)||0))}</div><div class="actions" style="display:flex;gap:5px;flex-wrap:wrap;margin-top:7px"><button type="button" class="secondary" onclick="stockEditProduct('${stockEsc(p.id)}')">Modifier</button><button type="button" class="secondary" onclick="stockDeleteProduct('${stockEsc(p.id)}')">Supprimer</button></div></div><button type="button" class="${stockData.orderBasket.some(x=>String(x.productId)===String(p.id))?'primary':'secondary'}" style="min-width:94px;max-width:110px" onclick="stockAddToOrderFromCatalog('${stockEsc(p.id)}')">${stockData.orderBasket.some(x=>String(x.productId)===String(p.id))?'✓ Au réappro':'+ Réappro'}</button></div>`).join(''):'<p class="small muted">Aucun produit correspondant. Ajoute les références réellement présentes en boutique.</p>';const catToggle=document.getElementById('stockCatalogToggle');if(catToggle){catToggle.hidden=!!q||products.length<=5;catToggle.textContent=stockCatalogExpanded?'Afficher les 5 premiers':'Voir tout le catalogue ('+products.length+')';}stockFilterSelectOptions('stockMoveSearch','stockMoveProduct');stockFilterSelectOptions('orderSearch','orderProduct');const basket=document.getElementById('stockOrderBasket');if(basket)basket.innerHTML=stockData.orderBasket.length?'<div class="small muted">Liste modifiable avant commande. Rien n’est ajouté au stock avant la réception réelle.</div>'+stockData.orderBasket.map(x=>{const p=stockProduct(x.productId);return `<div style="display:grid;grid-template-columns:minmax(0,1fr) 88px auto;gap:8px;align-items:center;padding:10px 0;border-bottom:1px solid var(--line,#e5e0d2)"><div><strong>${stockEsc(p?.name||'Produit supprimé')}</strong><div class="small muted">Réapprovisionnement</div></div><input aria-label="Quantité à commander pour ${stockEsc(p?.name||'produit')}" type="number" min="1" step="1" value="${Math.max(1,Number(x.qty)||1)}" onchange="stockUpdateOrderQty('${stockEsc(x.productId)}',this.value)" style="min-width:0;padding:8px"><button type="button" class="secondary" onclick="stockRemoveOrderItem('${stockEsc(x.productId)}')">Retirer</button></div>`}).join(''):'<p class="small muted">Panier vide. Appuie sur « + Réappro » dans une ligne du catalogue pour commencer.</p>';let copyBtn=document.getElementById('stockCopyOrderBtn');if(!copyBtn&&basket){copyBtn=document.createElement('button');copyBtn.id='stockCopyOrderBtn';copyBtn.type='button';copyBtn.className='secondary';copyBtn.textContent='Copier la liste fournisseur';copyBtn.onclick=stockCopyOrder;basket.insertAdjacentElement('afterend',copyBtn)}if(copyBtn)copyBtn.hidden=!stockData.orderBasket.length;const ordersHost=document.getElementById('stockOrdersHistory');if(ordersHost)ordersHost.innerHTML='<h4>Commandes fournisseurs</h4>'+(stockData.orders.slice(0,20).map(o=>{const total=(o.items||[]).reduce((n,x)=>n+(Number(x.qty)||0),0),received=(o.items||[]).reduce((n,x)=>n+(Number.isFinite(Number(x.receivedQty))?Number(x.receivedQty):(o.status==='Réceptionnée'?Number(x.qty)||0:0)),0),pending=Math.max(0,total-received);return `<div class="stockOrderHistoryRow"><p>${new Date(o.date).toLocaleDateString('fr-FR')} — <strong>${stockEsc(o.supplier||'Fournisseur non renseigné')}</strong> — ${stockEsc(o.id)}${Number.isFinite(Number(o.invoiceAmount))&&Number(o.invoiceAmount)>0?' · <strong>'+fmt(Number(o.invoiceAmount))+' TTC</strong>':' · <em>Montant non renseigné (ancienne commande)</em>'} — ${received}/${total} unité(s) reçue(s) · ${stockEsc(o.status||'En attente')}</p>${pending?`<button type="button" class="secondary" onclick="stockReceiveOrder('${stockEsc(o.id)}')">Réceptionner (${pending} restante(s))</button>`:''}</div>`}).join('')||'<p class="small muted">Aucune commande.</p>');
+
+function renderStockHealth(){
+ const host=document.getElementById('stockHealthSummary');if(!host)return;
+ const products=stockData.products||[],now=Date.now(),cutoff=now-30*86400000;
+ const low=products.filter(p=>(Number(p.qty)||0)>0&&(Number(p.qty)||0)<=(Number(p.threshold)||0));
+ const out=products.filter(p=>(Number(p.qty)||0)<=0);
+ const costKnown=products.filter(p=>Number.isFinite(Number(p.cost))&&Number(p.cost)>0);
+ const costValue=costKnown.reduce((s,p)=>s+(Number(p.qty)||0)*(Number(p.cost)||0),0);
+ const retailKnown=products.filter(p=>Number.isFinite(Number(p.price))&&Number(p.price)>0);
+ const retailValue=retailKnown.reduce((s,p)=>s+(Number(p.qty)||0)*(Number(p.price)||0),0);
+ const noMovement=products.filter(p=>!stockData.movements.some(m=>String(m.productId)===String(p.id)&&m.type==='out'&&new Date(m.date).getTime()>=cutoff&&new Date(m.date).getTime()<=now));
+ const lowHtml=low.slice(0,4).map(p=>`<div class="stockHealthRow"><span><strong>${stockEsc(p.name)}</strong><small>${Number(p.qty)||0} restant(s) · seuil ${Number(p.threshold)||0}</small></span><em>À surveiller</em></div>`).join('');
+ const outHtml=out.slice(0,3).map(p=>`<div class="stockHealthRow"><span><strong>${stockEsc(p.name)}</strong><small>Quantité disponible : 0</small></span><em class="stockOutLabel">Rupture</em></div>`).join('');
+ host.innerHTML=`<div class="stockHealthTiles">
+ <div><span>Références en alerte</span><strong>${low.length+out.length}</strong></div>
+ <div><span>Valeur d’achat connue</span><strong>${fmt(costValue)}</strong><small>${costKnown.length}/${products.length} références renseignées</small></div>
+ <div><span>Valeur de vente potentielle</span><strong>${fmt(retailValue)}</strong><small>${retailKnown.length}/${products.length} références renseignées</small></div>
+ <div><span>Sans sortie liée sur 30 j</span><strong>${noMovement.length}</strong><small>À examiner, pas forcément invendus</small></div>
+ </div>
+ ${outHtml?'<h4>Ruptures à traiter</h4>'+outHtml:''}
+ ${lowHtml?'<h4>Stocks bas</h4>'+lowHtml:''}
+ ${!low.length&&!out.length?'<p class="stockHealthGood">✓ Aucun stock sous son seuil d’alerte actuellement.</p>':''}
+ <p class="small muted">Les valeurs sont calculées uniquement sur les quantités et prix renseignés. « Sans sortie liée » signifie qu’aucun mouvement de vente n’est associé à cette référence sur 30 jours ; cela ne prouve pas qu’elle ne se vend pas.</p>`;
+}
+function renderStock(){stockRefreshSelects();refreshSaleStockSelect();renderStockHealth();const el=document.getElementById('stockInventory');if(!el)return;const q=(document.getElementById('stockSearch')?.value||'').trim().toLocaleLowerCase('fr');const cats=['Toutes','E-liquides','Résistances','Cartouches','Clearomiseurs','Accessoires','Puffs','E-cigarettes','Boosters'];const nav=document.getElementById('stockCategoryNav');if(nav)nav.innerHTML=cats.map(c=>{const count=c==='Toutes'?stockData.products.length:stockData.products.filter(p=>p.category===c).length;const active=stockSelectedCategory===c;const emoji=c==='Toutes'?'📦':c==='E-liquides'?'💧':c==='Résistances'?'⚙️':c==='Cartouches'?'🧩':c==='Clearomiseurs'?'🔧':c==='Puffs'?'💨':c==='E-cigarettes'?'🔋':c==='Boosters'?'🧪':'🧰';return `<button type="button" class="${active?'primary':'secondary'}" style="text-align:left;min-height:48px" onclick="stockSelectCategory('${c}')">${emoji} ${stockEsc(c)}<br><small>${count} référence(s)</small></button>`}).join('');const products=stockData.products.filter(p=>(stockSelectedCategory==='Toutes'||p.category===stockSelectedCategory)&&(!stockLowOnly||p.qty<=p.threshold)&&(p.name+' '+p.category).toLocaleLowerCase('fr').includes(q));const visibleProducts=stockCatalogExpanded||q?products:products.slice(0,5);const lowProducts=stockData.products.filter(p=>Number(p.qty)<=Number(p.threshold));const lowBtn=document.getElementById('stockLowOnlyBtn');if(lowBtn){lowBtn.textContent=stockLowOnly?'✓ Affichage des stocks bas activé':'⚠️ Afficher uniquement les stocks bas';lowBtn.classList.toggle('primary',stockLowOnly)}const homeStockText=document.getElementById('homeStockSummaryText');if(homeStockText)homeStockText.textContent=stockData.products.length?`${lowProducts.length} référence(s) au seuil ou en dessous sur ${stockData.products.length}. Les quantités non saisies ne sont pas estimées.`:'Aucune référence enregistrée : ajoute uniquement le stock réellement compté.';const homeStockList=document.getElementById('homeStockAlertList');if(homeStockList)homeStockList.innerHTML=lowProducts.length?lowProducts.slice().sort((a,b)=>a.qty-b.qty).slice(0,3).map(p=>`<div style="padding:5px 0;border-top:1px solid var(--line,#e5e8df)">⚠️ <strong>${stockEsc(p.name)}</strong> — ${p.qty} restant(s) / seuil ${p.threshold}</div>`).join('')+(lowProducts.length>3?`<p class="small muted">Et ${lowProducts.length-3} autre(s) référence(s) à vérifier dans le stock.</p>`:''):'<p class="small muted">'+(stockData.products.length?'Aucune alerte selon les seuils configurés.':'Le tableau de bord s’actualisera quand tu auras saisi tes références.')+'</p>';document.getElementById('stockSkuCount').textContent=stockData.products.length;document.getElementById('stockUnits').textContent=stockData.products.reduce((n,p)=>n+(Number(p.qty)||0),0);document.getElementById('stockAlerts').textContent=lowProducts.length;document.getElementById('stockMoves').textContent=stockData.movements.length;const costValue=stockData.products.reduce((n,p)=>n+Number(p.qty||0)*Number(p.cost||0),0),retailValue=stockData.products.reduce((n,p)=>n+Number(p.qty||0)*Number(p.price||0),0);const cv=document.getElementById('stockCostValue'),rv=document.getElementById('stockRetailValue');if(cv)cv.textContent=fmt(costValue);if(rv)rv.textContent=fmt(retailValue);el.innerHTML=visibleProducts.length?visibleProducts.map(p=>`<div class="stockCatalogRow" style="display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px;align-items:center;padding:12px 0;border-bottom:1px solid var(--line,#e5e0d2)"><div style="min-width:0"><strong style="display:block;overflow-wrap:anywhere">${stockEsc(p.name)}</strong><small class="muted">${stockEsc(p.category)}</small><div class="small" style="margin-top:4px">Stock <strong>${Number(p.qty)||0}</strong> · Seuil ${Number(p.threshold)||0} · ${p.qty<=p.threshold?'⚠️ À réapprovisionner':'OK'}</div><div class="small muted">Achat ${fmt(Number(p.cost)||0)} HT · Vente ${fmt(Number(p.price)||0)} TTC · TVA ${Number.isFinite(Number(p.vatRate))?Number(p.vatRate):20}%</div><div class="small">Vente HT ${fmt((Number(p.price)||0)/(1+(Number.isFinite(Number(p.vatRate))?Number(p.vatRate):20)/100))} · Marge brute estimée ${fmt((Number(p.price)||0)/(1+(Number.isFinite(Number(p.vatRate))?Number(p.vatRate):20)/100)-(Number(p.cost)||0))}</div><div class="actions" style="display:flex;gap:5px;flex-wrap:wrap;margin-top:7px"><button type="button" class="secondary" onclick="stockEditProduct('${stockEsc(p.id)}')">Modifier</button><button type="button" class="secondary" onclick="stockDeleteProduct('${stockEsc(p.id)}')">Supprimer</button></div></div><button type="button" class="${stockData.orderBasket.some(x=>String(x.productId)===String(p.id))?'primary':'secondary'}" style="min-width:94px;max-width:110px" onclick="stockAddToOrderFromCatalog('${stockEsc(p.id)}')">${stockData.orderBasket.some(x=>String(x.productId)===String(p.id))?'✓ Au réappro':'+ Réappro'}</button></div>`).join(''):'<p class="small muted">Aucun produit correspondant. Ajoute les références réellement présentes en boutique.</p>';const catToggle=document.getElementById('stockCatalogToggle');if(catToggle){catToggle.hidden=!!q||products.length<=5;catToggle.textContent=stockCatalogExpanded?'Afficher les 5 premiers':'Voir tout le catalogue ('+products.length+')';}stockFilterSelectOptions('stockMoveSearch','stockMoveProduct');stockFilterSelectOptions('orderSearch','orderProduct');const basket=document.getElementById('stockOrderBasket');if(basket)basket.innerHTML=stockData.orderBasket.length?'<div class="small muted">Liste modifiable avant commande. Rien n’est ajouté au stock avant la réception réelle.</div>'+stockData.orderBasket.map(x=>{const p=stockProduct(x.productId);return `<div style="display:grid;grid-template-columns:minmax(0,1fr) 88px auto;gap:8px;align-items:center;padding:10px 0;border-bottom:1px solid var(--line,#e5e0d2)"><div><strong>${stockEsc(p?.name||'Produit supprimé')}</strong><div class="small muted">Réapprovisionnement</div></div><input aria-label="Quantité à commander pour ${stockEsc(p?.name||'produit')}" type="number" min="1" step="1" value="${Math.max(1,Number(x.qty)||1)}" onchange="stockUpdateOrderQty('${stockEsc(x.productId)}',this.value)" style="min-width:0;padding:8px"><button type="button" class="secondary" onclick="stockRemoveOrderItem('${stockEsc(x.productId)}')">Retirer</button></div>`}).join(''):'<p class="small muted">Panier vide. Appuie sur « + Réappro » dans une ligne du catalogue pour commencer.</p>';let copyBtn=document.getElementById('stockCopyOrderBtn');if(!copyBtn&&basket){copyBtn=document.createElement('button');copyBtn.id='stockCopyOrderBtn';copyBtn.type='button';copyBtn.className='secondary';copyBtn.textContent='Copier la liste fournisseur';copyBtn.onclick=stockCopyOrder;basket.insertAdjacentElement('afterend',copyBtn)}if(copyBtn)copyBtn.hidden=!stockData.orderBasket.length;const ordersHost=document.getElementById('stockOrdersHistory');if(ordersHost)ordersHost.innerHTML='<h4>Commandes fournisseurs</h4>'+(stockData.orders.slice(0,20).map(o=>{const total=(o.items||[]).reduce((n,x)=>n+(Number(x.qty)||0),0),received=(o.items||[]).reduce((n,x)=>n+(Number.isFinite(Number(x.receivedQty))?Number(x.receivedQty):(o.status==='Réceptionnée'?Number(x.qty)||0:0)),0),pending=Math.max(0,total-received);return `<div class="stockOrderHistoryRow"><p>${new Date(o.date).toLocaleDateString('fr-FR')} — <strong>${stockEsc(o.supplier||'Fournisseur non renseigné')}</strong> — ${stockEsc(o.id)}${Number.isFinite(Number(o.invoiceAmount))&&Number(o.invoiceAmount)>0?' · <strong>'+fmt(Number(o.invoiceAmount))+' TTC</strong>':' · <em>Montant non renseigné (ancienne commande)</em>'} — ${received}/${total} unité(s) reçue(s) · ${stockEsc(o.status||'En attente')}</p>${pending?`<button type="button" class="secondary" onclick="stockReceiveOrder('${stockEsc(o.id)}')">Réceptionner (${pending} restante(s))</button>`:''}</div>`}).join('')||'<p class="small muted">Aucune commande.</p>');
  const supplierHost=document.getElementById('supplierPurchasesSummary');if(supplierHost){const now=new Date(),monthOrders=stockData.orders.filter(o=>{const d=new Date(o.date);return d.getFullYear()===now.getFullYear()&&d.getMonth()===now.getMonth()&&Number(o.invoiceAmount)>0}),allKnown=stockData.orders.filter(o=>Number(o.invoiceAmount)>0),monthSpend=monthOrders.reduce((n,o)=>n+Number(o.invoiceAmount),0),allSpend=allKnown.reduce((n,o)=>n+Number(o.invoiceAmount),0),monthCA=allPurchases().filter(p=>{const d=dateOf(p);return d.getFullYear()===now.getFullYear()&&d.getMonth()===now.getMonth()}).reduce((n,p)=>n+safelyPaid(p),0),ratio=monthCA>0?monthSpend/monthCA*100:null,unknown=stockData.orders.filter(o=>!(Number(o.invoiceAmount)>0)).length;supplierHost.innerHTML='<h4 style="margin-top:0">📈 Suivi des achats fournisseurs</h4><div class="grid grid2"><div class="stat"><strong>'+fmt(monthSpend)+'</strong><span class="kpiTitle">Commandes enregistrées ce mois</span></div><div class="stat"><strong>'+(ratio===null?'—':ratio.toLocaleString('fr-FR',{maximumFractionDigits:1})+' %')+'</strong><span class="kpiTitle">Achats fournisseurs / CA encaissé du mois</span></div><div class="stat"><strong>'+fmt(allSpend)+'</strong><span class="kpiTitle">Total des commandes renseignées</span></div><div class="stat"><strong>'+fmt(monthCA)+'</strong><span class="kpiTitle">CA encaissé ce mois</span></div></div><p class="small muted">Ratio indicatif de suivi des achats, pas une marge ni un bénéfice. Il compare les montants de commandes saisies au CA encaissé sur le mois, même si une commande n’est pas encore entièrement réceptionnée. '+unknown+' ancienne(s) commande(s) sans montant ne sont pas comptabilisées.</p>';}
  renderStockMovementHistory();const counts={};stockData.products.forEach(p=>counts[p.category]=(counts[p.category]||0)+1);const stats=document.getElementById('stockStatistics');if(stats)stats.innerHTML='<p><strong>Valeur d’achat connue du stock :</strong> '+fmt(costValue)+'</p><p><strong>Valeur de vente potentielle :</strong> '+fmt(retailValue)+'</p><p><strong>Marge brute théorique potentielle :</strong> '+fmt(retailValue-costValue)+' <span class="small muted">(indicative, uniquement sur les références dont les prix sont renseignés ; hors charges, taxes et remises)</span></p>'+Object.keys(counts).map(c=>`<p>${stockEsc(c)} : ${counts[c]} référence(s)</p>`).join('')+'<h4>Alertes de réapprovisionnement</h4>'+(lowProducts.slice().sort((a,b)=>a.qty-b.qty).map(p=>`<p>⚠️ ${stockEsc(p.name)} — ${p.qty} restant(s), seuil ${p.threshold}</p>`).join('')||'<p class="small muted">Aucune alerte de stock.</p>');buildStockReorderPlan();}
 function stockRemoveOrderItem(id){stockData.orderBasket=stockData.orderBasket.filter(x=>x.productId!==id);if(stockSave()){showSuccessToast('Panier mis à jour','La référence a été retirée de la commande.');renderStock()}}
@@ -3246,7 +3488,7 @@ function toggleVisitFrequencyStats(){showAllVisitFrequencyStats=!showAllVisitFre
 function exportData(){
   if(storageReadIssues.length){alert('Export bloqué : une ou plusieurs données locales sont illisibles ('+storageReadIssues.join(', ')+'). Restaure une sauvegarde valide avant de créer un nouvel export incomplet.');return;}
   const exportedAt=new Date().toISOString();
-  const payload={version:'Vap’ & Moi Pro V87 — Suivi des achats fournisseurs',schemaVersion:1,exportedAt,storageKey:KEY,settings,clients,historicalCA,activityLog,stockData};
+  const payload={version:'Vap’ & Moi Pro V90 — Vente intuitive',schemaVersion:1,exportedAt,storageKey:KEY,settings,clients,historicalCA,activityLog,stockData};
   let serialized;try{serialized=JSON.stringify(payload);const check=JSON.parse(serialized);validateBackupPayload(check);if(!Array.isArray(check.stockData?.products)||!Array.isArray(check.stockData?.movements)||!Array.isArray(check.stockData?.orders))throw new Error('Structure du stock incomplète');}catch(err){alert('Sauvegarde interrompue : les données ne passent pas le contrôle de cohérence ('+(err.message||'erreur')+'). Aucun fichier incomplet n’a été exporté.');return;}
   const blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='Vap_et_Moi_sauvegarde_V82.json';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);
   localStorage.setItem(KEY+'_last_backup',exportedAt);renderBackupStatus();
@@ -3351,6 +3593,36 @@ function trendPhrase(label,cur,prev,format='number'){
 function analysisClientLabel(c){return [c.firstName,c.name].filter(Boolean).join(' ')||c.name||'Client'}
 function analysisDate(p){return new Date(p.date)}
 function daysBetween(a,b){return Math.floor((b-a)/86400000)}
+
+function renderFinancialOverview(){
+ const host=document.getElementById('financialOverview');if(!host)return;
+ const kind=document.getElementById('financialPeriod')?.value||'month';
+ const ps=profitPeriodPurchases(kind).filter(isActivePurchase);
+ const ca=ps.reduce((s,p)=>s+safelyPaid(p),0),profit=purchasesProfit(ps),breakdown=profitBreakdown(ps);
+ const cost=breakdown.products.reduce((s,p)=>s+(Number(p.cost)||0),0);
+ const now=new Date(),start=new Date(now);start.setHours(0,0,0,0);
+ if(kind==='day'){}
+ else if(kind==='week')start.setDate(start.getDate()-((start.getDay()+6)%7));
+ else if(kind==='month')start.setDate(1);
+ else if(kind==='30')start.setDate(start.getDate()-29);
+ else if(kind==='year'){start.setMonth(0,1);}
+ const end=new Date(now);end.setHours(23,59,59,999);
+ const orders=(stockData.orders||[]).filter(o=>{const d=new Date(o.date);return Number.isFinite(d.getTime())&&d>=start&&d<=end;});
+ const supplierSpend=orders.reduce((s,o)=>s+(Number(o.invoiceAmount)>0?Number(o.invoiceAmount):0),0);
+ const knownRatio=ca>0?supplierSpend/ca*100:null;
+ const coverage=profit.totalSales?profit.knownSales/profit.totalSales*100:0;
+ const fmtPct=v=>v===null?'—':v.toLocaleString('fr-FR',{maximumFractionDigits:1})+' %';
+ const tile=(label,value,sub,cls='')=>`<div class="financeTile ${cls}"><span>${label}</span><strong>${value}</strong><small>${sub}</small></div>`;
+ host.innerHTML=`<div class="financeGrid">
+ ${tile('CA encaissé',fmt(ca),ps.length+' vente(s) enregistrée(s)','financePrimary')}
+ ${tile('Coût des produits vendus',fmt(cost),profit.knownSales+' vente(s) chiffrable(s)')}
+ ${tile('Bénéfice brut estimé',fmt(profit.total),'Avant charges et fiscalité','financeProfit')}
+ ${tile('Achats fournisseurs',fmt(supplierSpend),orders.length+' commande(s) sur la période')}
+ </div>
+ <div class="financeRatios"><div><span>Achats fournisseurs / CA encaissé</span><strong>${fmtPct(knownRatio)}</strong></div><div><span>Ventes avec bénéfice calculable</span><strong>${fmtPct(coverage)}</strong></div></div>
+ <p class="small muted">Données de ${ps.length} vente(s) et ${orders.length} commande(s) sur la période. ${orders.filter(o=>!(Number(o.invoiceAmount)>0)).length} commande(s) sans montant ne sont pas incluses dans les achats fournisseurs.</p>
+ <p class="small muted">Le bénéfice est une estimation brute calculée uniquement sur les ventes avec produits et coûts exploitables. Il ne déduit pas le loyer, les frais bancaires, les charges, les impôts ou les cotisations. Les commandes fournisseurs représentent des achats/engagements de trésorerie et ne sont pas assimilées au coût des produits vendus.</p>`;
+}
 function renderAnalysis(){
  const root=document.getElementById('analysisSummary');if(!root)return;
  const kind=document.getElementById('analysisPeriod')?.value||'month',d=analysisData(kind),now=new Date(),periodName=kind==='week'?'la semaine':kind==='year'?'l’année':'le mois';
@@ -3362,6 +3634,7 @@ function renderAnalysis(){
  root.innerHTML=insights.map(i=>`<div class="analysisInsight"><div class="analysisIcon">${i.icon}</div><div><strong>${esc(i.title)}</strong><p>${esc(i.text)}</p></div></div>`).join('');
  const metrics=[['CA période',fmt(d.ca)],['CA période précédente',fmt(d.prevCA)],['Ventes',String(d.tx)],['Ventes précédentes',String(d.prevTx)],['Nouveaux clients',String(d.newCurrent)],['Panier moyen',fmt(d.basket)],['Clients enregistrés',String(clients.length)],['Achats enregistrés',String(allPurchases().length)],['CA mensuel encaissé',fmt(getTodayMonthlyTarget(now).monthCA??0)],['Objectif quotidien ajusté',fmt(getTodayMonthlyTarget(now).daily)],['Jours d’ouverture restants',String(getTodayMonthlyTarget(now).remainingDays)]];
  document.getElementById('analysisMetrics').innerHTML=metrics.map(([l,v])=>`<div class="metricCard"><span>${esc(l)}</span><strong>${esc(v)}</strong></div>`).join('');
+ renderFinancialOverview();
  const purchases=allPurchases().map(p=>({...p,_date:analysisDate(p)})).filter(p=>Number.isFinite(p._date.getTime()));
  const clientStats=clients.map(c=>{const ps=(c.history||[]).filter(isActivePurchase).map(p=>({...p,_date:analysisDate(p)})).filter(p=>Number.isFinite(p._date.getTime()));ps.sort((a,b)=>b._date-a._date);const total=ps.reduce((s,p)=>s+safelyPaid(p),0);const last=ps[0]?ps[0]._date:null;return {c,ps,total,last,days:last?daysBetween(last,now):null}});
  const inactive=clientStats.filter(x=>x.ps.length&&x.days>=30).sort((a,b)=>b.days-a.days);
@@ -3471,7 +3744,10 @@ function renderCommercialCopilot(){
     if(monthlyGoal>0&&sum(month)<monthlyGoal)rec.push({icon:'📅',title:'Suis la trajectoire mensuelle',text:`CA du mois enregistré : ${fmt(sum(month))} sur ${fmt(monthlyGoal)}.`,action:'La prévision détaillée et les comparaisons sont disponibles dans Analyse.'});
   }
   if(!rec.length)rec.push({icon:'✅',title:'Activité suivie',text:'Aucun signal prioritaire calculable à partir des données actuelles.',action:'Continue à enregistrer les ventes et à vérifier les sauvegardes.'});
-  root.innerHTML=rec.slice(0,5).map(r=>`<div class="analysisInsight"><div class="analysisIcon">${r.icon}</div><div><strong>${esc(r.title)}</strong><p>${esc(r.text)}</p>${r.links?`<div class="actions">${r.links.map(x=>`<button class="secondary" onclick="showPage('clients');showClient('${escJs(x.name)}')">Ouvrir ${esc(x.name)} · ${x.days} j</button>`).join('')}</div>`:''}<p class="small muted">${esc(r.action)}</p></div></div>`).join('')+`<p class="small muted">Les conseils reposent sur les données actuellement enregistrées. Les fiches sans historique ou les ventes non saisies peuvent modifier les résultats. Les projections sont indicatives.</p>`;
+  const priority=rec[0],activeClients=clientStats.filter(x=>x.h.length).length,lastSale=ps.length?new Date(Math.max(...ps.map(p=>new Date(p.date).getTime()))):null;
+  const priorityCard=`<div class="copilotPriority"><div class="copilotPriorityHead"><span>PROCHAINE ACTION CONSEILLÉE</span><span class="copilotSpark">✦</span></div><div class="copilotPriorityMain"><span class="copilotPriorityIcon">${priority.icon}</span><div><strong>${esc(priority.title)}</strong><p>${esc(priority.text)}</p></div></div><p class="copilotPriorityAction">${esc(priority.action)}</p></div>`;
+  const other=rec.slice(1,5).map(r=>`<div class="analysisInsight"><div class="analysisIcon">${r.icon}</div><div><strong>${esc(r.title)}</strong><p>${esc(r.text)}</p>${r.links?`<div class="actions">${r.links.map(x=>`<button class="secondary" onclick="showPage('clients');showClient('${escJs(x.name)}')">Ouvrir ${esc(x.name)} · ${x.days} j</button>`).join('')}</div>`:''}<p class="small muted">${esc(r.action)}</p></div></div>`).join('');
+  root.innerHTML=priorityCard+other+`<div class="copilotDataNote"><strong>Sur quoi repose cette analyse ?</strong><span>${ps.length} vente(s) enregistrée(s) · ${activeClients} client(s) avec achat · ${lastSale?'dernière vente le '+lastSale.toLocaleDateString('fr-FR'):'aucune vente datée'}</span><p>Les conseils utilisent uniquement les ventes et fiches présentes sur cet appareil. Une vente non saisie ou un historique incomplet peut changer les résultats. Aucune relance ni remise n’est déclenchée automatiquement.</p></div>`;
 }
 function renderDataIntegrity(){
   const badge=document.getElementById('dataIntegrityBadge');if(!badge)return;
