@@ -1594,6 +1594,56 @@ input,select,textarea{accent-color:#2f7048}
 #stats .stat{border-radius:15px;padding:12px}
 @media(max-width:420px){#stats>.card:first-child{padding:14px}#stats .actionRow{grid-template-columns:1fr}#stats .statsOverview{gap:8px}#stats .statsOverview button{min-height:88px;padding:11px}#stats .statsExtraGrid>.card{padding:13px}}
 
+
+/* V96.3 — graphiques adaptés à la largeur réelle de l'écran */
+.chartWrap,
+#historicalChart,
+#advancedRevenueChart,
+.advancedSvgWrap {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  overflow: hidden;
+}
+.chartWrap svg,
+#historicalChart svg,
+#advancedRevenueChart svg,
+.advancedSvgWrap svg,
+svg.historyChart {
+  display: block;
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+  height: auto !important;
+  box-sizing: border-box;
+}
+#stats .historyChart {
+  width: 100% !important;
+  min-width: 0 !important;
+  max-width: 100% !important;
+}
+#stats .chartWrap {
+  padding: 8px;
+  overflow: hidden;
+}
+@media (max-width: 650px) {
+  .chartWrap,
+  #historicalChart,
+  #advancedRevenueChart,
+  .advancedSvgWrap {
+    overflow-x: hidden !important;
+    overflow-y: visible;
+  }
+  .chartWrap svg,
+  #historicalChart svg,
+  #advancedRevenueChart svg,
+  .advancedSvgWrap svg {
+    width: 100% !important;
+    min-width: 0 !important;
+  }
+}
+
 </style>
 <style>
 #profitStatsCard label[for="profitPeriod"],#profitPeriod,
@@ -2321,7 +2371,7 @@ button:disabled,input:disabled,select:disabled{opacity:.68}
   <div class="card"><h3>ℹ️ Application</h3><p class="small muted">Vap’ & Moi Pro · Version V96 · Statistiques réorganisées</p><p class="small muted">Application conçue pour fonctionner hors connexion après son installation.</p></div>
 </section>
 </main>
-<footer class="versionFooter" aria-label="Version installée"><span class="versionChip"><span class="versionDot" aria-hidden="true"></span> Vap’ & Moi Pro · V96 — Statistiques réorganisées</span><p class="small muted">Données enregistrées sur cet appareil · Pense à effectuer régulièrement une sauvegarde JSON.</p></footer>
+<footer class="versionFooter" aria-label="Version installée"><span class="versionChip"><span class="versionDot" aria-hidden="true"></span> Vap’ & Moi Pro · V96.3 — Graphiques adaptés et contraste renforcé</span><p class="small muted">Données enregistrées sur cet appareil · Pense à effectuer régulièrement une sauvegarde JSON.</p></footer>
 
 <script>
 
