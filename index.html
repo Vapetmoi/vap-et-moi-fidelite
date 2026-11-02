@@ -1820,7 +1820,7 @@ nav.appNav button.saleNav{transform:none!important;background:#174a35!important;
 @media(max-width:650px){.appHeaderV60{padding:9px 13px!important}.brandLockup h1{font-size:20px!important}main{padding:11px 11px calc(84px + env(safe-area-inset-bottom))!important}#accueil .homeStats:not([aria-label]) .stat{min-height:78px!important;padding:11px!important}#accueil .homeStats:not([aria-label]) .stat:first-child{min-height:96px!important}#accueil .homeStats:not([aria-label]) .stat:not(:first-child) strong{font-size:20px!important}nav.appNav button.saleNav{transform:none!important}}
 
 
-/* V92 — Accueil inspiré de la maquette validée : tableau de bord premium */
+/* V93 — Accueil inspiré de la maquette validée : tableau de bord premium */
 #accueil{padding-top:0!important}
 #accueil .appGreeting{margin:0 -1px 12px!important;overflow:hidden!important;border-radius:0 0 20px 20px!important}
 #accueil .homeBannerImage{height:clamp(150px,48vw,230px)!important;max-height:230px!important;object-position:center 46%!important;border-radius:0 0 18px 18px!important;box-shadow:none!important}
@@ -1849,6 +1849,16 @@ nav.appNav button.saleNav{transform:none!important;background:#174a35!important;
 #accueil .homeForecastTitle{font-size:16px!important}
 #accueil .homeQuick.homeQuickCompact{grid-template-columns:1fr 1fr!important}
 @media(max-width:390px){#accueil .homeRevenueCard{padding:14px!important}#accueil .homeRevenueCard .revenueTargetLabel{font-size:10px}#accueil .homeRevenueCard .revenueTargetLabel strong{font-size:14px}}
+
+/* V93 — contraste renforcé du CA et compteur de ventes saisies */
+#accueil .homeRevenueCard .revenueHeading .kpiTitle{color:#fff!important;text-shadow:0 1px 1px rgba(0,0,0,.22)!important}
+#accueil .homeRevenueCard .revenueTargetLabel{color:#fff4d5!important;background:rgba(255,255,255,.13)!important;border:1px solid rgba(255,239,194,.42)!important;border-radius:12px!important;padding:7px 10px!important;font-size:12px!important;font-weight:700!important}
+#accueil .homeRevenueCard .revenueTargetLabel strong{color:#fff!important;font-size:18px!important;font-weight:850!important}
+#accueil .homeRevenueCard>strong{color:#fff!important;text-shadow:0 1px 2px rgba(0,0,0,.18)!important}
+#accueil .homeRevenueCard>small{color:#fff!important;font-size:13px!important;font-weight:650!important;opacity:1!important}
+#accueil .homeRevenueCard .homeRevenueProgressText{color:#fff2ce!important;font-size:14px!important;font-weight:800!important;text-shadow:0 1px 1px rgba(0,0,0,.2)!important}
+#accueil .homeStats:not([aria-label]) .stat #dTodaySales{font-size:clamp(21px,5.8vw,27px)!important;white-space:nowrap!important;letter-spacing:-.5px!important}
+#accueil .homeStats:not([aria-label]) .stat:has(#dTodaySales) .kpiTitle{color:#244b36!important;font-weight:700!important}
 
 </style>
 </head>
@@ -1885,7 +1895,7 @@ nav.appNav button.saleNav{transform:none!important;background:#174a35!important;
     <div class="stat"><strong id="dBasket">0 €</strong><span class="kpiTitle">🛍️ Panier moyen</span></div>
     <div class="stat"><strong id="dClientsMonth">0</strong><span class="kpiTitle">👥 Clients ce mois</span></div><span id="dClients" hidden>0</span>
     <div class="stat"><strong id="dTodayProfit">—</strong><span class="kpiTitle">📈 Bénéfice estimé</span><small id="dTodayProfitNote" class="small muted">Produits identifiés uniquement</small></div>
-    <div class="stat"><strong id="dTodaySales">0</strong><span class="kpiTitle">🛍️ Ventes aujourd’hui</span></div>
+    <div class="stat"><strong id="dTodaySales">0</strong><span class="kpiTitle">🛍️ Ventes détaillées / total</span></div>
     <div class="stat" hidden><strong id="dWeek">0 €</strong><span class="kpiTitle">📆 CA cette semaine</span></div>
     <div class="stat" hidden><strong id="dMonth">0 €</strong><span class="kpiTitle">📅 CA ce mois</span></div>
   </div>
@@ -3142,7 +3152,7 @@ function setDashboard(){
   const weekStart=new Date(now);weekStart.setHours(0,0,0,0);weekStart.setDate(weekStart.getDate()-((weekStart.getDay()+6)%7));
   const week=ps.filter(p=>dateOf(p)>=weekStart&&dateOf(p)<=now);
   const todayCA=today.reduce((s,p)=>s+safelyPaid(p),0),weekCA=week.reduce((s,p)=>s+safelyPaid(p),0),monthCA=month.reduce((s,p)=>s+safelyPaid(p),0),allCA=ps.reduce((s,p)=>s+safelyPaid(p),0);
-  document.getElementById('dToday').textContent=fmt(todayCA);const todayTargetEl=document.getElementById('dTodayTarget');if(todayTargetEl){const dayTarget=getTodayMonthlyTarget(now);todayTargetEl.textContent=dayTarget.closed?'Boutique fermée aujourd’hui':`${fmt(todayCA)} / ${fmt(dayTarget.daily)} à faire aujourd’hui`;const targetValue=Math.max(0,Number(dayTarget.daily)||0);const pct=targetValue>0?Math.min(100,Math.round(todayCA/targetValue*100)):0;const targetLabel=document.getElementById('homeTodayTarget');if(targetLabel)targetLabel.textContent=dayTarget.closed?'Fermée':fmt(targetValue);const bar=document.getElementById('homeTodayProgress');if(bar)bar.style.width=pct+'%';const pctText=document.getElementById('homeTodayProgressText');if(pctText)pctText.textContent=dayTarget.closed?'Boutique fermée aujourd’hui':`${pct} % de l’objectif`; }const todaySalesEl=document.getElementById('dTodaySales');if(todaySalesEl)todaySalesEl.textContent=String(today.length);document.getElementById('dWeek').textContent=fmt(weekCA);document.getElementById('dMonth').textContent=fmt(monthCA);document.getElementById('dBasket').textContent=fmt(ps.length?allCA/ps.length:0);document.getElementById('dClients').textContent=clients.length;const clientsMonthEl=document.getElementById('dClientsMonth');if(clientsMonthEl)clientsMonthEl.textContent=clients.filter(c=>c.createdAt&&monthKey(new Date(c.createdAt))===mk).length;const profitToday=purchasesProfit(today);const profitEl=document.getElementById('dTodayProfit');if(profitEl)profitEl.textContent=profitToday.knownSales?fmt(profitToday.total):'—';const profitNote=document.getElementById('dTodayProfitNote');if(profitNote)profitNote.textContent=profitToday.knownSales?`${profitToday.knownSales}/${today.length} vente(s) détaillée(s)`:'Aucune vente détaillée aujourd’hui';
+  document.getElementById('dToday').textContent=fmt(todayCA);const todayTargetEl=document.getElementById('dTodayTarget');if(todayTargetEl){const dayTarget=getTodayMonthlyTarget(now);todayTargetEl.textContent=dayTarget.closed?'Boutique fermée aujourd’hui':`${fmt(todayCA)} / ${fmt(dayTarget.daily)} à faire aujourd’hui`;const targetValue=Math.max(0,Number(dayTarget.daily)||0);const pct=targetValue>0?Math.min(100,Math.round(todayCA/targetValue*100)):0;const targetLabel=document.getElementById('homeTodayTarget');if(targetLabel)targetLabel.textContent=dayTarget.closed?'Fermée':fmt(targetValue);const bar=document.getElementById('homeTodayProgress');if(bar)bar.style.width=pct+'%';const pctText=document.getElementById('homeTodayProgressText');if(pctText)pctText.textContent=dayTarget.closed?'Boutique fermée aujourd’hui':`${pct} % de l’objectif`; }const todaySalesEl=document.getElementById('dTodaySales');document.getElementById('dWeek').textContent=fmt(weekCA);document.getElementById('dMonth').textContent=fmt(monthCA);document.getElementById('dBasket').textContent=fmt(ps.length?allCA/ps.length:0);document.getElementById('dClients').textContent=clients.length;const clientsMonthEl=document.getElementById('dClientsMonth');if(clientsMonthEl)clientsMonthEl.textContent=clients.filter(c=>c.createdAt&&monthKey(new Date(c.createdAt))===mk).length;const profitToday=purchasesProfit(today);if(todaySalesEl)todaySalesEl.textContent=`${profitToday.knownSales} / ${today.length}`;const profitEl=document.getElementById('dTodayProfit');if(profitEl)profitEl.textContent=profitToday.knownSales?fmt(profitToday.total):'—';const profitNote=document.getElementById('dTodayProfitNote');if(profitNote)profitNote.textContent=profitToday.knownSales?`${profitToday.knownSales}/${today.length} vente(s) détaillée(s)`:'Aucune vente détaillée aujourd’hui';
   const elapsedOpenDays=Math.max(1,Math.min(6,((now.getDay()+6)%7)+1));const hp=document.getElementById('homeWeekPurchases');if(hp)hp.textContent=String(week.length);const ha=document.getElementById('homeAvgPurchases');if(ha)ha.textContent=(week.length/elapsedOpenDays).toLocaleString('fr-FR',{maximumFractionDigits:1});
   const goal=Number(settings.goal??4000);document.getElementById('monthlyGoal').value=goal;document.getElementById('goalText').textContent=fmt(goal);
   const pct=goal?Math.min(100,monthCA/goal*100):0;document.getElementById('goalBar').style.width=pct+'%';document.getElementById('goalMessage').textContent=`${pct.toFixed(0)} % atteint · ${fmt(Math.max(0,goal-monthCA))} restant pour l'objectif mensuel.`;
