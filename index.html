@@ -1903,6 +1903,31 @@ input::placeholder,textarea::placeholder{color:#70786f!important;opacity:1!impor
 button:disabled,input:disabled,select:disabled{opacity:.68}
 </style>
 
+<style>
+/* V96.2 — correction globale des textes insuffisamment contrastés sur fonds clairs */
+:root{--muted:#4f5e53!important}
+/* Descriptions des rubriques Statistiques : le fond est clair, le texte doit rester foncé. */
+#stats .statsThemeHead small,.statsThemeHead small{color:#4b5b50!important;opacity:1!important;font-weight:550!important}
+/* Catalogue Stock : noms de produits, catégories, détails et informations de marge. */
+#stock .stockCatalogRow>div>strong{color:#173f2e!important;opacity:1!important;font-weight:800!important}
+#stock .stockCatalogRow small,#stock .stockCatalogRow .small{color:#4d5b51!important;opacity:1!important}
+#stock .stockCatalogRow{color:#35483b!important}
+/* Alertes Accueil : contraste renforcé sur le fond ivoire. */
+#accueil #alertsBox .alert,#accueil #alertsBox .alert *{color:#354638!important;opacity:1!important}
+#accueil #alertsBox .alert strong{color:#173f2e!important;font-weight:800!important}
+/* Conseils et textes secondaires des analyses sur cartes claires. */
+#analyse .analysisInsight p,#analyse .analysisAction,#analyse .analysisInsight small,
+#analyse .copilotDataNote p,#analyse .financeRatios span{color:#4d5b51!important;opacity:1!important}
+#analyse .analysisInsight strong,#analyse .financeRatios strong{color:#173f2e!important}
+/* Informations secondaires des cartes claires, sans toucher aux bandeaux foncés. */
+.page .card:not(.homeRevenueCard):not(.financePrimary) .muted,
+.page .card:not(.homeRevenueCard):not(.financePrimary) .small{color:#4f5e53!important;opacity:1!important}
+.page .card:not(.homeRevenueCard):not(.financePrimary) label{color:#294b38!important;opacity:1!important}
+/* Évite qu'une opacité héritée atténue les textes de contenu non désactivés. */
+#stats .statsThemeHead small,#stock .stockCatalogRow strong,#stock .stockCatalogRow small,
+#accueil #alertsBox .alert,#analyse .analysisAction{opacity:1!important}
+</style>
+
 </head>
 <body>
 
