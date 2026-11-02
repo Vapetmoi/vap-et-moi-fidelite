@@ -1,4 +1,4 @@
-const CACHE_NAME = 'vap-et-moi-pro-cache-v95-stock';
+const CACHE_NAME = 'vap-et-moi-pro-cache-v96-stats';
 const CORE = ['./', './index.html', './manifest.webmanifest', './icon-192.png', './icon-512.png', './mascotte-vap-moi.jpg', './accueil-banniere.jpg'];
 self.addEventListener('install', event => {
   event.waitUntil(caches.open(CACHE_NAME).then(cache => cache.addAll(CORE)).catch(() => {}).then(() => self.skipWaiting()));

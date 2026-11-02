@@ -1570,6 +1570,30 @@ input,select,textarea{accent-color:#2f7048}
 .stockPanel[hidden]{display:none!important}
 .stockAddAction{width:100%;margin:0 0 12px}.homeKpiHidden{display:none!important}.clientOverviewSecondary{display:none!important}#clientDetail{max-height:78vh;overflow-y:auto;overscroll-behavior:contain}
 @media(min-width:700px){.stockSubnav{grid-template-columns:repeat(4,minmax(0,1fr))}}
+
+/* V96 — Statistiques réorganisées : synthèse, accès rapides et analyses complémentaires */
+#stats>.card:first-child{border-radius:22px;padding:18px;margin-bottom:14px}
+#stats>.card:first-child>h2{margin:0 0 6px;color:#214d36}
+#stats>#statsExtra{margin:12px 0 16px}
+#stats .statsExtraGrid{display:grid;grid-template-columns:1fr;gap:10px;padding:10px 0 0}
+#stats .statsExtraGrid>.card{margin:0;border-radius:16px}
+#stats .statsOverview{margin:14px 0 12px}
+#stats .statsOverview button{min-height:92px;padding:13px}
+#stats .statsOverview button strong{font-size:15px;line-height:1.25}
+#stats .statsOverview button small{font-size:12px}
+#stats .statsTheme{margin:12px 0 16px}
+#stats .statsThemeHead{min-height:66px;padding:13px 15px;border-radius:17px}
+#stats .statsThemeHead>span{font-size:23px;flex:0 0 28px}
+#stats .statsThemeHead strong{font-size:16px}
+#stats .statsThemeHead small{font-size:12px}
+#stats details.statsTheme[open]>.statsThemeHead{margin-bottom:12px}
+#stats details.statsTheme>.card{margin:10px 0;padding:15px;border-radius:16px}
+#stats .actionRow{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+#stats .actionRow button{min-width:0;font-size:12px;padding:10px 8px}
+#stats .grid4{gap:8px}
+#stats .stat{border-radius:15px;padding:12px}
+@media(max-width:420px){#stats>.card:first-child{padding:14px}#stats .actionRow{grid-template-columns:1fr}#stats .statsOverview{gap:8px}#stats .statsOverview button{min-height:88px;padding:11px}#stats .statsExtraGrid>.card{padding:13px}}
+
 </style>
 <style>
 #profitStatsCard label[for="profitPeriod"],#profitPeriod,
@@ -2130,10 +2154,6 @@ nav.appNav button.saleNav{transform:none!important;background:#174a35!important;
     </div>
   </div>
 
-  <div class="card" id="profitStatsCard"><h3>💰 Bénéfice brut estimé</h3><p class="small muted">Calcul estimatif sur les produits identifiés dans les ventes. Les nouvelles ventes conservent le coût, le prix de vente et la TVA au moment de l’achat ; les anciennes ventes utilisent les données encore disponibles. Les ventes sans détail produit exploitable ne sont pas chiffrées. Ce n’est pas le bénéfice net après charges.</p><label for="profitPeriod">Période du bénéfice</label><select id="profitPeriod" onchange="renderProfitStats()"><option value="day">Aujourd’hui</option><option value="week">Cette semaine</option><option value="month" selected>Ce mois</option><option value="30">30 derniers jours</option><option value="prevMonth">Mois précédent</option><option value="year">Cette année</option><option value="all">Tout l’historique</option></select><div id="profitStats"></div></div>
-
-  <div class="card"><h3>🧺 Répartition des ventes par catégorie</h3><p class="small muted">Calculée uniquement sur les ventes dont la répartition a été renseignée. Les ventes sans détail restent dans le CA global mais ne sont pas attribuées à une catégorie.</p><div id="categoryAnalytics"><p class="small muted">Aucune répartition de catégorie enregistrée.</p></div></div>
-
   <div class="statsOverview" aria-label="Accès aux statistiques détaillées">
     <button type="button" onclick="openStatsDetail('statsCA')"><span class="overviewIcon">💶</span><strong>Chiffre d’affaires</strong><small>CA par période, historique et comparaisons</small><span class="openHint">Voir le détail →</span></button>
     <button type="button" onclick="openStatsDetail('statsPurchases')"><span class="overviewIcon">🛍️</span><strong>Achats & panier moyen</strong><small>Par jour, semaine, mois et évolution</small><span class="openHint">Voir le détail →</span></button>
@@ -2157,6 +2177,13 @@ nav.appNav button.saleNav{transform:none!important;background:#174a35!important;
     </div>
   </details>
 
+  <details id="statsExtra" class="statsTheme">
+    <summary class="statsThemeHead"><span>📈</span><div><strong>Analyses complémentaires</strong><small>Bénéfice, catégories, moyennes par jour et graphiques de pilotage</small></div></summary>
+    <div class="statsExtraGrid">
+  <div class="card" id="profitStatsCard"><h3>💰 Bénéfice brut estimé</h3><p class="small muted">Calcul estimatif sur les produits identifiés dans les ventes. Les nouvelles ventes conservent le coût, le prix de vente et la TVA au moment de l’achat ; les anciennes ventes utilisent les données encore disponibles. Les ventes sans détail produit exploitable ne sont pas chiffrées. Ce n’est pas le bénéfice net après charges.</p><label for="profitPeriod">Période du bénéfice</label><select id="profitPeriod" onchange="renderProfitStats()"><option value="day">Aujourd’hui</option><option value="week">Cette semaine</option><option value="month" selected>Ce mois</option><option value="30">30 derniers jours</option><option value="prevMonth">Mois précédent</option><option value="year">Cette année</option><option value="all">Tout l’historique</option></select><div id="profitStats"></div></div>
+
+  <div class="card"><h3>🧺 Répartition des ventes par catégorie</h3><p class="small muted">Calculée uniquement sur les ventes dont la répartition a été renseignée. Les ventes sans détail restent dans le CA global mais ne sont pas attribuées à une catégorie.</p><div id="categoryAnalytics"><p class="small muted">Aucune répartition de catégorie enregistrée.</p></div></div>
+
   <div class="card" id="weekdayAverageCard">
     <h3 style="margin-top:0">📆 Chiffre d’affaires moyen par jour de la semaine</h3>
     <p class="small muted">Compare le lundi au samedi sur les périodes disponibles. Les moyennes utilisent les journées avec au moins une vente enregistrée : l’application ne peut pas distinguer un jour sans vente d’un jour où aucune donnée n’a été saisie.</p>
@@ -2178,6 +2205,9 @@ nav.appNav button.saleNav{transform:none!important;background:#174a35!important;
     </div>
     <p class="small muted" id="advancedAnalyticsNote">Les journées sans vente enregistrée ne permettent pas de distinguer une fermeture d’une absence de saisie.</p>
   </section>
+
+    </div>
+  </details>
 
   <details id="statsPurchases" class="statsTheme"><summary class="statsThemeHead"><span>🛍️</span><div><strong>2. Ventes et panier moyen</strong><small>Nombre d’achats, panier moyen et comparaison semaine par semaine</small></div></summary>
     <div class="card"><h3 style="margin-top:0">🛍️ Achats par jour et par semaine</h3><div id="purchasePeriodStats"></div><div class="chartWrap" id="purchaseDailyChart" aria-label="Graphique du nombre d’achats par jour"></div><div class="chartWrap" id="purchaseWeeklyChart" aria-label="Graphique du nombre d’achats par semaine"></div><div class="chartWrap" id="purchaseMonthlyChart" aria-label="Graphique du nombre d’achats par mois"></div><div id="dailyPurchaseStats"></div></div>
@@ -2245,10 +2275,10 @@ nav.appNav button.saleNav{transform:none!important;background:#174a35!important;
   <div class="card"><h2>⚙️ Paramètres</h2><p class="small muted">Réglages et sécurité de Vap’ & Moi Pro.</p></div>
   <div id="settingsObjectivesHost"></div><div id="settingsLoyaltyHost"></div><div id="settingsBackupHost"></div>
   <div class="card" id="settingsDataHost"><h3>🛡️ Protection et données</h3><p class="small muted">Les données restent stockées sur cet appareil. Effectue régulièrement une sauvegarde JSON et conserve-la dans un emplacement sûr.</p><div class="actions"><button class="secondary" onclick="exportData()">💾 Exporter toutes les données</button></div></div>
-  <div class="card"><h3>ℹ️ Application</h3><p class="small muted">Vap’ & Moi Pro · Version V94 · Accueil corrigé</p><p class="small muted">Application conçue pour fonctionner hors connexion après son installation.</p></div>
+  <div class="card"><h3>ℹ️ Application</h3><p class="small muted">Vap’ & Moi Pro · Version V96 · Statistiques réorganisées</p><p class="small muted">Application conçue pour fonctionner hors connexion après son installation.</p></div>
 </section>
 </main>
-<footer class="versionFooter" aria-label="Version installée"><span class="versionChip"><span class="versionDot" aria-hidden="true"></span> Vap’ & Moi Pro · V94 — Accueil corrigé</span><p class="small muted">Données enregistrées sur cet appareil · Pense à effectuer régulièrement une sauvegarde JSON.</p></footer>
+<footer class="versionFooter" aria-label="Version installée"><span class="versionChip"><span class="versionDot" aria-hidden="true"></span> Vap’ & Moi Pro · V96 — Statistiques réorganisées</span><p class="small muted">Données enregistrées sur cet appareil · Pense à effectuer régulièrement une sauvegarde JSON.</p></footer>
 
 <script>
 
@@ -3571,7 +3601,7 @@ function toggleVisitFrequencyStats(){showAllVisitFrequencyStats=!showAllVisitFre
 function exportData(){
   if(storageReadIssues.length){alert('Export bloqué : une ou plusieurs données locales sont illisibles ('+storageReadIssues.join(', ')+'). Restaure une sauvegarde valide avant de créer un nouvel export incomplet.');return;}
   const exportedAt=new Date().toISOString();
-  const payload={version:'Vap’ & Moi Pro V94 — Accueil corrigé',schemaVersion:1,exportedAt,storageKey:KEY,settings,clients,historicalCA,activityLog,stockData};
+  const payload={version:'Vap’ & Moi Pro V96 — Statistiques réorganisées',schemaVersion:1,exportedAt,storageKey:KEY,settings,clients,historicalCA,activityLog,stockData};
   let serialized;try{serialized=JSON.stringify(payload);const check=JSON.parse(serialized);validateBackupPayload(check);if(!Array.isArray(check.stockData?.products)||!Array.isArray(check.stockData?.movements)||!Array.isArray(check.stockData?.orders))throw new Error('Structure du stock incomplète');}catch(err){alert('Sauvegarde interrompue : les données ne passent pas le contrôle de cohérence ('+(err.message||'erreur')+'). Aucun fichier incomplet n’a été exporté.');return;}
   const blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='Vap_et_Moi_sauvegarde_V82.json';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);
   localStorage.setItem(KEY+'_last_backup',exportedAt);renderBackupStatus();
@@ -4049,3 +4079,5 @@ document.addEventListener('DOMContentLoaded',()=>{try{renderStock();}catch(e){co
 #accueil .homeRevenueCard .revenueTargetLabel strong{color:#173f2e!important}
 #accueil .homeRevenueCard .homeRevenueProgressText{color:#214b37!important;text-shadow:none!important;font-weight:850!important}
 </style>
+
+<!-- V96 : réorganisation visuelle de Stats, aucun changement de calcul ni de stockage. -->
