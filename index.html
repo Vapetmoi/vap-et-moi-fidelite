@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#173D30">
 <meta name="description" content="Vap’ & Moi Pro Signature Premium : gestion des clients, ventes, fidélité, analyses, suivi commercial et sauvegardes.">
-<title>Vap’ &amp; Moi Pro — V90 Signature — Version finale</title>
+<title>Vap’ &amp; Moi Pro — V91 Signature — Design moderne</title>
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="./icon-192.png">
 <meta name="mobile-web-app-capable" content="yes">
@@ -1777,6 +1777,47 @@ button:active{transform:scale(.985)}
 #offlineNotice{position:sticky;top:0;z-index:50;margin:0;padding:10px 14px;text-align:center;background:#f7edcf;border-bottom:1px solid #ddc98f;color:#674f20;font-size:12px;font-weight:700}
 button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px solid rgba(185,154,84,.65)!important;outline-offset:2px}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
+
+/* V91 — refonte visuelle sobre et moderne, sans modification des fonctions */
+:root{--green:#174a35;--green2:#287451;--light:#f5f6f1;--card:#fff;--text:#20382d;--muted:#68766d;--border:#e2e8df;--gold:#b99a58;--premium-shadow:0 3px 12px rgba(24,55,39,.045)}
+body{background:#f4f5f0;color:#20382d}
+.appHeaderV60{background:#153d2d!important;border-bottom:0!important;box-shadow:0 3px 12px rgba(15,48,34,.12)!important;padding:10px 15px!important}
+.appHeaderV60 .brandMark{width:38px!important;height:38px!important;flex-basis:38px!important;border-radius:10px!important;box-shadow:none!important;border-color:rgba(215,194,145,.55)!important}
+.appHeaderV60 .brandLockup h1{font-size:21px!important;letter-spacing:-.4px!important}
+.appHeaderV60 .settingsGear,.appHeaderV60 .themeToggle{border-radius:12px!important;background:rgba(255,255,255,.08)!important;border-color:rgba(255,255,255,.2)!important}
+main{max-width:900px!important;padding:14px 13px calc(86px + env(safe-area-inset-bottom))!important}
+#accueil{background:transparent!important;border-radius:0!important;padding:0 0 14px!important}
+#accueil .appGreeting{margin:0 0 13px!important;padding:0!important;background:transparent!important;border:0!important;border-radius:16px!important;box-shadow:none!important;overflow:hidden!important}
+#accueil .homeBannerImage{width:100%!important;height:clamp(105px,28vw,150px)!important;max-height:none!important;object-fit:cover!important;object-position:center!important;border:0!important;border-radius:15px!important;box-shadow:0 3px 12px rgba(24,55,39,.08)!important}
+#accueil .homeStats:not([aria-label]){padding:0!important;gap:9px!important;margin:0 0 12px!important}
+#accueil .homeStats:not([aria-label]) .stat{min-height:84px!important;padding:13px 14px!important;border:1px solid #e4e9e1!important;border-radius:15px!important;background:#fff!important;box-shadow:0 2px 9px rgba(24,55,39,.035)!important;gap:4px!important}
+#accueil .homeStats:not([aria-label]) .stat:first-child{grid-column:1/-1!important;min-height:104px!important;background:#fff!important;color:#20382d!important;border:1px solid #dfe7de!important;border-left:4px solid #287451!important;padding:15px 16px!important}
+#accueil .homeStats:not([aria-label]) .stat:first-child strong{font-size:clamp(28px,7vw,34px)!important;color:#174a35!important}
+#accueil .homeStats:not([aria-label]) .stat:first-child .kpiTitle{color:#68766d!important;font-size:13px!important}
+#accueil .homeStats:not([aria-label]) .stat:first-child small{color:#53675b!important;font-size:12px!important;opacity:1!important}
+#accueil .homeStats:not([aria-label]) .stat:not(:first-child) strong{font-size:22px!important;color:#174a35!important}
+#accueil .homeStats:not([aria-label]) .stat:not(:first-child) .kpiTitle{font-size:12px!important;color:#68766d!important}
+#accueil .homeStats[aria-label]{padding:0!important;gap:9px!important}
+#accueil .homeStats[aria-label] .stat{background:#f9faf7!important;border:1px solid #e5eae3!important;border-radius:14px!important}
+#accueil .homeGoalStrip{margin:12px 0!important;gap:9px!important}
+#accueil .homeGoalCard{background:#fff!important;border:1px solid #e4e9e1!important;border-radius:14px!important;box-shadow:none!important}
+#accueil .homeGoalHead strong{color:#287451!important}
+#accueil .progress>div{background:#287451!important}
+#accueil .homeForecastPanel,#accueil #homeStockSummary,#accueil #executiveDecisionPanel{margin:12px 0!important;border:1px solid #e4e9e1!important;border-radius:15px!important;background:#fff!important;box-shadow:none!important}
+#accueil .homeForecastCard{background:#f7f8f4!important;border:1px solid #e8ece6!important}
+#accueil .homeQuick.homeQuickCompact{margin:12px 0!important;grid-template-columns:1fr 1fr!important;gap:9px!important}
+#accueil .homeQuickCompact .quickTile{min-height:70px!important;border-radius:14px!important;border:1px solid #e1e8df!important;background:#fff!important;box-shadow:none!important;color:#234333!important}
+#accueil .homeQuickCompact .quickTile:first-child{background:#174a35!important;border-color:#174a35!important}
+#accueil .homeQuickCompact .quickTile:first-child strong,#accueil .homeQuickCompact .quickTile:first-child span:last-child{color:#fff!important}
+#accueil .homeQuickCompact .quickTile:first-child .tileIcon{background:transparent!important;color:#fff!important}
+#accueil .homeDetails{margin:10px 0!important;border:1px solid #e4e9e1!important;border-radius:14px!important;background:#fff!important;box-shadow:none!important}
+.appNav{background:rgba(255,255,255,.97)!important;border:1px solid #e3e9e1!important;border-radius:17px 17px 0 0!important;box-shadow:0 -3px 14px rgba(24,55,39,.08)!important;padding:6px 6px calc(6px + env(safe-area-inset-bottom))!important}
+nav.appNav button{min-height:50px!important;border-radius:11px!important;font-size:10px!important}
+nav.appNav button.active{background:#edf3ed!important;border:0!important;box-shadow:inset 0 -2px #287451!important}
+nav.appNav button.saleNav{transform:none!important;background:#174a35!important;border:0!important;box-shadow:none!important;border-radius:12px!important}
+.page:not(#accueil) .card,.page:not(#accueil) details,.page:not(#accueil) .statsTheme{border-radius:15px!important;box-shadow:0 2px 10px rgba(24,55,39,.035)!important}
+.page:not(#accueil) button.primary{background:#1d6041!important;border:0!important;box-shadow:none!important}
+@media(max-width:650px){.appHeaderV60{padding:9px 13px!important}.brandLockup h1{font-size:20px!important}main{padding:11px 11px calc(84px + env(safe-area-inset-bottom))!important}#accueil .homeStats:not([aria-label]) .stat{min-height:78px!important;padding:11px!important}#accueil .homeStats:not([aria-label]) .stat:first-child{min-height:96px!important}#accueil .homeStats:not([aria-label]) .stat:not(:first-child) strong{font-size:20px!important}nav.appNav button.saleNav{transform:none!important}}
 
 </style>
 </head>
