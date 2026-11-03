@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#173D30">
 <meta name="description" content="Vap’ & Moi Pro Signature Premium : gestion des clients, ventes, fidélité, analyses, suivi commercial et sauvegardes.">
-<title>Vap’ &amp; Moi Pro — V100 — Objectifs synchronisés</title>
+<title>Vap’ &amp; Moi Pro — V101 — Sauvegarde des objectifs fiabilisée</title>
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="./icon-192.png">
 <meta name="mobile-web-app-capable" content="yes">
@@ -2289,7 +2289,7 @@ nav.appNav button.saleNav{transform:none!important;background:#174a35!important;
   <div class="card"><h3>ℹ️ Application</h3><p class="small muted">Vap’ & Moi Pro · Version V99 · Prévisions par jour de semaine</p><p class="small muted">Application conçue pour fonctionner hors connexion après son installation.</p></div>
 </section>
 </main>
-<footer class="versionFooter" aria-label="Version installée"><span class="versionChip"><span class="versionDot" aria-hidden="true"></span> Vap’ & Moi Pro · V100 — Objectifs synchronisés</span><p class="small muted">Données enregistrées sur cet appareil · Pense à effectuer régulièrement une sauvegarde JSON.</p></footer>
+<footer class="versionFooter" aria-label="Version installée"><span class="versionChip"><span class="versionDot" aria-hidden="true"></span> Vap’ & Moi Pro · V101 — Sauvegarde des objectifs fiabilisée</span><p class="small muted">Données enregistrées sur cet appareil · Pense à effectuer régulièrement une sauvegarde JSON.</p></footer>
 
 <script>
 
@@ -2389,8 +2389,22 @@ function save(){
 function persistSettings(){
   if(storageReadIssues.includes(KEY+'_settings')){alert('Les réglages existants sont illisibles. Restaure une sauvegarde valide avant de les modifier.');return false;}
   const previous=localStorage.getItem(KEY+'_settings');
-  try{const payload=JSON.stringify(settings);localStorage.setItem(KEY+'_settings',payload);if(localStorage.getItem(KEY+'_settings')!==payload)throw new Error('Vérification des réglages impossible');updateAll();return true;}
-  catch(e){try{if(previous===null)localStorage.removeItem(KEY+'_settings');else localStorage.setItem(KEY+'_settings',previous);settings=JSON.parse(previous||'{}');}catch(rollbackError){}alert('Les réglages n’ont pas pu être enregistrés. Les valeurs précédentes ont été restaurées lorsque possible.');return false;}
+  let payload;
+  try{
+    payload=JSON.stringify(settings);
+    localStorage.setItem(KEY+'_settings',payload);
+    if(localStorage.getItem(KEY+'_settings')!==payload)throw new Error('Vérification des réglages impossible');
+  }catch(e){
+    try{if(previous===null)localStorage.removeItem(KEY+'_settings');else localStorage.setItem(KEY+'_settings',previous);settings=JSON.parse(previous||'{}');}catch(rollbackError){}
+    const reason=e&&e.name==='QuotaExceededError'?'Le stockage local est plein (quota dépassé).':(e&&e.name==='SecurityError'?'Le navigateur bloque l’accès au stockage local.':'Erreur d’écriture des réglages.');
+    alert('Les réglages n’ont pas pu être enregistrés : '+reason+' Les valeurs précédentes ont été restaurées lorsque possible.');
+    return false;
+  }
+  // Les réglages sont déjà enregistrés et vérifiés : une erreur de rafraîchissement
+  // de l’interface ne doit jamais annuler ni faire croire à l’échec de la sauvegarde.
+  try{updateAll();}
+  catch(renderError){console.error('VapMoi Pro : réglages enregistrés, erreur de rafraîchissement de l’interface',renderError);}
+  return true;
 }
 function setGoal(){settings.goal=Math.max(0,Number(document.getElementById('monthlyGoal').value||0));persistSettings()}
 function setWeeklyGoal(){settings.weeklyGoal=Math.max(0,Number(document.getElementById('weeklyGoal').value||0));persistSettings()}
@@ -3604,7 +3618,7 @@ function toggleVisitFrequencyStats(){showAllVisitFrequencyStats=!showAllVisitFre
 function exportData(){
   if(storageReadIssues.length){alert('Export bloqué : une ou plusieurs données locales sont illisibles ('+storageReadIssues.join(', ')+'). Restaure une sauvegarde valide avant de créer un nouvel export incomplet.');return;}
   const exportedAt=new Date().toISOString();
-  const payload={version:'Vap’ & Moi Pro V100 — Objectifs synchronisés',schemaVersion:1,exportedAt,storageKey:KEY,settings,clients,historicalCA,activityLog,stockData};
+  const payload={version:'Vap’ & Moi Pro V101 — Sauvegarde des objectifs fiabilisée',schemaVersion:1,exportedAt,storageKey:KEY,settings,clients,historicalCA,activityLog,stockData};
   let serialized;try{serialized=JSON.stringify(payload);const check=JSON.parse(serialized);validateBackupPayload(check);if(!Array.isArray(check.stockData?.products)||!Array.isArray(check.stockData?.movements)||!Array.isArray(check.stockData?.orders))throw new Error('Structure du stock incomplète');}catch(err){alert('Sauvegarde interrompue : les données ne passent pas le contrôle de cohérence ('+(err.message||'erreur')+'). Aucun fichier incomplet n’a été exporté.');return;}
   const blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='Vap_et_Moi_sauvegarde_V82.json';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);
   localStorage.setItem(KEY+'_last_backup',exportedAt);renderBackupStatus();
