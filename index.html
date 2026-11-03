@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#173D30">
 <meta name="description" content="Vap’ & Moi Pro Signature Premium : gestion des clients, ventes, fidélité, analyses, suivi commercial et sauvegardes.">
-<title>Vap’ &amp; Moi Pro — V97 — Prévisions unifiées</title>
+<title>Vap’ &amp; Moi Pro — V98 — Analyse par journée</title>
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="./icon-192.png">
 <meta name="mobile-web-app-capable" content="yes">
@@ -1571,7 +1571,7 @@ input,select,textarea{accent-color:#2f7048}
 .stockAddAction{width:100%;margin:0 0 12px}.homeKpiHidden{display:none!important}.clientOverviewSecondary{display:none!important}#clientDetail{max-height:78vh;overflow-y:auto;overscroll-behavior:contain}
 @media(min-width:700px){.stockSubnav{grid-template-columns:repeat(4,minmax(0,1fr))}}
 
-/* V97 — Statistiques réorganisées : synthèse, accès rapides et analyses complémentaires */
+/* V98 — Calendrier et statistiques détaillées par journée */
 #stats>.card:first-child{border-radius:22px;padding:18px;margin-bottom:14px}
 #stats>.card:first-child>h2{margin:0 0 6px;color:#214d36}
 #stats>#statsExtra{margin:12px 0 16px}
@@ -2244,6 +2244,18 @@ nav.appNav button.saleNav{transform:none!important;background:#174a35!important;
 </section>
 
 <section id="analyse" class="page">
+  <div class="card" id="analysisDayCard">
+    <h3>📅 Calendrier — statistiques d’une journée</h3>
+    <p class="small muted">Choisis une année, un mois et un jour, ou ouvre le calendrier. Les résultats portent uniquement sur les ventes actives enregistrées à cette date.</p>
+    <div class="grid grid2" style="gap:10px">
+      <div><label for="analysisDayYear">Année</label><select id="analysisDayYear" onchange="analysisDayFromParts()"></select></div>
+      <div><label for="analysisDayMonth">Mois</label><select id="analysisDayMonth" onchange="analysisDayFromParts()"></select></div>
+      <div><label for="analysisDayNumber">Jour</label><select id="analysisDayNumber" onchange="analysisDayFromParts()"></select></div>
+      <div><label for="analysisDayPicker">Calendrier</label><input id="analysisDayPicker" type="date" onchange="analysisDayFromPicker()" style="width:100%;min-height:44px"></div>
+    </div>
+    <div class="actions" style="margin-top:10px"><button type="button" class="secondary" onclick="analysisDayToday()">Aujourd’hui</button></div>
+    <div id="analysisDayResults" aria-live="polite"><p class="small muted">Sélectionne une date pour afficher ses statistiques.</p></div>
+  </div>
   <div class="card">
     <h2>🧭 Analyse de la boutique</h2>
     <p class="muted small">Un résumé automatique fondé sur les ventes et les fiches enregistrées sur cet appareil. Les comparaisons utilisent des périodes équivalentes et excluent l’historique de CA saisi manuellement.</p>
@@ -2275,10 +2287,10 @@ nav.appNav button.saleNav{transform:none!important;background:#174a35!important;
   <div class="card"><h2>⚙️ Paramètres</h2><p class="small muted">Réglages et sécurité de Vap’ & Moi Pro.</p></div>
   <div id="settingsObjectivesHost"></div><div id="settingsLoyaltyHost"></div><div id="settingsBackupHost"></div>
   <div class="card" id="settingsDataHost"><h3>🛡️ Protection et données</h3><p class="small muted">Les données restent stockées sur cet appareil. Effectue régulièrement une sauvegarde JSON et conserve-la dans un emplacement sûr.</p><div class="actions"><button class="secondary" onclick="exportData()">💾 Exporter toutes les données</button></div></div>
-  <div class="card"><h3>ℹ️ Application</h3><p class="small muted">Vap’ & Moi Pro · Version V97 · Prévisions unifiées</p><p class="small muted">Application conçue pour fonctionner hors connexion après son installation.</p></div>
+  <div class="card"><h3>ℹ️ Application</h3><p class="small muted">Vap’ & Moi Pro · Version V98 · Calendrier des journées</p><p class="small muted">Application conçue pour fonctionner hors connexion après son installation.</p></div>
 </section>
 </main>
-<footer class="versionFooter" aria-label="Version installée"><span class="versionChip"><span class="versionDot" aria-hidden="true"></span> Vap’ & Moi Pro · V97 — Statistiques réorganisées</span><p class="small muted">Données enregistrées sur cet appareil · Pense à effectuer régulièrement une sauvegarde JSON.</p></footer>
+<footer class="versionFooter" aria-label="Version installée"><span class="versionChip"><span class="versionDot" aria-hidden="true"></span> Vap’ & Moi Pro · V98 — Analyse par journée</span><p class="small muted">Données enregistrées sur cet appareil · Pense à effectuer régulièrement une sauvegarde JSON.</p></footer>
 
 <script>
 
@@ -3568,7 +3580,7 @@ function toggleVisitFrequencyStats(){showAllVisitFrequencyStats=!showAllVisitFre
 function exportData(){
   if(storageReadIssues.length){alert('Export bloqué : une ou plusieurs données locales sont illisibles ('+storageReadIssues.join(', ')+'). Restaure une sauvegarde valide avant de créer un nouvel export incomplet.');return;}
   const exportedAt=new Date().toISOString();
-  const payload={version:'Vap’ & Moi Pro V97 — Prévisions unifiées',schemaVersion:1,exportedAt,storageKey:KEY,settings,clients,historicalCA,activityLog,stockData};
+  const payload={version:'Vap’ & Moi Pro V98 — Analyse par journée',schemaVersion:1,exportedAt,storageKey:KEY,settings,clients,historicalCA,activityLog,stockData};
   let serialized;try{serialized=JSON.stringify(payload);const check=JSON.parse(serialized);validateBackupPayload(check);if(!Array.isArray(check.stockData?.products)||!Array.isArray(check.stockData?.movements)||!Array.isArray(check.stockData?.orders))throw new Error('Structure du stock incomplète');}catch(err){alert('Sauvegarde interrompue : les données ne passent pas le contrôle de cohérence ('+(err.message||'erreur')+'). Aucun fichier incomplet n’a été exporté.');return;}
   const blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='Vap_et_Moi_sauvegarde_V82.json';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);
   localStorage.setItem(KEY+'_last_backup',exportedAt);renderBackupStatus();
@@ -3703,8 +3715,47 @@ function renderFinancialOverview(){
  <p class="small muted">Données de ${ps.length} vente(s) et ${orders.length} commande(s) sur la période. ${orders.filter(o=>!(Number(o.invoiceAmount)>0)).length} commande(s) sans montant ne sont pas incluses dans les achats fournisseurs.</p>
  <p class="small muted">Le bénéfice est une estimation brute calculée uniquement sur les ventes avec produits et coûts exploitables. Il ne déduit pas le loyer, les frais bancaires, les charges, les impôts ou les cotisations. Les commandes fournisseurs représentent des achats/engagements de trésorerie et ne sont pas assimilées au coût des produits vendus.</p>`;
 }
+let selectedAnalysisDay = '';
+function localDateKey(d){return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`}
+function setAnalysisDayControls(date){
+ const y=document.getElementById('analysisDayYear'),m=document.getElementById('analysisDayMonth'),day=document.getElementById('analysisDayNumber'),picker=document.getElementById('analysisDayPicker');
+ if(!y||!m||!day||!picker)return;
+ const d=new Date(date.getFullYear(),date.getMonth(),date.getDate()); selectedAnalysisDay=localDateKey(d);
+ const years=new Set([new Date().getFullYear(),d.getFullYear()]); allPurchases().forEach(p=>{const x=dateOf(p);if(Number.isFinite(x.getTime()))years.add(x.getFullYear())});
+ const sorted=[...years].sort((a,b)=>a-b);y.innerHTML=sorted.map(v=>`<option value="${v}">${v}</option>`).join('');y.value=String(d.getFullYear());
+ const months=['Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Août','Septembre','Octobre','Novembre','Décembre'];m.innerHTML=months.map((v,i)=>`<option value="${i}">${v}</option>`).join('');m.value=String(d.getMonth());
+ const count=new Date(d.getFullYear(),d.getMonth()+1,0).getDate();day.innerHTML=Array.from({length:count},(_,i)=>`<option value="${i+1}">${String(i+1).padStart(2,'0')}</option>`).join('');day.value=String(d.getDate());picker.value=selectedAnalysisDay;
+}
+function analysisDayFromParts(){
+ const y=Number(document.getElementById('analysisDayYear')?.value),m=Number(document.getElementById('analysisDayMonth')?.value),day=Number(document.getElementById('analysisDayNumber')?.value);
+ if(!y||!Number.isInteger(m)||!day)return;
+ const d=new Date(y,m,day);setAnalysisDayControls(d);renderAnalysisDay();
+}
+function analysisDayFromPicker(){const v=document.getElementById('analysisDayPicker')?.value;if(!v)return;const [y,m,d]=v.split('-').map(Number);setAnalysisDayControls(new Date(y,m-1,d));renderAnalysisDay()}
+function analysisDayToday(){setAnalysisDayControls(new Date());renderAnalysisDay()}
+function renderAnalysisDay(){
+ const host=document.getElementById('analysisDayResults');if(!host)return;
+ const key=selectedAnalysisDay||localDateKey(new Date());
+ const ps=allPurchases().filter(p=>{const d=dateOf(p);return Number.isFinite(d.getTime())&&localDateKey(d)===key}).sort((a,b)=>dateOf(a)-dateOf(b));
+ const ca=ps.reduce((s,p)=>s+safelyPaid(p),0),basket=ps.length?ca/ps.length:0;
+ const customers=new Set(ps.map(p=>String(p.client||'').trim()).filter(Boolean));
+ const gross=ps.reduce((s,p)=>s+Math.max(0,Number(p.amount??p.paid)||0),0),discountField=ps.reduce((s,p)=>s+Math.max(0,Number(p.discount)||0),0),discount=Math.max(discountField,Math.round((gross-ca)*100)/100);
+ const profit=purchasesProfit(ps);
+ const fmtDate=new Date(key+'T12:00:00').toLocaleDateString('fr-FR',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+ const tile=(label,value)=>`<div class="metricCard"><span>${label}</span><strong>${value}</strong></div>`;
+ const productMap=new Map();ps.forEach(p=>{let items=Array.isArray(p.productDetailItems)?p.productDetailItems:[];if(!items.length&&(p.productDetailId||p.stockProductId))items=[{productId:p.productDetailId||p.stockProductId,productName:stockProduct(p.productDetailId||p.stockProductId)?.name||'Produit',qty:p.productDetailQty||p.stockQty||1}];items.forEach(it=>{const name=String(it.productName||stockProduct(it.productId||it.id)?.name||'Produit identifié');productMap.set(name,(productMap.get(name)||0)+Math.max(1,Number(it.qty||it.quantity||1)))})});
+ const top=[...productMap].sort((a,b)=>b[1]-a[1]).slice(0,8);
+ host.innerHTML=`<h4 style="margin:16px 0 8px;text-transform:capitalize">${esc(fmtDate)}</h4>
+ <div class="clientMetricGrid">${tile('CA encaissé',fmt(ca))}${tile('Ventes saisies',String(ps.length))}${tile('Panier moyen',fmt(basket))}${tile('Clients acheteurs',String(customers.size))}${tile('Réductions',fmt(discount))}${tile('Bénéfice brut estimé',fmt(profit.total))}</div>
+ <p class="small muted">Bénéfice calculable pour ${profit.knownSales} vente(s) sur ${profit.totalSales}. Il reste partiel lorsque les ventes ne comportent pas de produits ou de coûts exploitables.</p>
+ <h4>Produits identifiés vendus</h4>${top.length?`<ul>${top.map(([name,qty])=>`<li>${esc(name)} — ${qty} unité(s)</li>`).join('')}</ul>`:'<p class="small muted">Aucun détail produit enregistré pour cette journée.</p>'}
+ <h4>Détail des ventes</h4>${ps.length?`<div class="tableWrap"><table><thead><tr><th>Heure</th><th>Client</th><th>Montant encaissé</th></tr></thead><tbody>${ps.map(p=>{const d=dateOf(p);return `<tr><td>${d.toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'})}</td><td>${esc(p.client||'Client non identifié')}</td><td>${fmt(safelyPaid(p))}</td></tr>`}).join('')}</tbody></table></div>`:'<p class="small muted">Aucune vente enregistrée à cette date. Les indicateurs sont à zéro.</p>'}`;
+}
+function initAnalysisDay(){if(!document.getElementById('analysisDayYear'))return;const d=new Date();setAnalysisDayControls(d);renderAnalysisDay()}
+
 function renderAnalysis(){
  const root=document.getElementById('analysisSummary');if(!root)return;
+ if(!selectedAnalysisDay)initAnalysisDay();else renderAnalysisDay();
  const kind=document.getElementById('analysisPeriod')?.value||'month',d=analysisData(kind),now=new Date(),periodName=kind==='week'?'la semaine':kind==='year'?'l’année':'le mois';
  const insights=[];
  insights.push({icon:d.ca>=d.prevCA?'↗':'↘',title:'Chiffre d’affaires',text:trendPhrase(`Le CA de ${periodName}`,d.ca,d.prevCA,'money')});
@@ -4042,4 +4093,4 @@ document.addEventListener('DOMContentLoaded',()=>{try{renderStock();}catch(e){co
 #accueil .homeRevenueCard .homeRevenueProgressText{color:#214b37!important;text-shadow:none!important;font-weight:850!important}
 </style>
 
-<!-- V97 : prévisions unifiées et historique mensuel complété depuis les ventes actives, sans écriture automatique dans les données sauvegardées. -->
+<!-- V98 : calendrier d’analyse journalière ; données historiques conservées. -->
