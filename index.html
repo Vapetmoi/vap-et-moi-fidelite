@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#173D30">
 <meta name="description" content="Vap’ & Moi Pro Signature Premium : gestion des clients, ventes, fidélité, analyses, suivi commercial et sauvegardes.">
-<title>Vap’ &amp; Moi Pro — V98 — Analyse par journée</title>
+<title>Vap’ &amp; Moi Pro — V99 — Prévisions par jour de semaine</title>
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="./icon-192.png">
 <meta name="mobile-web-app-capable" content="yes">
@@ -2287,10 +2287,10 @@ nav.appNav button.saleNav{transform:none!important;background:#174a35!important;
   <div class="card"><h2>⚙️ Paramètres</h2><p class="small muted">Réglages et sécurité de Vap’ & Moi Pro.</p></div>
   <div id="settingsObjectivesHost"></div><div id="settingsLoyaltyHost"></div><div id="settingsBackupHost"></div>
   <div class="card" id="settingsDataHost"><h3>🛡️ Protection et données</h3><p class="small muted">Les données restent stockées sur cet appareil. Effectue régulièrement une sauvegarde JSON et conserve-la dans un emplacement sûr.</p><div class="actions"><button class="secondary" onclick="exportData()">💾 Exporter toutes les données</button></div></div>
-  <div class="card"><h3>ℹ️ Application</h3><p class="small muted">Vap’ & Moi Pro · Version V98 · Calendrier des journées</p><p class="small muted">Application conçue pour fonctionner hors connexion après son installation.</p></div>
+  <div class="card"><h3>ℹ️ Application</h3><p class="small muted">Vap’ & Moi Pro · Version V99 · Prévisions par jour de semaine</p><p class="small muted">Application conçue pour fonctionner hors connexion après son installation.</p></div>
 </section>
 </main>
-<footer class="versionFooter" aria-label="Version installée"><span class="versionChip"><span class="versionDot" aria-hidden="true"></span> Vap’ & Moi Pro · V98 — Analyse par journée</span><p class="small muted">Données enregistrées sur cet appareil · Pense à effectuer régulièrement une sauvegarde JSON.</p></footer>
+<footer class="versionFooter" aria-label="Version installée"><span class="versionChip"><span class="versionDot" aria-hidden="true"></span> Vap’ & Moi Pro · V99 — Prévisions par jour de semaine</span><p class="small muted">Données enregistrées sur cet appareil · Pense à effectuer régulièrement une sauvegarde JSON.</p></footer>
 
 <script>
 
@@ -2505,16 +2505,39 @@ function computeUnifiedForecast(now=new Date(),purchaseList=allPurchases()){
   if(isShopOpenDate(d)){recentDays++;recentTotal+=ca(ps.filter(p=>sameDay(dateOf(p),d)));}
  }
  const recentAverage=recentDays?recentTotal/recentDays:0;
+ // Référence de chaque jour de semaine : jusqu'à 8 occurrences récentes,
+ // en comptant aussi les journées ouvertes sans vente comme un CA nul.
+ const firstSaleDate=ps.map(p=>dateOf(p)).filter(d=>Number.isFinite(d.getTime())).reduce((min,d)=>!min||d<min?d:min,null);
+ const weekdayStats=Array.from({length:7},()=>({total:0,count:0}));
+ if(firstSaleDate){
+  const earliest=startOfDay(firstSaleDate);
+  for(let offset=1;offset<=84;offset++){
+   const d=new Date(todayStart);d.setDate(d.getDate()-offset);
+   if(d<earliest)break;
+   if(!isShopOpenDate(d))continue;
+   const bucket=weekdayStats[d.getDay()];
+   if(bucket.count<8){bucket.total+=ca(ps.filter(p=>sameDay(dateOf(p),d)));bucket.count++;}
+  }
+ }
+ const estimateOpenDay=d=>{
+  const bucket=weekdayStats[d.getDay()],weekdayAverage=bucket.count?bucket.total/bucket.count:0;
+  const weekdayWeight=bucket.count>=4?.60:bucket.count===3?.50:bucket.count===2?.35:bucket.count===1?.20:0;
+  const estimate=weekdayAverage*weekdayWeight+recentAverage*(1-weekdayWeight);
+  return Math.max(0,estimate);
+ };
  const minute=now.getHours()*60+now.getMinutes();
  const todayIsOpen=isShopOpenDate(now);
- const todayForecast=!todayIsOpen||minute>=SHOP_CLOSE_MINUTES?todayCA:Math.max(todayCA,recentAverage);
+ const todayEstimate= todayIsOpen?estimateOpenDay(now):todayCA;
+ const todayForecast=!todayIsOpen||minute>=SHOP_CLOSE_MINUTES?todayCA:Math.max(todayCA,todayEstimate);
+ const sumForecastDays=(from,to)=>{let total=0;for(let d=startOfDay(from);d<=startOfDay(to);d.setDate(d.getDate()+1)){if(isShopOpenDate(d))total+=estimateOpenDay(d);}return total;};
  const countOpen=(from,to)=>{let n=0;for(let d=startOfDay(from);d<=startOfDay(to);d.setDate(d.getDate()+1)){if(isShopOpenDate(d))n++;}return n;};
+ const tomorrow=new Date(todayStart.getTime()+86400000);
  const realizedBeforeToday=ca(ps.filter(p=>{const d=dateOf(p);return d>=weekStart&&d<todayStart;}));
- const weekFutureDays=countOpen(new Date(todayStart.getTime()+86400000),weekEnd);
- const weekForecast=realizedBeforeToday+todayForecast+recentAverage*weekFutureDays;
+ const weekFutureDays=countOpen(tomorrow,weekEnd);
+ const weekForecast=realizedBeforeToday+todayForecast+sumForecastDays(tomorrow,weekEnd);
  const monthBeforeToday=ca(ps.filter(p=>{const d=dateOf(p);return d>=monthStart&&d<todayStart;}));
- const monthFutureDays=countOpen(new Date(todayStart.getTime()+86400000),monthEnd);
- const monthForecast=monthBeforeToday+todayForecast+recentAverage*monthFutureDays;
+ const monthFutureDays=countOpen(tomorrow,monthEnd);
+ const monthForecast=monthBeforeToday+todayForecast+sumForecastDays(tomorrow,monthEnd);
  let completedMonthsCA=0;
  for(let m=0;m<now.getMonth();m++){
   const d=new Date(now.getFullYear(),m,1),key=monthKey(d);
@@ -2522,9 +2545,10 @@ function computeUnifiedForecast(now=new Date(),purchaseList=allPurchases()){
   completedMonthsCA+=saved?Number(historicalCA[key]):ca(ps.filter(p=>monthKey(dateOf(p))===key));
  }
  const yearEnd=new Date(now.getFullYear(),11,31);
- const yearFutureDays=countOpen(new Date(todayStart.getTime()+86400000),yearEnd);
- const yearForecast=completedMonthsCA+monthBeforeToday+todayForecast+recentAverage*yearFutureDays;
- return {todayCA,todayForecast,weekCA:ca(ps.filter(p=>{const d=dateOf(p);return d>=weekStart&&d<new Date(todayStart.getTime()+86400000);})),weekForecast,monthCA:ca(ps.filter(p=>{const d=dateOf(p);return d>=monthStart&&d<new Date(todayStart.getTime()+86400000);})),monthForecast,yearForecast,recentAverage,recentDays,weekFutureDays,monthFutureDays,yearFutureDays,completedMonthsCA};
+ const yearFutureDays=countOpen(tomorrow,yearEnd);
+ const yearForecast=completedMonthsCA+monthBeforeToday+todayForecast+sumForecastDays(tomorrow,yearEnd);
+ const todayBucket=weekdayStats[now.getDay()];
+ return {todayCA,todayForecast,weekCA:ca(ps.filter(p=>{const d=dateOf(p);return d>=weekStart&&d<new Date(todayStart.getTime()+86400000);})),weekForecast,monthCA:ca(ps.filter(p=>{const d=dateOf(p);return d>=monthStart&&d<new Date(todayStart.getTime()+86400000);})),monthForecast,yearForecast,recentAverage,recentDays,weekFutureDays,monthFutureDays,yearFutureDays,completedMonthsCA,weekdayAverage:todayBucket.count?todayBucket.total/todayBucket.count:0,weekdaySamples:todayBucket.count};
 }
 function sameDay(d,a){return d.toDateString()===a.toDateString()}
 function monthKey(d){return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')}
@@ -3242,7 +3266,7 @@ function setDashboard(){
   const unifiedForecast=computeUnifiedForecast(now,ps);
   const dailyForecast=unifiedForecast.todayForecast,weeklyForecast=unifiedForecast.weekForecast;
   setHomeText('homeDailyForecast',dailyForecast>0?fmt(dailyForecast):'—');
-  setHomeText('homeDailyForecastNote',unifiedForecast.recentDays?('CA réalisé '+fmt(todayCA)+' · estimation commune basée sur la moyenne des '+unifiedForecast.recentDays+' derniers jours d’ouverture'):'Pas assez de données pour estimer');
+  setHomeText('homeDailyForecastNote',unifiedForecast.recentDays?('CA réalisé '+fmt(todayCA)+' · estimation combinant les '+unifiedForecast.weekdaySamples+' dernier(s) jour(s) comparable(s) et la tendance récente'):'Pas assez de données pour estimer');
   setHomeText('homeWeeklyForecast',weeklyForecast>0?fmt(weeklyForecast):'—');
   setHomeText('homeWeeklyForecastNote',weeklyForecast>0?('CA déjà réalisé cette semaine + estimation du jour + '+unifiedForecast.weekFutureDays+' jour(s) d’ouverture restant(s)'):'Pas assez de données pour estimer la semaine');
   const inactive=clients.map(c=>({c,last:(c.history||[]).filter(isActivePurchase).map(p=>new Date(p.date)).filter(d=>Number.isFinite(d.getTime())).sort((a,b)=>b-a)[0]})).filter(x=>x.last&&((Date.now()-x.last.getTime())/86400000)>=30).sort((a,b)=>a.last-b.last);
@@ -3450,7 +3474,7 @@ function setStats(){
     `<div><h4>🔁 Top 5 des clients réguliers</h4>${renderRank(regular,c=>{const m=clientVisitMetrics(c);return m.average===null?'—':'~ '+Math.round(m.average)+' j entre visites'})}</div>`+
     `<div><h4>💶 Top 5 par chiffre d’affaires</h4>${renderRank(revenueTop,c=>fmt(c.total))}</div>`+
     `<div><h4>🧺 Top 5 par panier moyen</h4>${renderRank(basketTop,c=>fmt(c.purchases?c.total/c.purchases:0))}</div>`+
-    `<div><h4>🔮 Trajectoire des objectifs — prévisionnel</h4><div class="periodMetric"><span>Journée estimée</span><strong>${fmt(forecastDay)}</strong></div><div class="periodMetric"><span>Semaine estimée / objectif 1 000 €</span><strong>${fmt(forecastWeek)} · ${weeklyGoal>0?(forecastWeek/weeklyGoal*100).toFixed(0):'—'} %</strong></div><div class="periodMetric"><span>Mois estimé / objectif 4 000 €</span><strong>${fmt(forecastMonth)} · ${monthlyGoal>0?(forecastMonth/monthlyGoal*100).toFixed(0):'—'} %</strong></div><div class="periodMetric"><span>Prévision cumulée au 31 décembre ${now.getFullYear()}</span><strong>${fmt(forecastYearEnd)}</strong></div><p class="statNote">Méthode : journée basée sur la moyenne des 7 derniers jours d’ouverture (ou le CA déjà réalisé si supérieur) ; semaine basée sur les ventes de la semaine et, à partir de 3 jours d’ouverture observés, sur une moyenne mêlant le rythme de la semaine et la moyenne récente ; mois basé sur les ventes du mois et, à partir de 5 jours d’ouverture, sur une moyenne mêlant le rythme mensuel et la moyenne récente ; année basée sur le CA historique des mois terminés (ou les ventes enregistrées à défaut), le CA du mois en cours et le rythme estimé pour les jours d’ouverture restants. Horaires de référence : 09 h 30–19 h 00 du lundi au samedi, dimanche fermé. Les achats existants ne sont pas modifiés. Les ventes sont horodatées lors de leur saisie ; les anciennes heures ne peuvent pas être reconstituées si elles ne sont pas enregistrées. Ce sont des estimations, pas des garanties ; elles sont plus fiables si les achats sont saisis régulièrement.</p></div>`+
+    `<div><h4>🔮 Trajectoire des objectifs — prévisionnel</h4><div class="periodMetric"><span>Journée estimée</span><strong>${fmt(forecastDay)}</strong></div><div class="periodMetric"><span>Semaine estimée / objectif 1 000 €</span><strong>${fmt(forecastWeek)} · ${weeklyGoal>0?(forecastWeek/weeklyGoal*100).toFixed(0):'—'} %</strong></div><div class="periodMetric"><span>Mois estimé / objectif 4 000 €</span><strong>${fmt(forecastMonth)} · ${monthlyGoal>0?(forecastMonth/monthlyGoal*100).toFixed(0):'—'} %</strong></div><div class="periodMetric"><span>Prévision cumulée au 31 décembre ${now.getFullYear()}</span><strong>${fmt(forecastYearEnd)}</strong></div><p class="statNote">Méthode : prévision journalière combinant la moyenne des derniers jours comparables (même jour de semaine, jusqu’à 8 occurrences) et la tendance des 7 derniers jours d’ouverture ; pondération progressive selon l’historique disponible (jusqu’à 60 % jour comparable / 40 % tendance), avec plancher au CA déjà réalisé ; les prévisions de semaine, de mois et d’année additionnent les estimations de chaque jour d’ouverture à venir, selon son jour de semaine ; année basée sur le CA historique des mois terminés (ou les ventes enregistrées à défaut), le CA du mois en cours et le rythme estimé pour les jours d’ouverture restants. Horaires de référence : 09 h 30–19 h 00 du lundi au samedi, dimanche fermé. Les achats existants ne sont pas modifiés. Les ventes sont horodatées lors de leur saisie ; les anciennes heures ne peuvent pas être reconstituées si elles ne sont pas enregistrées. Ce sont des estimations, pas des garanties ; elles sont plus fiables si les achats sont saisis régulièrement.</p></div>`+
     `</div>`;
   renderPurchaseStats(ps,now);
   renderHistoricalCA();
@@ -3580,7 +3604,7 @@ function toggleVisitFrequencyStats(){showAllVisitFrequencyStats=!showAllVisitFre
 function exportData(){
   if(storageReadIssues.length){alert('Export bloqué : une ou plusieurs données locales sont illisibles ('+storageReadIssues.join(', ')+'). Restaure une sauvegarde valide avant de créer un nouvel export incomplet.');return;}
   const exportedAt=new Date().toISOString();
-  const payload={version:'Vap’ & Moi Pro V98 — Analyse par journée',schemaVersion:1,exportedAt,storageKey:KEY,settings,clients,historicalCA,activityLog,stockData};
+  const payload={version:'Vap’ & Moi Pro V99 — Prévisions par jour de semaine',schemaVersion:1,exportedAt,storageKey:KEY,settings,clients,historicalCA,activityLog,stockData};
   let serialized;try{serialized=JSON.stringify(payload);const check=JSON.parse(serialized);validateBackupPayload(check);if(!Array.isArray(check.stockData?.products)||!Array.isArray(check.stockData?.movements)||!Array.isArray(check.stockData?.orders))throw new Error('Structure du stock incomplète');}catch(err){alert('Sauvegarde interrompue : les données ne passent pas le contrôle de cohérence ('+(err.message||'erreur')+'). Aucun fichier incomplet n’a été exporté.');return;}
   const blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='Vap_et_Moi_sauvegarde_V82.json';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);
   localStorage.setItem(KEY+'_last_backup',exportedAt);renderBackupStatus();
@@ -4093,4 +4117,4 @@ document.addEventListener('DOMContentLoaded',()=>{try{renderStock();}catch(e){co
 #accueil .homeRevenueCard .homeRevenueProgressText{color:#214b37!important;text-shadow:none!important;font-weight:850!important}
 </style>
 
-<!-- V98 : calendrier d’analyse journalière ; données historiques conservées. -->
+<!-- V99 : prévisions pondérées par jour de semaine ; calendrier et données conservés. -->
