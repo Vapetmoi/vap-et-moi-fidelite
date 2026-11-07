@@ -1,26 +1,5 @@
-VAP’ & MOI PRO — V120 REPRISE SÉCURISÉE
+Vap’ & Moi Pro — V122 Signature complète
 
-Base : V119 Navigation réparée.
-Données restaurées depuis le fichier JSON vérifié du 02/11/2026 à 14:26:52 UTC (15:26:52, heure française).
+Version basée sur l’archive V122 étape 4, avec ajout de l’espace Caisse : saisie du moyen de paiement sur les nouvelles ventes, bilan journalier, calcul d’écart espèces, historique de clôtures et export CSV. Les clôtures sont intégrées aux sauvegardes JSON et restaurations.
 
-Contenu du point de reprise :
-- 127 fiches clients
-- 206 achats dans les historiques clients (201 actifs, 5 annulés)
-- historique mensuel existant : 11 mois, novembre 2025 à septembre 2026
-- stock : 47 produits, 64 mouvements, 0 commande
-- journal d’activité : 100 entrées
-
-IMPORTANT : aucune donnée postérieure au 02/11/2026 n'est inventée ou reconstituée.
-
-Initialisation : au premier lancement, V120 charge cette sauvegarde uniquement si la base locale clients est vide et qu'aucun stock produit n'est présent. Une base locale non vide n'est jamais remplacée.
-
-Protection : après chaque enregistrement client ou stock, V120 tente de mettre à jour un point de reprise dans le stockage local du navigateur. Ce point de reprise reste sur le même appareil et dans le même stockage du site : il ne protège PAS contre l'effacement des données du navigateur, la perte du téléphone ou la désinstallation. Utiliser aussi régulièrement le bouton Exporter toutes les données et conserver le JSON hors du téléphone.
-
-Fonctions conservées depuis V119 : navigation, fiches clients, fidélité, ventes, ventes liées au stock avec décrémentation, mouvements et inventaires, statistiques, analyses, prévisions, copilote commercial, bénéfice estimé à partir des ventes avec produits détaillés, QR clients et affichage mobile.
-
-Supabase : interface de synchronisation retirée de cette version de reprise. Aucun appel de synchronisation n'est nécessaire au fonctionnement local.
-
-
-V121 PREMIUM — Reprise sur la sauvegarde du 7 novembre 2026 (V106) : 141 clients, 241 achats actifs, 75 produits en stock. Ajout de la date réelle de vente modifiable et de l’heure facultative. Les ventes différées sont marquées dans les données (deferredEntry/enteredAt), les statistiques utilisent la date réelle, et les mouvements de stock liés reprennent la date réelle de la vente. Les clés de stockage historiques sont conservées.
-
-IMPORTANT — Si l’application sur ton téléphone contient déjà des données, exporte d’abord une sauvegarde depuis l’application. La sauvegarde V106 du 7 novembre est fournie séparément dans cette archive sous le nom « Vap_et_Moi_sauvegarde_V82 (2).json ». Tu peux la restaurer depuis Paramètres > Sauvegarder / restaurer ; l’application téléchargera une copie de sécurité des données présentes avant de remplacer les données. Ne restaure pas ce fichier si tu as des ventes plus récentes à conserver sans les avoir exportées.
+Important : fonctionnement local/hors connexion. Aucune sauvegarde distante automatique n’est activée. Les ventes anciennes sans moyen de paiement sont conservées comme « Non renseigné ». Le bénéfice est estimatif et limité aux ventes avec coûts produits connus. Tester sur une copie de sauvegarde avant usage quotidien.

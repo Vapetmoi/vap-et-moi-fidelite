@@ -1,0 +1,10 @@
+VAP’ & MOI PRO — V122 SIGNATURE — ÉTAPE 3
+
+Renforcement ciblé de la gestion du stock :
+- Blocage d’une deuxième sortie de stock pour le même produit et la même vente liée.
+- Protection contre la recréation d’un contre-mouvement d’annulation déjà présent pour une vente et un produit.
+- Les règles existantes de réception partielle, de mouvements manuels, de seuils et de liaison des produits aux ventes sont conservées.
+
+Contrôles effectués : archive d’origine extraite, fichier HTML modifié, contrôle de syntaxe JavaScript et intégrité ZIP.
+Tests non réalisés : scénario complet dans un navigateur/Samsung, restauration réelle et rapprochement physique du stock.
+Cette étape ne met pas en place de sauvegarde distante automatique. Conserver les exports JSON indépendamment.

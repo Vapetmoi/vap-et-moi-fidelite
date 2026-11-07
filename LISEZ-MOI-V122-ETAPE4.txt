@@ -1,0 +1,25 @@
+VAP’ & MOI PRO — V122 SIGNATURE — ÉTAPE 4
+Clients et copilote commercial
+
+Améliorations de cette étape :
+- Ajout d'un contrôle non destructif des doublons possibles dans la rubrique Clients.
+- Détection fondée sur le téléphone normalisé, l'e-mail exact ou le nom identique après normalisation (accents, casse et ponctuation).
+- Accès direct aux deux fiches à comparer ; aucune fusion, suppression ou modification automatique.
+- Le copilote commercial exclut désormais les ventes datées dans le futur de ses calculs de période.
+- Le texte de transparence du copilote précise les limites des données locales et l'exclusion des ventes futures.
+
+Conservation :
+- Les données JSON de référence incluses dans l'étape précédente sont conservées à l'identique.
+- Aucune clé de stockage existante n'est renommée ou supprimée.
+- Les règles de fidélité ne sont pas modifiées.
+
+Contrôles réalisés :
+- Contrôle de syntaxe du JavaScript intégré avec Node.js.
+- Vérification de l'intégrité de l'archive ZIP.
+- Comparaison du fichier JSON inclus avec celui de l'étape 3.
+
+Limites :
+- Le contrôle de doublons propose des paires candidates ; il ne prouve pas qu'il s'agit de la même personne.
+- Pas de fusion automatique des fiches.
+- Les essais interactifs complets sur navigateur et Samsung restent à réaliser.
+- Aucun envoi automatique de message ou relance n'est déclenché.
