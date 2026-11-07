@@ -19,3 +19,8 @@ Protection : après chaque enregistrement client ou stock, V120 tente de mettre 
 Fonctions conservées depuis V119 : navigation, fiches clients, fidélité, ventes, ventes liées au stock avec décrémentation, mouvements et inventaires, statistiques, analyses, prévisions, copilote commercial, bénéfice estimé à partir des ventes avec produits détaillés, QR clients et affichage mobile.
 
 Supabase : interface de synchronisation retirée de cette version de reprise. Aucun appel de synchronisation n'est nécessaire au fonctionnement local.
+
+
+V121 PREMIUM — Reprise sur la sauvegarde du 7 novembre 2026 (V106) : 141 clients, 241 achats actifs, 75 produits en stock. Ajout de la date réelle de vente modifiable et de l’heure facultative. Les ventes différées sont marquées dans les données (deferredEntry/enteredAt), les statistiques utilisent la date réelle, et les mouvements de stock liés reprennent la date réelle de la vente. Les clés de stockage historiques sont conservées.
+
+IMPORTANT — Si l’application sur ton téléphone contient déjà des données, exporte d’abord une sauvegarde depuis l’application. La sauvegarde V106 du 7 novembre est fournie séparément dans cette archive sous le nom « Vap_et_Moi_sauvegarde_V82 (2).json ». Tu peux la restaurer depuis Paramètres > Sauvegarder / restaurer ; l’application téléchargera une copie de sécurité des données présentes avant de remplacer les données. Ne restaure pas ce fichier si tu as des ventes plus récentes à conserver sans les avoir exportées.
