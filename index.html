@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#173D30">
 <meta name="description" content="Vap’ & Moi Pro Signature Premium : gestion des clients, ventes, fidélité, analyses, suivi commercial et sauvegardes.">
-<title>Vap’ &amp; Moi Pro — V110 — Diagnostic réseau Auth</title>
+<title>Vap’ &amp; Moi Pro — V111 — Cartes fidélité clients</title>
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="./icon-192.png">
 <meta name="mobile-web-app-capable" content="yes">
@@ -2287,10 +2287,10 @@ nav.appNav button.saleNav{transform:none!important;background:#174a35!important;
   <div id="settingsObjectivesHost"></div><div id="settingsLoyaltyHost"></div><div id="settingsBackupHost"></div>
   <div class="card" id="settingsDataHost"><h3>🛡️ Protection et données</h3><p class="small muted">Les données restent stockées sur cet appareil. Effectue régulièrement une sauvegarde JSON et conserve-la dans un emplacement sûr.</p><div class="actions"><button class="secondary" onclick="exportData()">💾 Exporter toutes les données</button></div></div>
   <div class="card" id="supabaseSyncCard"><h3>☁️ Sauvegarde sécurisée en ligne</h3><p class="small muted">Connexion à Supabase pour préparer une sauvegarde distante. La sauvegarde locale reste prioritaire. Aucun transfert automatique ni téléchargement distant n'est activé à cette étape.</p><div id="supabaseConnectionStatus" class="alert">Non connecté à Supabase.</div><div id="supabaseLoginFields"><label for="supabaseEmail">E-mail du compte boutique</label><input id="supabaseEmail" type="email" autocomplete="username" placeholder="Adresse e-mail"><label for="supabasePassword">Mot de passe Supabase</label><input id="supabasePassword" type="password" autocomplete="current-password" placeholder="Mot de passe"><div class="actions"><button class="primary" type="button" onclick="vapSupabaseLogin()">Se connecter</button><button class="secondary" type="button" onclick="vapSupabaseRequestPasswordReset()">Mot de passe oublié ?</button></div></div><div id="supabaseRecoveryFields" hidden><div class="alert">Lien de réinitialisation reconnu. Choisis maintenant un nouveau mot de passe pour ton compte boutique.</div><label for="supabaseNewPassword">Nouveau mot de passe</label><input id="supabaseNewPassword" type="password" autocomplete="new-password" minlength="8" placeholder="8 caractères minimum"><label for="supabaseNewPasswordConfirm">Confirmer le nouveau mot de passe</label><input id="supabaseNewPasswordConfirm" type="password" autocomplete="new-password" minlength="8" placeholder="Répète le nouveau mot de passe"><div class="actions"><button class="primary" type="button" onclick="vapSupabaseSetNewPassword()">Enregistrer le nouveau mot de passe</button></div></div><div id="supabaseConnectedActions" hidden><p class="small" id="supabaseUserLabel"></p><div class="actions"><button class="primary" type="button" onclick="vapSupabaseUploadSnapshot()">☁️ Sauvegarder une copie en ligne</button><button class="secondary" type="button" onclick="vapSupabaseLogout()">Se déconnecter</button></div><p class="small muted">La récupération depuis Supabase est volontairement désactivée tant que la comparaison des données n'a pas été validée.</p></div><p id="supabaseSyncResult" class="small" aria-live="polite"></p></div>
-  <div class="card"><h3>ℹ️ Application</h3><p class="small muted">Vap’ & Moi Pro · Version V110 · Diagnostic réseau Auth</p><p class="small muted">Application conçue pour fonctionner hors connexion après son installation.</p></div>
+  <div class="card"><h3>ℹ️ Application</h3><p class="small muted">Vap’ & Moi Pro · Version V111 · Cartes fidélité clients</p><p class="small muted">Application conçue pour fonctionner hors connexion après son installation.</p></div>
 </section>
 </main>
-<footer class="versionFooter" aria-label="Version installée"><span class="versionChip"><span class="versionDot" aria-hidden="true"></span> Vap’ & Moi Pro · V110 — Diagnostic réseau Auth</span><p class="small muted">Données locales conservées · Sauvegarde Supabase manuelle en phase de test.</p></footer>
+<footer class="versionFooter" aria-label="Version installée"><span class="versionChip"><span class="versionDot" aria-hidden="true"></span> Vap’ & Moi Pro · V111 — Cartes fidélité clients</span><p class="small muted">Données locales conservées · Sauvegarde Supabase manuelle en phase de test.</p></footer>
 
 <script>
 
@@ -3100,11 +3100,36 @@ function renderClients(){
     if(sort==='rewardsDesc') return availableReward(b)-availableReward(a) || a.name.localeCompare(b.name,'fr');
     return a.name.localeCompare(b.name,'fr');
   });
-  list.innerHTML=arr.length?arr.map(c=>{const visit=clientVisitMetrics(c);return `<div class="client" onclick="showClient('${escJs(c.name)}')" style="cursor:pointer"><div><strong>${esc(c.name)}</strong><br><span class="small muted">${c.purchases} achat(s) · ${fmt(c.total)} · panier moyen ${fmt(c.purchases?c.total/c.purchases:0)} · dernier achat ${visit.last===null?'inconnu':visit.last===0?'aujourd’hui':'il y a '+visit.last+' j'}${visit.average!==null?' · fréquence '+frequencyLabel(visit.average):''}</span></div><span class="badge">🎁 ${availableReward(c)} €</span></div>`}).join(''):'<p class="muted">Aucun client ne correspond à ces critères.</p>';
+  list.innerHTML=arr.length?arr.map(c=>{const amount=Math.max(0,Number(c.total||0))%50,remaining=amount===0?50:50-amount,progress=amount/50*100;return `<div class="client clientLoyaltyCompact" onclick="showClient('${escJs(c.name)}')" style="cursor:pointer"><div class="clientLoyaltyCompactTop"><strong>${esc(c.name)}</strong><span class="badge">🎁 ${fmt(availableReward(c))} € disponibles</span></div><div class="clientLoyaltyCompactMeta">${fmt(remaining)} € restants pour obtenir 5 € offerts</div><div class="clientLoyaltyCompactTrack"><span style="width:${progress}%"></span></div></div>`}).join(''):'<p class="muted">Aucun client ne correspond à ces critères.</p>';
   const ranked=[...clients].sort((a,b)=>b.total-a.total).slice(0,5);
   document.getElementById('clientRanking').innerHTML=ranked.length?ranked.map((c,i)=>`<div class="row"><span>${i+1}. <strong>${esc(c.name)}</strong></span><strong>${fmt(c.total)}</strong></div>`).join(''):'<span class="muted">Aucun client.</span>';
 }
 function showClient(name){
+  const c=clients.find(x=>x.name===name);if(!c)return;
+  const old=document.getElementById('clientDetail');if(old)old.remove();
+  const total=Math.max(0,Number(c.total||0));
+  const progressAmount=total%50;
+  const remaining=progressAmount===0?50:50-progressAmount;
+  const progress=progressAmount/50*100;
+  const available=availableReward(c);
+  const box=document.createElement('div');box.id='clientDetail';box.className='card clientLoyaltyPreview';
+  box.innerHTML=`<div class="clientLoyaltyHero" role="button" tabindex="0" onclick="showClientDetails('${escJs(c.name)}')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();showClientDetails('${escJs(c.name)}')}">
+    <div class="clientLoyaltyBrand"><img src="mascotte-vap-moi.jpg" alt="Mascotte Vap’ & Moi"><div><span>VAP’ & MOI</span><small>MA FIDÉLITÉ</small></div></div>
+    <div class="clientLoyaltyName">${esc(c.name)}</div>
+    <div class="clientLoyaltyEyebrow">PROCHAINE RÉCOMPENSE</div>
+    <div class="clientLoyaltyRemaining">${fmt(remaining)} <small>restants</small></div>
+    <div class="clientLoyaltyText">Encore ${fmt(remaining)} d’achats pour obtenir 5 € offerts</div>
+    <div class="clientLoyaltyTrack"><span style="width:${progress}%"></span></div>
+    <div class="clientLoyaltyProgressLabel">${fmt(progressAmount)} / 50 €</div>
+    <div class="clientLoyaltyAvailable"><span>Récompenses disponibles</span><strong>${fmt(available)} €</strong></div>
+    <div class="clientLoyaltyShop">15 rue Grande · 77480 Bray-sur-Seine<br>Lundi au samedi : 9h30 – 19h30 · Dimanche fermé</div>
+  </div>
+  <div class="actions clientLoyaltyActions"><button class="primary" onclick="showClientDetails('${escJs(c.name)}')">Voir la fiche complète et les achats →</button><button class="secondary" onclick="document.getElementById('clientDetail').remove()">Fermer</button></div>`;
+  document.getElementById('clientList').prepend(box);
+  box.scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+function showClientDetails(name){
   const c=clients.find(x=>x.name===name);if(!c)return;const old=document.getElementById('clientDetail');if(old)old.remove();
   const avg=c.purchases?c.total/c.purchases:0, target=c.total%50, progress=Math.min(100,target/50*100), reward=rewardSummary(c);
   const visit=clientVisitMetrics(c), hist=[...c.history].reverse();
@@ -4412,3 +4437,16 @@ document.addEventListener('DOMContentLoaded',()=>{try{renderStock();}catch(e){co
 </style>
 
 <!-- V99 : prévisions pondérées par jour de semaine ; calendrier et données conservés. -->
+
+
+<style>
+/* V111 — cartes fidélité dans la liste clients et aperçu avant détail */
+.clientLoyaltyCompact{display:block!important;padding:12px 14px!important;border:1px solid #d9dfd4!important;border-radius:14px!important;margin:9px 0!important;background:linear-gradient(135deg,#fffef9,#f1f5ee)!important}
+.clientLoyaltyCompactTop{display:flex;align-items:center;justify-content:space-between;gap:8px}.clientLoyaltyCompactTop strong{font-size:15px;color:#173d2d}
+.clientLoyaltyCompactMeta{font-size:12px;color:#526456;margin:6px 0}.clientLoyaltyCompactTrack,.clientLoyaltyTrack{height:7px;border-radius:20px;background:#dce5da;overflow:hidden}.clientLoyaltyCompactTrack span,.clientLoyaltyTrack span{display:block;height:100%;background:linear-gradient(90deg,#9c8248,#d7b968);border-radius:20px}
+.clientLoyaltyPreview{padding:12px!important;margin:14px 0!important;border:0!important;background:#f4f5ef!important}
+.clientLoyaltyHero{border-radius:18px;padding:19px 17px;color:#f6eedb;background:radial-gradient(ellipse at top right,#315b40,#153b2b 58%,#0d291e);box-shadow:0 10px 26px #122c1c24}
+.clientLoyaltyBrand{display:flex;align-items:center;gap:11px;margin-bottom:20px}.clientLoyaltyBrand img{width:58px;height:58px;object-fit:cover;border-radius:50%;border:2px solid #c5a75e}.clientLoyaltyBrand span{display:block;font-weight:900;letter-spacing:1.5px;font-size:18px}.clientLoyaltyBrand small{display:block;color:#d9c38e;letter-spacing:2px;font-size:10px;margin-top:3px}
+.clientLoyaltyName{font-size:22px;font-weight:850;margin-bottom:20px}.clientLoyaltyEyebrow{font-size:10px;letter-spacing:1.6px;color:#d9c38e;font-weight:800}.clientLoyaltyRemaining{font-size:34px;font-weight:900;color:#e4c574;margin:5px 0}.clientLoyaltyRemaining small{font-size:13px;color:#f6eedb;font-weight:500}.clientLoyaltyText{font-size:13px;margin-bottom:13px}.clientLoyaltyTrack{height:10px;background:#ffffff30}.clientLoyaltyProgressLabel{text-align:right;font-size:11px;color:#e8ddc4;margin-top:5px}.clientLoyaltyAvailable{display:flex;justify-content:space-between;align-items:center;border-top:1px solid #ffffff35;margin-top:17px;padding-top:13px;font-size:13px}.clientLoyaltyAvailable strong{font-size:22px;color:#e4c574}.clientLoyaltyShop{border-top:1px solid #ffffff35;margin-top:14px;padding-top:12px;font-size:11px;line-height:1.7;color:#e6dcc4}.clientLoyaltyActions{margin-top:10px}.clientLoyaltyActions button:first-child{flex:1}
+@media(max-width:520px){.clientLoyaltyCompactTop{align-items:flex-start;flex-direction:column}.clientLoyaltyRemaining{font-size:30px}}
+</style>

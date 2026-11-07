@@ -1,15 +1,13 @@
-VAP’ & MOI PRO — V110 — ajout du bouton « Diagnostic réseau Auth ? » et demande de réinitialisation via Supabase.
+VAP’ & MOI PRO — V111 — Cartes fidélité dans la section Clients
 
-Contenu :
-- index.html : application V110 — ajout du bouton « Diagnostic réseau Auth ? » et demande de réinitialisation via Supabase.
-- sw.js : cache service worker V110 — ajout du bouton « Diagnostic réseau Auth ? » et demande de réinitialisation via Supabase.
-- visuels et icônes V104 conservés.
-- SUPABASE_QR_SECURITE_V110 — ajout du bouton « Diagnostic réseau Auth ? » et demande de réinitialisation via Supabase.
+Modification :
+- La liste des clients affiche désormais une petite carte récapitulative : nom, récompenses disponibles, montant restant avant le prochain bon de 5 € et barre de progression.
+- Un clic sur le nom ouvre une carte fidélité grand format avec la mascotte, le nom, la progression, les récompenses disponibles, l’adresse et les horaires.
+- Un bouton depuis cette carte ouvre ensuite la fiche client détaillée et son historique existant.
+- Les calculs réutilisent les fonctions de fidélité déjà présentes (récompenses, récompenses manuelles et récompenses utilisées).
+- Les autres fichiers et données locales de V110 sont conservés ; le cache du service worker est renouvelé.
 
-IMPORTANT :
-1. Les données locales restent la source de vérité. Le code n'efface aucun stockage local ni aucune table.
-2. La synchronisation QR nécessite une session Supabase active.
-3. Le QR ne contient qu'un jeton opaque. La page publique n'affiche ni nom, ni téléphone, ni historique, ni montant total dépensé.
-4. Le générateur QR est chargé depuis cdnjs (connexion Internet nécessaire lors de la création/impression du QR).
-5. La table existante doit conserver les colonnes : id, user_id, client_id, public_token, active, progress_to_next_reward, amount_needed, next_reward_amount, available_reward_amount, updated_at.
-6. Le script SQL est réexécutable. Il remplace uniquement la policy nommée "shop manages own loyalty cards" et la fonction get_public_loyalty_card(uuid). Il ne supprime aucune donnée.
+À savoir :
+- Contrôles effectués : archive ZIP vérifiée, présence des 9 fichiers, vérification syntaxique JavaScript.
+- Aucun test réel sur téléphone ni test de ventes/Supabase n'a été effectué.
+- Vérifier l’adresse de boutique avant publication : l’adresse affichée dans la carte est « 15 rue Grande, 77480 Bray-sur-Seine ».
