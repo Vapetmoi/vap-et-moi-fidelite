@@ -1681,7 +1681,21 @@ nav.appNav button.saleNav span{font-size:24px!important}
   nav.appNav button{font-size:9px!important}
 }
 
-</style>
+
+/* Version discrète en bas de l'accueil, sans encadré ni texte de sauvegarde */
+.appVersionLabel{
+  margin:24px 12px 18px;
+  padding:8px 4px;
+  text-align:center;
+  color:#78857c;
+  font-family:Georgia,serif;
+  font-size:12px;
+  line-height:1.35;
+  letter-spacing:.15px;
+  opacity:.9;
+}
+@media(max-width:650px){.appVersionLabel{margin:20px 8px 14px;font-size:11px}}
+\n</style>
 <style>
 #profitStatsCard label[for="profitPeriod"],#profitPeriod,
 #weekdayAverageCard label[for="weekdayPeriod"],#weekdayPeriod,
@@ -2563,6 +2577,8 @@ nav.appNav button.saleNav span{font-size:23px!important;color:#e4d092!important}
   <div class="card" id="settingsDataHost"><h3>🛡️ Protection et données</h3><p class="small muted">Les modifications locales sont enregistrées sur cet appareil, même hors connexion. Effectue régulièrement une sauvegarde JSON et conserve-la dans un emplacement sûr.</p><div class="actions"><button class="secondary" onclick="exportData()">💾 Exporter toutes les données</button></div></div>
   <div class="card"><h3>ℹ️ Application</h3><p class="small muted">Vap’ & Moi Pro · Gestion boutique</p><p class="small muted">Application conçue pour fonctionner hors connexion après son installation.</p></div>
 </section>
+
+<div class="appVersionLabel" aria-label="Version de l’application">Vap’ &amp; Moi Pro · V122 Signature — Premium complète</div>
 </main>
 <script>
 // V120 — restauration initiale vérifiée depuis l'export du 02/11/2026.
