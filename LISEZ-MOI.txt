@@ -1,4 +1,4 @@
-VAP’ & MOI PRO — V112 — Cartes fidélité dans la section Clients
+VAP’ & MOI PRO — V113 — Cartes fidélité dans la section Clients
 
 Modification :
 - La liste des clients affiche désormais une petite carte récapitulative : nom, récompenses disponibles, montant restant avant le prochain bon de 5 € et barre de progression.
@@ -12,4 +12,10 @@ Modification :
 - Aucun test réel sur téléphone ni test de ventes/Supabase n'a été effectué.
 - Vérifier l’adresse de boutique avant publication : l’adresse affichée dans la carte est « 15 rue Grande, 77480 Bray-sur-Seine ».
 
-V112 : le QR code personnel est désormais généré depuis la grande carte fidélité (aperçu client), et non depuis la fiche détaillée.
+V113 : le QR code personnel est désormais généré depuis la grande carte fidélité (aperçu client), et non depuis la fiche détaillée.
+
+
+Correctifs V113 :
+- Suppression du symbole € en double dans les récompenses affichées sur la carte client.
+- En cas d’absence de session Supabase, le panneau QR explique où se connecter et propose un raccourci vers Paramètres > Sauvegarde sécurisée en ligne.
+- Important : le QR personnel nécessite toujours une session Supabase boutique valide. Cette version ne contourne pas l’authentification et aucun test réel de connexion Supabase n’a été effectué.
