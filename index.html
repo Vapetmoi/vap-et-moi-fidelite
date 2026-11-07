@@ -1596,6 +1596,91 @@ input,select,textarea{accent-color:#2f7048}
 
 
 .saleDateCard{border-radius:16px!important}.saleDateCard input{min-height:44px}.saleDeferredBadge{display:inline-block;padding:3px 7px;border-radius:99px;background:#f4ead1;color:#795b24;font-size:10px;font-weight:800}
+
+/* V122 Signature — ajustements ergonomiques demandés */
+.appHeaderV60{
+  min-height:88px!important;
+  padding:14px 76px 14px 18px!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:flex-start!important;
+}
+.appHeaderV60 .brandLockup{
+  width:100%;
+  max-width:100%;
+  margin:0!important;
+  justify-content:flex-start!important;
+  align-items:center!important;
+  gap:12px!important;
+  min-width:0;
+}
+.appHeaderV60 .brandMark{
+  width:58px!important;height:58px!important;flex:0 0 58px!important;
+  display:flex!important;align-items:center!important;justify-content:center!important;
+  flex-direction:row!important;gap:1px!important;
+  border-radius:17px!important;
+  font-family:Georgia,serif!important;font-size:20px!important;font-weight:900!important;
+  letter-spacing:-1.3px!important;line-height:1!important;
+  color:#173f2d!important;background:linear-gradient(145deg,#fff8e7,#d9c58e)!important;
+  border:1px solid #e4d29d!important;
+  box-shadow:inset 0 1px 0 #fff,0 3px 10px #061d1430!important;
+  text-shadow:0 1px 0 #fff8;
+}
+.appHeaderV60 .brandMark span{
+  display:inline!important;margin:0!important;font-size:14px!important;
+  color:#9b7934!important;line-height:1!important;
+}
+.appHeaderV60 .brandLockup h1{
+  font-family:Georgia,serif!important;
+  font-size:clamp(21px,5.5vw,29px)!important;
+  line-height:1.08!important;letter-spacing:-.6px!important;
+  white-space:nowrap!important;min-width:0;
+}
+.appHeaderV60 .brandProTag{flex:0 0 auto;white-space:nowrap}
+.appHeaderV60:after{width:0!important;height:0!important;opacity:0!important;border:0!important}
+.appHeaderV60 .settingsGear{right:12px!important;z-index:2}
+nav.appNav{
+  grid-template-columns:repeat(5,minmax(0,1fr))!important;
+  gap:5px!important;
+  padding:7px 8px calc(7px + env(safe-area-inset-bottom))!important;
+  align-items:stretch!important;
+}
+nav.appNav button{
+  min-width:0!important;
+  width:100%!important;
+  min-height:62px!important;
+  padding:7px 2px 6px!important;
+  font-size:clamp(10px,2.8vw,12px)!important;
+  line-height:1.15!important;
+  white-space:nowrap!important;
+  overflow:hidden!important;
+}
+nav.appNav button span{font-size:20px!important;line-height:1.05!important}
+nav.appNav button.saleNav{transform:translateY(-3px)!important}
+nav.appNav button.saleNav span{font-size:24px!important}
+@media(max-width:650px){
+  body{padding-bottom:calc(86px + env(safe-area-inset-bottom))!important}
+  .appHeaderV60{min-height:82px!important;padding:11px 70px 11px 14px!important}
+  .appHeaderV60 .brandLockup{gap:9px!important}
+  .appHeaderV60 .brandMark{width:52px!important;height:52px!important;flex-basis:52px!important;font-size:18px!important;border-radius:15px!important}
+  .appHeaderV60 .brandMark span{font-size:12px!important}
+  .appHeaderV60 .brandLockup h1{font-size:clamp(19px,5.5vw,25px)!important}
+  .appHeaderV60 .brandProTag{font-size:9px!important;padding:4px 6px!important}
+  .appHeaderV60 .settingsGear{right:9px!important;width:48px!important;height:48px!important}
+  nav.appNav{left:0!important;right:0!important;bottom:0!important;border-radius:19px 19px 0 0!important}
+  nav.appNav button{min-height:59px!important;font-size:10px!important;padding:6px 1px 5px!important}
+  nav.appNav button span{font-size:19px!important}
+  nav.appNav button.saleNav{transform:translateY(-2px)!important;border-radius:13px!important}
+  main{padding-bottom:calc(94px + env(safe-area-inset-bottom))!important}
+}
+@media(max-width:380px){
+  .appHeaderV60 .brandLockup{gap:7px!important}
+  .appHeaderV60 .brandLockup h1{font-size:19px!important}
+  .appHeaderV60 .brandProTag{font-size:8px!important;padding:3px 5px!important}
+  nav.appNav{gap:2px!important;padding-left:4px!important;padding-right:4px!important}
+  nav.appNav button{font-size:9px!important}
+}
+
 </style>
 <style>
 #profitStatsCard label[for="profitPeriod"],#profitPeriod,
@@ -1969,13 +2054,10 @@ nav.appNav button.active{box-shadow:inset 0 0 0 1px rgba(199,173,112,.72),0 5px 
   <button class="saleNav" data-page="achat" onclick="showPage('achat',this)"><span>＋</span>Vente</button>
   <button data-page="stock" onclick="showPage('stock',this)"><span>▤</span>Stock</button>
   <button data-page="stats" onclick="showPage('stats',this)"><span>◫</span>Pilotage</button>
-   <button data-page="caisse" onclick="showPage('caisse',this)"><span>▣</span>Caisse</button>
 </nav>
 
 <button class="desktopQuickAction" type="button" onclick="showPage('achat')" aria-label="Nouvelle vente"><span>＋</span> Nouvelle vente</button>
-<main><div class="card" id="v120RecoveryNotice" style="border:1px solid #b99a58;background:linear-gradient(135deg,#f7f3e8,#fff);color:#26382e;margin:12px 0"><strong>🛡️ Base de reprise — sauvegarde du 7 novembre 2026 à 21 h 48 (heure française)</strong><p class="small" style="margin:6px 0 0">141 clients, 241 ventes actives et 75 références en stock issus de la sauvegarde fournie. Les ventes saisies après l’heure de cette sauvegarde devront être ajoutées manuellement.</p></div>
-
-<section id="accueil" class="page active">
+<main><section id="accueil" class="page active">
   <div class="appGreeting appGreetingCompact appGreetingMascot appGreetingBanner">
     <img class="homeBannerImage" src="./accueil-banniere.jpg" alt="Bienvenue chez Vap’ & Moi à Bray-sur-Seine, avec la mascotte de la boutique" loading="eager">
     <button id="installAppBtn" class="installAppBtn bannerInstallBtn" type="button" hidden onclick="installApp()">＋ Installer l’application</button>
@@ -2381,8 +2463,6 @@ nav.appNav button.active{box-shadow:inset 0 0 0 1px rgba(199,173,112,.72),0 5px 
   <div class="card"><h3>ℹ️ Application</h3><p class="small muted">Vap’ & Moi Pro · Gestion boutique</p><p class="small muted">Application conçue pour fonctionner hors connexion après son installation.</p></div>
 </section>
 </main>
-<footer class="versionFooter" aria-label="Version installée"><span class="versionChip"><span class="versionDot" aria-hidden="true"></span> Vap’ & Moi Pro · V122 Signature — Premium complète</span><p class="small muted">Gestion locale hors connexion · Sauvegardes JSON exportables · Synchronisation distante non activée.</p></footer>
-
 <script>
 // V120 — restauration initiale vérifiée depuis l'export du 02/11/2026.
 // Ne remplace jamais une base locale non vide.
