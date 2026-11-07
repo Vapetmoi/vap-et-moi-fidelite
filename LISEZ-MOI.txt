@@ -1,27 +1,25 @@
-VAP’ & MOI PRO — V114 — ÉDITION PILOTAGE BOUTIQUE
+VAP’ & MOI PRO — V117 — SIGNATURE / REFONTE INTERFACE
 
-Base de travail : V113. Cette édition regroupe et met en avant les outils de pilotage déjà présents dans l’application. Elle conserve les fichiers applicatifs et les clés de stockage locales de la base.
+Base technique : V116 PREVIEW NATURE & STOCK, issue de la base V114 fournie par l’utilisateur.
 
-Fonctions présentes dans cette base :
-- Accueil : CA du jour, progression vers l’objectif, panier moyen, clients du mois et bénéfice brut estimé lorsque les produits vendus sont identifiés.
-- Clients : cartes récapitulatives, grande carte fidélité, fiche détaillée et historique d’achats.
-- Vente : saisie des ventes et association aux clients/produits selon les fonctions existantes.
-- Stock : catalogue, seuils d’alerte, mouvements, valorisation achat/vente, liste de réapprovisionnement, commandes et réception.
-- Stats et Analyse : comparaisons de périodes, bénéfice brut estimé, indicateurs clients, top clients, prévisions et analyse journalière.
-- Copilote commercial : clients à revoir, rythme d’achat observé, panier moyen et objectifs, sans relance automatique.
-- Contrôle de cohérence, journal d’activité et outils de sauvegarde présents dans la base.
+Cette édition applique une première refonte visuelle et de navigation selon les 40 choix validés (socle V117 à prévisualiser) :
+- Identité premium vert forêt, ivoire et touches dorées.
+- Navigation principale ramenée à cinq accès : Accueil, Clients, Vente, Stock, Pilotage.
+- Statistiques et Analyse restent deux rubriques distinctes accessibles depuis les onglets internes de Pilotage.
+- Recherche globale dans l’en-tête : clients, produits, ventes et rubriques ; les recherches spécifiques existantes dans les sections sont conservées.
+- Mise en page responsive mobile/tablette/ordinateur, cartes et tableaux existants conservés.
+- Action Nouvelle vente mise en avant sur grand écran ; accès Vente central sur mobile.
+- Animations d’apparition légères avec respect de prefers-reduced-motion.
+- Mascotte existante conservée dans les visuels et fiches ; aucun nouvel asset externe ajouté.
 
-Clés locales préservées :
-- vapetmoi_fidelite_v1
-- vapetmoi_fidelite_v1_settings
-- vapetmoi_fidelite_v1_historical_monthly_ca
-- vapetmoi_fidelite_v1_activity_log
-- vapetmoi_fidelite_v1_stock_v1
+Préservation :
+- Les identifiants des sections, fonctions métier et clés locales V1 existantes sont conservés dans le code source.
+- Aucune migration ni suppression des données n’est prévue par cette refonte d’interface.
+- Supabase est conservé dans le projet mais reste en attente : aucune connexion, synchronisation ni modification de schéma n’a été exécutée.
 
-Important — limites vérifiées :
-- Le QR client/Supabase n’est pas certifié fonctionnel. La connexion Supabase doit être valide pour les fonctions qui en dépendent.
-- Le bénéfice est une estimation brute uniquement sur les ventes avec produits et coûts exploitables ; il ne représente pas le bénéfice net après charges.
-- Les prévisions dépendent de l’historique réellement enregistré.
-- Aucun test réel sur téléphone, aucune vente de test et aucun test de connexion Supabase n’ont été réalisés dans cette préparation.
-
-Contrôles réalisés pour cette archive : intégrité ZIP, présence des 9 fichiers attendus, syntaxe JavaScript de l’application, mise à jour du nom de cache du service worker.
+Limites et contrôles :
+- Cette édition est une première refonte de l’interface/navigation, pas la livraison de toutes les améliorations fonctionnelles du questionnaire.
+- Les sauvegardes automatiques locales complètes, les rapports programmés, la personnalisation avancée, le verrouillage et les notifications natives doivent encore être spécifiés/implémentés et testés ; aucun succès n’est revendiqué ici.
+- Le moteur existant d’analyses, ventes, stock, fidélité, sauvegardes et copilotage est conservé sans certification fonctionnelle nouvelle.
+- Tests à effectuer avant usage réel : syntaxe JS, structure HTML, liens de navigation, recherche, essais vente/annulation et fidélité, stock, restauration, hors-ligne, puis essais sur Samsung.
+- Supabase/QR et notifications en arrière-plan non certifiés.
