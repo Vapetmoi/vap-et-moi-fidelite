@@ -1,10 +1,10 @@
-VAP’ & MOI PRO — V108 CARTES FIDÉLITÉ QR
+VAP’ & MOI PRO — V109 CARTES FIDÉLITÉ QR
 
 Contenu :
-- index.html : application V108 avec création/affichage QR individuel, vue publique limitée à la progression et aux récompenses, synchronisation après vente/modification/annulation si la carte QR du client existe.
-- sw.js : cache service worker V108.
+- index.html : application V109 avec création/affichage QR individuel, vue publique limitée à la progression et aux récompenses, synchronisation après vente/modification/annulation si la carte QR du client existe.
+- sw.js : cache service worker V109.
 - visuels et icônes V104 conservés.
-- SUPABASE_QR_SECURITE_V108.sql : script SQL final de sécurisation RLS et fonction publique.
+- SUPABASE_QR_SECURITE_V109.sql : script SQL final de sécurisation RLS et fonction publique.
 
 IMPORTANT :
 1. Les données locales restent la source de vérité. Le code n'efface aucun stockage local ni aucune table.
