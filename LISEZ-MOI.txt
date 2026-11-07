@@ -1,10 +1,10 @@
-VAP’ & MOI PRO — V109 — ajout du bouton « Mot de passe oublié ? » et demande de réinitialisation via Supabase.
+VAP’ & MOI PRO — V110 — ajout du bouton « Diagnostic réseau Auth ? » et demande de réinitialisation via Supabase.
 
 Contenu :
-- index.html : application V109 — ajout du bouton « Mot de passe oublié ? » et demande de réinitialisation via Supabase.
-- sw.js : cache service worker V109 — ajout du bouton « Mot de passe oublié ? » et demande de réinitialisation via Supabase.
+- index.html : application V110 — ajout du bouton « Diagnostic réseau Auth ? » et demande de réinitialisation via Supabase.
+- sw.js : cache service worker V110 — ajout du bouton « Diagnostic réseau Auth ? » et demande de réinitialisation via Supabase.
 - visuels et icônes V104 conservés.
-- SUPABASE_QR_SECURITE_V109 — ajout du bouton « Mot de passe oublié ? » et demande de réinitialisation via Supabase.
+- SUPABASE_QR_SECURITE_V110 — ajout du bouton « Diagnostic réseau Auth ? » et demande de réinitialisation via Supabase.
 
 IMPORTANT :
 1. Les données locales restent la source de vérité. Le code n'efface aucun stockage local ni aucune table.

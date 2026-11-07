@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#173D30">
 <meta name="description" content="Vap’ & Moi Pro Signature Premium : gestion des clients, ventes, fidélité, analyses, suivi commercial et sauvegardes.">
-<title>Vap’ &amp; Moi Pro — V109 — Mot de passe oublié</title>
+<title>Vap’ &amp; Moi Pro — V110 — Diagnostic réseau Auth</title>
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="./icon-192.png">
 <meta name="mobile-web-app-capable" content="yes">
@@ -2287,10 +2287,10 @@ nav.appNav button.saleNav{transform:none!important;background:#174a35!important;
   <div id="settingsObjectivesHost"></div><div id="settingsLoyaltyHost"></div><div id="settingsBackupHost"></div>
   <div class="card" id="settingsDataHost"><h3>🛡️ Protection et données</h3><p class="small muted">Les données restent stockées sur cet appareil. Effectue régulièrement une sauvegarde JSON et conserve-la dans un emplacement sûr.</p><div class="actions"><button class="secondary" onclick="exportData()">💾 Exporter toutes les données</button></div></div>
   <div class="card" id="supabaseSyncCard"><h3>☁️ Sauvegarde sécurisée en ligne</h3><p class="small muted">Connexion à Supabase pour préparer une sauvegarde distante. La sauvegarde locale reste prioritaire. Aucun transfert automatique ni téléchargement distant n'est activé à cette étape.</p><div id="supabaseConnectionStatus" class="alert">Non connecté à Supabase.</div><div id="supabaseLoginFields"><label for="supabaseEmail">E-mail du compte boutique</label><input id="supabaseEmail" type="email" autocomplete="username" placeholder="Adresse e-mail"><label for="supabasePassword">Mot de passe Supabase</label><input id="supabasePassword" type="password" autocomplete="current-password" placeholder="Mot de passe"><div class="actions"><button class="primary" type="button" onclick="vapSupabaseLogin()">Se connecter</button><button class="secondary" type="button" onclick="vapSupabaseRequestPasswordReset()">Mot de passe oublié ?</button></div></div><div id="supabaseRecoveryFields" hidden><div class="alert">Lien de réinitialisation reconnu. Choisis maintenant un nouveau mot de passe pour ton compte boutique.</div><label for="supabaseNewPassword">Nouveau mot de passe</label><input id="supabaseNewPassword" type="password" autocomplete="new-password" minlength="8" placeholder="8 caractères minimum"><label for="supabaseNewPasswordConfirm">Confirmer le nouveau mot de passe</label><input id="supabaseNewPasswordConfirm" type="password" autocomplete="new-password" minlength="8" placeholder="Répète le nouveau mot de passe"><div class="actions"><button class="primary" type="button" onclick="vapSupabaseSetNewPassword()">Enregistrer le nouveau mot de passe</button></div></div><div id="supabaseConnectedActions" hidden><p class="small" id="supabaseUserLabel"></p><div class="actions"><button class="primary" type="button" onclick="vapSupabaseUploadSnapshot()">☁️ Sauvegarder une copie en ligne</button><button class="secondary" type="button" onclick="vapSupabaseLogout()">Se déconnecter</button></div><p class="small muted">La récupération depuis Supabase est volontairement désactivée tant que la comparaison des données n'a pas été validée.</p></div><p id="supabaseSyncResult" class="small" aria-live="polite"></p></div>
-  <div class="card"><h3>ℹ️ Application</h3><p class="small muted">Vap’ & Moi Pro · Version V109 · Mot de passe oublié</p><p class="small muted">Application conçue pour fonctionner hors connexion après son installation.</p></div>
+  <div class="card"><h3>ℹ️ Application</h3><p class="small muted">Vap’ & Moi Pro · Version V110 · Diagnostic réseau Auth</p><p class="small muted">Application conçue pour fonctionner hors connexion après son installation.</p></div>
 </section>
 </main>
-<footer class="versionFooter" aria-label="Version installée"><span class="versionChip"><span class="versionDot" aria-hidden="true"></span> Vap’ & Moi Pro · V109 — Mot de passe oublié</span><p class="small muted">Données locales conservées · Sauvegarde Supabase manuelle en phase de test.</p></footer>
+<footer class="versionFooter" aria-label="Version installée"><span class="versionChip"><span class="versionDot" aria-hidden="true"></span> Vap’ & Moi Pro · V110 — Diagnostic réseau Auth</span><p class="small muted">Données locales conservées · Sauvegarde Supabase manuelle en phase de test.</p></footer>
 
 <script>
 
@@ -2494,7 +2494,7 @@ function renderClientOverview(){
   });
   set('clientOverviewTotal',clients.length);set('clientOverviewActive',active);set('clientOverviewInactive',inactive);set('clientOverviewRewards',fmt(rewardsTotal));
 }
-function updateOfflineMode(){const off=!navigator.onLine;const n=document.getElementById('offlineNotice');if(n)n.hidden=!off;document.body.classList.toggle('offline-readonly',off);document.querySelectorAll('button,input,select,textarea').forEach(el=>{const action=el.getAttribute('onclick')||'';const offlineAllowed=el.closest('nav')||el.id==='restoreFile'||el.type==='file'||/exportData|exportSalesCSV|exportAnalysisCSV|restoreData|restoreFile|installApp/.test(action);if(offlineAllowed)return;if(off){if(!el.dataset.v21WasDisabled)el.dataset.v21WasDisabled=el.disabled?'1':'0';el.disabled=true}else if(el.dataset.v21WasDisabled!==undefined){el.disabled=el.dataset.v21WasDisabled==='1';delete el.dataset.v21WasDisabled}})}
+function updateOfflineMode(){const off=!navigator.onLine;const n=document.getElementById('offlineNotice');if(n)n.hidden=!off;document.body.classList.toggle('offline-readonly',off);document.querySelectorAll('button,input,select,textarea').forEach(el=>{const action=el.getAttribute('onclick')||'';const offlineAllowed=el.closest('nav')||el.id==='restoreFile'||el.type==='file'||/exportData|exportSalesCSV|exportAnalysisCSV|restoreData|restoreFile|installApp|vapSupabaseLogin|vapSupabaseRequestPasswordReset/.test(action);if(offlineAllowed)return;if(off){if(!el.dataset.v21WasDisabled)el.dataset.v21WasDisabled=el.disabled?'1':'0';el.disabled=true}else if(el.dataset.v21WasDisabled!==undefined){el.disabled=el.dataset.v21WasDisabled==='1';delete el.dataset.v21WasDisabled}})}
 window.addEventListener('online',updateOfflineMode);window.addEventListener('offline',updateOfflineMode);
 function rewards(total){return Math.floor(total/50)*5}
 function availableReward(c){return Math.max(0,rewards(Number(c.total||0))+Number(c.manualRewards||0)-Number(c.usedRewards||0))}
@@ -4371,20 +4371,26 @@ async function vapSupabaseRequestPasswordReset(){
   const email=(document.getElementById('supabaseEmail')?.value||'').trim();
   const result=document.getElementById('supabaseSyncResult');
   if(!email){if(result)result.textContent='Saisis d’abord ton adresse e-mail boutique, puis appuie sur « Mot de passe oublié ? ».';return;}
+  if(!navigator.onLine){if(result)result.textContent='Le téléphone signale une absence de connexion Internet. Vérifie le Wi-Fi ou les données mobiles, puis réessaie.';return;}
   if(result)result.textContent='Envoi du lien de réinitialisation…';
   const redirectTo=location.origin+location.pathname;
   const endpoint=window.VAP_SUPABASE_URL.replace(/\/$/,'')+'/auth/v1/recover?redirect_to='+encodeURIComponent(redirectTo);
   const controller=new AbortController();
-  const timeoutId=setTimeout(()=>controller.abort(),15000);
+  let timeoutId;
+  const timeout=new Promise((_,reject)=>{timeoutId=setTimeout(()=>{controller.abort();reject(new Error('Délai dépassé après 15 secondes : aucune réponse de Supabase.'))},15000);});
   try{
-    const r=await fetch(endpoint,{method:'POST',mode:'cors',cache:'no-store',signal:controller.signal,
+    const request=fetch(endpoint,{method:'POST',mode:'cors',cache:'no-store',signal:controller.signal,
       headers:{'Accept':'application/json','Content-Type':'application/json','apikey':window.VAP_SUPABASE_ANON_KEY},
-      body:JSON.stringify({email})});
-    const raw=await r.text();let data={};try{data=JSON.parse(raw||'{}')}catch(e){}
-    if(!r.ok)throw new Error(data.msg||data.message||data.error_description||data.error||('Supabase HTTP '+r.status+' : '+raw.slice(0,180)));
-    if(result)result.textContent='Demande envoyée. Vérifie ta boîte e-mail et les courriers indésirables. Le lien doit revenir sur Vap’ & Moi Pro pour choisir un nouveau mot de passe.';
-  }catch(e){if(result)result.textContent=e.name==='AbortError'?'Délai dépassé : Supabase n’a pas répondu en 15 secondes.':'Impossible d’envoyer le lien : '+e.message;}
-  finally{clearTimeout(timeoutId);}
+      body:JSON.stringify({email})}).then(async r=>{
+        const raw=await r.text();let data={};try{data=JSON.parse(raw||'{}')}catch(e){}
+        if(!r.ok)throw new Error((data.msg||data.message||data.error_description||data.error||('HTTP '+r.status))+' — '+raw.slice(0,160));
+        return r.status;
+      });
+    const status=await Promise.race([request,timeout]);
+    if(result)result.textContent='Demande acceptée par Supabase (HTTP '+status+'). Vérifie ta boîte e-mail et les courriers indésirables. Si aucun mail n’arrive, vérifie la configuration SMTP de Supabase.';
+  }catch(e){
+    if(result)result.textContent='Échec de la demande : '+(e.message||String(e));
+  }finally{clearTimeout(timeoutId);}
 }
 async function vapSupabaseFreshSession(){let session=vapSupabaseSession();if(!session?.access_token||!session?.user?.id)throw new Error('Session Supabase absente.');if(Number(session.expires_at||0)>Date.now()+60000)return session;if(!session.refresh_token)throw new Error('Session expirée : reconnecte-toi à Supabase.');const r=await fetch(window.VAP_SUPABASE_URL+'/auth/v1/token?grant_type=refresh_token',{method:'POST',headers:{'Content-Type':'application/json','apikey':window.VAP_SUPABASE_ANON_KEY},body:JSON.stringify({refresh_token:session.refresh_token})});const data=await vapSupabaseReadJson(r,'Renouvellement de session');if(!data.access_token||!data.user?.id)throw new Error('Session expirée : reconnecte-toi à Supabase.');session={access_token:data.access_token,refresh_token:data.refresh_token,expires_at:Date.now()+(Number(data.expires_in)||3600)*1000,user:{id:data.user.id,email:data.user.email}};localStorage.setItem(window.VAP_SUPABASE_SESSION_KEY,JSON.stringify(session));return session;}
 function vapSupabaseLogout(){localStorage.removeItem(window.VAP_SUPABASE_SESSION_KEY);vapSupabaseRender();vapSupabaseSetStatus('Déconnecté de Supabase. Les données locales ne sont pas affectées.');const result=document.getElementById('supabaseSyncResult');if(result)result.textContent='Session locale supprimée.';}
