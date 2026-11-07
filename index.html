@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#173D30">
 <meta name="description" content="Vap’ & Moi Pro Signature Premium : gestion des clients, ventes, fidélité, analyses, suivi commercial et sauvegardes.">
-<title>Vap’ &amp; Moi Pro — V111 — Cartes fidélité clients</title>
+<title>Vap’ &amp; Moi Pro — V112 — QR sur carte fidélité</title>
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="./icon-192.png">
 <meta name="mobile-web-app-capable" content="yes">
@@ -2287,10 +2287,10 @@ nav.appNav button.saleNav{transform:none!important;background:#174a35!important;
   <div id="settingsObjectivesHost"></div><div id="settingsLoyaltyHost"></div><div id="settingsBackupHost"></div>
   <div class="card" id="settingsDataHost"><h3>🛡️ Protection et données</h3><p class="small muted">Les données restent stockées sur cet appareil. Effectue régulièrement une sauvegarde JSON et conserve-la dans un emplacement sûr.</p><div class="actions"><button class="secondary" onclick="exportData()">💾 Exporter toutes les données</button></div></div>
   <div class="card" id="supabaseSyncCard"><h3>☁️ Sauvegarde sécurisée en ligne</h3><p class="small muted">Connexion à Supabase pour préparer une sauvegarde distante. La sauvegarde locale reste prioritaire. Aucun transfert automatique ni téléchargement distant n'est activé à cette étape.</p><div id="supabaseConnectionStatus" class="alert">Non connecté à Supabase.</div><div id="supabaseLoginFields"><label for="supabaseEmail">E-mail du compte boutique</label><input id="supabaseEmail" type="email" autocomplete="username" placeholder="Adresse e-mail"><label for="supabasePassword">Mot de passe Supabase</label><input id="supabasePassword" type="password" autocomplete="current-password" placeholder="Mot de passe"><div class="actions"><button class="primary" type="button" onclick="vapSupabaseLogin()">Se connecter</button><button class="secondary" type="button" onclick="vapSupabaseRequestPasswordReset()">Mot de passe oublié ?</button></div></div><div id="supabaseRecoveryFields" hidden><div class="alert">Lien de réinitialisation reconnu. Choisis maintenant un nouveau mot de passe pour ton compte boutique.</div><label for="supabaseNewPassword">Nouveau mot de passe</label><input id="supabaseNewPassword" type="password" autocomplete="new-password" minlength="8" placeholder="8 caractères minimum"><label for="supabaseNewPasswordConfirm">Confirmer le nouveau mot de passe</label><input id="supabaseNewPasswordConfirm" type="password" autocomplete="new-password" minlength="8" placeholder="Répète le nouveau mot de passe"><div class="actions"><button class="primary" type="button" onclick="vapSupabaseSetNewPassword()">Enregistrer le nouveau mot de passe</button></div></div><div id="supabaseConnectedActions" hidden><p class="small" id="supabaseUserLabel"></p><div class="actions"><button class="primary" type="button" onclick="vapSupabaseUploadSnapshot()">☁️ Sauvegarder une copie en ligne</button><button class="secondary" type="button" onclick="vapSupabaseLogout()">Se déconnecter</button></div><p class="small muted">La récupération depuis Supabase est volontairement désactivée tant que la comparaison des données n'a pas été validée.</p></div><p id="supabaseSyncResult" class="small" aria-live="polite"></p></div>
-  <div class="card"><h3>ℹ️ Application</h3><p class="small muted">Vap’ & Moi Pro · Version V111 · Cartes fidélité clients</p><p class="small muted">Application conçue pour fonctionner hors connexion après son installation.</p></div>
+  <div class="card"><h3>ℹ️ Application</h3><p class="small muted">Vap’ & Moi Pro · Version V112 · QR sur carte fidélité</p><p class="small muted">Application conçue pour fonctionner hors connexion après son installation.</p></div>
 </section>
 </main>
-<footer class="versionFooter" aria-label="Version installée"><span class="versionChip"><span class="versionDot" aria-hidden="true"></span> Vap’ & Moi Pro · V111 — Cartes fidélité clients</span><p class="small muted">Données locales conservées · Sauvegarde Supabase manuelle en phase de test.</p></footer>
+<footer class="versionFooter" aria-label="Version installée"><span class="versionChip"><span class="versionDot" aria-hidden="true"></span> Vap’ & Moi Pro · V112 — QR sur carte fidélité</span><p class="small muted">Données locales conservées · Sauvegarde Supabase manuelle en phase de test.</p></footer>
 
 <script>
 
@@ -3124,6 +3124,12 @@ function showClient(name){
     <div class="clientLoyaltyAvailable"><span>Récompenses disponibles</span><strong>${fmt(available)} €</strong></div>
     <div class="clientLoyaltyShop">15 rue Grande · 77480 Bray-sur-Seine<br>Lundi au samedi : 9h30 – 19h30 · Dimanche fermé</div>
   </div>
+  <div class="card" style="margin-top:12px;background:#f3f7f4;border:1px solid #d8eadf;text-align:center">
+    <strong style="color:#173f2e">📱 Votre QR code fidélité</strong>
+    <p class="small muted" style="margin:5px 0 10px">Un QR code personnel pour consulter cette carte et sa progression.</p>
+    <button class="primary" type="button" onclick="vapQrShowClientCard('${escJs(c.name)}')">${c.qrClientId?'Afficher / actualiser mon QR code':'Générer le QR code personnel'}</button>
+    <div id="vapQrClientPanel" style="margin-top:10px"></div>
+  </div>
   <div class="actions clientLoyaltyActions"><button class="primary" onclick="showClientDetails('${escJs(c.name)}')">Voir la fiche complète et les achats →</button><button class="secondary" onclick="document.getElementById('clientDetail').remove()">Fermer</button></div>`;
   document.getElementById('clientList').prepend(box);
   box.scrollIntoView({behavior:'smooth',block:'start'});
@@ -3143,12 +3149,6 @@ function showClientDetails(name){
   <h3>🧺 Achats par catégorie</h3>${(()=>{const sums={};SALE_CATEGORIES.forEach(([key,label])=>sums[key]={label,amount:0});(c.history||[]).filter(isActivePurchase).forEach(p=>SALE_CATEGORIES.forEach(([key])=>sums[key].amount+=Math.max(0,Number(p.categoryAmounts?.[key])||0)));const rows=SALE_CATEGORIES.filter(([key])=>sums[key].amount>0);return rows.length?rows.map(([key])=>`<div class="row small"><span>${esc(sums[key].label)}</span><strong>${fmt(sums[key].amount)}</strong></div>`).join(''):'<p class="small muted">Aucune répartition renseignée pour ce client.</p>'})()}
   <h3>🧾 Historique des achats</h3>${hist.length?hist.map(p=>`<div class="purchase-history-item" style="border-bottom:1px solid var(--border);padding:10px 0;${p.cancelled?'opacity:.7;background:#fff5f4;':''}"><button type="button" class="secondary" style="display:block;width:100%;text-align:left;white-space:normal;line-height:1.45;margin-bottom:7px" onclick="showPurchaseDetails('${escJs(c.name)}','${escJs(p.id)}')">📅 ${dateFmt(p.date)} · ${fmt(p.amount)}${p.discount?' · 🎁 -'+fmt(p.discount):''}${p.exceptionalDiscount?' (dont remise exceptionnelle '+fmt(p.exceptionalDiscount)+')':''} · payé ${fmt(p.paid)} · <strong>Voir le détail ▾</strong>${p.cancelled?` · <strong style="color:var(--red)">ANNULÉ le ${dateFmt(p.cancelledAt)}</strong>`:''}</button><div class="actions" style="gap:7px">${isActivePurchase(p)?`<button class="secondary" onclick="editPurchase('${escJs(c.name)}','${escJs(p.id)}')">✏️ Modifier</button><button class="secondary" onclick="cancelPurchase('${escJs(c.name)}','${escJs(p.id)}')">Annuler</button>`:''}</div></div>`).join(''):'<p class="muted">Aucun achat.</p>'}
   <h3>🎁 Fidélité</h3>
-  <div class="card" style="background:#f3f7f4;border:1px solid #d8eadf;margin:10px 0">
-    <strong>📱 Carte fidélité QR</strong>
-    <p class="small muted">Le client pourra scanner son QR code pour consulter uniquement sa progression et ses récompenses.</p>
-    <button class="secondary" type="button" onclick="vapQrShowClientCard('${escJs(c.name)}')">📱 ${c.qrClientId?'Afficher / actualiser le QR':'Créer la carte QR'}</button>
-    <div id="vapQrClientPanel" style="margin-top:10px"></div>
-  </div>
   <div class="grid grid4">
     <div class="stat"><strong>${reward.earnedCount}</strong><span class="kpiTitle">Bons gagnés</span><div class="small muted">${fmt(reward.earned)}</div></div>
     <div class="stat"><strong>${reward.usedCount}</strong><span class="kpiTitle">Bons utilisés</span><div class="small muted">${fmt(reward.used)}</div></div>
@@ -4440,7 +4440,7 @@ document.addEventListener('DOMContentLoaded',()=>{try{renderStock();}catch(e){co
 
 
 <style>
-/* V111 — cartes fidélité dans la liste clients et aperçu avant détail */
+/* V111 + V112 — cartes clients et QR personnel sur l’aperçu fidélité */
 .clientLoyaltyCompact{display:block!important;padding:12px 14px!important;border:1px solid #d9dfd4!important;border-radius:14px!important;margin:9px 0!important;background:linear-gradient(135deg,#fffef9,#f1f5ee)!important}
 .clientLoyaltyCompactTop{display:flex;align-items:center;justify-content:space-between;gap:8px}.clientLoyaltyCompactTop strong{font-size:15px;color:#173d2d}
 .clientLoyaltyCompactMeta{font-size:12px;color:#526456;margin:6px 0}.clientLoyaltyCompactTrack,.clientLoyaltyTrack{height:7px;border-radius:20px;background:#dce5da;overflow:hidden}.clientLoyaltyCompactTrack span,.clientLoyaltyTrack span{display:block;height:100%;background:linear-gradient(90deg,#9c8248,#d7b968);border-radius:20px}
