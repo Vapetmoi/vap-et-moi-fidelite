@@ -2287,10 +2287,10 @@ nav.appNav button.saleNav{transform:none!important;background:#174a35!important;
   <div id="settingsObjectivesHost"></div><div id="settingsLoyaltyHost"></div><div id="settingsBackupHost"></div>
   <div class="card" id="settingsDataHost"><h3>🛡️ Protection et données</h3><p class="small muted">Les données restent stockées sur cet appareil. Effectue régulièrement une sauvegarde JSON et conserve-la dans un emplacement sûr.</p><div class="actions"><button class="secondary" onclick="exportData()">💾 Exporter toutes les données</button></div></div>
   <div class="card" id="supabaseSyncCard"><h3>☁️ Sauvegarde sécurisée en ligne</h3><p class="small muted">Connexion à Supabase pour préparer une sauvegarde distante. La sauvegarde locale reste prioritaire. Aucun transfert automatique ni téléchargement distant n'est activé à cette étape.</p><div id="supabaseConnectionStatus" class="alert">Non connecté à Supabase.</div><div id="supabaseLoginFields"><label for="supabaseEmail">E-mail du compte boutique</label><input id="supabaseEmail" type="email" autocomplete="username" placeholder="Adresse e-mail"><label for="supabasePassword">Mot de passe Supabase</label><input id="supabasePassword" type="password" autocomplete="current-password" placeholder="Mot de passe"><div class="actions"><button class="primary" type="button" onclick="vapSupabaseLogin()">Se connecter</button></div></div><div id="supabaseRecoveryFields" hidden><div class="alert">Lien de réinitialisation reconnu. Choisis maintenant un nouveau mot de passe pour ton compte boutique.</div><label for="supabaseNewPassword">Nouveau mot de passe</label><input id="supabaseNewPassword" type="password" autocomplete="new-password" minlength="8" placeholder="8 caractères minimum"><label for="supabaseNewPasswordConfirm">Confirmer le nouveau mot de passe</label><input id="supabaseNewPasswordConfirm" type="password" autocomplete="new-password" minlength="8" placeholder="Répète le nouveau mot de passe"><div class="actions"><button class="primary" type="button" onclick="vapSupabaseSetNewPassword()">Enregistrer le nouveau mot de passe</button></div></div><div id="supabaseConnectedActions" hidden><p class="small" id="supabaseUserLabel"></p><div class="actions"><button class="primary" type="button" onclick="vapSupabaseUploadSnapshot()">☁️ Sauvegarder une copie en ligne</button><button class="secondary" type="button" onclick="vapSupabaseLogout()">Se déconnecter</button></div><p class="small muted">La récupération depuis Supabase est volontairement désactivée tant que la comparaison des données n'a pas été validée.</p></div><p id="supabaseSyncResult" class="small" aria-live="polite"></p></div>
-  <div class="card"><h3>ℹ️ Application</h3><p class="small muted">Vap’ & Moi Pro · Version V104 · Connexion Supabase et récupération du mot de passe</p><p class="small muted">Application conçue pour fonctionner hors connexion après son installation.</p></div>
+  <div class="card"><h3>ℹ️ Application</h3><p class="small muted">Vap’ & Moi Pro · Version V105 · Cartes fidélité QR</p><p class="small muted">Application conçue pour fonctionner hors connexion après son installation.</p></div>
 </section>
 </main>
-<footer class="versionFooter" aria-label="Version installée"><span class="versionChip"><span class="versionDot" aria-hidden="true"></span> Vap’ & Moi Pro · V104 — Connexion et récupération du mot de passe</span><p class="small muted">Données locales conservées · Sauvegarde Supabase manuelle en phase de test.</p></footer>
+<footer class="versionFooter" aria-label="Version installée"><span class="versionChip"><span class="versionDot" aria-hidden="true"></span> Vap’ & Moi Pro · V105 — Cartes fidélité QR</span><p class="small muted">Données locales conservées · Sauvegarde Supabase manuelle en phase de test.</p></footer>
 
 <script>
 
@@ -2894,6 +2894,119 @@ function renderStock(){stockRefreshSelects();refreshSaleStockSelect();renderStoc
  renderStockMovementHistory();const counts={};stockData.products.forEach(p=>counts[p.category]=(counts[p.category]||0)+1);const stats=document.getElementById('stockStatistics');if(stats)stats.innerHTML='<p><strong>Valeur d’achat connue du stock :</strong> '+fmt(costValue)+'</p><p><strong>Valeur de vente potentielle :</strong> '+fmt(retailValue)+'</p><p><strong>Marge brute théorique potentielle :</strong> '+fmt(retailValue-costValue)+' <span class="small muted">(indicative, uniquement sur les références dont les prix sont renseignés ; hors charges, taxes et remises)</span></p>'+Object.keys(counts).map(c=>`<p>${stockEsc(c)} : ${counts[c]} référence(s)</p>`).join('')+'<h4>Alertes de réapprovisionnement</h4>'+(lowProducts.slice().sort((a,b)=>a.qty-b.qty).map(p=>`<p>⚠️ ${stockEsc(p.name)} — ${p.qty} restant(s), seuil ${p.threshold}</p>`).join('')||'<p class="small muted">Aucune alerte de stock.</p>');buildStockReorderPlan();}
 function stockRemoveOrderItem(id){stockData.orderBasket=stockData.orderBasket.filter(x=>x.productId!==id);if(stockSave()){showSuccessToast('Panier mis à jour','La référence a été retirée de la commande.');renderStock()}}
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',()=>{renderStock();refreshSaleStockSelect()});else{renderStock();refreshSaleStockSelect()}
+
+// V105 — carte fidélité QR. Les données locales restent la source de vérité.
+function vapQrUuid(){
+  if(window.crypto&&typeof crypto.randomUUID==='function')return crypto.randomUUID();
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g,c=>{const r=Math.random()*16|0;return (c==='x'?r:(r&3|8)).toString(16)});
+}
+function vapQrGetClientId(c){
+  if(!c.qrClientId){
+    const previous=localStorage.getItem(KEY);
+    c.qrClientId=vapQrUuid();
+    try{
+      const payload=JSON.stringify(clients);
+      localStorage.setItem(KEY,payload);
+      const check=JSON.parse(localStorage.getItem(KEY)||'null');
+      if(!Array.isArray(check)||check.length!==clients.length||!check.some(x=>String(x.qrClientId)===String(c.qrClientId)))throw new Error('Vérification de la sauvegarde QR impossible.');
+    }catch(e){
+      try{if(previous===null)localStorage.removeItem(KEY);else localStorage.setItem(KEY,previous);}catch(restoreError){}
+      delete c.qrClientId;
+      throw new Error("Impossible d'enregistrer l'identifiant QR dans les données locales.");
+    }
+  }
+  return String(c.qrClientId);
+}
+async function vapQrSyncClient(c){
+  if(!c||!c.qrClientId)return {skipped:true};
+  const session=await vapSupabaseFreshSession();
+  const row={
+    user_id:session.user.id,
+    client_id:String(c.qrClientId),
+    progress_to_next_reward:Math.round((Number(c.total||0)%50)*100)/100,
+    amount_needed:Math.max(0,Math.round((50-(Number(c.total||0)%50))*100)/100),
+    next_reward_amount:5,
+    available_reward_amount:Math.round(availableReward(c)*100)/100,
+    active:true,
+    updated_at:new Date().toISOString()
+  };
+  const base=window.VAP_SUPABASE_URL+'/rest/v1/public_loyalty_cards';
+  const headers={'apikey':window.VAP_SUPABASE_ANON_KEY,'Authorization':'Bearer '+session.access_token,'Content-Type':'application/json'};
+  const lookup=await fetch(base+'?select=id&user_id=eq.'+encodeURIComponent(session.user.id)+'&client_id=eq.'+encodeURIComponent(row.client_id),{headers});
+  const found=await vapSupabaseReadJson(lookup,'Recherche de la carte fidélité');
+  let response;
+  if(Array.isArray(found)&&found.length){
+    response=await fetch(base+'?id=eq.'+encodeURIComponent(found[0].id),{method:'PATCH',headers:{...headers,'Prefer':'return=minimal'},body:JSON.stringify(row)});
+  }else{
+    response=await fetch(base,{method:'POST',headers:{...headers,'Prefer':'return=minimal'},body:JSON.stringify(row)});
+  }
+  if(!response.ok){const raw=await response.text();throw new Error('Synchronisation QR HTTP '+response.status+' : '+raw.slice(0,300));}
+  return {updated:true};
+}
+async function vapQrLoadLibrary(){
+  if(window.QRCode)return;
+  if(window.__vapQrLibraryPromise)return window.__vapQrLibraryPromise;
+  window.__vapQrLibraryPromise=new Promise((resolve,reject)=>{
+    const script=document.createElement('script');
+    script.src='https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js';
+    script.onload=()=>window.QRCode?resolve():reject(new Error('Bibliothèque QR indisponible.'));
+    script.onerror=()=>reject(new Error('Impossible de charger le générateur QR. Vérifie la connexion Internet.'));
+    document.head.appendChild(script);
+  });
+  return window.__vapQrLibraryPromise;
+}
+async function vapQrShowClientCard(name){
+  const c=clients.find(x=>x.name===name);if(!c)return;
+  const panel=document.getElementById('vapQrClientPanel');if(!panel)return;
+  panel.textContent='Préparation de la carte QR…';
+  try{
+    const clientId=vapQrGetClientId(c);
+    await vapQrSyncClient(c);
+    const token=await vapQrGetOrCreatePublicToken(c,clientId);
+    const url=location.origin+location.pathname+'?carte='+encodeURIComponent(token);
+    await vapQrLoadLibrary();
+    panel.innerHTML='<div style="background:white;border-radius:14px;padding:14px;text-align:center;color:#173f2e"><div id="vapQrCanvas" style="display:inline-block;padding:8px"></div><p style="font-weight:800;margin:8px 0 3px">Carte fidélité Vap’ & Moi</p><p class="small" style="margin:0">À présenter en boutique ou à scanner pour consulter la cagnotte.</p><button type="button" class="secondary" style="margin-top:10px" onclick="vapQrPrint()">🖨️ Imprimer la carte</button></div>';
+    new QRCode(document.getElementById('vapQrCanvas'),{text:url,width:220,height:220,colorDark:'#173f2e',colorLight:'#ffffff',correctLevel:QRCode.CorrectLevel.M});
+    panel.dataset.url=url;
+  }catch(e){panel.textContent='Carte QR non disponible : '+e.message;}
+}
+async function vapQrGetOrCreatePublicToken(c,clientId){
+  const session=await vapSupabaseFreshSession();
+  const base=window.VAP_SUPABASE_URL+'/rest/v1/public_loyalty_cards';
+  const headers={'apikey':window.VAP_SUPABASE_ANON_KEY,'Authorization':'Bearer '+session.access_token,'Content-Type':'application/json'};
+  const r=await fetch(base+'?select=public_token&user_id=eq.'+encodeURIComponent(session.user.id)+'&client_id=eq.'+encodeURIComponent(clientId),{headers});
+  const rows=await vapSupabaseReadJson(r,'Lecture du QR fidélité');
+  if(Array.isArray(rows)&&rows.length&&rows[0].public_token)return rows[0].public_token;
+  throw new Error('La carte a été synchronisée mais aucun jeton QR n’a été retourné. Vérifie les droits et les contraintes de la table.');
+}
+function vapQrPrint(){
+  const panel=document.getElementById('vapQrClientPanel');const url=panel?.dataset.url;if(!url)return;
+  const win=window.open('','_blank');if(!win){alert("Autorise l'ouverture de la fenêtre d'impression.");return;}
+  win.document.write('<!doctype html><html><head><title>Carte fidélité Vap’ & Moi</title><meta name="viewport" content="width=device-width,initial-scale=1"><style>body{font-family:Arial,sans-serif;text-align:center;color:#173f2e;padding:24px}h2{margin-bottom:4px}.sub{color:#555}#qr{margin:20px auto;width:220px;height:220px}</style></head><body><h2>Vap’ & Moi</h2><p class="sub">Ma carte fidélité</p><div id="qr"></div><p>Scannez pour consulter votre progression et vos récompenses.</p><script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"><\/script><script>new QRCode(document.getElementById("qr"),{text:'+JSON.stringify(url)+',width:220,height:220});window.onload=()=>setTimeout(()=>window.print(),300);<\/script></body></html>');
+  win.document.close();
+}
+async function vapQrRenderPublicCard(){
+  const token=new URLSearchParams(location.search).get('carte');if(!token)return;
+  if(!/^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(token))return;
+  const root=document.createElement('div');root.id='vapPublicLoyaltyCard';
+  root.style.cssText='position:fixed;inset:0;z-index:999999;background:#f4f2e9;display:flex;align-items:center;justify-content:center;padding:20px;font-family:Arial,sans-serif;color:#173f2e';
+  root.innerHTML='<div style="width:min(100%,420px);background:#fff;border:1px solid #d8cda9;border-radius:22px;padding:26px;box-shadow:0 12px 36px #173f2e18;text-align:center"><div style="font-size:13px;letter-spacing:2px;color:#8c7741;font-weight:800">VAP’ & MOI · BRAY-SUR-SEINE</div><h1 style="font-size:25px;margin:12px 0 4px">Ma carte fidélité</h1><p id="vapPublicStatus" style="color:#64736a">Chargement de la carte…</p><div id="vapPublicContent" hidden><div style="margin:24px 0 8px;font-size:14px;color:#64736a">Progression vers le prochain bon</div><div id="vapPublicProgress" style="font-size:34px;font-weight:800"></div><div style="height:12px;background:#e8eee9;border-radius:99px;overflow:hidden;margin:12px 0"><div id="vapPublicBar" style="height:100%;background:#28583e;width:0%"></div></div><p id="vapPublicNeeded" style="color:#64736a"></p><div style="background:#f3f7f4;border-radius:14px;padding:16px;margin-top:18px"><div style="font-size:13px;color:#64736a">Récompenses disponibles</div><strong id="vapPublicReward" style="font-size:30px"></strong></div></div><p style="font-size:12px;color:#89948c;margin-top:24px">Présentez cette carte en boutique pour utiliser vos récompenses.</p></div>';
+  document.body.appendChild(root);
+  document.querySelector('main')?.setAttribute('hidden','');
+  document.querySelector('header')?.setAttribute('hidden','');
+  try{
+    const r=await fetch(window.VAP_SUPABASE_URL+'/rest/v1/rpc/get_public_loyalty_card',{method:'POST',headers:{'Content-Type':'application/json','apikey':window.VAP_SUPABASE_ANON_KEY},body:JSON.stringify({p_token:token})});
+    const data=await vapSupabaseReadJson(r,'Lecture de la carte fidélité');
+    if(!data||typeof data!=='object')throw new Error('Carte introuvable ou désactivée.');
+    const progress=Math.max(0,Math.min(50,Number(data.progress_to_next_reward)||0));
+    document.getElementById('vapPublicStatus').textContent='Carte fidélité à jour';
+    document.getElementById('vapPublicContent').hidden=false;
+    document.getElementById('vapPublicProgress').textContent=progress.toFixed(2).replace('.',',')+' € / 50 €';
+    document.getElementById('vapPublicBar').style.width=Math.min(100,progress/50*100)+'%';
+    document.getElementById('vapPublicNeeded').textContent='Encore '+Math.max(0,Number(data.amount_needed)||0).toFixed(2).replace('.',',')+' € avant le prochain bon de 5 €';
+    document.getElementById('vapPublicReward').textContent=(Number(data.available_reward_amount)||0).toFixed(2).replace('.',',')+' €';
+  }catch(e){document.getElementById('vapPublicStatus').textContent='Carte indisponible : '+e.message;}
+}
 function addPurchase(){
   if(window.__vapPurchaseBusy)return;window.__vapPurchaseBusy=true;const purchaseButton=document.querySelector('#achat button.primary');if(purchaseButton)purchaseButton.disabled=true;
   try{
@@ -2913,6 +3026,7 @@ function addPurchase(){
   if(linkedStockProducts.length){const originalStock=JSON.stringify(stockData);let stockOk=true;const savedMovements=[];for(const item of linkedStockProducts){if(!stockMove(item.product.id,'out',item.qty,'Vente liée à un achat client',String(purchase.id))){stockOk=false;break}const movement=stockData.movements.find(m=>m.ref===String(purchase.id)&&String(m.productId)===String(item.product.id)&&m.type==='out');if(movement)savedMovements.push({movementId:movement.id,productId:String(item.product.id),qty:item.qty})}if(!stockOk){stockData=JSON.parse(originalStock);stockSave();const restored=JSON.parse(previousClient);Object.keys(c).forEach(k=>delete c[k]);Object.assign(c,restored);updateAll();msg.textContent='⚠️ Vente non confirmée : tous les mouvements de stock ont été annulés.';return;}purchase.stockMovements=savedMovements;if(savedMovements.length===1){purchase.stockMovementId=savedMovements[0].movementId;purchase.stockProductId=savedMovements[0].productId;purchase.stockQty=savedMovements[0].qty;}}
   c.history.push(purchase);
   if(!save()){if(purchase.stockMovements?.length){purchase.stockMovementId=null;for(const sm of purchase.stockMovements){const m=stockData.movements.find(x=>x.id===sm.movementId);if(m){const prod=stockProduct(m.productId);if(prod)prod.qty+=m.qty;stockData.movements.unshift({id:'m'+Date.now()+Math.random().toString(36).slice(2,6),date:new Date().toISOString(),productId:prod?.id||sm.productId,type:'in',qty:sm.qty,reason:'Restauration après échec enregistrement vente',ref:String(purchase.id)})}}stockSave();}else if(purchase.stockMovementId)stockReverseSale(purchase);const restored=JSON.parse(previousClient);Object.keys(c).forEach(k=>delete c[k]);Object.assign(c,restored);updateAll();msg.textContent='⚠️ Vente non enregistrée : vérifie le stockage et réessaie. Le stock lié a été restauré si le navigateur l’a permis.';return;}
+  if(c.qrClientId)vapQrSyncClient(c).catch(e=>console.warn('Mise à jour carte QR non confirmée',e));
   logOperation('Achat enregistré',`${c.name} · payé ${fmt(paid)}`);showSuccessToast('Achat enregistré',`${c.name} · ${fmt(paid)} payé${linkedStockProducts.length?' · stock actualisé':''}`);msg.innerHTML=`✅ Achat enregistré pour ${esc(c.name)} · payé ${fmt(paid)} · réduction totale ${fmt(discount)} · cagnotte ${availableReward(c).toFixed(0)} €`;
   document.getElementById('clientName').value='';delete document.getElementById('clientName').dataset.selectedId;document.getElementById('amount').value='';document.getElementById('exceptionalDiscount').value='0';document.getElementById('useReward').checked=false;const linkedInfo=document.getElementById('linkedClientInfo');if(linkedInfo)linkedInfo.textContent='';const suggestions=document.getElementById('purchaseSuggestions');if(suggestions){suggestions.innerHTML='';suggestions.style.display='none';}saleProductBasket=[];const saleSearch=document.getElementById('saleStockSearch');if(saleSearch){saleSearch.value='';delete saleSearch.dataset.selectedId;}document.getElementById('saleStockQty').value='1';renderSaleProductBasket();SALE_CATEGORIES.forEach(([key])=>{const el=document.getElementById('cat'+key.charAt(0).toUpperCase()+key.slice(1));if(el)el.value='0'});updateCategoryAllocation();const allocation=document.getElementById('categoryAllocation');if(allocation)allocation.open=false;renderStock();updatePurchaseBox();
   }finally{window.__vapPurchaseBusy=false;if(purchaseButton)purchaseButton.disabled=false}
@@ -3004,6 +3118,12 @@ function showClient(name){
   <h3>🧺 Achats par catégorie</h3>${(()=>{const sums={};SALE_CATEGORIES.forEach(([key,label])=>sums[key]={label,amount:0});(c.history||[]).filter(isActivePurchase).forEach(p=>SALE_CATEGORIES.forEach(([key])=>sums[key].amount+=Math.max(0,Number(p.categoryAmounts?.[key])||0)));const rows=SALE_CATEGORIES.filter(([key])=>sums[key].amount>0);return rows.length?rows.map(([key])=>`<div class="row small"><span>${esc(sums[key].label)}</span><strong>${fmt(sums[key].amount)}</strong></div>`).join(''):'<p class="small muted">Aucune répartition renseignée pour ce client.</p>'})()}
   <h3>🧾 Historique des achats</h3>${hist.length?hist.map(p=>`<div class="purchase-history-item" style="border-bottom:1px solid var(--border);padding:10px 0;${p.cancelled?'opacity:.7;background:#fff5f4;':''}"><button type="button" class="secondary" style="display:block;width:100%;text-align:left;white-space:normal;line-height:1.45;margin-bottom:7px" onclick="showPurchaseDetails('${escJs(c.name)}','${escJs(p.id)}')">📅 ${dateFmt(p.date)} · ${fmt(p.amount)}${p.discount?' · 🎁 -'+fmt(p.discount):''}${p.exceptionalDiscount?' (dont remise exceptionnelle '+fmt(p.exceptionalDiscount)+')':''} · payé ${fmt(p.paid)} · <strong>Voir le détail ▾</strong>${p.cancelled?` · <strong style="color:var(--red)">ANNULÉ le ${dateFmt(p.cancelledAt)}</strong>`:''}</button><div class="actions" style="gap:7px">${isActivePurchase(p)?`<button class="secondary" onclick="editPurchase('${escJs(c.name)}','${escJs(p.id)}')">✏️ Modifier</button><button class="secondary" onclick="cancelPurchase('${escJs(c.name)}','${escJs(p.id)}')">Annuler</button>`:''}</div></div>`).join(''):'<p class="muted">Aucun achat.</p>'}
   <h3>🎁 Fidélité</h3>
+  <div class="card" style="background:#f3f7f4;border:1px solid #d8eadf;margin:10px 0">
+    <strong>📱 Carte fidélité QR</strong>
+    <p class="small muted">Le client pourra scanner son QR code pour consulter uniquement sa progression et ses récompenses.</p>
+    <button class="secondary" type="button" onclick="vapQrShowClientCard('${escJs(c.name)}')">📱 ${c.qrClientId?'Afficher / actualiser le QR':'Créer la carte QR'}</button>
+    <div id="vapQrClientPanel" style="margin-top:10px"></div>
+  </div>
   <div class="grid grid4">
     <div class="stat"><strong>${reward.earnedCount}</strong><span class="kpiTitle">Bons gagnés</span><div class="small muted">${fmt(reward.earned)}</div></div>
     <div class="stat"><strong>${reward.usedCount}</strong><span class="kpiTitle">Bons utilisés</span><div class="small muted">${fmt(reward.used)}</div></div>
@@ -3196,6 +3316,7 @@ function savePurchaseEdit(){
     Object.assign(p,oldEntry);c.total=oldTotal;
     alert("Modification non enregistrée. Les anciennes valeurs ont été restaurées.");return;
   }
+  if(c.qrClientId)vapQrSyncClient(c).catch(e=>console.warn("Mise à jour carte QR non confirmée",e));
   logOperation("Achat modifié",`${c.name} · ${fmt(oldPaid)} → ${fmt(newPaid)}${detailItems.length?" · produits : "+detailItems.map(it=>it.productName+" × "+it.qty).join(", "):""}`);showSuccessToast('Achat modifié',`${c.name} · ${fmt(oldPaid)} → ${fmt(newPaid)}`);
   closePurchaseEdit();updateAll();showClient(name);
 }
@@ -3216,6 +3337,7 @@ function cancelPurchase(name,id){
     stockData=JSON.parse(stockBefore);stockSave();
     alert('Annulation non enregistrée : les données de vente et le stock ont été remis dans leur état précédent lorsque le stockage l’a permis. Exporte une sauvegarde avant de réessayer.');return;
   }
+  if(c.qrClientId)vapQrSyncClient(c).catch(e=>console.warn('Mise à jour carte QR non confirmée',e));
   logOperation('Achat annulé',`${c.name} · ${fmt(p.paid??p.amount)}${p.cancellationReason?' · '+p.cancellationReason:''}`);showSuccessToast('Achat annulé',`${c.name} · historique conservé, achat exclu des statistiques`);updateAll();showClient(name);
 }
 function deleteClient(name){
@@ -4148,9 +4270,10 @@ function vapSupabaseRender(){const session=vapSupabaseSession();const logged=!!(
 async function vapSupabaseLogin(){const email=(document.getElementById('supabaseEmail')?.value||'').trim();const password=document.getElementById('supabasePassword')?.value||'';const result=document.getElementById('supabaseSyncResult');if(!email||!password){if(result)result.textContent='Renseigne ton e-mail et ton mot de passe.';return;}if(result)result.textContent='Connexion en cours…';try{const r=await fetch(window.VAP_SUPABASE_URL+'/auth/v1/token?grant_type=password',{method:'POST',headers:{'Content-Type':'application/json','apikey':window.VAP_SUPABASE_ANON_KEY},body:JSON.stringify({email,password})});const data=await vapSupabaseReadJson(r,'Connexion au compte boutique');if(!data.access_token||!data.user?.id)throw new Error('Identifiants refusés ou connexion impossible.');localStorage.setItem(window.VAP_SUPABASE_SESSION_KEY,JSON.stringify({access_token:data.access_token,refresh_token:data.refresh_token,expires_at:Date.now()+(Number(data.expires_in)||3600)*1000,user:{id:data.user.id,email:data.user.email}}));const pass=document.getElementById('supabasePassword');if(pass)pass.value='';vapSupabaseRender();if(result)result.textContent='Connexion réussie. Aucune donnée n’a encore été transférée.';}catch(e){if(result)result.textContent='Échec de connexion : '+e.message;vapSupabaseSetStatus('Connexion Supabase non établie.',true);}}
 async function vapSupabaseFreshSession(){let session=vapSupabaseSession();if(!session?.access_token||!session?.user?.id)throw new Error('Session Supabase absente.');if(Number(session.expires_at||0)>Date.now()+60000)return session;if(!session.refresh_token)throw new Error('Session expirée : reconnecte-toi à Supabase.');const r=await fetch(window.VAP_SUPABASE_URL+'/auth/v1/token?grant_type=refresh_token',{method:'POST',headers:{'Content-Type':'application/json','apikey':window.VAP_SUPABASE_ANON_KEY},body:JSON.stringify({refresh_token:session.refresh_token})});const data=await vapSupabaseReadJson(r,'Renouvellement de session');if(!data.access_token||!data.user?.id)throw new Error('Session expirée : reconnecte-toi à Supabase.');session={access_token:data.access_token,refresh_token:data.refresh_token,expires_at:Date.now()+(Number(data.expires_in)||3600)*1000,user:{id:data.user.id,email:data.user.email}};localStorage.setItem(window.VAP_SUPABASE_SESSION_KEY,JSON.stringify(session));return session;}
 function vapSupabaseLogout(){localStorage.removeItem(window.VAP_SUPABASE_SESSION_KEY);vapSupabaseRender();vapSupabaseSetStatus('Déconnecté de Supabase. Les données locales ne sont pas affectées.');const result=document.getElementById('supabaseSyncResult');if(result)result.textContent='Session locale supprimée.';}
-function vapSupabaseBuildSnapshot(){const keys=[KEY,KEY+'_settings',HISTORICAL_KEY,AUDIT_KEY,KEY+'_stock_v1','vapetmoi_ui_theme_v60'];const data={};for(const key of keys){const raw=localStorage.getItem(key);if(raw!==null){try{data[key]=JSON.parse(raw)}catch(e){throw new Error('Donnée locale illisible : '+key)}}}return {app:'Vap’ & Moi Pro',schema_version:'V104',created_at:new Date().toISOString(),storage_keys:data,integrity:{clients:Array.isArray(data[KEY])?data[KEY].length:null,purchases:Array.isArray(data[KEY])?data[KEY].reduce((n,c)=>n+(Array.isArray(c.history)?c.history.length:0),0):null,stock_products:Array.isArray(data[KEY+'_stock_v1']?.products)?data[KEY+'_stock_v1'].products.length:null}}}
-async function vapSupabaseUploadSnapshot(){let session=vapSupabaseSession();const result=document.getElementById('supabaseSyncResult');if(!session?.access_token||!session?.user?.id){if(result)result.textContent='Reconnecte-toi à Supabase.';vapSupabaseRender();return;}if(!confirm('Envoyer une COPIE de toutes les données locales V102 vers Supabase ? Les données locales ne seront pas modifiées. Aucun téléchargement distant ne sera effectué.'))return;try{session=await vapSupabaseFreshSession();const snapshot=vapSupabaseBuildSnapshot();if(result)result.textContent='Préparation de la sauvegarde…';const row={user_id:session.user.id,state_json:snapshot,schema_version:'V104',updated_at:new Date().toISOString()};const r=await fetch(window.VAP_SUPABASE_URL+'/rest/v1/shop_app_state?on_conflict=user_id',{method:'POST',headers:{'Content-Type':'application/json','apikey':window.VAP_SUPABASE_ANON_KEY,'Authorization':'Bearer '+session.access_token,'Prefer':'resolution=merge-duplicates,return=representation'},body:JSON.stringify(row)});const body=await r.text();if(!r.ok)throw new Error('Supabase '+r.status+' : '+body.slice(0,500));let parsed=[];try{parsed=JSON.parse(body||'[]')}catch(e){}if(!Array.isArray(parsed)||parsed.length!==1||parsed[0].user_id!==session.user.id)throw new Error('Écriture envoyée mais confirmation de lecture non reçue. Ne relance pas avant vérification dans Supabase.');if(result)result.textContent='Sauvegarde en ligne confirmée le '+new Date().toLocaleString('fr-FR')+'. Clients : '+(snapshot.integrity.clients??'—')+' · Achats détaillés : '+(snapshot.integrity.purchases??'—')+' · Produits en stock : '+(snapshot.integrity.stock_products??'—')+'. Les données locales sont inchangées.';}catch(e){if(result)result.textContent='Sauvegarde non confirmée : '+e.message;}}
+function vapSupabaseBuildSnapshot(){const keys=[KEY,KEY+'_settings',HISTORICAL_KEY,AUDIT_KEY,KEY+'_stock_v1','vapetmoi_ui_theme_v60'];const data={};for(const key of keys){const raw=localStorage.getItem(key);if(raw!==null){try{data[key]=JSON.parse(raw)}catch(e){throw new Error('Donnée locale illisible : '+key)}}}return {app:'Vap’ & Moi Pro',schema_version:'V105',created_at:new Date().toISOString(),storage_keys:data,integrity:{clients:Array.isArray(data[KEY])?data[KEY].length:null,purchases:Array.isArray(data[KEY])?data[KEY].reduce((n,c)=>n+(Array.isArray(c.history)?c.history.length:0),0):null,stock_products:Array.isArray(data[KEY+'_stock_v1']?.products)?data[KEY+'_stock_v1'].products.length:null}}}
+async function vapSupabaseUploadSnapshot(){let session=vapSupabaseSession();const result=document.getElementById('supabaseSyncResult');if(!session?.access_token||!session?.user?.id){if(result)result.textContent='Reconnecte-toi à Supabase.';vapSupabaseRender();return;}if(!confirm('Envoyer une COPIE de toutes les données locales V102 vers Supabase ? Les données locales ne seront pas modifiées. Aucun téléchargement distant ne sera effectué.'))return;try{session=await vapSupabaseFreshSession();const snapshot=vapSupabaseBuildSnapshot();if(result)result.textContent='Préparation de la sauvegarde…';const row={user_id:session.user.id,state_json:snapshot,schema_version:'V105',updated_at:new Date().toISOString()};const r=await fetch(window.VAP_SUPABASE_URL+'/rest/v1/shop_app_state?on_conflict=user_id',{method:'POST',headers:{'Content-Type':'application/json','apikey':window.VAP_SUPABASE_ANON_KEY,'Authorization':'Bearer '+session.access_token,'Prefer':'resolution=merge-duplicates,return=representation'},body:JSON.stringify(row)});const body=await r.text();if(!r.ok)throw new Error('Supabase '+r.status+' : '+body.slice(0,500));let parsed=[];try{parsed=JSON.parse(body||'[]')}catch(e){}if(!Array.isArray(parsed)||parsed.length!==1||parsed[0].user_id!==session.user.id)throw new Error('Écriture envoyée mais confirmation de lecture non reçue. Ne relance pas avant vérification dans Supabase.');if(result)result.textContent='Sauvegarde en ligne confirmée le '+new Date().toLocaleString('fr-FR')+'. Clients : '+(snapshot.integrity.clients??'—')+' · Achats détaillés : '+(snapshot.integrity.purchases??'—')+' · Produits en stock : '+(snapshot.integrity.stock_products??'—')+'. Les données locales sont inchangées.';}catch(e){if(result)result.textContent='Sauvegarde non confirmée : '+e.message;}}
 try{vapSupabaseRender();vapSupabaseDetectRecovery()}catch(e){console.error('Supabase recovery',e)}
+try{vapQrRenderPublicCard()}catch(e){console.error('Carte fidélité publique',e)}
 
 if("serviceWorker" in navigator && location.protocol.startsWith("http")){navigator.serviceWorker.register("./sw.js").catch(()=>{});}
 document.addEventListener('DOMContentLoaded',()=>{try{renderStock();}catch(e){console.error('Stock V37',e)}});

@@ -1,0 +1,15 @@
+VAP’ & MOI PRO — V105 CARTES FIDÉLITÉ QR
+
+Contenu :
+- index.html : application V105 avec création/affichage QR individuel, vue publique limitée à la progression et aux récompenses, synchronisation après vente/modification/annulation si la carte QR du client existe.
+- sw.js : cache service worker V105.
+- visuels et icônes V104 conservés.
+- SUPABASE_QR_SECURITE_V105.sql : script SQL final de sécurisation RLS et fonction publique.
+
+IMPORTANT :
+1. Les données locales restent la source de vérité. Le code n'efface aucun stockage local ni aucune table.
+2. La synchronisation QR nécessite une session Supabase active.
+3. Le QR ne contient qu'un jeton opaque. La page publique n'affiche ni nom, ni téléphone, ni historique, ni montant total dépensé.
+4. Le générateur QR est chargé depuis cdnjs (connexion Internet nécessaire lors de la création/impression du QR).
+5. La table existante doit conserver les colonnes : id, user_id, client_id, public_token, active, progress_to_next_reward, amount_needed, next_reward_amount, available_reward_amount, updated_at.
+6. Le script SQL est réexécutable. Il remplace uniquement la policy nommée "shop manages own loyalty cards" et la fonction get_public_loyalty_card(uuid). Il ne supprime aucune donnée.
