@@ -1,28 +1,29 @@
-VAP’ & MOI PRO — V118 — MASCOTTE INTERACTIVE
+VAP’ & MOI PRO — V118 — REFONTE VISUELLE ET ANIMATIONS
 
-Base : archive V117 SIGNATURE REFONTE fournie dans le projet.
+Base : V117 Signature Refonte.
 
-Modifications V118 :
-- Suppression du champ de recherche permanent dans l’en-tête.
-- Remplacement par une icône loupe ; toucher l’icône ouvre le champ de recherche globale existant. Les recherches dédiées aux rubriques restent inchangées.
-- Ajout de la mascotte dans les confirmations d’opérations déjà affichées par l’application.
-- Animation courte de la mascotte selon le type d’opération détecté dans la confirmation : vente/achat, client, stock, fidélité et réussite générique. Les styles prévoient aussi une réaction dédiée à l’objectif lorsqu’un événement correspondant est transmis.
-- Respect de la préférence système « réduire les animations ».
+Modifications :
+- Suppression de la loupe et du champ de recherche global dans l’en-tête.
+- Suppression du libellé de version V117 sur l’accueil et dans les informations visibles de l’application.
+- En-tête recentré sur l’identité Vap’ & Moi Pro et les paramètres.
+- Refonte visuelle complémentaire : fond ivoire, reliefs plus doux, cartes premium, ombres discrètes, navigation basse affinée.
+- Animations légères à l’ouverture des écrans et à l’apparition des indicateurs.
+- Animation de respiration discrète de la mascotte sur la bannière et réaction animée de la mascotte dans les confirmations déjà utilisées par l’application (par exemple après une vente enregistrée).
+- Respect du réglage système de réduction des animations.
 
-Préservation et limites :
-- Cette modification est une amélioration ciblée de l’interface et des confirmations. Elle ne constitue pas une animation permanente du personnage dans toutes les pages.
-- Les fonctions métier, sections, assets et mécanismes de stockage de V117 sont conservés ; aucune migration ni suppression des données locales n’a été ajoutée.
-- Supabase reste présent mais n’a pas été activé, modifié ni testé.
-- Les réactions sont déclenchées par les confirmations existantes (showSuccessToast). Les événements qui n’affichent pas de confirmation ne déclenchent pas de réaction.
+Préservation :
+- Les cinq accès principaux et les sections existantes sont conservés.
+- Les fonctions de recherche propres aux rubriques ne sont pas supprimées.
+- Les clés de stockage local et les données métier ne sont pas volontairement modifiées.
+- Le code Supabase / QR reste présent et n’a pas été reconnecté ni modifié volontairement.
 
-Contrôles effectués sur cette archive :
-- Vérification de syntaxe JavaScript avec Node.js : réussie.
-- Vérification de l’intégrité ZIP : réussie.
-- Vérification statique de la présence de l’icône de recherche, du champ replié, de la mascotte et des animations : réussie.
+Contrôles effectués :
+- Contrôle de la structure ZIP et de la présence des ressources locales.
+- Vérification que les contrôles de recherche globale ne sont plus présents dans l’en-tête.
+- Vérification que le libellé visible V117 n’est plus affiché dans l’accueil / les informations de l’application.
 
-Non effectués :
-- Test réel sur Samsung / navigateur Android.
-- Parcours réel complet de vente, annulation, fidélité et mouvements de stock.
-- Test de restauration, mode hors ligne et Supabase.
-
-Avant utilisation en boutique, tester une copie de sauvegarde sur l’appareil.
+Limites :
+- Pas de test réel sur Samsung ni de parcours complet de vente/stock/fidélité dans un navigateur mobile.
+- Les animations sont des animations d’interface ; elles ne constituent pas une mascotte 3D interactive.
+- Les réactions utilisent le système de confirmation existant : seules les opérations qui affichent une confirmation déclenchent cette réaction.
+- Faire une sauvegarde des données avant remplacement de la version actuellement utilisée.
