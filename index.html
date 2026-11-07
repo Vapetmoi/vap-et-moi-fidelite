@@ -3741,7 +3741,7 @@ function toggleVisitFrequencyStats(){showAllVisitFrequencyStats=!showAllVisitFre
 function exportData(){
   if(storageReadIssues.length){alert('Export bloqué : une ou plusieurs données locales sont illisibles ('+storageReadIssues.join(', ')+'). Restaure une sauvegarde valide avant de créer un nouvel export incomplet.');return;}
   const exportedAt=new Date().toISOString();
-  const payload={version:'Vap’ & Moi Pro V104 — Connexion et récupération du mot de passe',schemaVersion:1,exportedAt,storageKey:KEY,settings,clients,historicalCA,activityLog,stockData};
+  const payload={version:'Vap’ & Moi Pro V106 — Diagnostic connexion et cartes QR',schemaVersion:1,exportedAt,storageKey:KEY,settings,clients,historicalCA,activityLog,stockData};
   let serialized;try{serialized=JSON.stringify(payload);const check=JSON.parse(serialized);validateBackupPayload(check);if(!Array.isArray(check.stockData?.products)||!Array.isArray(check.stockData?.movements)||!Array.isArray(check.stockData?.orders))throw new Error('Structure du stock incomplète');}catch(err){alert('Sauvegarde interrompue : les données ne passent pas le contrôle de cohérence ('+(err.message||'erreur')+'). Aucun fichier incomplet n’a été exporté.');return;}
   const blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='Vap_et_Moi_sauvegarde_V82.json';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);
   localStorage.setItem(KEY+'_last_backup',exportedAt);renderBackupStatus();
