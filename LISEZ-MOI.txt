@@ -1,25 +1,28 @@
-VAP’ & MOI PRO — V117 — SIGNATURE / REFONTE INTERFACE
+VAP’ & MOI PRO — V118 — MASCOTTE INTERACTIVE
 
-Base technique : V116 PREVIEW NATURE & STOCK, issue de la base V114 fournie par l’utilisateur.
+Base : archive V117 SIGNATURE REFONTE fournie dans le projet.
 
-Cette édition applique une première refonte visuelle et de navigation selon les 40 choix validés (socle V117 à prévisualiser) :
-- Identité premium vert forêt, ivoire et touches dorées.
-- Navigation principale ramenée à cinq accès : Accueil, Clients, Vente, Stock, Pilotage.
-- Statistiques et Analyse restent deux rubriques distinctes accessibles depuis les onglets internes de Pilotage.
-- Recherche globale dans l’en-tête : clients, produits, ventes et rubriques ; les recherches spécifiques existantes dans les sections sont conservées.
-- Mise en page responsive mobile/tablette/ordinateur, cartes et tableaux existants conservés.
-- Action Nouvelle vente mise en avant sur grand écran ; accès Vente central sur mobile.
-- Animations d’apparition légères avec respect de prefers-reduced-motion.
-- Mascotte existante conservée dans les visuels et fiches ; aucun nouvel asset externe ajouté.
+Modifications V118 :
+- Suppression du champ de recherche permanent dans l’en-tête.
+- Remplacement par une icône loupe ; toucher l’icône ouvre le champ de recherche globale existant. Les recherches dédiées aux rubriques restent inchangées.
+- Ajout de la mascotte dans les confirmations d’opérations déjà affichées par l’application.
+- Animation courte de la mascotte selon le type d’opération détecté dans la confirmation : vente/achat, client, stock, fidélité et réussite générique. Les styles prévoient aussi une réaction dédiée à l’objectif lorsqu’un événement correspondant est transmis.
+- Respect de la préférence système « réduire les animations ».
 
-Préservation :
-- Les identifiants des sections, fonctions métier et clés locales V1 existantes sont conservés dans le code source.
-- Aucune migration ni suppression des données n’est prévue par cette refonte d’interface.
-- Supabase est conservé dans le projet mais reste en attente : aucune connexion, synchronisation ni modification de schéma n’a été exécutée.
+Préservation et limites :
+- Cette modification est une amélioration ciblée de l’interface et des confirmations. Elle ne constitue pas une animation permanente du personnage dans toutes les pages.
+- Les fonctions métier, sections, assets et mécanismes de stockage de V117 sont conservés ; aucune migration ni suppression des données locales n’a été ajoutée.
+- Supabase reste présent mais n’a pas été activé, modifié ni testé.
+- Les réactions sont déclenchées par les confirmations existantes (showSuccessToast). Les événements qui n’affichent pas de confirmation ne déclenchent pas de réaction.
 
-Limites et contrôles :
-- Cette édition est une première refonte de l’interface/navigation, pas la livraison de toutes les améliorations fonctionnelles du questionnaire.
-- Les sauvegardes automatiques locales complètes, les rapports programmés, la personnalisation avancée, le verrouillage et les notifications natives doivent encore être spécifiés/implémentés et testés ; aucun succès n’est revendiqué ici.
-- Le moteur existant d’analyses, ventes, stock, fidélité, sauvegardes et copilotage est conservé sans certification fonctionnelle nouvelle.
-- Tests à effectuer avant usage réel : syntaxe JS, structure HTML, liens de navigation, recherche, essais vente/annulation et fidélité, stock, restauration, hors-ligne, puis essais sur Samsung.
-- Supabase/QR et notifications en arrière-plan non certifiés.
+Contrôles effectués sur cette archive :
+- Vérification de syntaxe JavaScript avec Node.js : réussie.
+- Vérification de l’intégrité ZIP : réussie.
+- Vérification statique de la présence de l’icône de recherche, du champ replié, de la mascotte et des animations : réussie.
+
+Non effectués :
+- Test réel sur Samsung / navigateur Android.
+- Parcours réel complet de vente, annulation, fidélité et mouvements de stock.
+- Test de restauration, mode hors ligne et Supabase.
+
+Avant utilisation en boutique, tester une copie de sauvegarde sur l’appareil.
