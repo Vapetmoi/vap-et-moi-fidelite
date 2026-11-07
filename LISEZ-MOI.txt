@@ -1,29 +1,21 @@
-VAP’ & MOI PRO — V118 — REFONTE VISUELLE ET ANIMATIONS
+VAP’ & MOI PRO — V120 REPRISE SÉCURISÉE
 
-Base : V117 Signature Refonte.
+Base : V119 Navigation réparée.
+Données restaurées depuis le fichier JSON vérifié du 02/11/2026 à 14:26:52 UTC (15:26:52, heure française).
 
-Modifications :
-- Suppression de la loupe et du champ de recherche global dans l’en-tête.
-- Suppression du libellé de version V117 sur l’accueil et dans les informations visibles de l’application.
-- En-tête recentré sur l’identité Vap’ & Moi Pro et les paramètres.
-- Refonte visuelle complémentaire : fond ivoire, reliefs plus doux, cartes premium, ombres discrètes, navigation basse affinée.
-- Animations légères à l’ouverture des écrans et à l’apparition des indicateurs.
-- Animation de respiration discrète de la mascotte sur la bannière et réaction animée de la mascotte dans les confirmations déjà utilisées par l’application (par exemple après une vente enregistrée).
-- Respect du réglage système de réduction des animations.
+Contenu du point de reprise :
+- 127 fiches clients
+- 206 achats dans les historiques clients (201 actifs, 5 annulés)
+- historique mensuel existant : 11 mois, novembre 2025 à septembre 2026
+- stock : 47 produits, 64 mouvements, 0 commande
+- journal d’activité : 100 entrées
 
-Préservation :
-- Les cinq accès principaux et les sections existantes sont conservés.
-- Les fonctions de recherche propres aux rubriques ne sont pas supprimées.
-- Les clés de stockage local et les données métier ne sont pas volontairement modifiées.
-- Le code Supabase / QR reste présent et n’a pas été reconnecté ni modifié volontairement.
+IMPORTANT : aucune donnée postérieure au 02/11/2026 n'est inventée ou reconstituée.
 
-Contrôles effectués :
-- Contrôle de la structure ZIP et de la présence des ressources locales.
-- Vérification que les contrôles de recherche globale ne sont plus présents dans l’en-tête.
-- Vérification que le libellé visible V117 n’est plus affiché dans l’accueil / les informations de l’application.
+Initialisation : au premier lancement, V120 charge cette sauvegarde uniquement si la base locale clients est vide et qu'aucun stock produit n'est présent. Une base locale non vide n'est jamais remplacée.
 
-Limites :
-- Pas de test réel sur Samsung ni de parcours complet de vente/stock/fidélité dans un navigateur mobile.
-- Les animations sont des animations d’interface ; elles ne constituent pas une mascotte 3D interactive.
-- Les réactions utilisent le système de confirmation existant : seules les opérations qui affichent une confirmation déclenchent cette réaction.
-- Faire une sauvegarde des données avant remplacement de la version actuellement utilisée.
+Protection : après chaque enregistrement client ou stock, V120 tente de mettre à jour un point de reprise dans le stockage local du navigateur. Ce point de reprise reste sur le même appareil et dans le même stockage du site : il ne protège PAS contre l'effacement des données du navigateur, la perte du téléphone ou la désinstallation. Utiliser aussi régulièrement le bouton Exporter toutes les données et conserver le JSON hors du téléphone.
+
+Fonctions conservées depuis V119 : navigation, fiches clients, fidélité, ventes, ventes liées au stock avec décrémentation, mouvements et inventaires, statistiques, analyses, prévisions, copilote commercial, bénéfice estimé à partir des ventes avec produits détaillés, QR clients et affichage mobile.
+
+Supabase : interface de synchronisation retirée de cette version de reprise. Aucun appel de synchronisation n'est nécessaire au fonctionnement local.
