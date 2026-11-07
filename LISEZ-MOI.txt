@@ -1,21 +1,27 @@
-VAP’ & MOI PRO — V113 — Cartes fidélité dans la section Clients
+VAP’ & MOI PRO — V114 — ÉDITION PILOTAGE BOUTIQUE
 
-Modification :
-- La liste des clients affiche désormais une petite carte récapitulative : nom, récompenses disponibles, montant restant avant le prochain bon de 5 € et barre de progression.
-- Un clic sur le nom ouvre une carte fidélité grand format avec la mascotte, le nom, la progression, les récompenses disponibles, l’adresse et les horaires.
-- Un bouton depuis cette carte ouvre ensuite la fiche client détaillée et son historique existant.
-- Les calculs réutilisent les fonctions de fidélité déjà présentes (récompenses, récompenses manuelles et récompenses utilisées).
-- Les autres fichiers et données locales de V110 sont conservés ; le cache du service worker est renouvelé.
+Base de travail : V113. Cette édition regroupe et met en avant les outils de pilotage déjà présents dans l’application. Elle conserve les fichiers applicatifs et les clés de stockage locales de la base.
 
-À savoir :
-- Contrôles effectués : archive ZIP vérifiée, présence des 9 fichiers, vérification syntaxique JavaScript.
-- Aucun test réel sur téléphone ni test de ventes/Supabase n'a été effectué.
-- Vérifier l’adresse de boutique avant publication : l’adresse affichée dans la carte est « 15 rue Grande, 77480 Bray-sur-Seine ».
+Fonctions présentes dans cette base :
+- Accueil : CA du jour, progression vers l’objectif, panier moyen, clients du mois et bénéfice brut estimé lorsque les produits vendus sont identifiés.
+- Clients : cartes récapitulatives, grande carte fidélité, fiche détaillée et historique d’achats.
+- Vente : saisie des ventes et association aux clients/produits selon les fonctions existantes.
+- Stock : catalogue, seuils d’alerte, mouvements, valorisation achat/vente, liste de réapprovisionnement, commandes et réception.
+- Stats et Analyse : comparaisons de périodes, bénéfice brut estimé, indicateurs clients, top clients, prévisions et analyse journalière.
+- Copilote commercial : clients à revoir, rythme d’achat observé, panier moyen et objectifs, sans relance automatique.
+- Contrôle de cohérence, journal d’activité et outils de sauvegarde présents dans la base.
 
-V113 : le QR code personnel est désormais généré depuis la grande carte fidélité (aperçu client), et non depuis la fiche détaillée.
+Clés locales préservées :
+- vapetmoi_fidelite_v1
+- vapetmoi_fidelite_v1_settings
+- vapetmoi_fidelite_v1_historical_monthly_ca
+- vapetmoi_fidelite_v1_activity_log
+- vapetmoi_fidelite_v1_stock_v1
 
+Important — limites vérifiées :
+- Le QR client/Supabase n’est pas certifié fonctionnel. La connexion Supabase doit être valide pour les fonctions qui en dépendent.
+- Le bénéfice est une estimation brute uniquement sur les ventes avec produits et coûts exploitables ; il ne représente pas le bénéfice net après charges.
+- Les prévisions dépendent de l’historique réellement enregistré.
+- Aucun test réel sur téléphone, aucune vente de test et aucun test de connexion Supabase n’ont été réalisés dans cette préparation.
 
-Correctifs V113 :
-- Suppression du symbole € en double dans les récompenses affichées sur la carte client.
-- En cas d’absence de session Supabase, le panneau QR explique où se connecter et propose un raccourci vers Paramètres > Sauvegarde sécurisée en ligne.
-- Important : le QR personnel nécessite toujours une session Supabase boutique valide. Cette version ne contourne pas l’authentification et aucun test réel de connexion Supabase n’a été effectué.
+Contrôles réalisés pour cette archive : intégrité ZIP, présence des 9 fichiers attendus, syntaxe JavaScript de l’application, mise à jour du nom de cache du service worker.
