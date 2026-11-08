@@ -1,4 +1,4 @@
-const CACHE_NAME = 'vap-et-moi-pro-cache-v126-mascot-scenes';
+const CACHE_NAME = 'vap-et-moi-pro-cache-v127-version-label';
 const CORE = [
   './',
   './index.html',
