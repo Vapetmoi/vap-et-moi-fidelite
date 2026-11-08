@@ -2648,7 +2648,7 @@ nav.appNav button.saleNav span{font-size:23px!important;color:#e4d092!important}
   <div class="card"><h3>ℹ️ Application</h3><p class="small muted">Vap’ & Moi Pro · Gestion boutique</p><p class="small muted">Application conçue pour fonctionner hors connexion après son installation.</p></div>
 </section>
 
-<div class="appVersionLabel" aria-label="Version de l’application">Vap’ &amp; Moi Pro · V131 Signature — Animations corrigées</div>
+<div class="appVersionLabel" aria-label="Version de l’application">Vap’ &amp; Moi Pro · V132 Signature — Pilotage et fermeture corrigés</div>
 </main>
 <script>
 // V120 — restauration initiale vérifiée depuis l'export du 02/11/2026.
@@ -5079,8 +5079,8 @@ document.addEventListener('DOMContentLoaded',()=>{const cashDate=document.getEle
     loyalty:'./mascotte-animation-celebration.gif',
     client:'./mascotte-animation-celebration.gif',
     stock:'./mascotte-animation-stock.gif',
-    goal:'./mascotte-animation-stats.gif',
-    stats:'./mascotte-animation-stats.gif',
+    goal:'./mascotte-animation-copilote.gif',
+    stats:'./mascotte-animation-copilote.gif',
     analysis:'./mascotte-animation-copilote.gif',
     copilot:'./mascotte-animation-copilote.gif'
   };
@@ -5123,20 +5123,13 @@ document.addEventListener('DOMContentLoaded',()=>{const cashDate=document.getEle
     if(sceneTimer)clearTimeout(sceneTimer);
     sceneTimer=setTimeout(function(){dismiss(panel);},duration);
   };
-  // Fermeture immédiate au toucher/clic sur toute la scène.
-  // pointerdown + preventDefault évite que le clic traverse vers le bouton dessous.
-  document.addEventListener('pointerdown',function(event){
-    const panel=document.getElementById('vapMascotScene');
-    if(panel && panel.classList.contains('is-active') && panel.contains(event.target)){
-      event.preventDefault();
-      event.stopPropagation();
-      if(event.stopImmediatePropagation)event.stopImmediatePropagation();
-      dismiss(panel);
-    }
-  },true);
+  // Fermer uniquement sur l'événement click, AVANT de masquer le panneau.
+  // Ne pas fermer sur pointerdown/touchstart : Android peut alors retargeter
+  // le click synthétique vers le bouton situé derrière le panneau.
   document.addEventListener('click',function(event){
     const panel=document.getElementById('vapMascotScene');
-    if(panel && panel.classList.contains('is-active') && panel.contains(event.target)){
+    if(!panel || !panel.classList.contains('is-active'))return;
+    if(panel.contains(event.target)){
       event.preventDefault();
       event.stopPropagation();
       if(event.stopImmediatePropagation)event.stopImmediatePropagation();
