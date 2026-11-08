@@ -2192,8 +2192,8 @@ nav.appNav button.saleNav span{font-size:23px!important;color:#e4d092!important}
 #vapMascotScene.is-active{opacity:1;visibility:visible}
 #vapMascotScene .vapSceneInner{width:min(88vw,390px);display:flex;flex-direction:column;align-items:center;text-align:center;gap:12px;transform:translateY(18px) scale(.94);opacity:0}
 #vapMascotScene.is-active .vapSceneInner{animation:vapSceneEnter .42s cubic-bezier(.2,.8,.2,1) forwards}
-#vapMascotScene .vapScenePortrait{width:clamp(150px,42vw,205px);height:clamp(150px,42vw,205px);padding:6px;border-radius:50%;background:linear-gradient(145deg,#f4e4ae,#a98a43,#f9edc8);box-shadow:0 0 0 8px rgba(235,215,157,.09),0 16px 50px rgba(0,0,0,.35);overflow:hidden;animation:vapSceneFloat 1.5s ease-in-out infinite}
-#vapMascotScene .vapScenePortrait img{width:100%;height:100%;display:block;object-fit:cover;object-position:50% 24%;border-radius:50%}
+#vapMascotScene .vapScenePortrait{width:min(82vw,340px);height:min(82vw,340px);padding:0;border-radius:24px;background:transparent;box-shadow:0 14px 42px rgba(0,0,0,.28);overflow:hidden;animation:vapSceneFloat 1.5s ease-in-out infinite}
+#vapMascotScene .vapScenePortrait img{width:100%;height:100%;display:block;object-fit:contain;object-position:center;border-radius:24px}
 #vapMascotScene .vapSceneTitle{font-size:clamp(23px,6vw,29px);font-weight:800;line-height:1.15;margin-top:7px}
 #vapMascotScene .vapSceneDetail{max-width:320px;font-size:15px;line-height:1.45;color:#f0e8d4}
 #vapMascotScene .vapSceneRule{width:62px;height:2px;border-radius:2px;background:#cdb477;margin:4px 0}
@@ -5071,23 +5071,44 @@ document.addEventListener('DOMContentLoaded',()=>{const cashDate=document.getEle
 (function(){
   'use strict';
   let sceneTimer=null;
+  const imageByReaction={
+    sale:'./mascotte-animation-celebration.gif',
+    loyalty:'./mascotte-animation-celebration.gif',
+    stock:'./mascotte-animation-stock.gif',
+    goal:'./mascotte-animation-stats.gif',
+    stats:'./mascotte-animation-stats.gif',
+    analysis:'./mascotte-animation-copilote.gif',
+    copilot:'./mascotte-animation-copilote.gif'
+  };
   const sectionScenes={
     accueil:['Bonjour patron !','Tout est prêt pour suivre la boutique.','success'],
     clients:['À vos côtés !','On prend soin de vos clients et de leur fidélité.','client'],
     achat:['À vous de jouer !','Je garde un œil sur la vente.','sale'],
-    stock:['Faisons le point !','Chaque référence compte. Vérifions le stock.','stock'],
-    stats:['Regardons les chiffres !','Les indicateurs nous aident à décider.','goal'],
-    analyse:['En mode réflexion !','Je prépare mon carnet pour analyser les tendances.','goal'],
+    stock:['Le contrôle du stock','Je vérifie les flacons et les quantités.','stock'],
+    stats:['Place aux chiffres','J’analyse les résultats avec attention.','stats'],
+    analyse:['Votre copilote commercial','Je repère les tendances et prépare des pistes d’action.','analysis'],
     parametres:['Un petit réglage ?','Je reste à ta disposition.','success'],
     caisse:['Comptons ensemble !','Un point clair sur la journée.','success']
   };
+  function dismiss(panel){
+    if(!panel)return;
+    if(sceneTimer){clearTimeout(sceneTimer);sceneTimer=null;}
+    panel.classList.remove('is-active');
+    panel.setAttribute('aria-hidden','true');
+  }
   window.vapMascotScene=function(kind,key,title,detail){
     const panel=document.getElementById('vapMascotScene');
     if(!panel)return;
-    let chosenTitle=title,chosenDetail=detail,reaction=key||'success',duration=kind==='section'?1250:2050;
+    let chosenTitle=title,chosenDetail=detail,reaction=key||'success',duration=kind==='section'?2100:3000;
     if(kind==='section'){
       const scene=sectionScenes[key]||['On continue !','Je reste avec toi pour la suite.','success'];
       chosenTitle=scene[0];chosenDetail=scene[1];reaction=scene[2];
+    }
+    const img=panel.querySelector('.vapScenePortrait img');
+    if(img){
+      const src=imageByReaction[reaction];
+      img.src=src||'./mascotte-vap-moi.jpg';
+      img.alt='Mascotte Vap’ & Moi en animation';
     }
     const t=document.getElementById('vapSceneTitle'),d=document.getElementById('vapSceneDetail');
     if(t)t.textContent=chosenTitle||'C’est noté !';
@@ -5096,14 +5117,27 @@ document.addEventListener('DOMContentLoaded',()=>{const cashDate=document.getEle
     panel.setAttribute('aria-hidden','false');
     panel.classList.remove('is-active');void panel.offsetWidth;panel.classList.add('is-active');
     if(sceneTimer)clearTimeout(sceneTimer);
-    sceneTimer=setTimeout(function(){panel.classList.remove('is-active');panel.setAttribute('aria-hidden','true');},duration);
+    sceneTimer=setTimeout(function(){dismiss(panel);},duration);
   };
   document.addEventListener('click',function(event){
+    const panel=document.getElementById('vapMascotScene');
+    if(panel && panel.classList.contains('is-active') && event.target.closest('#vapMascotScene')){
+      event.preventDefault();
+      event.stopPropagation();
+      dismiss(panel);
+      return;
+    }
     const button=event.target&&event.target.closest?event.target.closest('nav.appNav button[data-page]'):null;
     if(!button)return;
     const key=button.dataset.page||'accueil';
     window.setTimeout(function(){window.vapMascotScene('section',key);},40);
   },true);
+  document.addEventListener('keydown',function(event){
+    if(event.key==='Escape'){
+      const panel=document.getElementById('vapMascotScene');
+      if(panel && panel.classList.contains('is-active'))dismiss(panel);
+    }
+  });
 })();
 </script>
 
