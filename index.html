@@ -2189,7 +2189,7 @@ nav.appNav button.saleNav span{font-size:23px!important;color:#e4d092!important}
 
 <style id="vap-mascot-scenes-css">
 #vapMascotScene{position:fixed;inset:0;z-index:100000;display:flex;align-items:center;justify-content:center;padding:26px;background:radial-gradient(ellipse at 50% 38%,rgba(40,91,64,.98),rgba(23,61,44,.985) 56%,rgba(14,43,32,.99));color:#fff8e8;opacity:0;visibility:hidden;pointer-events:none;transition:opacity .28s ease,visibility .28s ease}
-#vapMascotScene.is-active{opacity:1;visibility:visible}
+#vapMascotScene.is-active{opacity:1;visibility:visible;pointer-events:auto;touch-action:manipulation;cursor:pointer}
 #vapMascotScene .vapSceneInner{width:min(88vw,390px);display:flex;flex-direction:column;align-items:center;text-align:center;gap:12px;transform:translateY(18px) scale(.94);opacity:0}
 #vapMascotScene.is-active .vapSceneInner{animation:vapSceneEnter .42s cubic-bezier(.2,.8,.2,1) forwards}
 #vapMascotScene .vapScenePortrait{width:min(82vw,340px);height:min(82vw,340px);padding:0;border-radius:24px;background:transparent;box-shadow:0 14px 42px rgba(0,0,0,.28);overflow:hidden;animation:vapSceneFloat 1.5s ease-in-out infinite}
@@ -2648,7 +2648,7 @@ nav.appNav button.saleNav span{font-size:23px!important;color:#e4d092!important}
   <div class="card"><h3>ℹ️ Application</h3><p class="small muted">Vap’ & Moi Pro · Gestion boutique</p><p class="small muted">Application conçue pour fonctionner hors connexion après son installation.</p></div>
 </section>
 
-<div class="appVersionLabel" aria-label="Version de l’application">Vap’ &amp; Moi Pro · V128 Signature — Interactions corrigées</div>
+<div class="appVersionLabel" aria-label="Version de l’application">Vap’ &amp; Moi Pro · V131 Signature — Animations corrigées</div>
 </main>
 <script>
 // V120 — restauration initiale vérifiée depuis l'export du 02/11/2026.
@@ -5123,13 +5123,23 @@ document.addEventListener('DOMContentLoaded',()=>{const cashDate=document.getEle
     if(sceneTimer)clearTimeout(sceneTimer);
     sceneTimer=setTimeout(function(){dismiss(panel);},duration);
   };
-  // Fermeture au toucher du panneau uniquement. La navigation est gérée
-  // par showPage(), sans écouteur global doublon.
-  document.addEventListener('click',function(event){
+  // Fermeture immédiate au toucher/clic sur toute la scène.
+  // pointerdown + preventDefault évite que le clic traverse vers le bouton dessous.
+  document.addEventListener('pointerdown',function(event){
     const panel=document.getElementById('vapMascotScene');
-    if(panel && panel.classList.contains('is-active') && event.target.closest('#vapMascotScene')){
+    if(panel && panel.classList.contains('is-active') && panel.contains(event.target)){
       event.preventDefault();
       event.stopPropagation();
+      if(event.stopImmediatePropagation)event.stopImmediatePropagation();
+      dismiss(panel);
+    }
+  },true);
+  document.addEventListener('click',function(event){
+    const panel=document.getElementById('vapMascotScene');
+    if(panel && panel.classList.contains('is-active') && panel.contains(event.target)){
+      event.preventDefault();
+      event.stopPropagation();
+      if(event.stopImmediatePropagation)event.stopImmediatePropagation();
       dismiss(panel);
     }
   },true);

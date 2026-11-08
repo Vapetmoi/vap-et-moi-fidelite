@@ -1,4 +1,4 @@
-const CACHE_NAME = 'vap-et-moi-pro-cache-v128-mascot-interactions';
+const CACHE_NAME = 'vap-et-moi-pro-cache-v131-gif-touch';
 const CORE = [
   './',
   './index.html',
