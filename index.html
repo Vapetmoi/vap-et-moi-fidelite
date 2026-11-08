@@ -2169,6 +2169,23 @@ nav.appNav button.saleNav span{font-size:23px!important;color:#e4d092!important}
 @media(prefers-reduced-motion:reduce){.vapMascotButton{animation:none!important}}
 </style>
 
+
+<style id="vap-mascot-splash-style">
+#vapMascotIntro{position:fixed;inset:0;z-index:99999;display:flex;align-items:center;justify-content:center;padding:28px;background:radial-gradient(ellipse at 50% 38%,#285b40 0%,#173d2c 55%,#0e2b20 100%);color:#fff8e8;opacity:1;visibility:visible;transition:opacity .65s ease,visibility .65s ease}
+#vapMascotIntro.vapIntroLeaving{opacity:0;visibility:hidden;pointer-events:none}
+#vapMascotIntro .vapIntroInner{width:min(88vw,390px);display:flex;flex-direction:column;align-items:center;text-align:center;gap:13px;transform:translateY(0);animation:vapIntroRise .7s cubic-bezier(.2,.8,.2,1) both}
+#vapMascotIntro .vapIntroPortrait{width:clamp(175px,48vw,230px);height:clamp(175px,48vw,230px);border-radius:50%;padding:6px;background:linear-gradient(145deg,#f4e4ae,#a98a43,#f9edc8);box-shadow:0 0 0 8px rgba(235,215,157,.09),0 16px 50px rgba(0,0,0,.35);overflow:hidden;animation:vapIntroFloat 2s ease-in-out infinite}
+#vapMascotIntro .vapIntroPortrait img{width:100%;height:100%;object-fit:cover;object-position:50% 24%;border-radius:50%;display:block}
+#vapMascotIntro .vapIntroGreeting{font-size:clamp(21px,6vw,27px);font-weight:800;letter-spacing:.1px;margin-top:5px}
+#vapMascotIntro .vapIntroSub{font-size:14px;letter-spacing:2px;text-transform:uppercase;color:#e5d39c}
+#vapMascotIntro .vapIntroRule{width:62px;height:2px;background:#cdb477;border-radius:2px;margin:3px 0}
+#vapMascotIntro .vapIntroBrand{font-family:Georgia,serif;font-size:clamp(25px,7vw,34px);font-weight:bold;color:#f5e5b7;text-shadow:0 2px 12px rgba(0,0,0,.35);margin-top:4px}
+#vapMascotIntro .vapIntroPro{font-size:11px;letter-spacing:4px;color:#e2d19e}
+@keyframes vapIntroRise{from{opacity:0;transform:translateY(24px) scale(.94)}to{opacity:1;transform:translateY(0) scale(1)}}
+@keyframes vapIntroFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
+@media(prefers-reduced-motion:reduce){#vapMascotIntro,#vapMascotIntro *{animation:none!important;transition:none!important}}
+</style>
+
 </head>
 <body>
 
@@ -4901,6 +4918,18 @@ document.addEventListener('DOMContentLoaded',()=>{const cashDate=document.getEle
 
 </script>
 
+
+<div id="vapMascotIntro" role="status" aria-label="Bienvenue chez Vap’ & Moi">
+  <div class="vapIntroInner">
+    <div class="vapIntroPortrait"><img src="./mascotte-vap-moi.jpg" alt="La mascotte de Vap’ & Moi"></div>
+    <div class="vapIntroGreeting">Salut patron !</div>
+    <div class="vapIntroSub">Ton compagnon de gestion</div>
+    <div class="vapIntroRule"></div>
+    <div class="vapIntroBrand">Vap’ &amp; Moi</div>
+    <div class="vapIntroPro">PRO</div>
+  </div>
+</div>
+
 <div id="vapMascotCompanion" class="vapMascotCompanion" aria-label="Mascotte interactive">
   <div id="vapMascotBubble" class="vapMascotBubble" role="status" aria-live="polite" hidden>
     <span id="vapMascotBubbleText"></span>
@@ -4947,7 +4976,7 @@ document.addEventListener('DOMContentLoaded',()=>{const cashDate=document.getEle
     const host=document.getElementById('vapMascotCompanion');if(!host)return;
     host.hidden=!!(id==='achat'&&prefs.quietOnSale);
     if(host.hidden){window.vapMascotHideBubble();return;}
-    if(id!=='accueil'&&prefs.bubbles)window.vapMascotReact();
+    if(prefs.animations){host.classList.remove('vapMascotAnimate');void host.offsetWidth;host.classList.add('vapMascotAnimate');}window.vapMascotHideBubble();
   };
   window.vapMascotSet=function(key,value){
     if(!Object.prototype.hasOwnProperty.call(defaults,key))return;
@@ -4956,6 +4985,13 @@ document.addEventListener('DOMContentLoaded',()=>{const cashDate=document.getEle
     if(!prefs.bubbles)window.vapMascotHideBubble();
     const host=document.getElementById('vapMascotCompanion');
     if(host)host.hidden=!!(pageId()==='achat'&&prefs.quietOnSale);
+    const intro=document.getElementById('vapMascotIntro');
+    if(intro){
+      const dismiss=function(){intro.classList.add('vapIntroLeaving');window.setTimeout(function(){if(intro.parentNode)intro.parentNode.removeChild(intro);},700);};
+      window.setTimeout(dismiss,2100);
+      intro.addEventListener('click',dismiss,{once:true});
+    }
+
     if(!prefs.animations&&host)host.classList.remove('vapMascotAnimate');
     const status=document.getElementById('mascotSettingsStatus');
     if(status)status.textContent='Préférences enregistrées sur cet appareil.';
