@@ -2648,7 +2648,7 @@ nav.appNav button.saleNav span{font-size:23px!important;color:#e4d092!important}
   <div class="card"><h3>ℹ️ Application</h3><p class="small muted">Vap’ & Moi Pro · Gestion boutique</p><p class="small muted">Application conçue pour fonctionner hors connexion après son installation.</p></div>
 </section>
 
-<div class="appVersionLabel" aria-label="Version de l’application">Vap’ &amp; Moi Pro · V127 Signature — Mascotte réactive</div>
+<div class="appVersionLabel" aria-label="Version de l’application">Vap’ &amp; Moi Pro · V128 Signature — Interactions corrigées</div>
 </main>
 <script>
 // V120 — restauration initiale vérifiée depuis l'export du 02/11/2026.
@@ -2684,7 +2684,7 @@ function showSuccessToast(title,detail='Opération enregistrée avec succès.'){
  if(t)t.textContent=label;if(d)d.textContent=info;
  const low=(label+' '+info).toLocaleLowerCase('fr');
  const reaction=/(achat enregistré|vente validée|vente enregistrée)/.test(low)?'sale':/(objectif.*atteint|objectif.*dépassé)/.test(low)?'goal':/(stock|rupture|réappro|réception)/.test(low)?'stock':/(client|fiche)/.test(low)?'client':/(fidélité|bon fidélité|récompense)/.test(low)?'loyalty':'success';
- if(typeof window.vapMascotScene==='function'){window.vapMascotScene('action',reaction,label,info);return;}box.dataset.reaction=reaction;box.hidden=false;box.classList.remove('is-visible');void box.offsetWidth;
+ if(typeof window.vapMascotScene==='function'){window.vapMascotScene('action',reaction,label,info);box.hidden=true;return;}box.dataset.reaction=reaction;box.hidden=false;box.classList.remove('is-visible');void box.offsetWidth;
  requestAnimationFrame(()=>box.classList.add('is-visible'));
  if(successToastTimer)clearTimeout(successToastTimer);
  successToastTimer=setTimeout(()=>{box.classList.remove('is-visible');setTimeout(()=>{if(!box.classList.contains('is-visible'))box.hidden=true},260)},3200);
@@ -2884,7 +2884,9 @@ function showPage(id,btn){
   document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('active',b.dataset.page===navPage));
   const gear=document.getElementById('settingsGear');if(gear)gear.classList.toggle('active',id==='parametres');
   document.querySelectorAll('.pilotageSwitch button').forEach(b=>{const on=(id==='stats'&&b.textContent.includes('Statistiques'))||(id==='analyse'&&b.textContent.includes('Analyse'));b.classList.toggle('active',on);b.setAttribute('aria-selected',on?'true':'false')});
-  updateAll();if(id==='caisse')renderCash();if(typeof window.vapMascotScene==='function')window.vapMascotScene('section',id);
+  if(typeof window.vapMascotScene==='function')window.vapMascotScene('section',id);
+  try{updateAll();}catch(e){console.error('Actualisation de la rubrique :',e);}
+  if(id==='caisse')try{renderCash();}catch(e){console.error('Actualisation caisse :',e);}
 }
 function runGlobalSearch(){
   const input=document.getElementById('globalSearch'),out=document.getElementById('globalSearchResults');
@@ -5096,6 +5098,12 @@ document.addEventListener('DOMContentLoaded',()=>{const cashDate=document.getEle
     if(sceneTimer)clearTimeout(sceneTimer);
     sceneTimer=setTimeout(function(){panel.classList.remove('is-active');panel.setAttribute('aria-hidden','true');},duration);
   };
+  document.addEventListener('click',function(event){
+    const button=event.target&&event.target.closest?event.target.closest('nav.appNav button[data-page]'):null;
+    if(!button)return;
+    const key=button.dataset.page||'accueil';
+    window.setTimeout(function(){window.vapMascotScene('section',key);},40);
+  },true);
 })();
 </script>
 
