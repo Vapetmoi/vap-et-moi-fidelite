@@ -2150,6 +2150,25 @@ nav.appNav button.saleNav span{font-size:23px!important;color:#e4d092!important}
 }
 </style>
 
+
+<style id="vap-mascot-companion-style">
+.vapMascotCompanion{position:fixed;z-index:1100;right:14px;bottom:calc(92px + env(safe-area-inset-bottom,0px));display:flex;flex-direction:column;align-items:flex-end;gap:8px}
+.vapMascotCompanion[hidden],.vapMascotBubble[hidden]{display:none!important}
+.vapMascotButton{position:relative;width:66px;height:66px;padding:0;border:3px solid #d8c58e;border-radius:50%;overflow:hidden;background:#173e2b;box-shadow:0 5px 18px rgba(0,0,0,.27);cursor:pointer}
+.vapMascotButton img{width:100%;height:100%;display:block;object-fit:cover;object-position:50% 25%}
+.vapMascotOnlineDot{position:absolute;right:2px;bottom:3px;width:13px;height:13px;border:2px solid #fff8e8;border-radius:50%;background:#39a76a}
+.vapMascotBubble{position:relative;max-width:min(260px,calc(100vw - 110px));padding:12px 32px 12px 14px;border:1px solid #c9b77e;border-radius:16px 16px 4px 16px;background:#fff9e9;color:#26372b;box-shadow:0 7px 22px rgba(0,0,0,.18);font-size:13px;line-height:1.4;font-weight:650}
+.vapMascotBubbleClose{position:absolute;right:6px;top:4px;border:0;background:transparent;color:#657264;font-size:20px;cursor:pointer}
+.vapMascotCompanion.vapMascotAnimate .vapMascotButton{animation:vapMascotNudge .55s ease-in-out}
+@keyframes vapMascotNudge{0%,100%{transform:translateY(0) rotate(0)}25%{transform:translateY(-7px) rotate(-4deg)}55%{transform:translateY(-2px) rotate(3deg)}}
+.mascotSettingRow{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:11px 0;border-top:1px solid var(--line,#e5e8df)}
+.mascotSettingRow span{display:flex;flex-direction:column;gap:3px}
+.mascotSettingRow small{font-size:12px;color:var(--muted,#68746a)}
+.mascotSettingRow input{width:20px;height:20px;accent-color:#1d6842}
+@media(min-width:700px){.vapMascotCompanion{right:22px;bottom:22px}.vapMascotButton{width:74px;height:74px}}
+@media(prefers-reduced-motion:reduce){.vapMascotButton{animation:none!important}}
+</style>
+
 </head>
 <body>
 
@@ -2573,7 +2592,16 @@ nav.appNav button.saleNav span{font-size:23px!important;color:#e4d092!important}
 
 <section id="parametres" class="page">
   <div class="card"><h2>⚙️ Paramètres</h2><p class="small muted">Réglages et sécurité de Vap’ & Moi Pro.</p></div>
-  <div id="settingsObjectivesHost"></div><div id="settingsLoyaltyHost"></div><div id="settingsBackupHost"></div><div class="card"><h3>🔔 Notifications</h3><p class="small muted">Reçois une alerte lorsque des produits passent sous leur seuil ou lorsque l’objectif journalier est atteint. Les notifications locales sont déclenchées lorsque l’application est ouverte.</p><button type="button" class="secondary" onclick="vapV117EnableNotifications()">Activer les notifications</button><p id="vapV117NotificationStatus" class="small muted" aria-live="polite"></p></div>
+  
+<div class="card" id="mascotSettingsCard">
+  <h3>🐈 Compagnon interactif</h3>
+  <p class="small muted">Personnalise les réactions de la mascotte.</p>
+  <label class="mascotSettingRow"><span><strong>Animations</strong><small>Petits mouvements et réactions</small></span><input id="mascotAnimationsToggle" type="checkbox" checked></label>
+  <label class="mascotSettingRow"><span><strong>Bulles de dialogue</strong><small>Messages selon la rubrique ouverte</small></span><input id="mascotBubblesToggle" type="checkbox" checked></label>
+  <label class="mascotSettingRow"><span><strong>Mode discret pendant les ventes</strong><small>Masque la mascotte dans l’écran Vente</small></span><input id="mascotQuietToggle" type="checkbox" checked></label>
+  <p class="small muted" id="mascotSettingsStatus" aria-live="polite">Réglages enregistrés sur cet appareil.</p>
+</div>
+<div id="settingsObjectivesHost"></div><div id="settingsLoyaltyHost"></div><div id="settingsBackupHost"></div><div class="card"><h3>🔔 Notifications</h3><p class="small muted">Reçois une alerte lorsque des produits passent sous leur seuil ou lorsque l’objectif journalier est atteint. Les notifications locales sont déclenchées lorsque l’application est ouverte.</p><button type="button" class="secondary" onclick="vapV117EnableNotifications()">Activer les notifications</button><p id="vapV117NotificationStatus" class="small muted" aria-live="polite"></p></div>
   <div class="card" id="settingsDataHost"><h3>🛡️ Protection et données</h3><p class="small muted">Les modifications locales sont enregistrées sur cet appareil, même hors connexion. Effectue régulièrement une sauvegarde JSON et conserve-la dans un emplacement sûr.</p><div class="actions"><button class="secondary" onclick="exportData()">💾 Exporter toutes les données</button></div></div>
   <div class="card"><h3>ℹ️ Application</h3><p class="small muted">Vap’ & Moi Pro · Gestion boutique</p><p class="small muted">Application conçue pour fonctionner hors connexion après son installation.</p></div>
 </section>
@@ -2814,7 +2842,7 @@ function showPage(id,btn){
   document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('active',b.dataset.page===navPage));
   const gear=document.getElementById('settingsGear');if(gear)gear.classList.toggle('active',id==='parametres');
   document.querySelectorAll('.pilotageSwitch button').forEach(b=>{const on=(id==='stats'&&b.textContent.includes('Statistiques'))||(id==='analyse'&&b.textContent.includes('Analyse'));b.classList.toggle('active',on);b.setAttribute('aria-selected',on?'true':'false')});
-  updateAll();if(id==='caisse')renderCash();if(typeof vapMascotOnPage==='function')vapMascotOnPage(id);
+  updateAll();if(id==='caisse')renderCash();if(typeof window.vapMascotOnPage==='function')window.vapMascotOnPage(id);
 }
 function runGlobalSearch(){
   const input=document.getElementById('globalSearch'),out=document.getElementById('globalSearchResults');
@@ -4871,10 +4899,23 @@ try{vapQrRenderPublicCard()}catch(e){console.error('Carte fidélité publique',e
 if("serviceWorker" in navigator && location.protocol.startsWith("http")){navigator.serviceWorker.register("./sw.js").catch(()=>{});}
 document.addEventListener('DOMContentLoaded',()=>{const cashDate=document.getElementById('cashDate');if(cashDate){cashDate.value=new Date().toISOString().slice(0,10);cashDate.addEventListener('change',renderCash);}['cashActual','cashOpening'].forEach(id=>document.getElementById(id)?.addEventListener('input',updateCashDifference));try{renderStock();}catch(e){console.error('Stock V37',e)}});
 
+</script>
+
+<div id="vapMascotCompanion" class="vapMascotCompanion" aria-label="Mascotte interactive">
+  <div id="vapMascotBubble" class="vapMascotBubble" role="status" aria-live="polite" hidden>
+    <span id="vapMascotBubbleText"></span>
+    <button type="button" class="vapMascotBubbleClose" aria-label="Fermer le message" onclick="vapMascotHideBubble()">×</button>
+  </div>
+  <button type="button" id="vapMascotButton" class="vapMascotButton" onclick="vapMascotReact()" aria-label="Faire parler la mascotte" title="Parler à la mascotte">
+    <img src="./mascotte-vap-moi.jpg" alt="">
+    <span class="vapMascotOnlineDot" aria-hidden="true"></span>
+  </button>
+</div>
 
 
-// V123 — mascot companion. Isolated and defensive: does not touch sales/client/stock data.
+<script id="vap-mascot-companion-script">
 (function(){
+  'use strict';
   const KEY='vapetmoi_mascot_preferences_v1';
   const defaults={animations:true,bubbles:true,quietOnSale:true};
   let prefs={...defaults};
@@ -4888,78 +4929,48 @@ document.addEventListener('DOMContentLoaded',()=>{const cashDate=document.getEle
     analyse:['Une bonne décision commence par une donnée vérifiée.'],
     parametres:['Tu peux régler ma présence ici. Promis, je ne prends pas trop de place !']
   };
-  function activePage(){
-    const el=document.querySelector('.page.active');
-    return el ? el.id : 'accueil';
-  }
-  function bubble(text){
+  function pageId(){const p=document.querySelector('.page.active');return p?p.id:'accueil';}
+  function showBubble(message){
+    const host=document.getElementById('vapMascotCompanion');
     const box=document.getElementById('vapMascotBubble');
     const label=document.getElementById('vapMascotBubbleText');
-    const host=document.getElementById('vapMascotCompanion');
-    if(!box||!label||!host||!prefs.bubbles)return;
-    label.textContent=text;box.hidden=false;
+    if(!host||!box||!label||!prefs.bubbles)return;
+    label.textContent=message;box.hidden=false;
     if(prefs.animations){host.classList.remove('vapMascotAnimate');void host.offsetWidth;host.classList.add('vapMascotAnimate');}
   }
   window.vapMascotHideBubble=function(){const b=document.getElementById('vapMascotBubble');if(b)b.hidden=true;};
   window.vapMascotReact=function(){
-    const list=messages[activePage()]||messages.accueil;
-    bubble(list[Math.floor(Math.random()*list.length)]);
+    const list=messages[pageId()]||messages.accueil;
+    showBubble(list[Math.floor(Math.random()*list.length)]);
   };
   window.vapMascotOnPage=function(id){
-    const host=document.getElementById('vapMascotCompanion');
-    if(!host)return;
+    const host=document.getElementById('vapMascotCompanion');if(!host)return;
     host.hidden=!!(id==='achat'&&prefs.quietOnSale);
     if(host.hidden){window.vapMascotHideBubble();return;}
     if(id!=='accueil'&&prefs.bubbles)window.vapMascotReact();
   };
   window.vapMascotSet=function(key,value){
-    if(!(key in defaults))return;
+    if(!Object.prototype.hasOwnProperty.call(defaults,key))return;
     prefs[key]=!!value;
     try{localStorage.setItem(KEY,JSON.stringify(prefs));}catch(e){}
     if(!prefs.bubbles)window.vapMascotHideBubble();
     const host=document.getElementById('vapMascotCompanion');
-    if(host)host.hidden=!!(activePage()==='achat'&&prefs.quietOnSale);
+    if(host)host.hidden=!!(pageId()==='achat'&&prefs.quietOnSale);
     if(!prefs.animations&&host)host.classList.remove('vapMascotAnimate');
     const status=document.getElementById('mascotSettingsStatus');
     if(status)status.textContent='Préférences enregistrées sur cet appareil.';
   };
-  function addSettings(){
-    const page=document.getElementById('parametres');
-    if(!page||document.getElementById('mascotSettingsCard'))return;
-    const card=document.createElement('section');
-    card.className='card';card.id='mascotSettingsCard';
-    card.innerHTML='<h3>🐈 Compagnon interactif</h3><p class="small muted">Personnalise les réactions de la mascotte. Tes choix sont enregistrés sur cet appareil.</p>'+
-      '<label class="mascotSettingRow"><span><strong>Animations</strong><small>Petits mouvements et réactions visuelles</small></span><input id="mascotAnimationsToggle" type="checkbox"></label>'+
-      '<label class="mascotSettingRow"><span><strong>Bulles de dialogue</strong><small>Conseils et messages contextuels</small></span><input id="mascotBubblesToggle" type="checkbox"></label>'+
-      '<label class="mascotSettingRow"><span><strong>Mode discret pendant les ventes</strong><small>Réduit les interventions dans l’écran Vente</small></span><input id="mascotQuietToggle" type="checkbox"></label>'+
-      '<p class="small muted" id="mascotSettingsStatus" aria-live="polite">Réglages de la mascotte.</p>';
-    const host=page.querySelector('.card:last-of-type')||page;
-    host.parentNode.insertBefore(card,host.nextSibling);
-    [['animations','mascotAnimationsToggle'],['bubbles','mascotBubblesToggle'],['quietOnSale','mascotQuietToggle']].forEach(([k,id])=>{
-      const input=document.getElementById(id);if(input){input.checked=!!prefs[k];input.addEventListener('change',()=>window.vapMascotSet(k,input.checked));}
+  document.addEventListener('DOMContentLoaded',function(){
+    const map={animations:'mascotAnimationsToggle',bubbles:'mascotBubblesToggle',quietOnSale:'mascotQuietToggle'};
+    Object.keys(map).forEach(function(k){
+      const el=document.getElementById(map[k]);
+      if(el){el.checked=!!prefs[k];el.addEventListener('change',function(){window.vapMascotSet(k,el.checked);});}
     });
-  }
-  document.addEventListener('DOMContentLoaded',()=>{
-    addSettings();
     const host=document.getElementById('vapMascotCompanion');
-    if(host)host.hidden=!!(activePage()==='achat'&&prefs.quietOnSale);
+    if(host)host.hidden=!!(pageId()==='achat'&&prefs.quietOnSale);
   });
-  // In case this script executes after DOMContentLoaded.
-  if(document.readyState!=='loading')addSettings();
 })();
-
 </script>
-
-<div id="vapMascotCompanion" class="vapMascotCompanion" aria-label="Mascotte interactive">
-  <div id="vapMascotBubble" class="vapMascotBubble" role="status" aria-live="polite" hidden>
-    <span id="vapMascotBubbleText"></span>
-    <button type="button" class="vapMascotBubbleClose" aria-label="Fermer le message" onclick="vapMascotHideBubble()">×</button>
-  </div>
-  <button type="button" id="vapMascotButton" class="vapMascotButton" onclick="vapMascotReact(true)" aria-label="Faire parler la mascotte" title="Parler à la mascotte">
-    <img src="./mascotte-vap-moi.jpg" alt="" />
-    <span class="vapMascotOnlineDot" aria-hidden="true"></span>
-  </button>
-</div>
 
 </body>
 </html>
@@ -5042,25 +5053,4 @@ button.secondary,.secondary{border-color:#d7cbb4!important;color:#294b35}
   body{padding-bottom:0!important}
   main{padding-bottom:calc(100px + env(safe-area-inset-bottom))!important}
 }
-</style>
-
-
-<style id="vap-mascot-companion-v1">
-.vapMascotCompanion{position:fixed;z-index:120;right:12px;bottom:calc(82px + env(safe-area-inset-bottom,0px));display:flex;flex-direction:column;align-items:flex-end;gap:8px}
-.vapMascotButton{position:relative;width:66px;height:66px;padding:0;border:3px solid #d8c58e;border-radius:50%;overflow:hidden;background:#173e2b;box-shadow:0 5px 18px rgba(0,0,0,.27);cursor:pointer;transition:transform .18s ease}
-.vapMascotButton:active{transform:scale(.93)}
-.vapMascotButton img{width:100%;height:100%;display:block;object-fit:cover;object-position:50% 27%}
-.vapMascotOnlineDot{position:absolute;right:2px;bottom:3px;width:13px;height:13px;border:2px solid #fff8e8;border-radius:50%;background:#39a76a}
-.vapMascotBubble{position:relative;max-width:min(260px,calc(100vw - 105px));padding:12px 34px 12px 14px;border:1px solid rgba(184,153,83,.65);border-radius:16px 16px 4px 16px;background:#fff9e9;color:#26372b;box-shadow:0 7px 22px rgba(0,0,0,.18);font-size:13px;line-height:1.4;font-weight:650;animation:vapMascotBubbleIn .22s ease-out}
-.vapMascotBubble[hidden],.vapMascotCompanion[hidden]{display:none!important}
-.vapMascotBubbleClose{position:absolute;right:7px;top:5px;border:0;background:transparent;color:#657264;font-size:20px;line-height:1;cursor:pointer;padding:2px 5px}
-.vapMascotCompanion.vapMascotAnimate .vapMascotButton{animation:vapMascotNudge .55s ease-in-out}
-@keyframes vapMascotNudge{0%,100%{transform:translateY(0) rotate(0)}25%{transform:translateY(-7px) rotate(-4deg)}55%{transform:translateY(-2px) rotate(3deg)}}
-@keyframes vapMascotBubbleIn{from{opacity:0;transform:translateY(7px) scale(.97)}to{opacity:1;transform:translateY(0) scale(1)}}
-.mascotSettingRow{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:11px 0;border-top:1px solid var(--line,#e5e8df)}
-.mascotSettingRow span{display:flex;flex-direction:column;gap:3px}
-.mascotSettingRow small{font-size:12px;color:var(--muted,#68746a)}
-.mascotSettingRow input{width:20px;height:20px;accent-color:#1d6842;flex:0 0 auto}
-@media(min-width:700px){.vapMascotCompanion{bottom:22px;right:22px}.vapMascotButton{width:74px;height:74px}}
-@media(prefers-reduced-motion:reduce){.vapMascotButton,.vapMascotBubble{animation:none!important;transition:none!important}}
 </style>
