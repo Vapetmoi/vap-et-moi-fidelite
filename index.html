@@ -4985,13 +4985,6 @@ document.addEventListener('DOMContentLoaded',()=>{const cashDate=document.getEle
     if(!prefs.bubbles)window.vapMascotHideBubble();
     const host=document.getElementById('vapMascotCompanion');
     if(host)host.hidden=!!(pageId()==='achat'&&prefs.quietOnSale);
-    const intro=document.getElementById('vapMascotIntro');
-    if(intro){
-      const dismiss=function(){intro.classList.add('vapIntroLeaving');window.setTimeout(function(){if(intro.parentNode)intro.parentNode.removeChild(intro);},700);};
-      window.setTimeout(dismiss,2100);
-      intro.addEventListener('click',dismiss,{once:true});
-    }
-
     if(!prefs.animations&&host)host.classList.remove('vapMascotAnimate');
     const status=document.getElementById('mascotSettingsStatus');
     if(status)status.textContent='Préférences enregistrées sur cet appareil.';
@@ -5005,6 +4998,29 @@ document.addEventListener('DOMContentLoaded',()=>{const cashDate=document.getEle
     const host=document.getElementById('vapMascotCompanion');
     if(host)host.hidden=!!(pageId()==='achat'&&prefs.quietOnSale);
   });
+
+  // L'écran d'accueil doit se fermer automatiquement, indépendamment des réglages.
+  function startIntro(){
+    const intro=document.getElementById('vapMascotIntro');
+    if(!intro || intro.dataset.dismissScheduled==='1')return;
+    intro.dataset.dismissScheduled='1';
+    let closed=false;
+    function dismiss(){
+      if(closed)return;
+      closed=true;
+      intro.classList.add('vapIntroLeaving');
+      window.setTimeout(function(){
+        if(intro.parentNode)intro.parentNode.removeChild(intro);
+      },700);
+    }
+    window.setTimeout(dismiss,2600);
+    intro.addEventListener('click',dismiss,{once:true});
+  }
+  if(document.readyState==='loading'){
+    document.addEventListener('DOMContentLoaded',startIntro,{once:true});
+  }else{
+    startIntro();
+  }
 })();
 </script>
 
