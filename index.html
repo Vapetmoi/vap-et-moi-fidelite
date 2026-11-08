@@ -4913,7 +4913,11 @@ async function vapSupabaseUploadSnapshot(){let session=vapSupabaseSession();cons
 try{vapSupabaseRender();vapSupabaseDetectRecovery()}catch(e){console.error('Supabase recovery',e)}
 try{vapQrRenderPublicCard()}catch(e){console.error('Carte fidélité publique',e)}
 
-if("serviceWorker" in navigator && location.protocol.startsWith("http")){navigator.serviceWorker.register("./sw.js").catch(()=>{});}
+if("serviceWorker" in navigator && location.protocol.startsWith("http")){
+  navigator.serviceWorker.register("./sw.js",{updateViaCache:"none"})
+    .then(function(reg){ return reg.update().catch(function(){}); })
+    .catch(function(){});
+}
 document.addEventListener('DOMContentLoaded',()=>{const cashDate=document.getElementById('cashDate');if(cashDate){cashDate.value=new Date().toISOString().slice(0,10);cashDate.addEventListener('change',renderCash);}['cashActual','cashOpening'].forEach(id=>document.getElementById(id)?.addEventListener('input',updateCashDifference));try{renderStock();}catch(e){console.error('Stock V37',e)}});
 
 </script>
