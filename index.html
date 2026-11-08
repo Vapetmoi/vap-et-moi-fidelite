@@ -2186,6 +2186,31 @@ nav.appNav button.saleNav span{font-size:23px!important;color:#e4d092!important}
 @media(prefers-reduced-motion:reduce){#vapMascotIntro,#vapMascotIntro *{animation:none!important;transition:none!important}}
 </style>
 
+
+<style id="vap-mascot-scenes-css">
+#vapMascotScene{position:fixed;inset:0;z-index:100000;display:flex;align-items:center;justify-content:center;padding:26px;background:radial-gradient(ellipse at 50% 38%,rgba(40,91,64,.98),rgba(23,61,44,.985) 56%,rgba(14,43,32,.99));color:#fff8e8;opacity:0;visibility:hidden;pointer-events:none;transition:opacity .28s ease,visibility .28s ease}
+#vapMascotScene.is-active{opacity:1;visibility:visible}
+#vapMascotScene .vapSceneInner{width:min(88vw,390px);display:flex;flex-direction:column;align-items:center;text-align:center;gap:12px;transform:translateY(18px) scale(.94);opacity:0}
+#vapMascotScene.is-active .vapSceneInner{animation:vapSceneEnter .42s cubic-bezier(.2,.8,.2,1) forwards}
+#vapMascotScene .vapScenePortrait{width:clamp(150px,42vw,205px);height:clamp(150px,42vw,205px);padding:6px;border-radius:50%;background:linear-gradient(145deg,#f4e4ae,#a98a43,#f9edc8);box-shadow:0 0 0 8px rgba(235,215,157,.09),0 16px 50px rgba(0,0,0,.35);overflow:hidden;animation:vapSceneFloat 1.5s ease-in-out infinite}
+#vapMascotScene .vapScenePortrait img{width:100%;height:100%;display:block;object-fit:cover;object-position:50% 24%;border-radius:50%}
+#vapMascotScene .vapSceneTitle{font-size:clamp(23px,6vw,29px);font-weight:800;line-height:1.15;margin-top:7px}
+#vapMascotScene .vapSceneDetail{max-width:320px;font-size:15px;line-height:1.45;color:#f0e8d4}
+#vapMascotScene .vapSceneRule{width:62px;height:2px;border-radius:2px;background:#cdb477;margin:4px 0}
+#vapMascotScene .vapSceneBrand{font:700 25px Georgia,serif;color:#f5e5b7}
+#vapMascotScene[data-reaction="sale"] .vapScenePortrait,#vapMascotScene[data-reaction="loyalty"] .vapScenePortrait{animation:vapSceneCelebrate .85s cubic-bezier(.2,.8,.2,1) both}
+#vapMascotScene[data-reaction="stock"] .vapScenePortrait{animation:vapSceneAlert .8s ease-in-out both}
+#vapMascotScene[data-reaction="client"] .vapScenePortrait{animation:vapSceneWelcome .85s ease-in-out both}
+#vapMascotScene[data-reaction="goal"] .vapScenePortrait{animation:vapSceneGoal .95s ease-in-out both}
+@keyframes vapSceneEnter{to{opacity:1;transform:translateY(0) scale(1)}}
+@keyframes vapSceneFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+@keyframes vapSceneCelebrate{0%{transform:scale(.78) rotate(-12deg)}45%{transform:scale(1.12) rotate(9deg)}75%{transform:scale(.96) rotate(-4deg)}100%{transform:scale(1) rotate(0)}}
+@keyframes vapSceneAlert{0%,100%{transform:translateX(0)}25%{transform:translateX(-7px) rotate(-5deg)}65%{transform:translateX(5px) rotate(4deg)}}
+@keyframes vapSceneWelcome{0%{transform:translateX(-12px) rotate(-12deg)}55%{transform:translateX(4px) rotate(8deg)}100%{transform:translateX(0) rotate(0)}}
+@keyframes vapSceneGoal{0%,100%{transform:translateY(0)}35%{transform:translateY(-13px) rotate(-7deg)}70%{transform:translateY(-3px) rotate(6deg)}}
+@media(prefers-reduced-motion:reduce){#vapMascotScene,#vapMascotScene *{animation:none!important;transition:none!important}#vapMascotScene .vapSceneInner{opacity:1;transform:none}}
+</style>
+
 </head>
 <body>
 
@@ -2659,7 +2684,7 @@ function showSuccessToast(title,detail='Opération enregistrée avec succès.'){
  if(t)t.textContent=label;if(d)d.textContent=info;
  const low=(label+' '+info).toLocaleLowerCase('fr');
  const reaction=/(achat enregistré|vente validée|vente enregistrée)/.test(low)?'sale':/(objectif.*atteint|objectif.*dépassé)/.test(low)?'goal':/(stock|rupture|réappro|réception)/.test(low)?'stock':/(client|fiche)/.test(low)?'client':/(fidélité|bon fidélité|récompense)/.test(low)?'loyalty':'success';
- box.dataset.reaction=reaction;box.hidden=false;box.classList.remove('is-visible');void box.offsetWidth;
+ if(typeof window.vapMascotScene==='function'){window.vapMascotScene('action',reaction,label,info);return;}box.dataset.reaction=reaction;box.hidden=false;box.classList.remove('is-visible');void box.offsetWidth;
  requestAnimationFrame(()=>box.classList.add('is-visible'));
  if(successToastTimer)clearTimeout(successToastTimer);
  successToastTimer=setTimeout(()=>{box.classList.remove('is-visible');setTimeout(()=>{if(!box.classList.contains('is-visible'))box.hidden=true},260)},3200);
@@ -2859,7 +2884,7 @@ function showPage(id,btn){
   document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('active',b.dataset.page===navPage));
   const gear=document.getElementById('settingsGear');if(gear)gear.classList.toggle('active',id==='parametres');
   document.querySelectorAll('.pilotageSwitch button').forEach(b=>{const on=(id==='stats'&&b.textContent.includes('Statistiques'))||(id==='analyse'&&b.textContent.includes('Analyse'));b.classList.toggle('active',on);b.setAttribute('aria-selected',on?'true':'false')});
-  updateAll();if(id==='caisse')renderCash();if(typeof window.vapMascotOnPage==='function')window.vapMascotOnPage(id);
+  updateAll();if(id==='caisse')renderCash();if(typeof window.vapMascotScene==='function')window.vapMascotScene('section',id);
 }
 function runGlobalSearch(){
   const input=document.getElementById('globalSearch'),out=document.getElementById('globalSearchResults');
@@ -5025,6 +5050,52 @@ document.addEventListener('DOMContentLoaded',()=>{const cashDate=document.getEle
   }else{
     startIntro();
   }
+})();
+</script>
+
+
+<div id="vapMascotScene" aria-hidden="true">
+  <div class="vapSceneInner">
+    <div class="vapScenePortrait"><img src="./mascotte-vap-moi.jpg" alt=""></div>
+    <div class="vapSceneTitle" id="vapSceneTitle">On y va !</div>
+    <div class="vapSceneDetail" id="vapSceneDetail">Je suis avec toi.</div>
+    <div class="vapSceneRule"></div>
+    <div class="vapSceneBrand">Vap’ &amp; Moi <small style="font:11px Arial,sans-serif;letter-spacing:4px">PRO</small></div>
+  </div>
+</div>
+
+
+<script id="vap-mascot-scene-controller">
+(function(){
+  'use strict';
+  let sceneTimer=null;
+  const sectionScenes={
+    accueil:['Bonjour patron !','Tout est prêt pour suivre la boutique.','success'],
+    clients:['À vos côtés !','On prend soin de vos clients et de leur fidélité.','client'],
+    achat:['À vous de jouer !','Je garde un œil sur la vente.','sale'],
+    stock:['Faisons le point !','Chaque référence compte. Vérifions le stock.','stock'],
+    stats:['Regardons les chiffres !','Les indicateurs nous aident à décider.','goal'],
+    analyse:['En mode réflexion !','Je prépare mon carnet pour analyser les tendances.','goal'],
+    parametres:['Un petit réglage ?','Je reste à ta disposition.','success'],
+    caisse:['Comptons ensemble !','Un point clair sur la journée.','success']
+  };
+  window.vapMascotScene=function(kind,key,title,detail){
+    const panel=document.getElementById('vapMascotScene');
+    if(!panel)return;
+    let chosenTitle=title,chosenDetail=detail,reaction=key||'success',duration=kind==='section'?1250:2050;
+    if(kind==='section'){
+      const scene=sectionScenes[key]||['On continue !','Je reste avec toi pour la suite.','success'];
+      chosenTitle=scene[0];chosenDetail=scene[1];reaction=scene[2];
+    }
+    const t=document.getElementById('vapSceneTitle'),d=document.getElementById('vapSceneDetail');
+    if(t)t.textContent=chosenTitle||'C’est noté !';
+    if(d)d.textContent=chosenDetail||'Opération enregistrée.';
+    panel.dataset.reaction=reaction;
+    panel.setAttribute('aria-hidden','false');
+    panel.classList.remove('is-active');void panel.offsetWidth;panel.classList.add('is-active');
+    if(sceneTimer)clearTimeout(sceneTimer);
+    sceneTimer=setTimeout(function(){panel.classList.remove('is-active');panel.setAttribute('aria-hidden','true');},duration);
+  };
 })();
 </script>
 
