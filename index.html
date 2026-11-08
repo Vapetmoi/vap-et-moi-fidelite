@@ -2884,7 +2884,10 @@ function showPage(id,btn){
   document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('active',b.dataset.page===navPage));
   const gear=document.getElementById('settingsGear');if(gear)gear.classList.toggle('active',id==='parametres');
   document.querySelectorAll('.pilotageSwitch button').forEach(b=>{const on=(id==='stats'&&b.textContent.includes('Statistiques'))||(id==='analyse'&&b.textContent.includes('Analyse'));b.classList.toggle('active',on);b.setAttribute('aria-selected',on?'true':'false')});
-  if(typeof window.vapMascotScene==='function')window.vapMascotScene('section',id);
+  // L'intro est réservée au lancement. Accueil et Vente ne déclenchent
+  // aucune scène à la simple navigation : Vente réagit après enregistrement confirmé.
+  if(typeof window.vapMascotScene==='function' && id!=='accueil' && id!=='achat')
+    window.vapMascotScene('section',id);
   try{updateAll();}catch(e){console.error('Actualisation de la rubrique :',e);}
   if(id==='caisse')try{renderCash();}catch(e){console.error('Actualisation caisse :',e);}
 }
@@ -5074,6 +5077,7 @@ document.addEventListener('DOMContentLoaded',()=>{const cashDate=document.getEle
   const imageByReaction={
     sale:'./mascotte-animation-celebration.gif',
     loyalty:'./mascotte-animation-celebration.gif',
+    client:'./mascotte-animation-celebration.gif',
     stock:'./mascotte-animation-stock.gif',
     goal:'./mascotte-animation-stats.gif',
     stats:'./mascotte-animation-stats.gif',
@@ -5119,18 +5123,15 @@ document.addEventListener('DOMContentLoaded',()=>{const cashDate=document.getEle
     if(sceneTimer)clearTimeout(sceneTimer);
     sceneTimer=setTimeout(function(){dismiss(panel);},duration);
   };
+  // Fermeture au toucher du panneau uniquement. La navigation est gérée
+  // par showPage(), sans écouteur global doublon.
   document.addEventListener('click',function(event){
     const panel=document.getElementById('vapMascotScene');
     if(panel && panel.classList.contains('is-active') && event.target.closest('#vapMascotScene')){
       event.preventDefault();
       event.stopPropagation();
       dismiss(panel);
-      return;
     }
-    const button=event.target&&event.target.closest?event.target.closest('nav.appNav button[data-page]'):null;
-    if(!button)return;
-    const key=button.dataset.page||'accueil';
-    window.setTimeout(function(){window.vapMascotScene('section',key);},40);
   },true);
   document.addEventListener('keydown',function(event){
     if(event.key==='Escape'){
