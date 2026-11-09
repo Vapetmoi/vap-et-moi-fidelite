@@ -1,4 +1,4 @@
-const CACHE_NAME = 'vap-et-moi-pro-cache-v136-vente-epuree';
+const CACHE_NAME = 'vap-et-moi-pro-cache-v137-client-action';
 const CORE = [
   './',
   './index.html',
