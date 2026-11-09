@@ -1739,6 +1739,17 @@ nav.appNav button.saleNav span{font-size:24px!important}
 .stockTabIntro{margin:0 3px 10px;line-height:1.45}
 @media(min-width:600px){.stockTabs{grid-template-columns:repeat(3,minmax(0,1fr))}}
 
+
+/* V139 — estimation du bénéfice */
+.profitEstimatePanel{margin-top:16px;padding:15px;border:1px solid var(--gold,#c9b77d);border-radius:17px;background:rgba(238,235,216,.42)}
+.profitEstimatePanel h3{margin:0 0 6px;color:var(--green,#214b35)}
+.profitEstimatePanel label{display:block;margin:12px 0 6px;font-weight:750;color:var(--green,#214b35)}
+.profitEstimatePanel select,.profitEstimatePanel input{width:100%;min-height:46px;padding:10px 12px;border:1px solid var(--line,#d9ddcf);border-radius:12px;background:var(--card,#fff);color:var(--text,#25372d);font:inherit}
+.profitEstimateKpis{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin-top:14px}
+.profitEstimateKpis .stat{min-width:0;padding:13px;border-radius:13px;background:rgba(255,255,255,.62);border:1px solid var(--line,#e1dfd2)}
+.profitEstimateKpis .stat strong{font-size:clamp(19px,5vw,27px);overflow-wrap:anywhere;color:var(--green,#214b35)}
+.profitEstimatePanel .small{line-height:1.5}
+
 </style>
 <style>
 #profitStatsCard label[for="profitPeriod"],#profitPeriod,
@@ -2610,7 +2621,23 @@ nav.appNav button.saleNav span{font-size:23px!important;color:#e4d092!important}
     <div class="statsExtraGrid"><div class="card" id="productSalesRankingCard"><h3>🏆 Classement des produits vendus</h3><p class="small muted">Classement calculé uniquement à partir des produits réellement identifiés dans les ventes. Les produits sans vente liée peuvent apparaître dans les moins vendus.</p><label for="productRankingPeriod">Période</label><select id="productRankingPeriod" onchange="renderProductSalesRanking()"><option value="day">Aujourd’hui</option><option value="week">Cette semaine</option><option value="month" selected>Ce mois</option><option value="year">Cette année</option><option value="all">Tout l’historique</option></select><div id="productSalesRanking"></div></div><div class="card"><h3>🧺 Répartition des ventes par catégorie</h3><p class="small muted">Calculée uniquement sur les ventes dont la répartition a été renseignée. Les ventes sans détail restent dans le CA global mais ne sont pas attribuées à une catégorie.</p><div id="categoryAnalytics"><p class="small muted">Aucune répartition de catégorie enregistrée.</p></div></div></div>
   </details><details id="statsProfit" class="statsTheme">
     <summary class="statsThemeHead"><span>💰</span><div><strong>4. Bénéfices et marges</strong><small>Bénéfice brut estimé et détail des produits chiffrables</small></div></summary>
-    <div class="card" id="profitStatsCard"><h3>💰 Bénéfice brut estimé</h3><p class="small muted">Calcul estimatif sur les produits identifiés dans les ventes. Les nouvelles ventes conservent le coût, le prix de vente et la TVA au moment de l’achat ; les anciennes ventes utilisent les données encore disponibles. Les ventes sans détail produit exploitable ne sont pas chiffrées. Ce n’est pas le bénéfice net après charges.</p><label for="profitPeriod">Période du bénéfice</label><select id="profitPeriod" onchange="renderProfitStats()"><option value="day">Aujourd’hui</option><option value="week">Cette semaine</option><option value="month" selected>Ce mois</option><option value="30">30 derniers jours</option><option value="prevMonth">Mois précédent</option><option value="year">Cette année</option><option value="all">Tout l’historique</option></select><div id="profitStats"></div></div>
+    <div class="card" id="profitStatsCard"><h3>💰 Bénéfice brut estimé</h3><p class="small muted">Calcul estimatif sur les produits identifiés dans les ventes. Les nouvelles ventes conservent le coût, le prix de vente et la TVA au moment de l’achat ; les anciennes ventes utilisent les données encore disponibles. Les ventes sans détail produit exploitable ne sont pas chiffrées. Ce n’est pas le bénéfice net après charges.</p><label for="profitPeriod">Période du bénéfice</label><select id="profitPeriod" onchange="renderProfitStats()"><option value="day">Aujourd’hui</option><option value="week">Cette semaine</option><option value="month" selected>Ce mois</option><option value="30">30 derniers jours</option><option value="prevMonth">Mois précédent</option><option value="year">Cette année</option><option value="all">Tout l’historique</option></select><div id="profitStats"></div>
+    <div class="profitEstimatePanel" id="profitEstimatePanel">
+      <h3>🔮 Estimation des bénéfices</h3>
+      <p class="small muted">Projette le bénéfice brut à partir du rythme réel ou d’un chiffre d’affaires que tu définis.</p>
+      <label for="profitEstimateMode">Méthode d’estimation</label>
+      <select id="profitEstimateMode" onchange="profitEstimateUpdateMode()"><option value="pace">Selon le rythme actuel</option><option value="manual">À partir d’un CA saisi</option></select>
+      <label for="profitEstimateHorizon">Période à estimer</label>
+      <select id="profitEstimateHorizon" onchange="renderProfitEstimate()"><option value="7">7 jours</option><option value="30" selected>30 jours</option><option value="90">3 mois (90 jours)</option><option value="180">6 mois (180 jours)</option><option value="365">1 an (365 jours)</option></select>
+      <div id="profitEstimateManualFields" hidden>
+        <label for="profitEstimateCA">Chiffre d’affaires prévisionnel (€)</label>
+        <input id="profitEstimateCA" type="number" min="0" step="0.01" inputmode="decimal" placeholder="Ex. 4 000" oninput="renderProfitEstimate()">
+        <label for="profitEstimateReference">Période de référence pour calculer la marge</label>
+        <select id="profitEstimateReference" onchange="renderProfitEstimate()"><option value="30" selected>30 derniers jours</option><option value="month">Mois en cours</option><option value="90">3 derniers mois</option><option value="all">Tout l’historique</option></select>
+      </div>
+      <div id="profitEstimateResult" aria-live="polite"></div>
+    </div>
+    </div>
   </details><details id="statsDiscounts" class="statsTheme">
     <summary class="statsThemeHead"><span>🎟️</span><div><strong>5. Réductions et encaissements</strong><small>Bons de fidélité, remises et indicateurs commerciaux</small></div></summary>
     
@@ -2711,7 +2738,7 @@ nav.appNav button.saleNav span{font-size:23px!important;color:#e4d092!important}
   <div class="card"><h3>ℹ️ Application</h3><p class="small muted">Vap’ & Moi Pro · Gestion boutique</p><p class="small muted">Application conçue pour fonctionner hors connexion après son installation.</p></div>
 </section>
 
-<div class="appVersionLabel" aria-label="Version de l’application">Vap’ &amp; Moi Pro · V138 Signature — Vente épurée</div>
+<div class="appVersionLabel" aria-label="Version de l’application">Vap’ &amp; Moi Pro · V139 Signature — Vente épurée</div>
 </main>
 <script>
 // V120 — restauration initiale vérifiée depuis l'export du 02/11/2026.
@@ -3985,7 +4012,70 @@ function renderProductSalesRanking(){
  const line=x=>`<div style="display:flex;justify-content:space-between;gap:10px;padding:8px 0;border-bottom:1px solid var(--border)"><span><strong>${stockEsc(x.name)}</strong><small class="small muted" style="display:block">${stockEsc(x.brand)}</small></span><strong>${x.qty} unité(s)</strong></div>`;
  host.innerHTML='<h4>🔥 Les plus vendus</h4>'+(top.map(line).join('')||'<p class="small muted">Aucune vente avec produit identifié sur cette période.</p>')+'<h4 style="margin-top:14px">🐢 Les moins vendus</h4>'+slow.map(line).join('')+'<p class="small muted">Un produit affiché à 0 peut avoir été vendu sans être relié au catalogue dans la saisie de vente.</p>';
 }
-function renderProfitStats(){const kind=document.getElementById('profitPeriod')?.value||'month',ps=profitPeriodPurchases(kind),r=purchasesProfit(ps),b=profitBreakdown(ps),host=document.getElementById('profitStats');if(!host)return;const row=x=>`<div style="display:flex;justify-content:space-between;gap:10px;padding:9px 0;border-bottom:1px solid var(--line,#e5e8df)"><span style="min-width:0">${stockEsc(x.name)} <small class="muted">· ${x.qty} unité(s)</small></span><strong style="white-space:nowrap">${fmt(x.profit)}</strong></div>`;host.innerHTML=`<div class="grid grid2" style="margin-top:12px"><div class="stat"><strong>${fmt(r.total)}</strong><span class="kpiTitle">Bénéfice brut estimé</span></div><div class="stat"><strong>${r.knownSales} / ${r.totalSales}</strong><span class="kpiTitle">Ventes chiffrables</span></div></div><p class="small muted">${r.knownItems} unité(s) détaillée(s) · ${b.missing} vente(s) non chiffrable(s) ou sans référence exploitable.</p><h4>🏆 Top 5 des produits par bénéfice</h4>${b.products.slice(0,5).map(row).join('')||'<p class="small muted">Pas encore assez de ventes détaillées.</p>'}<h4 style="margin-top:16px">Bénéfice par catégorie</h4>${b.categories.map(row).join('')||'<p class="small muted">Aucune donnée disponible.</p>'}<p class="small muted" style="margin-top:12px">Estimation brute, hors charges fixes, frais bancaires et fiscalité. Les coûts utilisés sont les prix d’achat actuellement enregistrés dans le stock : si un coût a changé depuis une ancienne vente, son bénéfice historique peut différer. Les remises sont réparties proportionnellement entre les produits identifiés.</p>`;}
+
+function profitEstimateReferencePurchases(kind){
+ const ps=allPurchases(),now=new Date(),start=new Date(now);start.setHours(0,0,0,0);
+ if(kind==='month'){start.setDate(1);return ps.filter(p=>dateOf(p)>=start&&dateOf(p)<=now);}
+ if(kind==='90'){start.setDate(start.getDate()-89);return ps.filter(p=>dateOf(p)>=start&&dateOf(p)<=now);}
+ if(kind==='all')return ps;
+ start.setDate(start.getDate()-29);return ps.filter(p=>dateOf(p)>=start&&dateOf(p)<=now);
+}
+function profitEstimateOpenDays(from,to){
+ let n=0;for(let d=new Date(from);d<=to;d.setDate(d.getDate()+1)){if(isShopOpenDate(d))n++;}
+ return n;
+}
+function profitEstimateMargin(kind){
+ const ps=profitEstimateReferencePurchases(kind),known=ps.filter(p=>profitDetailsForPurchase(p).known);
+ const result=purchasesProfit(known),knownCA=known.reduce((s,p)=>s+safelyPaid(p),0),allCA=ps.reduce((s,p)=>s+safelyPaid(p),0);
+ return {profit:result.total,knownCA,allCA,margin:knownCA>0?result.total/knownCA:null,coverage:allCA>0?knownCA/allCA:0,knownSales:result.knownSales,totalSales:ps.length};
+}
+function renderProfitEstimate(){
+ const host=document.getElementById('profitEstimateResult');if(!host)return;
+ const mode=document.getElementById('profitEstimateMode')?.value||'pace';
+ const horizon=Math.max(1,Number(document.getElementById('profitEstimateHorizon')?.value)||30);
+ const ref=document.getElementById('profitEstimateReference')?.value||'30';
+ const margin=profitEstimateMargin(ref),now=new Date(),end=new Date(now);end.setDate(end.getDate()+horizon-1);
+ const openDays=profitEstimateOpenDays(new Date(now.getFullYear(),now.getMonth(),now.getDate()),end);
+ const money=v=>fmt(Number.isFinite(v)?v:0);
+ if(mode==='pace'){
+  const lookback=new Date(now);lookback.setHours(0,0,0,0);
+  let days=0,ca=0,profit=0,knownCA=0,allCA=0;
+  for(let offset=0;offset<120&&days<30;offset++){
+   const d=new Date(lookback);d.setDate(d.getDate()-offset);
+   if(!isShopOpenDate(d))continue;
+   days++;
+   const daily=allPurchases().filter(p=>sameDay(dateOf(p),d));
+   ca+=daily.reduce((s,p)=>s+safelyPaid(p),0);
+   const known=daily.filter(p=>profitDetailsForPurchase(p).known);
+   profit+=purchasesProfit(known).total;
+   knownCA+=known.reduce((s,p)=>s+safelyPaid(p),0);
+   allCA+=daily.reduce((s,p)=>s+safelyPaid(p),0);
+  }
+  const avgCA=days?ca/days:0,avgProfit=days?profit/days:0;
+  const projectedCA=avgCA*openDays,projectedProfit=avgProfit*openDays;
+  const coverage=allCA>0?knownCA/allCA:0;
+  host.innerHTML=`<div class="profitEstimateKpis"><div class="stat"><strong>${money(projectedCA)}</strong><span class="kpiTitle">CA prévisionnel</span></div><div class="stat"><strong>${profit>0||knownCA>0?money(projectedProfit):'—'}</strong><span class="kpiTitle">Bénéfice brut estimé</span></div></div><p class="small muted">Projection sur ${horizon} jour(s), soit ${openDays} jour(s) d’ouverture. Rythme observé sur les ${days} derniers jours d’ouverture : ${money(avgCA)} de CA et ${money(avgProfit)} de bénéfice brut par jour.</p><p class="small muted">Couverture du calcul de bénéfice : ${(coverage*100).toLocaleString('fr-FR',{maximumFractionDigits:1})} % du CA observé correspond à des ventes avec produits et coûts identifiables (${knownCA?money(knownCA):'0 €'} sur ${money(allCA)}). Les ventes non détaillées ne sont pas extrapolées en bénéfice.</p>`;
+ }else{
+  const raw=document.getElementById('profitEstimateCA')?.value||'';
+  const target=Number(String(raw).replace(/\s/g,'').replace(',','.'));
+  if(!Number.isFinite(target)||target<0){
+   host.innerHTML='<p class="small muted">Saisis un chiffre d’affaires prévisionnel positif pour calculer le bénéfice estimé.</p>';return;
+  }
+  if(margin.margin===null){
+   host.innerHTML='<p class="small muted">Bénéfice impossible à estimer pour le moment : aucune vente détaillée avec coût d’achat exploitable dans la période de référence.</p>';return;
+  }
+  const estimated=target*margin.margin;
+  host.innerHTML=`<div class="profitEstimateKpis"><div class="stat"><strong>${money(target)}</strong><span class="kpiTitle">CA saisi</span></div><div class="stat"><strong>${money(estimated)}</strong><span class="kpiTitle">Bénéfice brut estimé</span></div></div><p class="small muted">Marge brute observée : ${(margin.margin*100).toLocaleString('fr-FR',{maximumFractionDigits:1})} %, calculée sur ${margin.knownSales} vente(s) chiffrable(s) parmi ${margin.totalSales} ventes de la période de référence.</p><p class="small muted">Couverture des ventes détaillées : ${(margin.coverage*100).toLocaleString('fr-FR',{maximumFractionDigits:1})} % du CA de référence. Le résultat est une estimation, pas un bénéfice net.</p>`;
+ }
+}
+function profitEstimateUpdateMode(){
+ const mode=document.getElementById('profitEstimateMode')?.value||'pace';
+ const manual=document.getElementById('profitEstimateManualFields');
+ if(manual)manual.hidden=mode!=='manual';
+ renderProfitEstimate();
+}
+
+function renderProfitStats(){const kind=document.getElementById('profitPeriod')?.value||'month',ps=profitPeriodPurchases(kind),r=purchasesProfit(ps),b=profitBreakdown(ps),host=document.getElementById('profitStats');if(!host)return;const row=x=>`<div style="display:flex;justify-content:space-between;gap:10px;padding:9px 0;border-bottom:1px solid var(--line,#e5e8df)"><span style="min-width:0">${stockEsc(x.name)} <small class="muted">· ${x.qty} unité(s)</small></span><strong style="white-space:nowrap">${fmt(x.profit)}</strong></div>`;host.innerHTML=`<div class="grid grid2" style="margin-top:12px"><div class="stat"><strong>${fmt(r.total)}</strong><span class="kpiTitle">Bénéfice brut estimé</span></div><div class="stat"><strong>${r.knownSales} / ${r.totalSales}</strong><span class="kpiTitle">Ventes chiffrables</span></div></div><p class="small muted">${r.knownItems} unité(s) détaillée(s) · ${b.missing} vente(s) non chiffrable(s) ou sans référence exploitable.</p><h4>🏆 Top 5 des produits par bénéfice</h4>${b.products.slice(0,5).map(row).join('')||'<p class="small muted">Pas encore assez de ventes détaillées.</p>'}<h4 style="margin-top:16px">Bénéfice par catégorie</h4>${b.categories.map(row).join('')||'<p class="small muted">Aucune donnée disponible.</p>'}<p class="small muted" style="margin-top:12px">Estimation brute, hors charges fixes, frais bancaires et fiscalité. Les coûts utilisés sont les prix d’achat actuellement enregistrés dans le stock : si un coût a changé depuis une ancienne vente, son bénéfice historique peut différer. Les remises sont réparties proportionnellement entre les produits identifiés.</p>`;renderProfitEstimate();}
 function setDashboard(){
   const now=new Date(),ps=allPurchases(),today=ps.filter(p=>sameDay(dateOf(p),now)),mk=monthKey(now),month=ps.filter(p=>monthKey(dateOf(p))===mk);
   const weekStart=new Date(now);weekStart.setHours(0,0,0,0);weekStart.setDate(weekStart.getDate()-((weekStart.getDay()+6)%7));

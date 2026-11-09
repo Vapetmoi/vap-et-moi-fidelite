@@ -1,4 +1,4 @@
-const CACHE_NAME = 'vap-et-moi-pro-cache-v138-stock-tabs';
+const CACHE_NAME = 'vap-et-moi-pro-cache-v139-profit-estimate';
 const CORE = [
   './',
   './index.html',
