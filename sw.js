@@ -1,4 +1,4 @@
-const CACHE_NAME = 'vap-et-moi-pro-cache-v133-two-gifs';
+const CACHE_NAME = 'vap-et-moi-pro-cache-v134-stats-categories';
 const CORE = [
   './',
   './index.html',

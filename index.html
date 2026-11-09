@@ -1695,7 +1695,19 @@ nav.appNav button.saleNav span{font-size:24px!important}
   opacity:.9;
 }
 @media(max-width:650px){.appVersionLabel{margin:20px 8px 14px;font-size:11px}}
-\n</style>
+\n
+/* V134 — statistiques en six catégories, lisibles sur mobile */
+#stats .statsOverview{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:14px 0 16px}
+#stats .statsOverview button{min-width:0;min-height:116px;text-align:left;display:flex;flex-direction:column;align-items:flex-start;gap:6px;padding:14px;border:1px solid #e2e2d5;border-radius:17px;background:linear-gradient(145deg,#fffef9,#f3f4e9);box-shadow:0 4px 12px rgba(18,56,36,.05)}
+#stats .statsOverview button strong{font-size:14px;line-height:1.25;color:#174a32}
+#stats .statsOverview button small{font-size:11px;line-height:1.35;color:#667166}
+#stats .statsOverview .overviewIcon{font-size:22px}
+#stats .statsOverview .openHint{margin-top:auto;font-size:11px;color:#987b42;font-weight:750}
+#stats details.statsTheme{scroll-margin-top:12px}
+#stats details.statsTheme[open]>summary{margin-bottom:12px}
+@media(max-width:380px){#stats .statsOverview{grid-template-columns:1fr}#stats .statsOverview button{min-height:92px}}
+
+</style>
 <style>
 #profitStatsCard label[for="profitPeriod"],#profitPeriod,
 #weekdayAverageCard label[for="weekdayPeriod"],#weekdayPeriod,
@@ -2490,18 +2502,21 @@ nav.appNav button.saleNav span{font-size:23px!important;color:#e4d092!important}
     </div>
   </div>
 
-  <div class="statsOverview" aria-label="Accès aux statistiques détaillées">
-    <button type="button" onclick="openStatsDetail('statsCA')"><span class="overviewIcon">💶</span><strong>Chiffre d’affaires</strong><small>CA par période, historique et comparaisons</small><span class="openHint">Voir le détail →</span></button>
-    <button type="button" onclick="openStatsDetail('statsPurchases')"><span class="overviewIcon">🛍️</span><strong>Achats & panier moyen</strong><small>Par jour, semaine, mois et évolution</small><span class="openHint">Voir le détail →</span></button>
-    <button type="button" onclick="openStatsDetail('statsClients')"><span class="overviewIcon">👥</span><strong>Clients & fidélité</strong><small>Retours, fréquence, top clients et relances</small><span class="openHint">Voir le détail →</span></button>
-    <button type="button" onclick="openStatsDetail('statsDiscounts')"><span class="overviewIcon">🎟️</span><strong>Réductions & encaissements</strong><small>Bons fidélité, remises et encaissements</small><span class="openHint">Voir le détail →</span></button>
-    <button type="button" onclick="openStatsDetail('statsForecast')"><span class="overviewIcon">🎯</span><strong>Prévisions & objectifs</strong><small>Rythme commercial et progression</small><span class="openHint">Voir le détail →</span></button>
+  <div class="statsOverview" aria-label="Six catégories de statistiques">
+    <button type="button" onclick="openStatsDetail('statsCA')"><span class="overviewIcon">💶</span><strong>Ventes et chiffre d’affaires</strong><small>CA, nombre de ventes, panier moyen et historique</small><span class="openHint">Ouvrir la catégorie →</span></button>
+    <button type="button" onclick="openStatsDetail('statsClients')"><span class="overviewIcon">👥</span><strong>Clients et fidélité</strong><small>Retours, fréquence, top 5 et suivi clientèle</small><span class="openHint">Ouvrir la catégorie →</span></button>
+    <button type="button" onclick="openStatsDetail('statsProducts')"><span class="overviewIcon">📦</span><strong>Produits et catégories</strong><small>Classement des produits et répartition des ventes</small><span class="openHint">Ouvrir la catégorie →</span></button>
+    <button type="button" onclick="openStatsDetail('statsProfit')"><span class="overviewIcon">💰</span><strong>Bénéfices et marges</strong><small>Bénéfice estimé et détail des produits chiffrables</small><span class="openHint">Ouvrir la catégorie →</span></button>
+    <button type="button" onclick="openStatsDetail('statsDiscounts')"><span class="overviewIcon">🎟️</span><strong>Réductions et encaissements</strong><small>Bons fidélité, remises et indicateurs encaissés</small><span class="openHint">Ouvrir la catégorie →</span></button>
+    <button type="button" onclick="openStatsDetail('statsComparisons')"><span class="overviewIcon">📈</span><strong>Comparaisons et prévisions</strong><small>Évolution, moyennes, objectifs et trajectoire</small><span class="openHint">Ouvrir la catégorie →</span></button>
   </div>
 
-  <details id="statsCA" class="statsTheme"><summary class="statsThemeHead"><span>💶</span><div><strong>1. Chiffre d’affaires</strong><small>Résultats par période et historique mensuel</small></div></summary>
+<details id="statsCA" class="statsTheme">
+    <summary class="statsThemeHead"><span>💶</span><div><strong>1. Ventes et chiffre d’affaires</strong><small>CA par période, nombre de ventes, panier moyen et historique</small></div></summary>
+    
     <div class="grid">
       <div class="card"><h3 style="margin-top:0">📅 CA par période</h3><div id="periodStats"></div></div>
-      <div class="card"><h3 style="margin-top:0">↔️ Comparaison des périodes</h3><div id="comparisonStats"></div></div>
+      
     </div>
     <div class="card" id="historicalCASection">
       <h3 style="margin-top:0">🗓️ Historique mensuel du chiffre d’affaires</h3>
@@ -2511,42 +2526,7 @@ nav.appNav button.saleNav span{font-size:23px!important;color:#e4d092!important}
       <div class="chartWrap" id="historicalChart" aria-label="Graphique d’évolution du chiffre d’affaires historique"></div>
       <div class="tableWrap" id="historicalTable"></div>
     </div>
-  </details>
-
-  <details id="statsExtra" class="statsTheme">
-    <summary class="statsThemeHead"><span>📈</span><div><strong>Analyses complémentaires</strong><small>Bénéfice, catégories, moyennes par jour et graphiques de pilotage</small></div></summary>
-    <div class="statsExtraGrid">
-  <div class="card" id="profitStatsCard"><h3>💰 Bénéfice brut estimé</h3><p class="small muted">Calcul estimatif sur les produits identifiés dans les ventes. Les nouvelles ventes conservent le coût, le prix de vente et la TVA au moment de l’achat ; les anciennes ventes utilisent les données encore disponibles. Les ventes sans détail produit exploitable ne sont pas chiffrées. Ce n’est pas le bénéfice net après charges.</p><label for="profitPeriod">Période du bénéfice</label><select id="profitPeriod" onchange="renderProfitStats()"><option value="day">Aujourd’hui</option><option value="week">Cette semaine</option><option value="month" selected>Ce mois</option><option value="30">30 derniers jours</option><option value="prevMonth">Mois précédent</option><option value="year">Cette année</option><option value="all">Tout l’historique</option></select><div id="profitStats"></div></div>
-  <div class="card" id="productSalesRankingCard"><h3>🏆 Classement des produits vendus</h3><p class="small muted">Classement calculé uniquement à partir des produits réellement identifiés dans les ventes. Les produits sans vente liée peuvent apparaître dans les moins vendus.</p><label for="productRankingPeriod">Période</label><select id="productRankingPeriod" onchange="renderProductSalesRanking()"><option value="day">Aujourd’hui</option><option value="week">Cette semaine</option><option value="month" selected>Ce mois</option><option value="year">Cette année</option><option value="all">Tout l’historique</option></select><div id="productSalesRanking"></div></div>
-
-  <div class="card"><h3>🧺 Répartition des ventes par catégorie</h3><p class="small muted">Calculée uniquement sur les ventes dont la répartition a été renseignée. Les ventes sans détail restent dans le CA global mais ne sont pas attribuées à une catégorie.</p><div id="categoryAnalytics"><p class="small muted">Aucune répartition de catégorie enregistrée.</p></div></div>
-
-  <div class="card" id="weekdayAverageCard">
-    <h3 style="margin-top:0">📆 Chiffre d’affaires moyen par jour de la semaine</h3>
-    <p class="small muted">Compare le lundi au samedi sur les périodes disponibles. Les moyennes utilisent les journées avec au moins une vente enregistrée : l’application ne peut pas distinguer un jour sans vente d’un jour où aucune donnée n’a été saisie.</p>
-    <label for="weekdayPeriod">Période à analyser</label>
-    <select id="weekdayPeriod" onchange="renderWeekdayStats()"><option value="all">Tout l’historique des ventes</option><option value="30">30 derniers jours</option><option value="currentMonth">Mois en cours</option><option value="previousMonth">Mois précédent</option><option value="3months">3 derniers mois</option></select>
-    <div id="weekdaySummary" class="clientMetricGrid"></div>
-    <div id="weekdayStatsTable" class="tableWrap"></div>
-    <p id="weekdayStatsNote" class="statNote"></p>
-  </div>
-
-  <section class="card advancedAnalytics" id="advancedAnalytics">
-    <div class="advancedHead"><div><span class="advancedEyebrow">VAP’ & MOI · PILOTAGE</span><h2>📈 Votre activité en un coup d’œil</h2><p class="muted small">Graphiques calculés à partir des ventes actives enregistrées.</p></div><span class="advancedMark">V50</span></div>
-    <label for="advancedPeriod">Période des graphiques</label>
-    <select id="advancedPeriod" onchange="renderAdvancedAnalytics()"><option value="14">14 derniers jours</option><option value="30" selected>30 derniers jours</option><option value="90">90 derniers jours</option><option value="all">Tout l’historique</option></select>
-    <div class="advancedKpis" id="advancedKpis"></div>
-    <div class="advancedCharts">
-      <div class="advancedChartCard"><h3>Évolution du chiffre d’affaires</h3><p class="muted small">CA encaissé par jour</p><div id="advancedRevenueChart" class="advancedSvgWrap"></div></div>
-      <div class="advancedChartCard"><h3>Top 5 des clients</h3><p class="muted small">Classement par CA enregistré</p><div id="advancedTopClients"></div></div>
-    </div>
-    <p class="small muted" id="advancedAnalyticsNote">Les journées sans vente enregistrée ne permettent pas de distinguer une fermeture d’une absence de saisie.</p>
-  </section>
-
-    </div>
-  </details>
-
-  <details id="statsPurchases" class="statsTheme"><summary class="statsThemeHead"><span>🛍️</span><div><strong>2. Ventes et panier moyen</strong><small>Nombre d’achats, panier moyen et comparaison semaine par semaine</small></div></summary>
+  
     <div class="card"><h3 style="margin-top:0">🛍️ Achats par jour et par semaine</h3><div id="purchasePeriodStats"></div><div class="chartWrap" id="purchaseDailyChart" aria-label="Graphique du nombre d’achats par jour"></div><div class="chartWrap" id="purchaseWeeklyChart" aria-label="Graphique du nombre d’achats par semaine"></div><div class="chartWrap" id="purchaseMonthlyChart" aria-label="Graphique du nombre d’achats par mois"></div><div id="dailyPurchaseStats"></div></div>
     <div class="card" id="weeklyClientPurchaseCompare">
       <h3 style="margin-top:0">📅 Comparatif hebdomadaire — 2 derniers mois</h3>
@@ -2554,9 +2534,10 @@ nav.appNav button.saleNav span{font-size:23px!important;color:#e4d092!important}
       <div id="weeklyAlert"></div><div id="weeklyCAChart" class="chartWrap"></div>
       <div id="weeklyCAStats" style="margin-top:16px"></div><div id="weeklyPurchasesStats" style="margin-top:16px"></div><div id="weeklyNewClientsStats" style="margin-top:16px"></div>
     </div>
-  </details>
-
-  <details id="statsClients" class="statsTheme"><summary class="statsThemeHead"><span>👥</span><div><strong>3. Clients et fidélité</strong><small>Fréquence de visite, fidélisation, meilleurs clients et relances</small></div></summary>
+  
+  </details><details id="statsClients" class="statsTheme">
+    <summary class="statsThemeHead"><span>👥</span><div><strong>2. Clients et fidélité</strong><small>Fréquence de visite, fidélisation, top clients et suivi</small></div></summary>
+    
     <div class="card"><h3 style="margin-top:0">🔁 Fidélisation en un coup d’œil</h3><div id="statsRetentionSummary" class="clientMetricGrid"></div><p class="statNote">Les retours sont calculés uniquement à partir des achats datés enregistrés dans l’application.</p></div>
     <div class="card" id="visitFrequencyStats">
       <h3 style="margin-top:0">⏱️ Fréquence moyenne des visites</h3>
@@ -2568,15 +2549,42 @@ nav.appNav button.saleNav span{font-size:23px!important;color:#e4d092!important}
     <div class="card"><h3 style="margin-top:0">🏆 Meilleurs clients</h3><div id="topClient"></div></div>
     <div class="card" id="clientInsights"><h3 style="margin-top:0">💡 Analyse de la clientèle</h3><div id="clientInsightsContent"></div></div>
     <div class="card" id="relanceCard"><h3 style="margin-top:0">🔔 Clients à revoir</h3><p class="muted small">Clients dont le dernier achat remonte à au moins 30 jours. La liste est calculée depuis l’historique enregistré.</p><div id="relanceList"></div></div>
-  </details>
-
-  <details id="statsDiscounts" class="statsTheme"><summary class="statsThemeHead"><span>🎟️</span><div><strong>4. Réductions et encaissements</strong><small>Bons de fidélité, remises ponctuelles et total encaissé</small></div></summary>
+  
+  </details><details id="statsProducts" class="statsTheme">
+    <summary class="statsThemeHead"><span>📦</span><div><strong>3. Produits et catégories</strong><small>Classement des produits vendus et répartition par catégorie</small></div></summary>
+    <div class="statsExtraGrid"><div class="card" id="productSalesRankingCard"><h3>🏆 Classement des produits vendus</h3><p class="small muted">Classement calculé uniquement à partir des produits réellement identifiés dans les ventes. Les produits sans vente liée peuvent apparaître dans les moins vendus.</p><label for="productRankingPeriod">Période</label><select id="productRankingPeriod" onchange="renderProductSalesRanking()"><option value="day">Aujourd’hui</option><option value="week">Cette semaine</option><option value="month" selected>Ce mois</option><option value="year">Cette année</option><option value="all">Tout l’historique</option></select><div id="productSalesRanking"></div></div><div class="card"><h3>🧺 Répartition des ventes par catégorie</h3><p class="small muted">Calculée uniquement sur les ventes dont la répartition a été renseignée. Les ventes sans détail restent dans le CA global mais ne sont pas attribuées à une catégorie.</p><div id="categoryAnalytics"><p class="small muted">Aucune répartition de catégorie enregistrée.</p></div></div></div>
+  </details><details id="statsProfit" class="statsTheme">
+    <summary class="statsThemeHead"><span>💰</span><div><strong>4. Bénéfices et marges</strong><small>Bénéfice brut estimé et détail des produits chiffrables</small></div></summary>
+    <div class="card" id="profitStatsCard"><h3>💰 Bénéfice brut estimé</h3><p class="small muted">Calcul estimatif sur les produits identifiés dans les ventes. Les nouvelles ventes conservent le coût, le prix de vente et la TVA au moment de l’achat ; les anciennes ventes utilisent les données encore disponibles. Les ventes sans détail produit exploitable ne sont pas chiffrées. Ce n’est pas le bénéfice net après charges.</p><label for="profitPeriod">Période du bénéfice</label><select id="profitPeriod" onchange="renderProfitStats()"><option value="day">Aujourd’hui</option><option value="week">Cette semaine</option><option value="month" selected>Ce mois</option><option value="30">30 derniers jours</option><option value="prevMonth">Mois précédent</option><option value="year">Cette année</option><option value="all">Tout l’historique</option></select><div id="profitStats"></div></div>
+  </details><details id="statsDiscounts" class="statsTheme">
+    <summary class="statsThemeHead"><span>🎟️</span><div><strong>5. Réductions et encaissements</strong><small>Bons de fidélité, remises et indicateurs commerciaux</small></div></summary>
+    
     <div class="card" id="discountStatsCard"><h3 style="margin-top:0">🎟️ Suivi des réductions</h3><div id="discountStats"></div></div>
     <div class="card" id="profitabilityCard"><h3 style="margin-top:0">💶 Encaissements et indicateurs commerciaux</h3><p class="muted small">Vue de pilotage basée sur les achats enregistrés : ce n’est pas une marge comptable, car les coûts d’achat des produits ne sont pas saisis.</p><div id="profitabilityStats" class="clientMetricGrid"></div></div>
-  </details>
-
-  <details id="statsForecast" class="statsTheme"><summary class="statsThemeHead"><span>🎯</span><div><strong>5. Prévisions et objectifs</strong><small>Rythme de la journée, de la semaine, du mois et de l’année</small></div></summary>
+  
+  </details><details id="statsComparisons" class="statsTheme">
+    <summary class="statsThemeHead"><span>📈</span><div><strong>6. Comparaisons et prévisions</strong><small>Comparaisons, moyennes, graphiques et objectifs</small></div></summary>
+    <div class="card"><h3 style="margin-top:0">↔️ Comparaison des périodes</h3><div id="comparisonStats"></div></div><div class="card" id="weekdayAverageCard">
+    <h3 style="margin-top:0">📆 Chiffre d’affaires moyen par jour de la semaine</h3>
+    <p class="small muted">Compare le lundi au samedi sur les périodes disponibles. Les moyennes utilisent les journées avec au moins une vente enregistrée : l’application ne peut pas distinguer un jour sans vente d’un jour où aucune donnée n’a été saisie.</p>
+    <label for="weekdayPeriod">Période à analyser</label>
+    <select id="weekdayPeriod" onchange="renderWeekdayStats()"><option value="all">Tout l’historique des ventes</option><option value="30">30 derniers jours</option><option value="currentMonth">Mois en cours</option><option value="previousMonth">Mois précédent</option><option value="3months">3 derniers mois</option></select>
+    <div id="weekdaySummary" class="clientMetricGrid"></div>
+    <div id="weekdayStatsTable" class="tableWrap"></div>
+    <p id="weekdayStatsNote" class="statNote"></p>
+  </div><section class="card advancedAnalytics" id="advancedAnalytics">
+    <div class="advancedHead"><div><span class="advancedEyebrow">VAP’ & MOI · PILOTAGE</span><h2>📈 Votre activité en un coup d’œil</h2><p class="muted small">Graphiques calculés à partir des ventes actives enregistrées.</p></div><span class="advancedMark">V50</span></div>
+    <label for="advancedPeriod">Période des graphiques</label>
+    <select id="advancedPeriod" onchange="renderAdvancedAnalytics()"><option value="14">14 derniers jours</option><option value="30" selected>30 derniers jours</option><option value="90">90 derniers jours</option><option value="all">Tout l’historique</option></select>
+    <div class="advancedKpis" id="advancedKpis"></div>
+    <div class="advancedCharts">
+      <div class="advancedChartCard"><h3>Évolution du chiffre d’affaires</h3><p class="muted small">CA encaissé par jour</p><div id="advancedRevenueChart" class="advancedSvgWrap"></div></div>
+      <div class="advancedChartCard"><h3>Top 5 des clients</h3><p class="muted small">Classement par CA enregistré</p><div id="advancedTopClients"></div></div>
+    </div>
+    <p class="small muted" id="advancedAnalyticsNote">Les journées sans vente enregistrée ne permettent pas de distinguer une fermeture d’une absence de saisie.</p>
+  </section>
     <div class="card"><h3 style="margin-top:0">🎯 Objectifs et rythme</h3><div id="statsGoalSummary"></div></div>
+  
   </details>
 </section>
 
@@ -2648,7 +2656,7 @@ nav.appNav button.saleNav span{font-size:23px!important;color:#e4d092!important}
   <div class="card"><h3>ℹ️ Application</h3><p class="small muted">Vap’ & Moi Pro · Gestion boutique</p><p class="small muted">Application conçue pour fonctionner hors connexion après son installation.</p></div>
 </section>
 
-<div class="appVersionLabel" aria-label="Version de l’application">Vap’ &amp; Moi Pro · V133 Signature — Deux animations</div>
+<div class="appVersionLabel" aria-label="Version de l’application">Vap’ &amp; Moi Pro · V134 Signature — Statistiques réorganisées</div>
 </main>
 <script>
 // V120 — restauration initiale vérifiée depuis l'export du 02/11/2026.
@@ -4701,23 +4709,12 @@ function arrangeV82Layout(){
   });
   ['dWeek','dMonth'].forEach(id=>{const el=document.getElementById(id);if(el&&el.closest('.stat'))el.closest('.stat').classList.add('homeKpiHidden');});
   const weekPurchase=document.getElementById('homeWeekPurchases');if(weekPurchase){const block=weekPurchase.closest('.homeStats');if(block)block.classList.add('homeKpiHidden');}
-  const analysisPageForMoves=document.getElementById('analyse');
-  const forecastDetail=document.getElementById('statsForecast');
-  if(forecastDetail&&analysisPageForMoves&&!document.getElementById('analysisForecastHost')){
-    const host=document.createElement('div');host.id='analysisForecastHost';analysisPageForMoves.appendChild(host);host.appendChild(forecastDetail);
-    const forecastLink=[...document.querySelectorAll('#stats .statsOverview button')].find(b=>b.textContent.includes('Prévisions'));
-    if(forecastLink)forecastLink.remove();
-  }
+  // Les prévisions restent dans la catégorie « Comparaisons et prévisions ».
   const clientRanking=document.getElementById('clientRanking'),statsClients=document.getElementById('statsClients');
   if(clientRanking&&statsClients&&!document.getElementById('statsTopClientsHost')){
     const host=document.createElement('div');host.id='statsTopClientsHost';statsClients.appendChild(host);host.appendChild(clientRanking);
   }
-  const analysisPageForComparison=document.getElementById('analyse');
-  const comparisonStats=document.getElementById('comparisonStats');
-  if(analysisPageForComparison&&comparisonStats&&!document.getElementById('analysisComparisonHost')){
-    const card=comparisonStats.closest('.card');
-    if(card){card.id='analysisComparisonHost';const heading=card.querySelector('h3');if(heading)heading.textContent='↔️ Comparaison des périodes commerciales';analysisPageForComparison.insertBefore(card,analysisPageForComparison.children[1]||null);}
-  }
+  // Les comparaisons restent dans la catégorie « Comparaisons et prévisions ».
   const copilot=document.getElementById('commercialCopilotCard'),analysisPage=document.getElementById('analyse');
   if(copilot&&analysisPage&&!document.getElementById('commercialCopilotAnalysisHost')){
     const host=document.createElement('div');host.id='commercialCopilotAnalysisHost';analysisPage.appendChild(host);host.appendChild(copilot);
