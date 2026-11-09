@@ -2424,7 +2424,6 @@ nav.appNav button.saleNav span{font-size:23px!important;color:#e4d092!important}
     <h2>💶 Nouvelle vente</h2>
     <div class="saleFlowIntro">Un parcours simple en quelques étapes. Tes ventes et ta fidélité restent enregistrées comme avant.</div>
     <div class="saleFlowSteps" aria-label="Étapes de la vente"><span class="current"><b>1</b> Client</span><i></i><span><b>2</b> Montant</span><i></i><span><b>3</b> Avantages</span><i></i><span><b>4</b> Produits</span></div>
-    <div class="saleStepTitle"><span>01</span><div><strong>Choisir le client</strong><small>Chaque vente est associée à une fiche client.</small></div></div>
     <label for="clientName">Rechercher un client par nom</label>
     <div class="purchaseSearchWrap">
       <input id="clientName" type="text" placeholder="🔎 Tape « Na », « M », un nom…" autocomplete="off" oninput="updatePurchaseBox();renderPurchaseSuggestions()" onchange="updatePurchaseBox();renderPurchaseSuggestions()" onkeydown="purchaseSuggestionKeydown(event)" aria-describedby="purchaseClientHelp" aria-controls="purchaseSuggestions" aria-autocomplete="list">
@@ -2432,10 +2431,8 @@ nav.appNav button.saleNav span{font-size:23px!important;color:#e4d092!important}
     </div>
     <p id="purchaseClientHelp" class="small muted" style="margin-top:-7px">Tapez un nom, un prénom, un téléphone ou un e-mail, puis sélectionnez le client dans les suggestions.</p>
     <div id="linkedClientInfo" class="small muted"></div>
-    <div class="saleStepTitle"><span>02</span><div><strong>Montant de la vente</strong><small>Saisis le montant total avant les réductions.</small></div></div>
     <label for="amount">Montant avant réduction (€)</label>
     <input id="amount" type="number" inputmode="decimal" min="0" step="0.01" placeholder="17,00" oninput="updatePurchaseBox()" aria-label="Montant avant réduction en euros">
-    <div class="saleStepTitle saleStepCompact"><span>03</span><div><strong>Fidélité et réductions</strong><small>Applique les avantages disponibles si nécessaire.</small></div></div>
     <div id="rewardBox" class="card" style="display:none;background:#eef6f0;padding:13px">
       <div class="row"><strong>🎁 Bon disponible</strong><strong id="availableReward">0 €</strong></div>
       <label style="display:flex;align-items:center;gap:9px"><input id="useReward" type="checkbox" onchange="updatePurchaseBox()" style="width:21px;margin:0"><span>Utiliser 5 € de la cagnotte</span></label>
@@ -2443,7 +2440,6 @@ nav.appNav button.saleNav span{font-size:23px!important;color:#e4d092!important}
     <label for="exceptionalDiscount">🎟️ Réduction globale — facultatif</label>
     <div class="grid grid2"><div><label for="exceptionalDiscountType">Type de remise</label><select id="exceptionalDiscountType" onchange="updatePurchaseBox()"><option value="amount">Montant (€)</option><option value="percent">Pourcentage (%)</option></select></div><div><label for="exceptionalDiscount">Valeur</label><input id="exceptionalDiscount" type="number" inputmode="decimal" min="0" step="0.01" value="0" placeholder="0,00" oninput="updatePurchaseBox()" aria-label="Valeur de la réduction globale"></div></div>
     <p class="small muted" style="margin-top:-7px">La remise globale peut être saisie en euros ou en pourcentage, en plus ou à la place du bon de fidélité.</p>
-    <div class="saleStepTitle saleStepCompact"><span>04</span><div><strong>Détailler les produits vendus</strong><small>Facultatif : seuls les produits identifiés sont déduits du stock.</small></div></div>
     <details id="categoryAllocation" class="card" style="padding:13px;margin:12px 0;background:#f8f7ef">
       <summary style="font-weight:700;cursor:pointer">📊 Répartir l’achat par catégorie (facultatif)</summary>
       <p class="small muted">Renseigne uniquement les catégories connues. Les montants doivent totaliser le montant avant réduction. Si tu ne détailles pas l’achat, laisse tout à 0 €. Cette répartition sert aux analyses et ne modifie jamais le stock.</p>
@@ -2664,7 +2660,7 @@ nav.appNav button.saleNav span{font-size:23px!important;color:#e4d092!important}
   <div class="card"><h3>ℹ️ Application</h3><p class="small muted">Vap’ & Moi Pro · Gestion boutique</p><p class="small muted">Application conçue pour fonctionner hors connexion après son installation.</p></div>
 </section>
 
-<div class="appVersionLabel" aria-label="Version de l’application">Vap’ &amp; Moi Pro · V135 Signature — Vente simplifiée</div>
+<div class="appVersionLabel" aria-label="Version de l’application">Vap’ &amp; Moi Pro · V136 Signature — Vente épurée</div>
 </main>
 <script>
 // V120 — restauration initiale vérifiée depuis l'export du 02/11/2026.
