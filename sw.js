@@ -1,4 +1,4 @@
-const CACHE_NAME = 'vap-et-moi-pro-cache-v137-client-action';
+const CACHE_NAME = 'vap-et-moi-pro-cache-v138-stock-tabs';
 const CORE = [
   './',
   './index.html',
