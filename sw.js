@@ -1,4 +1,4 @@
-const CACHE_NAME = 'vap-et-moi-pro-cache-v144-analyse-jours';
+const CACHE_NAME = 'vap-et-moi-pro-cache-v145-horaires-19h30';
 const CORE = [
   './',
   './index.html',
