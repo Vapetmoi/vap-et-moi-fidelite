@@ -2578,6 +2578,8 @@ nav.appNav button.saleNav span{font-size:23px!important;color:#e4d092!important}
     </div>
   </div>
 
+  <div class="card" id="hourlySalesCard"><h3>🕒 Analyse des ventes par heure</h3><p class="small muted">Analyse basée sur les achats actifs dont la date et l’heure sont exploitables.</p><label for="hourlySalesPeriod">Période analysée</label><select id="hourlySalesPeriod" onchange="renderHourlySalesStats()"><option value="7">7 derniers jours</option><option value="30" selected>30 derniers jours</option><option value="90">90 derniers jours</option><option value="365">365 derniers jours</option><option value="all">Tout l’historique</option></select><div id="hourlySalesSummary" class="clientMetricGrid" style="margin-top:12px"></div><div id="hourlySalesChart" class="chartWrap" style="margin-top:14px"></div><div id="hourlySalesNote" class="small muted" style="margin-top:10px"></div></div>
+
   <div class="statsOverview" aria-label="Six catégories de statistiques">
     <button type="button" onclick="openStatsDetail('statsCA')"><span class="overviewIcon">💶</span><strong>Ventes et chiffre d’affaires</strong><small>CA, nombre de ventes, panier moyen et historique</small><span class="openHint">Ouvrir la catégorie →</span></button>
     <button type="button" onclick="openStatsDetail('statsClients')"><span class="overviewIcon">👥</span><strong>Clients et fidélité</strong><small>Retours, fréquence, top 5 et suivi clientèle</small><span class="openHint">Ouvrir la catégorie →</span></button>
@@ -4874,7 +4876,20 @@ function renderExecutiveDecisionPanel(){
   const stamp=document.getElementById('executiveUpdatedAt');if(stamp)stamp.textContent='Mis à jour à '+now.toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'});
 }
 
-function updateAll(){clients=clients.map(normalizeClient);updateClientOptions();renderClientOverview();renderClients();updatePurchaseBox();renderCategoryAnalytics();setDashboard();setStats();renderProfitStats();renderProductSalesRanking();renderWeekdayStats();renderAdvancedAnalytics();renderV15Insights(allPurchases(),new Date());renderDailyOps(new Date());renderActivityLog();renderBackupStatus();renderAnalysis();renderCommercialCopilot();renderDataIntegrity();renderFollowupAgenda();renderExecutiveDecisionPanel();const threshold=document.getElementById("inactiveThreshold");if(threshold)threshold.value=String(settings.inactiveThreshold||30);updateGreeting();refreshStatsForPeriod()}
+
+function renderHourlySalesStats(){
+ const host=document.getElementById('hourlySalesSummary'),chart=document.getElementById('hourlySalesChart'),note=document.getElementById('hourlySalesNote');if(!host||!chart||!note)return;
+ const period=document.getElementById('hourlySalesPeriod')?.value||'30',now=new Date(),cutoff=new Date(now);if(period!=='all'){cutoff.setDate(cutoff.getDate()-Number(period));cutoff.setHours(0,0,0,0)}
+ const rows=allPurchases().map(p=>({p,d:new Date(p.date)})).filter(x=>Number.isFinite(x.d.getTime())&&(period==='all'||x.d>=cutoff)&&x.d<=now);
+ const morning={ca:0,n:0},afternoon={ca:0,n:0},bins=Array.from({length:10},(_,i)=>({label:i===0?'9h30–10h':`${i+10}h–${i+11}h`,ca:0,n:0}));let unknown=0,outside=0;
+ rows.forEach(({p,d})=>{const h=d.getHours()+d.getMinutes()/60,ca=safelyPaid(p);if(!Number.isFinite(h)){unknown++;return}if(h>=9.5&&h<13){morning.ca+=ca;morning.n++;}else if(h>=13&&h<19){afternoon.ca+=ca;afternoon.n++;}else{outside++;return}let idx=h<10?0:Math.floor(h)-9;if(idx>=0&&idx<10){bins[idx].ca+=ca;bins[idx].n++;}});
+ const money=v=>fmt(v),total=morning.ca+afternoon.ca,share=v=>total?Math.round(v/total*100):0;
+ const tile=(label,o)=>`<div class="metricCard"><span>${label}</span><strong>${money(o.ca)}</strong><small>${o.n} vente(s) · panier ${o.n?money(o.ca/o.n):money(0)} · ${share(o.ca)} % du CA sur les deux créneaux</small></div>`;
+ host.innerHTML=tile('☀️ Matin · 9h30–13h',morning)+tile('🌤️ Après-midi · 13h–19h',afternoon)+`<div class="metricCard"><span>Créneau le plus élevé</span><strong>${morning.ca===afternoon.ca?'Égalité':morning.ca>afternoon.ca?'Matin':'Après-midi'}</strong><small>Écart : ${money(Math.abs(morning.ca-afternoon.ca))}</small></div>`;
+ const max=Math.max(1,...bins.map(b=>b.ca));chart.innerHTML=`<h4>Chiffre d’affaires par heure</h4><div style="display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;align-items:end">${bins.map(b=>`<div style="text-align:center;min-width:0"><div style="height:110px;display:flex;align-items:end;justify-content:center"><div title="${money(b.ca)} · ${b.n} vente(s)" style="width:70%;height:${Math.max(3,b.ca/max*100)}%;background:linear-gradient(180deg,#c7a45d,#24583d);border-radius:7px 7px 2px 2px"></div></div><small>${b.label}</small><div class="small muted">${b.n} v.</div></div>`).join('')}</div>`;
+ note.textContent=`${rows.length} vente(s) datée(s) analysée(s). ${outside} vente(s) enregistrée(s) hors des créneaux 09h30–19h sont exclues de la comparaison matin/après-midi. ${unknown} date(s) inexploitable(s). Les annulations sont exclues.`;
+}
+function updateAll(){clients=clients.map(normalizeClient);updateClientOptions();renderClientOverview();renderClients();updatePurchaseBox();renderCategoryAnalytics();setDashboard();setStats();renderProfitStats();renderProductSalesRanking();renderWeekdayStats();renderHourlySalesStats();renderAdvancedAnalytics();renderV15Insights(allPurchases(),new Date());renderDailyOps(new Date());renderActivityLog();renderBackupStatus();renderAnalysis();renderCommercialCopilot();renderDataIntegrity();renderFollowupAgenda();renderExecutiveDecisionPanel();const threshold=document.getElementById("inactiveThreshold");if(threshold)threshold.value=String(settings.inactiveThreshold||30);updateGreeting();refreshStatsForPeriod()}
 
 function arrangeV82Layout(){
   const settingsMoves=[
