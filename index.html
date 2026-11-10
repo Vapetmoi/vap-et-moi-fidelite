@@ -2753,6 +2753,9 @@ nav.appNav button.saleNav span{font-size:23px!important;color:#e4d092!important}
 <div class="appVersionLabel" aria-label="Version de l’application">Vap’ &amp; Moi Pro · V141 — Journal animé</div>
 </main>
 <script>
+// V142 hotfix: initialize journal state before any startup callback can access it.
+var vapJournalState={scenes:[],index:0,timer:null,renderTimer:null,recorder:null,chunks:[],stream:null};
+
 // V120 — restauration initiale vérifiée depuis l'export du 02/11/2026.
 // Ne remplace jamais une base locale non vide.
 (function vapV120Seed(){
@@ -5122,8 +5125,8 @@ if("serviceWorker" in navigator && location.protocol.startsWith("http")){
 document.addEventListener('DOMContentLoaded',()=>{const cashDate=document.getElementById('cashDate');if(cashDate){cashDate.value=new Date().toISOString().slice(0,10);cashDate.addEventListener('change',renderCash);}['cashActual','cashOpening'].forEach(id=>document.getElementById(id)?.addEventListener('input',updateCashDifference));try{renderStock();}catch(e){console.error('Stock V37',e)}});
 
 
-// V141 — Journal silencieux cartoon, calculé depuis les ventes locales existantes.
-let vapJournalState={scenes:[],index:0,timer:null,renderTimer:null,recorder:null,chunks:[],stream:null};
+// V142 — Correctif initialisation du journal silencieux cartoon, calculé depuis les ventes locales existantes.
+
 function vapJournalDateKey(d){const x=new Date(d);return Number.isFinite(x.getTime())?new Date(x.getTime()-x.getTimezoneOffset()*60000).toISOString().slice(0,10):'';}
 function vapJournalMoney(n){return (Number(n)||0).toLocaleString('fr-FR',{style:'currency',currency:'EUR'});}
 function vapJournalBuild(){
