@@ -2266,6 +2266,10 @@ nav.appNav button.saleNav span{font-size:23px!important;color:#e4d092!important}
 @media(prefers-reduced-motion:reduce){#vapMascotScene,#vapMascotScene *{animation:none!important;transition:none!important}#vapMascotScene .vapSceneInner{opacity:1;transform:none}}
 </style>
 
+
+<style id="vap-journal-studio-css">
+.journalStudioCard{overflow:hidden;border:1px solid rgba(190,151,75,.38);background:linear-gradient(145deg,#f9f7ef,#fff)}.journalStudioHeader{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap}.journalStudioHeader h2{margin:3px 0 5px;color:#17452f}.journalControls{display:flex;align-items:end;gap:10px;flex-wrap:wrap;margin:14px 0}.journalControls label{font-weight:700;display:block;width:100%}.journalControls select{flex:1;min-width:150px}.journalPreviewWrap{margin-top:14px;max-width:420px;margin-left:auto;margin-right:auto}.journalPreviewWrap canvas{width:100%;height:auto;display:block;border-radius:18px;border:2px solid #c6a15c;background:#082519;box-shadow:0 12px 28px rgba(0,0,0,.18)}.journalPreviewActions{display:flex;gap:8px;margin-top:10px}.journalPreviewActions button{flex:1}.journalExportNote{font-size:12px}
+</style>
 </head>
 <body>
 
@@ -2554,6 +2558,12 @@ nav.appNav button.saleNav span{font-size:23px!important;color:#e4d092!important}
 </section>
 
 <section id="stats" class="page"><div class="pilotageSwitch" role="tablist" aria-label="Rubriques de pilotage"><button type="button" class="active" role="tab" aria-selected="true" onclick="showPage('stats')">▥ Statistiques</button><button type="button" class="" role="tab" aria-selected="false" onclick="showPage('analyse')">↗ Analyse approfondie</button></div>
+  <div class="card journalStudioCard" id="journalStudioCard">
+    <div class="journalStudioHeader"><div><span class="sectionEyebrow">LE RENDEZ-VOUS DE LA BOUTIQUE</span><h2>🎬 Le Journal de Vap’ & Moi</h2><p class="small muted">La mascotte présente tes résultats avec des commentaires calculés à partir des ventes enregistrées.</p></div><span class="badge">Sans voix · Cartoon</span></div>
+    <div class="journalControls"><label for="journalPeriod">Période du journal</label><select id="journalPeriod"><option value="day">Aujourd’hui</option><option value="week" selected>Cette semaine</option><option value="month">Ce mois</option></select><button class="primary" type="button" onclick="vapJournalGenerate()">▶ Générer le journal</button></div>
+    <div id="journalStatus" class="small muted" aria-live="polite">Choisis une période puis génère ton journal. Les données ne sont pas modifiées.</div>
+    <div id="journalPreviewWrap" class="journalPreviewWrap" hidden><canvas id="journalCanvas" width="720" height="1280" aria-label="Aperçu animé du journal de Vap’ & Moi"></canvas><div class="journalPreviewActions"><button class="secondary" type="button" onclick="vapJournalPlay()">↻ Relancer</button><button class="secondary" type="button" id="journalExportBtn" onclick="vapJournalExport()">⬇ Exporter le clip</button></div><p id="journalExportStatus" class="small muted">Lecture silencieuse à vitesse normale. L’export vidéo dépend des formats pris en charge par ton navigateur.</p></div>
+  </div>
   <div class="card">
     <h2>📊 Statistiques</h2>
     <p class="muted small">Vue synthétique en premier. Appuie sur une rubrique pour ouvrir ses indicateurs, graphiques et comparaisons détaillés.</p>
@@ -2622,21 +2632,7 @@ nav.appNav button.saleNav span{font-size:23px!important;color:#e4d092!important}
   </details><details id="statsProfit" class="statsTheme">
     <summary class="statsThemeHead"><span>💰</span><div><strong>4. Bénéfices et marges</strong><small>Bénéfice brut estimé et détail des produits chiffrables</small></div></summary>
     <div class="card" id="profitStatsCard"><h3>💰 Bénéfice brut estimé</h3><p class="small muted">Calcul estimatif sur les produits identifiés dans les ventes. Les nouvelles ventes conservent le coût, le prix de vente et la TVA au moment de l’achat ; les anciennes ventes utilisent les données encore disponibles. Les ventes sans détail produit exploitable ne sont pas chiffrées. Ce n’est pas le bénéfice net après charges.</p><label for="profitPeriod">Période du bénéfice</label><select id="profitPeriod" onchange="renderProfitStats()"><option value="day">Aujourd’hui</option><option value="week">Cette semaine</option><option value="month" selected>Ce mois</option><option value="30">30 derniers jours</option><option value="prevMonth">Mois précédent</option><option value="year">Cette année</option><option value="all">Tout l’historique</option></select><div id="profitStats"></div>
-    <div class="profitEstimatePanel" id="profitEstimatePanel">
-      <h3>🔮 Estimation des bénéfices</h3>
-      <p class="small muted">Projette le bénéfice brut à partir du rythme réel ou d’un chiffre d’affaires que tu définis.</p>
-      <label for="profitEstimateMode">Méthode d’estimation</label>
-      <select id="profitEstimateMode" onchange="profitEstimateUpdateMode()"><option value="pace">Selon le rythme actuel</option><option value="manual">À partir d’un CA saisi</option></select>
-      <label for="profitEstimateHorizon">Période à estimer</label>
-      <select id="profitEstimateHorizon" onchange="renderProfitEstimate()"><option value="7">7 jours</option><option value="30" selected>30 jours</option><option value="90">3 mois (90 jours)</option><option value="180">6 mois (180 jours)</option><option value="365">1 an (365 jours)</option></select>
-      <div id="profitEstimateManualFields" hidden>
-        <label for="profitEstimateCA">Chiffre d’affaires prévisionnel (€)</label>
-        <input id="profitEstimateCA" type="number" min="0" step="0.01" inputmode="decimal" placeholder="Ex. 4 000" oninput="renderProfitEstimate()">
-        <label for="profitEstimateReference">Période de référence pour calculer la marge</label>
-        <select id="profitEstimateReference" onchange="renderProfitEstimate()"><option value="30" selected>30 derniers jours</option><option value="month">Mois en cours</option><option value="90">3 derniers mois</option><option value="all">Tout l’historique</option></select>
-      </div>
-      <div id="profitEstimateResult" aria-live="polite"></div>
-    </div>
+    
     </div>
   </details><details id="statsDiscounts" class="statsTheme">
     <summary class="statsThemeHead"><span>🎟️</span><div><strong>5. Réductions et encaissements</strong><small>Bons de fidélité, remises et indicateurs commerciaux</small></div></summary>
@@ -2671,6 +2667,22 @@ nav.appNav button.saleNav span{font-size:23px!important;color:#e4d092!important}
 </section>
 
 <section id="analyse" class="page"><div class="pilotageSwitch" role="tablist" aria-label="Rubriques de pilotage"><button type="button" class="" role="tab" aria-selected="false" onclick="showPage('stats')">▥ Statistiques</button><button type="button" class="active" role="tab" aria-selected="true" onclick="showPage('analyse')">↗ Analyse approfondie</button></div>
+<div class="profitEstimatePanel" id="profitEstimatePanel">
+      <h2>🔮 Estimation des bénéfices</h2><p class="small muted"><strong>Analyse approfondie</strong> · Prévision du bénéfice selon ton rythme actuel ou un CA cible.</p>
+      <p class="small muted">Projette le bénéfice brut à partir du rythme réel ou d’un chiffre d’affaires que tu définis.</p>
+      <label for="profitEstimateMode">Méthode d’estimation</label>
+      <select id="profitEstimateMode" onchange="profitEstimateUpdateMode()"><option value="pace">Selon le rythme actuel</option><option value="manual">À partir d’un CA saisi</option></select>
+      <label for="profitEstimateHorizon">Période à estimer</label>
+      <select id="profitEstimateHorizon" onchange="renderProfitEstimate()"><option value="7">7 jours</option><option value="30" selected>30 jours</option><option value="90">3 mois (90 jours)</option><option value="180">6 mois (180 jours)</option><option value="365">1 an (365 jours)</option></select>
+      <div id="profitEstimateManualFields" hidden>
+        <label for="profitEstimateCA">Chiffre d’affaires prévisionnel (€)</label>
+        <input id="profitEstimateCA" type="number" min="0" step="0.01" inputmode="decimal" placeholder="Ex. 4 000" oninput="renderProfitEstimate()">
+        <label for="profitEstimateReference">Période de référence pour calculer la marge</label>
+        <select id="profitEstimateReference" onchange="renderProfitEstimate()"><option value="30" selected>30 derniers jours</option><option value="month">Mois en cours</option><option value="90">3 derniers mois</option><option value="all">Tout l’historique</option></select>
+      </div>
+      <div id="profitEstimateResult" aria-live="polite"></div>
+    </div>
+
   <div class="card" id="analysisDayCard">
     <h3>📅 Calendrier — statistiques d’une journée</h3>
     <p class="small muted">Choisis une année, un mois et un jour, ou ouvre le calendrier. Les résultats portent uniquement sur les ventes actives enregistrées à cette date.</p>
@@ -2738,7 +2750,7 @@ nav.appNav button.saleNav span{font-size:23px!important;color:#e4d092!important}
   <div class="card"><h3>ℹ️ Application</h3><p class="small muted">Vap’ & Moi Pro · Gestion boutique</p><p class="small muted">Application conçue pour fonctionner hors connexion après son installation.</p></div>
 </section>
 
-<div class="appVersionLabel" aria-label="Version de l’application">Vap’ &amp; Moi Pro · V139 Signature — Vente épurée</div>
+<div class="appVersionLabel" aria-label="Version de l’application">Vap’ &amp; Moi Pro · V141 — Journal animé</div>
 </main>
 <script>
 // V120 — restauration initiale vérifiée depuis l'export du 02/11/2026.
@@ -5108,6 +5120,66 @@ if("serviceWorker" in navigator && location.protocol.startsWith("http")){
     .catch(function(){});
 }
 document.addEventListener('DOMContentLoaded',()=>{const cashDate=document.getElementById('cashDate');if(cashDate){cashDate.value=new Date().toISOString().slice(0,10);cashDate.addEventListener('change',renderCash);}['cashActual','cashOpening'].forEach(id=>document.getElementById(id)?.addEventListener('input',updateCashDifference));try{renderStock();}catch(e){console.error('Stock V37',e)}});
+
+
+// V141 — Journal silencieux cartoon, calculé depuis les ventes locales existantes.
+let vapJournalState={scenes:[],index:0,timer:null,renderTimer:null,recorder:null,chunks:[],stream:null};
+function vapJournalDateKey(d){const x=new Date(d);return Number.isFinite(x.getTime())?new Date(x.getTime()-x.getTimezoneOffset()*60000).toISOString().slice(0,10):'';}
+function vapJournalMoney(n){return (Number(n)||0).toLocaleString('fr-FR',{style:'currency',currency:'EUR'});}
+function vapJournalBuild(){
+ const mode=document.getElementById('journalPeriod')?.value||'week';const now=new Date();const today=new Date(now.getFullYear(),now.getMonth(),now.getDate());let from,to,periodLabel;
+ if(mode==='day'){from=today;to=new Date(today.getTime()+86400000);periodLabel='AUJOURD’HUI · '+today.toLocaleDateString('fr-FR');}
+ else if(mode==='month'){from=new Date(now.getFullYear(),now.getMonth(),1);to=new Date(now.getFullYear(),now.getMonth()+1,1);periodLabel='CE MOIS · '+now.toLocaleDateString('fr-FR',{month:'long',year:'numeric'});}
+ else {const dow=(today.getDay()+6)%7;from=new Date(today.getTime()-dow*86400000);to=new Date(from.getTime()+7*86400000);periodLabel='CETTE SEMAINE · DU '+from.toLocaleDateString('fr-FR')+' AU '+new Date(to-86400000).toLocaleDateString('fr-FR');}
+ const all=allPurchases().filter(p=>isActivePurchase(p));const inRange=all.filter(p=>{const d=new Date(dateOf(p));return Number.isFinite(d.getTime())&&d>=from&&d<to;});
+ const ca=inRange.reduce((n,p)=>n+safelyPaid(p),0),count=inRange.length,avg=count?ca/count:0;
+ const names=new Set(inRange.map(p=>String(p.client||p.clientName||'').trim()).filter(Boolean));
+ const prevFrom=new Date(from);const prevTo=new Date(to);const span=to-from;prevFrom.setTime(from.getTime()-span);prevTo.setTime(from.getTime());
+ const previous=all.filter(p=>{const d=new Date(dateOf(p));return Number.isFinite(d.getTime())&&d>=prevFrom&&d<prevTo;});
+ const prevCA=previous.reduce((n,p)=>n+safelyPaid(p),0);const delta=prevCA?((ca-prevCA)/prevCA)*100:null;
+ const byDay={};inRange.forEach(p=>{const key=vapJournalDateKey(dateOf(p));byDay[key]=(byDay[key]||0)+safelyPaid(p)});
+ const best=Object.entries(byDay).sort((a,b)=>b[1]-a[1])[0];
+ const comments=[];
+ comments.push({title:'Bonjour !',text:'Bienvenue dans votre journal. Voici le bilan de '+periodLabel.toLocaleLowerCase('fr-FR')+'.',kind:'intro'});
+ comments.push({title:'Le chiffre d’affaires',text:count?'La boutique a réalisé '+vapJournalMoney(ca)+' sur la période.':'Aucune vente enregistrée sur cette période. Aucun chiffre ne sera inventé.',kind:'ca'});
+ comments.push({title:'La fréquentation',text:count?count+' vente(s) enregistrée(s)'+(names.size?' auprès de '+names.size+' client(s) identifié(s)':'')+'. Le panier moyen est de '+vapJournalMoney(avg)+'.':'Les indicateurs de fréquentation apparaîtront dès que des ventes seront enregistrées.',kind:'clients'});
+ comments.push({title:'La comparaison',text:delta===null?'Pas assez de données sur la période précédente pour établir une comparaison fiable.':'Le chiffre d’affaires est '+(delta>=0?'en hausse de ':'en baisse de ')+Math.abs(delta).toLocaleString('fr-FR',{maximumFractionDigits:1})+' % par rapport à la période précédente.',kind:'compare'});
+ comments.push({title:'Le conseil de la mascotte',text:!count?'Enregistre tes ventes pour obtenir un bilan personnalisé.':(delta!==null&&delta<0?'Surveille la fréquentation et le panier moyen. Mets en avant les produits complémentaires adaptés aux besoins des clients.':'Continue à soigner le conseil et la fidélisation. Observe les produits qui contribuent le plus au panier moyen.'),kind:'advice'});
+ if(best)comments.push({title:'Le meilleur moment',text:'La meilleure journée enregistrée est le '+new Date(best[0]+'T12:00:00').toLocaleDateString('fr-FR',{weekday:'long',day:'numeric',month:'long'})+', avec '+vapJournalMoney(best[1])+'.',kind:'best'});
+ comments.push({title:'À bientôt !',text:'Merci pour votre fidélité. Rendez-vous au prochain journal de Vap’ & Moi !',kind:'end'});
+ return {comments,periodLabel,ca,count,avg,clients:names.size,delta,best};
+}
+function vapJournalDraw(scene,progress=0){
+ const c=document.getElementById('journalCanvas');if(!c)return;const ctx=c.getContext('2d'),w=c.width,h=c.height;
+ const grad=ctx.createLinearGradient(0,0,w,h);grad.addColorStop(0,'#123f2b');grad.addColorStop(1,'#061c13');ctx.fillStyle=grad;ctx.fillRect(0,0,w,h);
+ ctx.fillStyle='#e6c27a';ctx.font='bold 30px Georgia';ctx.fillText('V&M',36,54);ctx.font='bold 27px Arial';ctx.fillText('LE JOURNAL DE VAP’ & MOI',132,54);ctx.fillStyle='#c9a45e';ctx.fillRect(34,82,w-68,3);
+ ctx.fillStyle='#eee5d1';ctx.font='18px Arial';ctx.fillText(vapJournalState.data?.periodLabel||'',36,120);
+ // Mascotte cartoon : GIF animé dans le canvas si le navigateur le décode, sinon image de secours.
+ const img=window.vapJournalMascot||(window.vapJournalMascot=new Image());if(!img.src)img.src='./mascotte-animation-stats.gif';
+ ctx.fillStyle='#0b3020';ctx.strokeStyle='#c9a45e';ctx.lineWidth=4;ctx.beginPath();ctx.roundRect(30,165,660,575,24);ctx.fill();ctx.stroke();
+ if(img.complete&&img.naturalWidth){const iw=img.naturalWidth,ih=img.naturalHeight,scale=Math.min(620/iw,530/ih);const dw=iw*scale,dh=ih*scale;ctx.drawImage(img,(w-dw)/2,185+(530-dh)/2,dw,dh);}else{ctx.fillStyle='#f2d28a';ctx.font='bold 90px Arial';ctx.fillText('🐱',300,470);}
+ const slide=vapJournalState.scenes[vapJournalState.index]||{title:'Le Journal',text:''};
+ ctx.fillStyle='#0a3824';ctx.strokeStyle='#c9a45e';ctx.lineWidth=3;ctx.beginPath();ctx.roundRect(28,785,664,360,22);ctx.fill();ctx.stroke();
+ ctx.fillStyle='#f0cd80';ctx.font='bold 30px Arial';ctx.fillText(slide.title,52,835);
+ ctx.fillStyle='#fff9eb';ctx.font='24px Arial';const words=slide.text.split(/\s+/);let line='',y=890;for(const word of words){const test=(line+' '+word).trim();if(ctx.measureText(test).width>600){ctx.fillText(line,52,y);line=word;y+=38;}else line=test;}if(line)ctx.fillText(line,52,y);
+ if(slide.kind==='ca'||slide.kind==='clients'){ ctx.fillStyle='#e8c779';ctx.font='bold 36px Arial';const val=slide.kind==='ca'?vapJournalMoney(vapJournalState.data.ca):String(vapJournalState.data.count)+' ventes';ctx.fillText(val,52,1080);}
+ ctx.fillStyle='#d9bd7d';ctx.font='18px Arial';ctx.fillText('VAP’ & MOI  ·  BRAY-SUR-SEINE',38,1210);ctx.fillStyle='#b6c9b9';ctx.fillRect(36,1240,648,5);ctx.fillStyle='#e4bf72';ctx.fillRect(36,1240,648*((vapJournalState.index+progress)/vapJournalState.scenes.length),5);
+}
+function vapJournalGenerate(){
+ try{vapJournalStop();const data=vapJournalBuild();vapJournalState.data=data;vapJournalState.scenes=data.comments;vapJournalState.index=0;document.getElementById('journalPreviewWrap').hidden=false;document.getElementById('journalStatus').textContent='Journal prêt : '+data.comments.length+' séquences · données locales uniquement · lecture silencieuse.';document.getElementById('journalExportStatus').textContent='Le clip est lu à vitesse normale. Sur Android, l’export dépend du support vidéo du navigateur.';vapJournalPlay();}
+ catch(e){console.error('Journal V141',e);document.getElementById('journalStatus').textContent='Impossible de générer le journal : '+e.message;}
+}
+function vapJournalPlay(){vapJournalStop();if(!vapJournalState.scenes.length)return;vapJournalState.index=0;let last=Date.now();vapJournalState.renderTimer=setInterval(()=>vapJournalDraw(),100);vapJournalState.timer=setInterval(()=>{vapJournalState.index++;if(vapJournalState.index>=vapJournalState.scenes.length){vapJournalStop();vapJournalState.index=vapJournalState.scenes.length-1;vapJournalDraw();}},5500);vapJournalDraw();}
+function vapJournalStop(){if(vapJournalState.timer){clearInterval(vapJournalState.timer);vapJournalState.timer=null;}if(vapJournalState.renderTimer){clearInterval(vapJournalState.renderTimer);vapJournalState.renderTimer=null;}}
+async function vapJournalExport(){
+ const canvas=document.getElementById('journalCanvas');const status=document.getElementById('journalExportStatus');if(!canvas||!vapJournalState.scenes.length)return;
+ if(!window.MediaRecorder||!canvas.captureStream){status.textContent='L’export vidéo n’est pas pris en charge par ce navigateur. Tu peux lire le journal dans l’application.';return;}
+ try{vapJournalStop();vapJournalState.index=0;const stream=canvas.captureStream(24);const mime=['video/mp4;codecs=avc1','video/webm;codecs=vp9','video/webm'].find(t=>MediaRecorder.isTypeSupported(t));if(!mime){status.textContent='Aucun format vidéo exportable détecté sur ce navigateur.';return;}
+ const rec=new MediaRecorder(stream,{mimeType:mime,videoBitsPerSecond:2200000});const chunks=[];rec.ondataavailable=e=>{if(e.data&&e.data.size)chunks.push(e.data)};rec.onstop=()=>{const blob=new Blob(chunks,{type:mime});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='journal-vap-et-moi.'+(mime.includes('mp4')?'mp4':'webm');a.click();setTimeout(()=>URL.revokeObjectURL(url),30000);status.textContent='Export terminé : '+a.download+'.';stream.getTracks().forEach(t=>t.stop());};rec.start();status.textContent='Enregistrement du clip à vitesse normale… garde cette page ouverte.';const paintTimer=setInterval(()=>vapJournalDraw(),100);
+ for(let i=0;i<vapJournalState.scenes.length;i++){vapJournalState.index=i;vapJournalDraw();await new Promise(r=>setTimeout(r,5500));}
+ clearInterval(paintTimer);rec.stop();
+ }catch(e){console.error('Export journal',e);status.textContent='Export impossible : '+e.message;}
+}
 
 </script>
 
